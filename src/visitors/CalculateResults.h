@@ -1,42 +1,33 @@
 #include "IVisitorResult.h"
 
 enum CalculateResultType {
-	IntResulType, NoneResultType, ErrorResultType
+	IntResultType, NoneResultType, ErrorResultType
 };
 
 class CalculateResult : public IVisitorResult {
 	CalculateResultType type;
 
-	Result(ResultType type) {
-		this.type = type;
-	}
-
-	ResultType getType() {
-		return type;
-	}
+public:
+	CalculateResult(ResultType type);
+	
+	ResultType getType();
 };
 
-class CalculateIntResult : public Result {
+class CalculateIntResult : public CalculateResult {
 	int value;
 
-	CalculateIntResult(int value_) : value(value_) {
-		super(IntResultType);
-	}
-
 public:
-	int getValue() {
-		return value;
-	}
+	CalculateIntResult(int value_);
+
+	int getValue();
 }
 
-class CalculateNoneResult : public Result {
-	CalculateNoneResult() {
-		super(NoneResultType);
-	}
+class CalculateNoneResult : public CalculateResult {
+public:
+	CalculateNoneResult();
 }
 
-class CalculateErrorResult : public Result {
-	CalculateErrorResult() {
-		super(ErrorResultType);
-	}
+class CalculateErrorResult : public CalculateResult {
+public:
+	CalculateErrorResult();
 }
