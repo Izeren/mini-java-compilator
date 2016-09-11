@@ -4,6 +4,7 @@
 
 class CNumExp : public IExpression {
 public:
+	CNumExp(int number = 0);
 	virtual IVisitorResult Accept(IVisitor *visitor) override;
 	
 private:

@@ -1,10 +1,14 @@
 #pragma once
 
 #include "IExpression.h"
+#include <string>
 
-class CNumExp : public IExpression {
+class CIdExp : public IExpression {
 public:
 	virtual IVisitorResult Accept(IVisitor *visitor) override;
-	
+	CIdExp(std::string name = "a");
 	int *number;
+
+private:
+	std::string name;
 };

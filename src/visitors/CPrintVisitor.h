@@ -3,12 +3,7 @@
 #include "IVisitor.h"
 #include "IVisitorResult.h"
 
-#include "CPrintStm.h"
-#include "CCompoundStm.h"
-#include "CAssignStm.h"
-#include "COpExp.h"
-#include "CNumExp.h"
-#include "CIdExp.h"
+#include <string>
 
 class CPrintVisitor : public IVisitor {
 public:
@@ -26,5 +21,6 @@ public:
 
 private:
 	int currentId;
-
+	int lastVisited;
+	std::string description;
 };

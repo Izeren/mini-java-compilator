@@ -2,10 +2,12 @@
 
 #include "IVisitorResult.h"
 
-#include "CPrintStm.h"
-#include "CCompoundStm.h"
-#include "COpExp.h"
-#include "CNumExp"
+#include "../nodes/statements/CPrintStm.h"
+#include "../nodes/statements/CCompoundStm.h"
+#include "../nodes/statements/CAssignStm.h"
+#include "../nodes/expressions/COpExp.h"
+#include "../nodes/expressions/CNumExp.h"
+#include "../nodes/expressions/CIdExp.h"
 
 class IVisitor {
 public:
