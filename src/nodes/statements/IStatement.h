@@ -7,4 +7,5 @@
 class IStatement : public INode {
 public:
 	virtual IVisitorResult Accept(IVisitor *visitor) = 0;
+	virtual ~IStatement() {}
 };
