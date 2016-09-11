@@ -1,10 +1,17 @@
 #pragma once
 
-class IVisitor {
+#include "IVisitorResult.h"
 
-	virtual void Visit(CPrintStm *visitor) = 0;
-	virtual void Visit(CCompoundStm *visitor) = 0;
-	virtual void Visit(COpExp *visitor) = 0;
-	virtual void Visit(CNumExp *visitor) = 0;
+#include "CPrintStm.h"
+#include "CCompoundStm.h"
+#include "COpExp.h"
+#include "CNumExp"
+
+class IVisitor {
+public:
+	virtual IVisitorResult Visit(CPrintStm *stm) = 0;
+	virtual IVisitorResult Visit(CCompoundStm *stm) = 0;
+	virtual IVisitorResult Visit(COpExp *exp) = 0;
+	virtual IVisitorResult Visit(CNumExp *exp) = 0;
 
 };
