@@ -7,5 +7,5 @@ public:
 	virtual IVisitorResult Accept(IVisitor *visitor) override;
 
 	IExpression *rightExpression;
-	IExpression *leftExpression;
+	CIdExp *leftExpression;
 };
