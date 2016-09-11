@@ -13,5 +13,7 @@ public:
 	virtual IVisitorResult Visit(CCompoundStm *stm) = 0;
 	virtual IVisitorResult Visit(COpExp *exp) = 0;
 	virtual IVisitorResult Visit(CNumExp *exp) = 0;
+	virtual IVisitorResult Visit(CIdExp *exp) = 0;
+	virtual IVisitorResult Visit(CAssignStm *exp) = 0;
 
 };

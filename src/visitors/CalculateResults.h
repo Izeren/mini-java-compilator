@@ -36,14 +36,7 @@ class CalculateNoneResult : public Result {
 }
 
 class CalculateErrorResult : public Result {
-	int errorCode;
-
-	CalculateErrorResult(int errorCode_) : errorCode(errorCode_) {
+	CalculateErrorResult() {
 		super(ErrorResultType);
-	}
-
-public:
-	void printError() {
-
 	}
 }
