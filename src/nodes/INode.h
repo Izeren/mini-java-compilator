@@ -5,6 +5,6 @@
 
 class INode {
 public:
-	virtual IVisitorResult Accept(IVisitor *) = 0;
+	virtual IVisitorResult* Accept(IVisitor *) = 0;
 
 };
