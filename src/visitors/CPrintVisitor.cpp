@@ -41,12 +41,37 @@ IVisitorResult* CPrintVisitor::Visit(COpExp *exp) {
 	CPrintResults* result = reinterpret_cast<CPrintResults*>(exp->leftOperand->Accept(this));
 	std::string subdescription = result->getDescription();
 	int leftId = lastVisited;
+	int operationId = lastVisited = currentId++;
 	result = reinterpret_cast<CPrintResults*>(exp->rightOperand->Accept(this));
 	subdescription += result->getDescription();
 	int rightId = lastVisited;
 	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(leftId) + "\n";
+	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(operationId) + "\n";
 	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(rightId) + "\n";
 	subdescription += "\t" + std::to_string(currentId) + "[label=OpExp]\n";
+	std::string operationName;
+	switch (exp->operation) {
+		case PLUS: {
+			operationName = "PLUS";
+			break;
+		}
+		case MINUS: {
+			operationName = "MINUS";
+			break;
+		}
+		case MULTIPLY: {
+			operationName = "MULTIPLY";
+			break;
+		}
+		case DIVISE: {
+			operationName = "DIVISE";
+		}
+		default: {
+			operationName = "UnknownOperation";
+			break;
+		}
+	} 
+	subdescription += "\t" + std::to_string(operationId) + "[label=" + operationName + "]\n";
 	lastVisited = currentId;
 	++currentId;
 	return new CPrintResults(subdescription);
