@@ -8,7 +8,7 @@ CFLAGS=-std=c++11
 
 all: $(BUILD_DIR)/main.bin
 
-$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o IdExp.o NumExp.o OpExp.o AssignStm.o PrintStm.o CompoundStm.o PrintResults.o PrintVisitor.o CalculateResults.o CaculateVisitor.o)
+$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o IdExp.o NumExp.o OpExp.o AssignStm.o PrintStm.o CompoundStm.o PrintResults.o PrintVisitor.o )
 	$(CC) $(CFLAGS) $^ -o $@
 
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp
@@ -22,11 +22,11 @@ $(BUILD_DIR)/PrintResults.o: $(VISITORS_DIR)/CPrintResults.cpp
 $(BUILD_DIR)/PrintVisitor.o: $(VISITORS_DIR)/CPrintVisitor.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@
 
-$(BUILD_DIR)/CalculateResults.o: $(VISITORS_DIR)/CalculateResults.cpp
-	$(CC) $(CFLAGS) -c $^ -o $@
+#$(BUILD_DIR)/CalculateResults.o: $(VISITORS_DIR)/CalculateResults.cpp
+#	$(CC) $(CFLAGS) -c $^ -o $@
 
-$(BUILD_DIR)/CaculateVisitor.o: $(VISITORS_DIR)/CaculateVisitor.cpp
-	$(CC) $(CFLAGS) -c $^ -o $@
+#$(BUILD_DIR)/CaculateVisitor.o: $(VISITORS_DIR)/CaculateVisitor.cpp
+#	$(CC) $(CFLAGS) -c $^ -o $@
 
 #Expressions block
 #-----------------------------------------------------------------

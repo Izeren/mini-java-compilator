@@ -15,16 +15,16 @@ IVisitorResult* CPrintVisitor::Visit(CPrintStm *stm) {
 	subdescription += "\t" + std::to_string(currentId) + "[label=PrintStm]\n";
 	lastVisited = currentId;
 	++currentId;
-	return CPrintResults(subdescription);
+	return new CPrintResults(subdescription);
 
 }
 
 IVisitorResult* CPrintVisitor::Visit(CCompoundStm *stm) {
 
-	CPrintResults* result = reinterpret_cast<CCompoundStm*>(stm->leftStatement->Accept(this));
+	CPrintResults* result = reinterpret_cast<CPrintResults*>(stm->leftStatement->Accept(this));
 	std::string subdescription = result->getDescription();
 	int leftId = lastVisited;
-	result = reinterpret_cast<CCompoundStm*>(stm->rightStatement->Accept(this));
+	result = reinterpret_cast<CPrintResults*>(stm->rightStatement->Accept(this));
 	subdescription += result->getDescription();
 	int rightId = lastVisited;
 	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(leftId) + "\n";
@@ -32,16 +32,16 @@ IVisitorResult* CPrintVisitor::Visit(CCompoundStm *stm) {
 	subdescription += "\t" + std::to_string(currentId) + "[label=CompoundStm]\n";
 	lastVisited = currentId;
 	++currentId;
-	return CPrintResults(subdescription);
+	return new CPrintResults(subdescription);
 
 }
 
 IVisitorResult* CPrintVisitor::Visit(COpExp *exp) {
 
-	CPrintResults* result = exp->leftOperand->Accept(this);
+	CPrintResults* result = reinterpret_cast<CPrintResults*>(exp->leftOperand->Accept(this));
 	std::string subdescription = result->getDescription();
 	int leftId = lastVisited;
-	result = exp->rightOperand->Accept(this);
+	result = reinterpret_cast<CPrintResults*>(exp->rightOperand->Accept(this));
 	subdescription += result->getDescription();
 	int rightId = lastVisited;
 	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(leftId) + "\n";
@@ -49,7 +49,7 @@ IVisitorResult* CPrintVisitor::Visit(COpExp *exp) {
 	subdescription += "\t" + std::to_string(currentId) + "[label=OpExp]\n";
 	lastVisited = currentId;
 	++currentId;
-	return CPrintResults(subdescription);
+	return new CPrintResults(subdescription);
 
 }
 
@@ -60,7 +60,7 @@ IVisitorResult* CPrintVisitor::Visit(CNumExp *exp) {
 	subdescription += "\t" + std::to_string(currentId) + "[label=" + std::to_string(exp->number) + "]\n";
 	lastVisited = currentId + 1;
 	currentId += 2;
-	return CPrintResults(subdescription);	
+	return new CPrintResults(subdescription);	
 }
 
 IVisitorResult* CPrintVisitor::Visit(CIdExp *exp) {
@@ -70,15 +70,15 @@ IVisitorResult* CPrintVisitor::Visit(CIdExp *exp) {
 	subdescription += "\t" + std::to_string(currentId) + "[label=" + exp->name + "]\n";
 	lastVisited = currentId + 1;
 	currentId += 2;
-	return CPrintResults(subdescription);
+	return new CPrintResults(subdescription);
 }
 
 IVisitorResult* CPrintVisitor::Visit(CAssignStm *stm) {
 
-	CPrintResults* result = stm->leftExpression->Accept(this);
+	CPrintResults* result = reinterpret_cast<CPrintResults*>(stm->leftExpression->Accept(this));
 	std::string subdescription = result->getDescription();
 	int leftId = lastVisited;
-	result = stm->rightExpression->Accept(this);
+	result = reinterpret_cast<CPrintResults*>(stm->rightExpression->Accept(this));
 	subdescription += result->getDescription();
 	int rightId = lastVisited;
 	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(leftId) + "\n";
@@ -86,5 +86,5 @@ IVisitorResult* CPrintVisitor::Visit(CAssignStm *stm) {
 	subdescription += "\t" + std::to_string(currentId) + "[label=AssignStm]\n";
 	lastVisited = currentId;
 	++currentId;
-	return CPrintResults(subdescription);
+	return new CPrintResults(subdescription);
 }
