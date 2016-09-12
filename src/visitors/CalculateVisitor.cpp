@@ -1,92 +1,93 @@
-#pragma once
-
 #include <iostream>
 
 #include "IVisitor.h"
 #include "IVisitorResult.h"
 #include "CalculateResults.h"
+#include "CalculateVisitor.h"
 
-#include "CPrintStm.h"
-#include "CCompoundStm.h"
-#include "COpExp.h"
-#include "CNumExp"
-#include "CAssignStm.h"
-#include "CIdExp.h"
+#include "../nodes/statements/CPrintStm.h"
+#include "../nodes/statements/CCompoundStm.h"
+#include "../nodes/statements/CAssignStm.h"
+#include "../nodes/expressions/COpExp.h"
+#include "../nodes/expressions/CNumExp.h"
+#include "../nodes/expressions/CIdExp.h"
 
 
-IVisitorResult CCalculateVisitor::Visit(CPrintStm *stm) {
-	CalculateResult result = (CalculateResult) stm->expression->Accept(this);
+IVisitorResult* CCalculateVisitor::Visit(CPrintStm *stm) {
+	CalculateResult* result = reinterpret_cast<CalculateResult*>(stm->expression->Accept(this));
 
-	switch (result.getType) {
-		case IntResulType:
-			int value = ((CalculateIntResult) result).getValue();
+	switch (result->getType()) {
+		case INT_RESULT_TYPE: {
+				int value = (reinterpret_cast<CalculateIntResult*>(result))->getValue();
 
-			std::cout <<  << '\n';
+				std::cout << value << '\n';
 
-			return CalculateNoneResult();
-		case NoneResultType:
-			return CalculateErrorResult();
-		case ErrorResultType:
-			return CalculateErrorResult();
+				return new CalculateNoneResult();
+			}
+		case NONE_RESULT_TYPE:
+			return new CalculateErrorResult();
+		case ERROR_RESULT_TYPE:
+			return new CalculateErrorResult();
 	}
 }
 
-IVisitorResult CCalculateVisitor::Visit(CCompoundStm *stm) {
-	CalculateResult leftResult = (CalculateResult) stm->leftStatement->Accept(this);
-	CalculateResult rightResult = (CalculateResult) stm->rightStatement->Accept(this);
+IVisitorResult* CCalculateVisitor::Visit(CCompoundStm *stm) {
+	CalculateResult* leftResult = reinterpret_cast<CalculateResult*>(stm->leftStatement->Accept(this));
+	CalculateResult* rightResult = reinterpret_cast<CalculateResult*>(stm->rightStatement->Accept(this));
 
-	if (leftResult.getType() == ErrorResultType || rightOperand.getType() == ErrorResultType) {
-		return CalculateErrorResult();
+	if (leftResult->getType() == ERROR_RESULT_TYPE || rightResult->getType() == ERROR_RESULT_TYPE) {
+		return new CalculateErrorResult();
 	} else {
-		return CalculateNoneResult();
+		return new CalculateNoneResult();
 	}
 }
 
-IVisitorResult CCalculateVisitor::Visit(COpExp *exp) {
-	CalculateResult leftResult = (CalculateResult) exp->leftOperand->Accept(this);
-	CalculateResult rightResult = (CalculateResult) exp->rightOperand->Accept(this);
+IVisitorResult* CCalculateVisitor::Visit(COpExp *exp) {
+	CalculateResult* leftResult = reinterpret_cast<CalculateResult*>(exp->leftOperand->Accept(this));
+	CalculateResult* rightResult = reinterpret_cast<CalculateResult*>(exp->rightOperand->Accept(this));
 
-	if (leftResult.getType() == IntResultType && rightOperand.getType() == IntResultType) {
-		int leftValue = ((CalculateIntResult) leftResult).getValue();
-		int rightValue = ((CalculateIntResult) rightResult).getValue();
+	if (leftResult->getType() == INT_RESULT_TYPE && rightResult->getType() == INT_RESULT_TYPE) {
+		int leftValue = (reinterpret_cast<CalculateIntResult*>(leftResult))->getValue();
+		int rightValue = (reinterpret_cast<CalculateIntResult*>(rightResult))->getValue();
 
 		switch (exp->operation) {
 			case PLUS:
-				return CalculateIntResult(leftValue + rightValue);
+				return new CalculateIntResult(leftValue + rightValue);
 			case MINUS:
-				return CalculateIntResult(leftValue - rightValue);
+				return new CalculateIntResult(leftValue - rightValue);
 			case MULTIPLY:
-				return CalculateIntResult(leftValue * rightValue);
+				return new CalculateIntResult(leftValue * rightValue);
 			case DIVISE:
 				if (rightValue == 0) {
-					return CalculateErrorResult();
+					return new CalculateErrorResult();
 				} else {
-					return CalculateIntResult(leftValue / rightValue);
+					return new CalculateIntResult(leftValue / rightValue);
 				}
 		}
 	} else {
-		return CalculateErrorResult();
+		return new CalculateErrorResult();
 	}
 }
 
-IVisitorResult CCalculateVisitor::Visit(CNumExp *exp) {
-	return CalculateIntResult(exp->number);
+IVisitorResult* CCalculateVisitor::Visit(CNumExp *exp) {
+	return new CalculateIntResult(exp->number);
 }
 
-IVisitorResult CCalculateVisitor::Visit(CIdExp *exp) {
-	return CalculateIntResult(*(exp->number));
+IVisitorResult* CCalculateVisitor::Visit(CIdExp *exp) {
+	return new CalculateIntResult(*(exp->address));
 }
 
-IVisitorResult CCalculateVisitor::Visit(CAssignStm *exp) {
-	CalculateResult result = (CalculateResult) exp->rightExpression->Accept(this);
+IVisitorResult* CCalculateVisitor::Visit(CAssignStm *exp) {
+	CalculateResult* result = reinterpret_cast<CalculateResult*>(exp->rightExpression->Accept(this));
 
-	switch (result.getType) {
-		case IntResulType:
-			*(exp->leftExpression->number) = ((CalculateIntResult) result).getValue();
-			return CalculateNoneResult();
-		case NoneResultType:
-			return CalculateErrorResult();
-		case ErrorResultType:
-			return CalculateErrorResult();
+	switch (result->getType()) {
+		case INT_RESULT_TYPE: {
+				*(exp->leftExpression->address) = (reinterpret_cast<CalculateIntResult*>(result))->getValue();
+				return new CalculateNoneResult();
+			}
+		case NONE_RESULT_TYPE:
+			return new CalculateErrorResult();
+		case ERROR_RESULT_TYPE:
+			return new CalculateErrorResult();
 	}
 }

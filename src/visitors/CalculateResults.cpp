@@ -1,27 +1,23 @@
-#pragma once
-
 #include "CalculateResults.h"
 
-CalculateResult::CalculateResult(ResultType type) {
-	this.type = type;
+CalculateResult::CalculateResult(CalculateResultType type) {
+	this->type = type;
 }
 
-ResultType CalculateResult::getType() {
+CalculateResultType CalculateResult::getType() {
 	return type;
 }
 
-CalculateIntResult::CalculateIntResult(int value_) : value(value_) {
-	super(IntResultType);
+CalculateIntResult::CalculateIntResult(int value) : CalculateResult(INT_RESULT_TYPE) {
+	this->value = value;
 }
 
-int CalculateIntResultgetValue() {
-	return value;
+int CalculateIntResult::getValue() {
+	return this->value;
 }
 
-CalculateNoneResult::CalculateNoneResult() {
-	super(NoneResultType);
+CalculateNoneResult::CalculateNoneResult() : CalculateResult(NONE_RESULT_TYPE) {
 }
 
-CalculateErrorResult::CalculateErrorResult() {
-	super(ErrorResultType);
+CalculateErrorResult::CalculateErrorResult() : CalculateResult(ERROR_RESULT_TYPE) {
 }

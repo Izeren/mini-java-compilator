@@ -1,33 +1,33 @@
 #include "IVisitorResult.h"
 
 enum CalculateResultType {
-	IntResultType, NoneResultType, ErrorResultType
+	INT_RESULT_TYPE, NONE_RESULT_TYPE, ERROR_RESULT_TYPE
 };
 
 class CalculateResult : public IVisitorResult {
 	CalculateResultType type;
 
 public:
-	CalculateResult(ResultType type);
+	CalculateResult(CalculateResultType type);
 	
-	ResultType getType();
+	CalculateResultType getType();
 };
 
 class CalculateIntResult : public CalculateResult {
 	int value;
 
 public:
-	CalculateIntResult(int value_);
+	CalculateIntResult(int value);
 
 	int getValue();
-}
+};
 
 class CalculateNoneResult : public CalculateResult {
 public:
 	CalculateNoneResult();
-}
+};
 
 class CalculateErrorResult : public CalculateResult {
 public:
 	CalculateErrorResult();
-}
+};
