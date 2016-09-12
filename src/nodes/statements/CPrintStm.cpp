@@ -11,5 +11,5 @@ CPrintStm::~CPrintStm() {
 }
 
 IVisitorResult CPrintStm::Accept(IVisitor *visitor) {
-	return visitor->visit(this);
+	return visitor->Visit(this);
 }

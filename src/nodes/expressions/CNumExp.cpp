@@ -5,7 +5,7 @@ CNumExp::CNumExp(int number) {
 }
 
 IVisitorResult CNumExp::Accept(IVisitor *visitor) {
-	return visitor->visit(this);
+	return visitor->Visit(this);
 }
 
-~CNumExp() {}
+CNumExp::~CNumExp() {}

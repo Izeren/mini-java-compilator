@@ -5,11 +5,10 @@
 
 class CIdExp : public IExpression {
 public:
-	virtual IVisitorResult Accept(IVisitor *visitor) override;
-	CIdExp(std::string name = "a", int *address);
+	IVisitorResult Accept(IVisitor *visitor) override;
+	CIdExp(std::string name = "a", int *address = 0);
 	int *address;
 	~CIdExp();
 
-private:
 	std::string name;
 };

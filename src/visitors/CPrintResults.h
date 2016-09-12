@@ -1,4 +1,5 @@
 #include "IVisitorResult.h"
+#include <string>
 
 class CPrintResults : public IVisitorResult {
 

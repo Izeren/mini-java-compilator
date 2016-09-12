@@ -8,7 +8,7 @@ CFLAGS=-std=c++11
 
 all: $(BUILD_DIR)/main.bin
 
-$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o visitor.o IdExp.o NumExp.o OpExp.o AssignStm.o PrintStm.o CompoundStm.o PrintResults.o PrintVisitor.o CalculateResults.o CaculateVisitor.o)
+$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o IdExp.o NumExp.o OpExp.o AssignStm.o PrintStm.o CompoundStm.o PrintResults.o PrintVisitor.o CalculateResults.o CaculateVisitor.o)
 	$(CC) $(CFLAGS) $^ -o $@
 
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp
@@ -49,3 +49,8 @@ $(BUILD_DIR)/PrintStm.o: $(STATEMENTS_DIR)/CPrintStm.cpp
 
 $(BUILD_DIR)/CompoundStm.o: $(STATEMENTS_DIR)/CCompoundStm.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@
+
+
+clean:
+	rm -rf $(BUILD_DIR)/*.o
+	rm -rf $(BUILD_DIR)/*.bin

@@ -9,7 +9,7 @@ CPrintVisitor::CPrintVisitor() {
 
 IVisitorResult CPrintVisitor::Visit(CPrintStm *stm) {
 
-	CPrintResults result = stm->expression->Accept(this);
+	CPrintResults result = static_cast<CPrintResults>(stm->expression->Accept(this));
 	std::string subdescription = result.getDescription();
 	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(lastVisited) + "\n";
 	subdescription += "\t" + std::to_string(currentId) + "[label=PrintStm]\n";
@@ -21,10 +21,10 @@ IVisitorResult CPrintVisitor::Visit(CPrintStm *stm) {
 
 IVisitorResult CPrintVisitor::Visit(CCompoundStm *stm) {
 
-	CPrintResults result = stm->leftStatement->Accept(this);
+	CPrintResults result = static_cast<CCompoundStm>(stm->leftStatement->Accept(this));
 	std::string subdescription = result.getDescription();
 	int leftId = lastVisited;
-	result = stm->rightStatement->Accept(this);
+	result = static_cast<CCompoundStm>(stm->rightStatement->Accept(this));
 	subdescription += result.getDescription();
 	int rightId = lastVisited;
 	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(leftId) + "\n";
@@ -38,10 +38,10 @@ IVisitorResult CPrintVisitor::Visit(CCompoundStm *stm) {
 
 IVisitorResult CPrintVisitor::Visit(COpExp *exp) {
 
-	CPrintResults result = stm->leftExpression->Accept(this);
+	CPrintResults result = exp->leftOperand->Accept(this);
 	std::string subdescription = result.getDescription();
 	int leftId = lastVisited;
-	result = stm->rightExpression->Accept(this);
+	result = exp->rightOperand->Accept(this);
 	subdescription += result.getDescription();
 	int rightId = lastVisited;
 	subdescription += "\t" + std::to_string(currentId) + " -> " + std::to_string(leftId) + "\n";
@@ -73,7 +73,7 @@ IVisitorResult CPrintVisitor::Visit(CIdExp *exp) {
 	return CPrintResults(subdescription);
 }
 
-IVisitorResult CPrintVisitor::Visit(CAssignStm *exp) {
+IVisitorResult CPrintVisitor::Visit(CAssignStm *stm) {
 
 	CPrintResults result = stm->leftExpression->Accept(this);
 	std::string subdescription = result.getDescription();

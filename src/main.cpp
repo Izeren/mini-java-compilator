@@ -1,36 +1,41 @@
+#include <stdlib.h>
 #include "nodes/expressions/IExpression.h"
 #include "nodes/statements/IStatement.h"
-#include "visitors/CPrintVisitor.h"
-#include "visitors/CalculateVisitor.h"
-#include "visitors/CPrintResults.h"
+#include "nodes/expressions/COpExp.h"
+#include "nodes/expressions/CNumExp.h"
+#include "nodes/expressions/CIdExp.h"
+#include "nodes/statements/CAssignStm.h"
+#include "nodes/statements/CCompoundStm.h"
+#include "nodes/statements/CPrintStm.h"
+// #include "visitors/CPrintVisitor.h"
+// #include "visitors/CalculateVisitor.h"
+// #include "visitors/CPrintResults.h"
+
 
 #include <iostream>
 
 int main() {
 
-	CCompoundStm *tree = new CCompoundStm();
-	tree->leftStatement = new CAssignStm();
-	tree->leftStatement->leftExpression = new CIdExp("a");
-	tree->leftStatement->rightExpression = new COpExp();
-	tree->leftStatement->rightExpression->leftOperand = new CNumExp(5);
-	tree->leftStatement->rightExpression->rightOperand = new CNumExp(3);
-	tree->leftStatement->rightExpression->operation = PLUS;
-	tree->rightStatement = new CPrintStm();
-	tree->rightStatement->expression = new CIdExp("a");
+	CCompoundStm *tree = new CCompoundStm(
+		reinterpret_cast<IStatement *>(new CAssignStm(
+			new CIdExp("a"),
+			reinterpret_cast<IExpression *>(new COpExp(
+				reinterpret_cast<IExpression *>(new CNumExp(5)),
+				reinterpret_cast<IExpression *>(new CNumExp(3)),
+				PLUS
+			))
+		)),
+		reinterpret_cast<IStatement *>(new CPrintStm(
+			reinterpret_cast<IExpression *>(new CIdExp("a"))
+		))
+	);
 
-	CPrintVisitor *printVisitor = new CPrintVisitor();
-	CPrintResults result = tree->Accept(printVisitor);
-	std::cout << result.getDescription() << "\n";
+	// CPrintVisitor *printVisitor = new CPrintVisitor();
+	// CPrintResults result = tree->Accept(printVisitor);
+	// std::cout << result.getDescription() << "\n";
 
 
-	// delete tree->rightStatement->expression;
-	// delete tree->rightStatement;
-	// delete tree->leftStatement->rightExpression->leftOperand;
-	// delete tree->leftStatement->rightExpression->rightOperand;
-	// delete tree->leftStatement->leftExpression;
-	// delete tree->leftStatement->rightExpression;
-	// delete tree->leftStatement;
-	// delete tree;
+	delete tree;
 
 	return 0;
 }

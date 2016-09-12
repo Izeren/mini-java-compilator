@@ -7,7 +7,7 @@ public:
 	CAssignStm(CIdExp *leftExpression = 0, IExpression *rightExpression = 0);
 	~CAssignStm();
 
-	virtual IVisitorResult Accept(IVisitor *visitor) override;
+	IVisitorResult Accept(IVisitor *visitor) override;
 
 	IExpression *rightExpression;
 	CIdExp *leftExpression;

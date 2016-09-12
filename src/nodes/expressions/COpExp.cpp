@@ -1,21 +1,21 @@
 #include "COpExp.h"
 
 IVisitorResult COpExp::Accept(IVisitor *visitor) {
-	return visitor->visit(this);
+	return visitor->Visit(this);
 }
 
-COpExp(IExpression *leftOperand = null, IExpression *rightOperand = null, TOperation operation = PLUS) {
+COpExp::COpExp(IExpression *leftOperand, IExpression *rightOperand, TOperation operation) {
 	this->leftOperand = leftOperand;
 	this->rightOperand = rightOperand;
 	this->operation = operation;
 
 }
 
-~COpExp() {
-	if (leftOperand != null) {
+COpExp::~COpExp() {
+	if (leftOperand) {
 		delete leftOperand;
 	}
-	if (rightOperand != null) {
+	if (rightOperand) {
 		delete rightOperand;
 	}
 }

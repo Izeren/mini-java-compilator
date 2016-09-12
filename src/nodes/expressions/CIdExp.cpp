@@ -6,11 +6,11 @@ CIdExp::CIdExp(std::string name, int *address) {
 }
 
 IVisitorResult CIdExp::Accept(IVisitor *visitor) {
-	return visitor->visit(this);
+	return visitor->Visit(this);
 }
 
-~CIdExp() {
-	if (address != 0) {
+CIdExp::~CIdExp() {
+	if (address) {
 		delete address;
 	}
 }
