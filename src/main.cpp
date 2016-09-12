@@ -14,28 +14,38 @@
 
 #include <iostream>
 
+CCompoundStm* buildTree() {
+	CCompoundStm *tree= new CCompoundStm(
+			reinterpret_cast<IStatement *>(new CAssignStm(
+				new CIdExp("a"),
+				reinterpret_cast<IExpression *>(new COpExp(
+					reinterpret_cast<IExpression *>(new CNumExp(5)),
+					reinterpret_cast<IExpression *>(new CNumExp(3)),
+					PLUS
+				))
+			)),
+			reinterpret_cast<IStatement *>(new CPrintStm(
+				reinterpret_cast<IExpression *>(new CIdExp("a"))
+			))
+		);
+
+	return tree;
+}
+
+void cutDownTree(CCompoundStm *tree) {
+	delete tree;
+}
+
 int main() {
 
-	CCompoundStm *tree = new CCompoundStm(
-		reinterpret_cast<IStatement *>(new CAssignStm(
-			new CIdExp("a"),
-			reinterpret_cast<IExpression *>(new COpExp(
-				reinterpret_cast<IExpression *>(new CNumExp(5)),
-				reinterpret_cast<IExpression *>(new CNumExp(3)),
-				PLUS
-			))
-		)),
-		reinterpret_cast<IStatement *>(new CPrintStm(
-			reinterpret_cast<IExpression *>(new CIdExp("a"))
-		))
-	);
+	CCompoundStm *tree = buildTree();
 
 	// CPrintVisitor *printVisitor = new CPrintVisitor();
 	// CPrintResults result = tree->Accept(printVisitor);
 	// std::cout << result.getDescription() << "\n";
 
 
-	delete tree;
+	cutDownTree(tree);
 
 	return 0;
 }
