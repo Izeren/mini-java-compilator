@@ -7,11 +7,11 @@
 #include "nodes/statements/CAssignStm.h"
 #include "nodes/statements/CCompoundStm.h"
 #include "nodes/statements/CPrintStm.h"
-// #include "visitors/CPrintVisitor.h"
+#include "visitors/CPrintVisitor.h"
 // #include "visitors/CalculateVisitor.h"
-// #include "visitors/CPrintResults.h"
+#include "visitors/CPrintResults.h"
 
-
+#include <fstream>
 #include <iostream>
 
 CCompoundStm* buildTree() {
@@ -40,10 +40,13 @@ int main() {
 
 	CCompoundStm *tree = buildTree();
 
-	// CPrintVisitor *printVisitor = new CPrintVisitor();
-	// CPrintResults result = tree->Accept(printVisitor);
-	// std::cout << result.getDescription() << "\n";
+	CPrintVisitor *printVisitor = new CPrintVisitor();
+	CPrintResults *result = reinterpret_cast<CPrintResults *>(tree->Accept(printVisitor));
 
+	std::ofstream out("output.txt");
+	out << "digraph {\n" << result->getDescription() << "}\n"<< "\n";
+
+	out.close();
 
 	cutDownTree(tree);
 
