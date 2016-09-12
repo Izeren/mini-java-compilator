@@ -5,7 +5,7 @@ CIdExp::CIdExp(std::string name, int *address) {
 	this->address = address;
 }
 
-IVisitorResult CIdExp::Accept(IVisitor *visitor) {
+IVisitorResult* CIdExp::Accept(IVisitor *visitor) {
 	return visitor->Visit(this);
 }
 

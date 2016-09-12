@@ -1,6 +1,6 @@
 #include "COpExp.h"
 
-IVisitorResult COpExp::Accept(IVisitor *visitor) {
+IVisitorResult* COpExp::Accept(IVisitor *visitor) {
 	return visitor->Visit(this);
 }
 

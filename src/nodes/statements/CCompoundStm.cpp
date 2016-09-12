@@ -14,6 +14,6 @@ CCompoundStm::~CCompoundStm() {
 	}
 }
 
-IVisitorResult CCompoundStm::Accept(IVisitor *visitor) {
+IVisitorResult* CCompoundStm::Accept(IVisitor *visitor) {
 	return visitor->Visit(this);
 }

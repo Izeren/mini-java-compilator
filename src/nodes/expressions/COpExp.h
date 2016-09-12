@@ -6,7 +6,7 @@ enum TOperation { PLUS, MINUS, MULTIPLY, DIVISE };
 
 class COpExp : public IExpression {
 public:
-	IVisitorResult Accept(IVisitor *visitor) override;
+	IVisitorResult* Accept(IVisitor *visitor) override;
 	COpExp(IExpression *leftOperand = nullptr, IExpression *rightOperand = nullptr, TOperation operation = PLUS);
 	~COpExp();
 

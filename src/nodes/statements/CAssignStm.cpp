@@ -14,6 +14,6 @@ CAssignStm::~CAssignStm() {
 	}
 }
 
-IVisitorResult CAssignStm::Accept(IVisitor *visitor) {
+IVisitorResult* CAssignStm::Accept(IVisitor *visitor) {
 	return visitor->Visit(this);
 }

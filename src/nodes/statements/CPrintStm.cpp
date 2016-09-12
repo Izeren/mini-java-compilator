@@ -10,6 +10,6 @@ CPrintStm::~CPrintStm() {
 	}
 }
 
-IVisitorResult CPrintStm::Accept(IVisitor *visitor) {
+IVisitorResult* CPrintStm::Accept(IVisitor *visitor) {
 	return visitor->Visit(this);
 }

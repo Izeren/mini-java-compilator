@@ -7,7 +7,7 @@ public:
 	CPrintStm(IExpression *expression = 0);
 	~CPrintStm();
 
-	IVisitorResult Accept(IVisitor *visitor) override;
+	IVisitorResult* Accept(IVisitor *visitor) override;
 
 	IExpression *expression;
 }; 
