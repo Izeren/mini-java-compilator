@@ -5,11 +5,12 @@ NODES_DIR=$(SRC_DIR)/nodes
 STATEMENTS_DIR=$(NODES_DIR)/statements
 EXPRESSIONS_DIR=$(NODES_DIR)/expressions
 CFLAGS=-std=c++11
+LFLAGS=-lstdc++
 
 all: $(BUILD_DIR)/main.bin
 
 $(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o IdExp.o NumExp.o OpExp.o AssignStm.o PrintStm.o CompoundStm.o PrintResults.o PrintVisitor.o )
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@
