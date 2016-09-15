@@ -7,6 +7,7 @@
 #include "../nodes/statements/CPrintStm.h"
 #include "../nodes/statements/CCompoundStm.h"
 #include "../nodes/statements/CAssignStm.h"
+#include "../nodes/statements/CSimpleStm.h"
 #include "../nodes/expressions/COpExp.h"
 #include "../nodes/expressions/CNumExp.h"
 #include "../nodes/expressions/CIdExp.h"
@@ -19,4 +20,5 @@ public:
 	IVisitorResult* Visit(CNumExp *exp) override;
 	IVisitorResult* Visit(CIdExp *exp) override;
 	IVisitorResult* Visit(CAssignStm *exp) override;
+	IVisitorResult* Visit(CSimpleStm *exp) override;
 };

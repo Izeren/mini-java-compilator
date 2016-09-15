@@ -42,6 +42,16 @@ IVisitorResult* CCalculateVisitor::Visit(CCompoundStm *stm) {
 	}
 }
 
+IVisitorResult* CCalculateVisitor::Visit(CSimpleStm *stm) {
+	CalculateResult* result = reinterpret_cast<CalculateResult*>(stm->statement->Accept(this));
+
+	if (result->getType() == ERROR_RESULT_TYPE) {
+		return new CalculateErrorResult();
+	} else {
+		return new CalculateNoneResult();
+	}
+}
+
 IVisitorResult* CCalculateVisitor::Visit(COpExp *exp) {
 	CalculateResult* leftResult = reinterpret_cast<CalculateResult*>(exp->leftOperand->Accept(this));
 	CalculateResult* rightResult = reinterpret_cast<CalculateResult*>(exp->rightOperand->Accept(this));

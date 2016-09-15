@@ -8,6 +8,7 @@ class CAssignStm;
 class COpExp;
 class CNumExp;
 class CIdExp; 
+class CSimpleStm;
 
 class IVisitor {
 public:
@@ -17,5 +18,6 @@ public:
 	virtual IVisitorResult* Visit(CNumExp *exp) = 0;
 	virtual IVisitorResult* Visit(CIdExp *exp) = 0;
 	virtual IVisitorResult* Visit(CAssignStm *exp) = 0;
+	virtual IVisitorResult* Visit(CSimpleStm *exp) = 0;
 
 };

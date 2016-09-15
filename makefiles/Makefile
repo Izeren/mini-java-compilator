@@ -9,7 +9,7 @@ LFLAGS=-lstdc++
 
 all: $(BUILD_DIR)/main.bin
 
-$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o IdExp.o NumExp.o OpExp.o AssignStm.o PrintStm.o CompoundStm.o PrintResults.o PrintVisitor.o CalculateResults.o CalculateVisitor.o)
+$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o IdExp.o NumExp.o OpExp.o SimpleStm.o AssignStm.o PrintStm.o CompoundStm.o PrintResults.o PrintVisitor.o CalculateResults.o CalculateVisitor.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp
@@ -49,6 +49,9 @@ $(BUILD_DIR)/PrintStm.o: $(STATEMENTS_DIR)/CPrintStm.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 $(BUILD_DIR)/CompoundStm.o: $(STATEMENTS_DIR)/CCompoundStm.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)/SimpleStm.o: $(STATEMENTS_DIR)/CSimpleStm.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 
