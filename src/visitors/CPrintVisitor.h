@@ -26,7 +26,6 @@ public:
 	IVisitorResult* Visit(CSimpleStm *exp) override;
 
 private:
-	int currentId;
 	int lastVisited;
 	std::string description;
 };
