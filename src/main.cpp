@@ -64,8 +64,8 @@ void cutDownTree(INode *tree) {
 
 void testPrintVisitor() {
 
-	// INode *tree = buildTree();
-	INode *tree = buildCaculatableExpression();
+	INode *tree = buildTree();
+	// INode *tree = buildCaculatableExpression();
 
 	CPrintVisitor *printVisitor = new CPrintVisitor();
 	CPrintResults *result = reinterpret_cast<CPrintResults *>(tree->Accept(printVisitor));
@@ -98,7 +98,7 @@ void testCalculateVisitor() {
 int main() {
 
 	testPrintVisitor();
-	testCalculateVisitor();
+	// testCalculateVisitor();
 	
 	return 0;
 }
