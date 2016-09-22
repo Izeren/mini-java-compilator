@@ -7,7 +7,7 @@ CC=g++
 all: flex bison $(BUILD_DIR)/bison_main.bin
 
 flex: 
-	flex --header-file=src/lex.h -o lex.cpp src/grammatic.flex
+	flex --header-file=src/lex.h -o src/lex.cpp src/grammatic.flex
 
 bison:
 	bison -d -o src/bison.cpp src/grammatic.y

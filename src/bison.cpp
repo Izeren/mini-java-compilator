@@ -71,9 +71,11 @@
        
     #define YYERROR_VERBOSE 1        
     int yylex (void);
-    void yyerror ( const IProgram*&, char const * );
+    void yyerror (char const *s) {
+      fprintf (stderr, "%s\n", s);
+    }
 
-#line 77 "src/bison.cpp" /* yacc.c:339  */
+#line 79 "src/bison.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -120,7 +122,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 124 "src/bison.cpp" /* yacc.c:358  */
+#line 126 "src/bison.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -417,7 +419,7 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    15,    15
+       0,    17,    17
 };
 #endif
 
@@ -1182,7 +1184,7 @@ yyreduce:
   switch (yyn)
     {
       
-#line 1186 "src/bison.cpp" /* yacc.c:1646  */
+#line 1188 "src/bison.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1410,4 +1412,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 25 "src/grammatic.y" /* yacc.c:1906  */
+#line 27 "src/grammatic.y" /* yacc.c:1906  */

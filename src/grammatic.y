@@ -6,7 +6,9 @@
        
     #define YYERROR_VERBOSE 1        
     int yylex (void);
-    void yyerror ( const IProgram*&, char const * );
+    void yyerror (char const *s) {
+      fprintf (stderr, "%s\n", s);
+    }
 %}
 
 

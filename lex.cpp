@@ -931,7 +931,7 @@ YY_RULE_SETUP
 case 18:
 YY_RULE_SETUP
 #line 58 "src/grammatic.flex"
-{ std::cout << "BINARY "; }
+{ std::cout << "BinaryOp "; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
@@ -1996,5 +1996,6 @@ void yyfree (void * ptr )
 #define YYTABLES_NAME "yytables"
 
 #line 70 "src/grammatic.flex"
+
 
 

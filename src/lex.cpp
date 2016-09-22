@@ -931,7 +931,7 @@ YY_RULE_SETUP
 case 18:
 YY_RULE_SETUP
 #line 58 "src/grammatic.flex"
-{ std::cout << "BINARY "; }
+{ std::cout << "BinaryOp "; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
@@ -1999,12 +1999,3 @@ void yyfree (void * ptr )
 
 
 
-int main( int argc, char **argv ) {
-    ++argv, --argc;  /* skip over program name */
-    if ( argc > 0 )
-        yyin = fopen( argv[0], "r" );
-    else
-        yyin = stdin;
-
-    yylex();
-}
