@@ -1,0 +1,17 @@
+SRC_DIR=src
+BUILD_DIR=build
+SOURSE_DIR=resource
+CFLAGS=-std=c++11
+LFLAGS=-lstdc++
+CC=g++
+all: $(BUILD_DIR)/lex_main.bin
+
+$(BUILD_DIR)/lex_main.bin: $(addprefix $(BUILD_DIR)/, lex_main.o)
+	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
+
+$(BUILD_DIR)/lex_main.o: $(SRC_DIR)/lex.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+
+clean:
+	rm -rf $(BUILD_DIR)/*.o
+	rm -rf $(BUILD_DIR)/*.bin
