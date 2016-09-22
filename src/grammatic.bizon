@@ -1,0 +1,79 @@
+%{
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string>
+    #include <stdbool.h>
+       
+    #define YYERROR_VERBOSE 1        
+%}
+
+%code {
+int yylex (void);
+void yyerror ( const IProgram*&, char const * );
+}
+
+%error-verbose // более подробная информация об ошибке
+%verbose // output-файл с правилами грамматики
+%parse-param { const IProgram*& program } // результат работы анализатора
+%locations  // Подключаем yylloc без появления @n в коде
+
+%union {
+	Symbol::CSymbol* Symbol; // символ
+
+	const IProgram* Program; // Указатель на класс-программу
+	const IMainClass* MainClass; // Указатель на главный класс
+	const IClassDeclList* ClassDeclList;
+	const IClassDecl* ClassDecl;
+	const IVarDecl* VarDecl;
+	const IMethodDeclList* MethodDeclList;
+	const IMethodDecl* MethodDecl;
+	const IFormalList* FormalList;
+	const IType* Type;
+	const IStatementList* StatementList;
+	const IStatement* Statement;
+	const IExpList* ExpList;
+	const IExp* Exp;
+}
+
+%token T_Class T_Extends T_Public
+%token T_Static T_Void T_Main T_String
+
+// Особые (типизированные) токены
+%token <Symbol> T_Identifier
+
+%type <Program> Program
+
+%%
+
+Program: 
+	MainClass ClassDeclList { program = $$ = new CProgram( $1, $2); };
+
+MainClass: T_Class T_Identifier '{'
+	T_Public T_Static T_Void T_Main '(' T_String '[' ']' T_Identifier ')'
+	'{' Statement '}' '}'
+	{
+		$$ = new CMainClass( $2, $12, $15 );
+	}
+;
+
+//Список классов
+ClassDeclList: T_Class '{' error '}'
+	{
+	fprinf( stderr, "[%d, %d] Class error!", @3.first_line, @3.first_column );
+	}
+
+Statement:
+	'{' StatementList '}' { $$ = new CCompoundStatement) $2 ); }
+	| T_If '(' Exp ')' Statement T_Else Statement { $$ = new CIfStatement}( $3, $5, $7 ); }
+
+Exp:
+	Exp '+' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Plus, $3 ); }
+	| Exp '-' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Minus, $3 ); }
+	| Exp '*' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Mult, $3 ); }
+	| Exp '/' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Div, $3 ); }
+	| Exp T_And Exp { $$ = new CLogicalExp( $1, CLogicalExp::O_And, $3 ); }
+	| Exp '<' Exp { $$ = new CCompareExp( $1, CCompareExp::O_Less, $3 ); }
+	| Exp '*' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Mult, $3 ); }
+	| '-' Exp %prec T_UMinus { $$ = new CUnariMinusExp( $2 ); } 
+
+%%

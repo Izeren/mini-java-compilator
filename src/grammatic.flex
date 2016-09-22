@@ -55,7 +55,7 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "new" { std::cout << "NEW "; }
 "return" { std::cout << "RETURN "; }
 {ID} { std::cout << "id(" << yytext << ") "; }
-"&&"|"+"|"-"|"*" { std::cout << "BINARY "; }
+"&&"|"+"|"-"|"*" { std::cout << "BinaryOp "; }
 "(" { std::cout << "LPAREN "; }
 ")" { std::cout << "RPAREN "; }
 "[" { std::cout << "LBRACKET "; }
