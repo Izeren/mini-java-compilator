@@ -4,12 +4,25 @@ SOURSE_DIR=resource
 CFLAGS=-std=c++11
 LFLAGS=-lstdc++
 CC=g++
-all: $(BUILD_DIR)/lex_main.bin
+all: flex bison $(BUILD_DIR)/bison_main.bin
 
-$(BUILD_DIR)/lex_main.bin: $(addprefix $(BUILD_DIR)/, lex_main.o)
+flex: 
+	flex --header-file=src/lex.h -o lex.cpp src/grammatic.flex
+
+bison:
+	bison -d -o src/bison.cpp src/grammatic.y
+
+$(BUILD_DIR)/bison_main.bin: $(addprefix $(BUILD_DIR)/, bison_main.o flex.o bison.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
-$(BUILD_DIR)/lex_main.o: $(SRC_DIR)/lex.cpp
+
+$(BUILD_DIR)/bison_main.o: $(SRC_DIR)/bison_main.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+
+$(BUILD_DIR)/flex.o: $(SRC_DIR)/lex.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+
+$(BUILD_DIR)/bison.o: $(SRC_DIR)/bison.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 clean:

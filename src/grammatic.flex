@@ -1,33 +1,33 @@
 %{
 #include <iostream>
-#include "grammatic.tab.c"
+// #include "grammatic.tab.c"
 
 
-extern int yylex();
-static void updateLocation() {
-    // Начало токена
-    yylloc.first_line = 0;
-    // yylloc.first_line = line_number;
-    // yylloc.first_column = column_number;
+// extern int yylex();
+// static void updateLocation() {
+//     // Начало токена
+//     yylloc.first_line = 0;
+//     // yylloc.first_line = line_number;
+//     // yylloc.first_column = column_number;
 
-    // Новое смещение
-    for (int i = 0; i < yyleng; i++) {
-      if( yytext[i] == '\n' ) {
-        // line_number++;
-        // column_number = 1;
-      } else {
-        // column_number++;
-      }
-    }
-    // Конец токена
-    // yylloc.last_line = line_number;
-    // yylloc.last_column = column_number;
+//     // Новое смещение
+//     for (int i = 0; i < yyleng; i++) {
+//       if( yytext[i] == '\n' ) {
+//         // line_number++;
+//         // column_number = 1;
+//       } else {
+//         // column_number++;
+//       }
+//     }
+//     // Конец токена
+//     // yylloc.last_line = line_number;
+//     // yylloc.last_column = column_number;
 
-    printf( "%s", yytext );
-}
+//     printf( "%s", yytext );
+// }
 
 
-#define YY_USER_ACTION updateLocation();
+// #define YY_USER_ACTION updateLocation();
 %}
 
 DIGIT [0-9]
@@ -68,13 +68,3 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "/*"((("*"[^/])?)|[^*])*"*/" { std::cout << "COMMENT "; }
 . { ; }
 %%
-
-int main( int argc, char **argv ) {
-    ++argv, --argc;  /* skip over program name */
-    if ( argc > 0 )
-        yyin = fopen( argv[0], "r" );
-    else
-        yyin = stdin;
-
-    yylex(0, 0);
-}

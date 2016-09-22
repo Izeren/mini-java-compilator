@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "grammatic.y" /* yacc.c:339  */
+#line 1 "src/grammatic.y" /* yacc.c:339  */
 
     #include <stdio.h>
     #include <stdlib.h>
@@ -71,7 +71,7 @@
        
     #define YYERROR_VERBOSE 1        
 
-#line 75 "y.tab.c" /* yacc.c:339  */
+#line 75 "bison.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -89,10 +89,7 @@
 # define YYERROR_VERBOSE 0
 #endif
 
-/* In a future release of Bison, this section will be replaced
-   by #include "y.tab.h".  */
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -114,11 +111,18 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+
 
 /* Copy the second part of user declarations.  */
 
-#line 122 "y.tab.c" /* yacc.c:358  */
+#line 119 "bison.cpp" /* yacc.c:358  */
+/* Unqualified %code blocks.  */
+#line 10 "src/grammatic.y" /* yacc.c:359  */
+
+int yylex (void);
+void yyerror ( const IProgram*&, char const * );
+
+#line 126 "bison.cpp" /* yacc.c:359  */
 
 #ifdef short
 # undef short
@@ -415,7 +419,7 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    12,    12
+       0,    18,    18
 };
 #endif
 
@@ -1180,7 +1184,7 @@ yyreduce:
   switch (yyn)
     {
       
-#line 1184 "y.tab.c" /* yacc.c:1646  */
+#line 1188 "bison.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1408,4 +1412,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 16 "grammatic.y" /* yacc.c:1906  */
+#line 28 "src/grammatic.y" /* yacc.c:1906  */

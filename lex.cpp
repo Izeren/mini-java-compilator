@@ -1,6 +1,6 @@
-#line 2 "src/lex.cpp"
+#line 2 "lex.cpp"
 
-#line 4 "src/lex.cpp"
+#line 4 "lex.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -566,7 +566,7 @@ char *yytext;
 
 
 // #define YY_USER_ACTION updateLocation();
-#line 570 "src/lex.cpp"
+#line 570 "lex.cpp"
 
 #define INITIAL 0
 
@@ -786,7 +786,7 @@ YY_DECL
 	{
 #line 40 "src/grammatic.flex"
 
-#line 790 "src/lex.cpp"
+#line 790 "lex.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -994,7 +994,7 @@ YY_RULE_SETUP
 #line 70 "src/grammatic.flex"
 ECHO;
 	YY_BREAK
-#line 998 "src/lex.cpp"
+#line 998 "lex.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1998,13 +1998,3 @@ void yyfree (void * ptr )
 #line 70 "src/grammatic.flex"
 
 
-
-int main( int argc, char **argv ) {
-    ++argv, --argc;  /* skip over program name */
-    if ( argc > 0 )
-        yyin = fopen( argv[0], "r" );
-    else
-        yyin = stdin;
-
-    yylex();
-}
