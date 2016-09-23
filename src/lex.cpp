@@ -538,35 +538,41 @@ char *yytext;
 #line 1 "src/grammatic.flex"
 #line 2 "src/grammatic.flex"
 #include <iostream>
-// #include "grammatic.tab.c"
+#include "bison.hpp"
+
+struct {
+	int first_line;
+	int last_line;
+	int first_column;
+	int last_column;
+} yylloc;
+int line_number = 0;
+int column_number = 0;
+
+static void updateLocation() {
+    // Начало токена
+    yylloc.first_line = line_number;
+    yylloc.first_column = column_number;
+
+    // Новое смещение
+    for (int i = 0; i < yyleng; i++) {
+      if( yytext[i] == '\n' ) {
+        line_number++;
+        column_number = 1;
+      } else {
+        column_number++;
+      }
+    }
+    // Конец токена
+    yylloc.last_line = line_number;
+    yylloc.last_column = column_number;
+
+    printf( "%s", yytext );
+}
 
 
-// extern int yylex();
-// static void updateLocation() {
-//     // Начало токена
-//     yylloc.first_line = 0;
-//     // yylloc.first_line = line_number;
-//     // yylloc.first_column = column_number;
-
-//     // Новое смещение
-//     for (int i = 0; i < yyleng; i++) {
-//       if( yytext[i] == '\n' ) {
-//         // line_number++;
-//         // column_number = 1;
-//       } else {
-//         // column_number++;
-//       }
-//     }
-//     // Конец токена
-//     // yylloc.last_line = line_number;
-//     // yylloc.last_column = column_number;
-
-//     printf( "%s", yytext );
-// }
-
-
-// #define YY_USER_ACTION updateLocation();
-#line 570 "src/lex.cpp"
+#define YY_USER_ACTION updateLocation();
+#line 576 "src/lex.cpp"
 
 #define INITIAL 0
 
@@ -784,9 +790,9 @@ YY_DECL
 		}
 
 	{
-#line 40 "src/grammatic.flex"
+#line 46 "src/grammatic.flex"
 
-#line 790 "src/lex.cpp"
+#line 796 "src/lex.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -845,156 +851,170 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 41 "src/grammatic.flex"
-{ std::cout << "T_Class "; }
+#line 47 "src/grammatic.flex"
+{
+	std::cout << "T_CLass{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 42 "src/grammatic.flex"
-{ std::cout << "T_Extends "; }
+#line 50 "src/grammatic.flex"
+{
+	std::cout << "T_Extends{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 43 "src/grammatic.flex"
-{ std::cout << "T_Public "; }
+#line 53 "src/grammatic.flex"
+{ 
+	std::cout << "T_Public{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 44 "src/grammatic.flex"
-{ std::cout << "PRINT "; }
+#line 56 "src/grammatic.flex"
+{ 
+	std::cout << "PRINTLN{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 45 "src/grammatic.flex"
-{ std::cout << " "; }
+#line 59 "src/grammatic.flex"
+{ 
+	std::cout << "PRINT{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 46 "src/grammatic.flex"
-{ std::cout << "T_Int "; }
+#line 62 "src/grammatic.flex"
+{ 
+	std::cout << "T_Int{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 47 "src/grammatic.flex"
-{ std::cout << "BOOLEAN "; }
+#line 65 "src/grammatic.flex"
+{ 
+	std::cout << "BOOLEAN{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 48 "src/grammatic.flex"
-{ std::cout << "IF "; }
+#line 68 "src/grammatic.flex"
+{ std::cout << "IF{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 49 "src/grammatic.flex"
-{ std::cout << "ELSE "; }
+#line 69 "src/grammatic.flex"
+{ std::cout << "ELSE{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 50 "src/grammatic.flex"
-{ std::cout << "NUM(" << yytext << ") "; }
+#line 70 "src/grammatic.flex"
+{ std::cout << "NUM(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 51 "src/grammatic.flex"
-{ std::cout << "WHILE "; }
+#line 71 "src/grammatic.flex"
+{ std::cout << "WHILE{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 52 "src/grammatic.flex"
-{ std::cout << "TRUE "; }
+#line 72 "src/grammatic.flex"
+{ std::cout << "TRUE{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 53 "src/grammatic.flex"
-{ std::cout << "FALSE "; }
+#line 73 "src/grammatic.flex"
+{ std::cout << "FALSE{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 54 "src/grammatic.flex"
-{ std::cout << "THIS "; }
+#line 74 "src/grammatic.flex"
+{ std::cout << "THIS{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 55 "src/grammatic.flex"
-{ std::cout << "NEW "; }
+#line 75 "src/grammatic.flex"
+{ std::cout << "NEW{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 56 "src/grammatic.flex"
-{ std::cout << "RETURN "; }
+#line 76 "src/grammatic.flex"
+{ std::cout << "RETURN{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 57 "src/grammatic.flex"
-{ std::cout << "id(" << yytext << ") "; }
+#line 77 "src/grammatic.flex"
+{ std::cout << "id(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 58 "src/grammatic.flex"
-{ std::cout << "BinaryOp "; }
+#line 78 "src/grammatic.flex"
+{ std::cout << "BinaryOp{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 59 "src/grammatic.flex"
-{ std::cout << "LPAREN "; }
+#line 79 "src/grammatic.flex"
+{ std::cout << "LPAREN{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 60 "src/grammatic.flex"
-{ std::cout << "RPAREN "; }
+#line 80 "src/grammatic.flex"
+{ std::cout << "RPAREN{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 61 "src/grammatic.flex"
-{ std::cout << "LBRACKET "; }
+#line 81 "src/grammatic.flex"
+{ std::cout << "LBRACKET{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 62 "src/grammatic.flex"
-{ std::cout << "RBRACKET "; }
+#line 82 "src/grammatic.flex"
+{ std::cout << "RBRACKET{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 63 "src/grammatic.flex"
-{ std::cout << "LBRACE "; }
+#line 83 "src/grammatic.flex"
+{ std::cout << "LBRACE{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 64 "src/grammatic.flex"
-{ std::cout << "RBRACE "; }
+#line 84 "src/grammatic.flex"
+{ std::cout << "RBRACE{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 65 "src/grammatic.flex"
-{ std::cout << "COMMA "; }
+#line 85 "src/grammatic.flex"
+{ std::cout << "COMMA{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 66 "src/grammatic.flex"
-{ std::cout << "DOT "; }
+#line 86 "src/grammatic.flex"
+{ std::cout << "DOT{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 67 "src/grammatic.flex"
-{ std::cout << "SEMI "; }
+#line 87 "src/grammatic.flex"
+{ std::cout << "SEMI{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 68 "src/grammatic.flex"
-{ std::cout << "COMMENT "; }
+#line 88 "src/grammatic.flex"
+{ std::cout << "COMMENT{" << yylloc.first_line << ":" << yylloc.first_column << "} "; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 69 "src/grammatic.flex"
+#line 89 "src/grammatic.flex"
 { ; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 70 "src/grammatic.flex"
+#line 90 "src/grammatic.flex"
 ECHO;
 	YY_BREAK
-#line 998 "src/lex.cpp"
+#line 1018 "src/lex.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1995,7 +2015,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 70 "src/grammatic.flex"
+#line 90 "src/grammatic.flex"
 
 
 

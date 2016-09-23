@@ -330,7 +330,7 @@ extern int yylex (void);
 #undef YY_DECL
 #endif
 
-#line 70 "src/grammatic.flex"
+#line 90 "src/grammatic.flex"
 
 
 #line 337 "src/lex.h"
