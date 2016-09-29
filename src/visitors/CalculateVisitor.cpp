@@ -13,91 +13,134 @@
 #include "../nodes/expressions/CIdExp.h"
 
 
-IVisitorResult* CCalculateVisitor::Visit(CPrintStm *stm) {
-	CalculateResult* result = reinterpret_cast<CalculateResult*>(stm->expression->Accept(this));
+void CCalculateVisitor::Visit(CPrintStm *stm) {
+	if (wasError) {
+		return;
+	}
 
-	switch (result->getType()) {
-		case INT_RESULT_TYPE: {
-				int value = (reinterpret_cast<CalculateIntResult*>(result))->getValue();
+	stm->expression.get()->Accept(this);
 
-				std::cout << value << '\n';
+	if (wasError) {
+		return;
+	}
 
-				return new CalculateNoneResult();
+	if (!this->isChildResultInteger) {
+		this->wasError = true;
+		return;
+	}
+
+	std::cout << this->childResult << '\n';
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CCompoundStm *stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm->leftStatement.get()->Accept(this);
+	stm->rightStatement.get()->Accept(this);
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CSimpleStm *stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm->statement.get()->Accept(this);
+
+	this->isChildResultInteger = false;	
+}
+
+void CCalculateVisitor::Visit(COpExp *exp) {
+	if (wasError) {
+		return;
+	}
+
+	int leftResult;
+	int rightResult;
+
+	exp->leftOperand.get()->Accept(this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	leftResult = this->childResult;
+
+	exp->rightOperand.get()->Accept(this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	rightResult = this->childResult;
+
+	if (wasError) {
+		return;
+	}
+
+
+	this->isChildResultInteger = true;
+	switch (exp->operation) {
+		case PLUS:
+			this->childResult = leftResult + rightResult;
+			break;
+		case MINUS:
+			this->childResult = leftResult - rightResult;
+			break;
+		case MULTIPLY:
+			this->childResult = leftResult * rightResult;
+			break;
+		case DIVISE:
+			if (rightResult == 0) {
+				this->wasError = true;
+				break;
+			} else {
+				this->childResult = leftResult / rightResult;
+				break;
 			}
-		case NONE_RESULT_TYPE:
-			return new CalculateErrorResult();
-		case ERROR_RESULT_TYPE:
-			return new CalculateErrorResult();
 	}
 }
 
-IVisitorResult* CCalculateVisitor::Visit(CCompoundStm *stm) {
-	CalculateResult* leftResult = reinterpret_cast<CalculateResult*>(stm->leftStatement->Accept(this));
-	CalculateResult* rightResult = reinterpret_cast<CalculateResult*>(stm->rightStatement->Accept(this));
-
-	if (leftResult->getType() == ERROR_RESULT_TYPE || rightResult->getType() == ERROR_RESULT_TYPE) {
-		return new CalculateErrorResult();
-	} else {
-		return new CalculateNoneResult();
+void CCalculateVisitor::Visit(CNumExp *exp) {
+	if (wasError) {
+		return;
 	}
+
+	this->childResult = exp->number;
+	this->isChildResultInteger = true;
 }
 
-IVisitorResult* CCalculateVisitor::Visit(CSimpleStm *stm) {
-	CalculateResult* result = reinterpret_cast<CalculateResult*>(stm->statement->Accept(this));
-
-	if (result->getType() == ERROR_RESULT_TYPE) {
-		return new CalculateErrorResult();
-	} else {
-		return new CalculateNoneResult();
+void CCalculateVisitor::Visit(CIdExp *exp) {
+	if (wasError) {
+		return;
 	}
+
+	this->childResult = *(exp->address);
+	this->isChildResultInteger = true;
 }
 
-IVisitorResult* CCalculateVisitor::Visit(COpExp *exp) {
-	CalculateResult* leftResult = reinterpret_cast<CalculateResult*>(exp->leftOperand->Accept(this));
-	CalculateResult* rightResult = reinterpret_cast<CalculateResult*>(exp->rightOperand->Accept(this));
-
-	if (leftResult->getType() == INT_RESULT_TYPE && rightResult->getType() == INT_RESULT_TYPE) {
-		int leftValue = (reinterpret_cast<CalculateIntResult*>(leftResult))->getValue();
-		int rightValue = (reinterpret_cast<CalculateIntResult*>(rightResult))->getValue();
-
-		switch (exp->operation) {
-			case PLUS:
-				return new CalculateIntResult(leftValue + rightValue);
-			case MINUS:
-				return new CalculateIntResult(leftValue - rightValue);
-			case MULTIPLY:
-				return new CalculateIntResult(leftValue * rightValue);
-			case DIVISE:
-				if (rightValue == 0) {
-					return new CalculateErrorResult();
-				} else {
-					return new CalculateIntResult(leftValue / rightValue);
-				}
-		}
-	} else {
-		return new CalculateErrorResult();
+void CCalculateVisitor::Visit(CAssignStm *exp) {
+	if (wasError) {
+		return;
 	}
-}
 
-IVisitorResult* CCalculateVisitor::Visit(CNumExp *exp) {
-	return new CalculateIntResult(exp->number);
-}
-
-IVisitorResult* CCalculateVisitor::Visit(CIdExp *exp) {
-	return new CalculateIntResult(*(exp->address));
-}
-
-IVisitorResult* CCalculateVisitor::Visit(CAssignStm *exp) {
-	CalculateResult* result = reinterpret_cast<CalculateResult*>(exp->rightExpression->Accept(this));
-
-	switch (result->getType()) {
-		case INT_RESULT_TYPE: {
-				*(exp->leftExpression->address) = (reinterpret_cast<CalculateIntResult*>(result))->getValue();
-				return new CalculateNoneResult();
-			}
-		case NONE_RESULT_TYPE:
-			return new CalculateErrorResult();
-		case ERROR_RESULT_TYPE:
-			return new CalculateErrorResult();
+	exp->rightExpression.get()->Accept(this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
 	}
+
+	if (wasError) {
+		return;
+	}
+
+	int rightResult = this->childResult;
+
+	*(exp->leftExpression.get()->address) = rightResult;
+
+	this->isChildResultInteger = false;
 }

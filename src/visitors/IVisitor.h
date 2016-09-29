@@ -20,4 +20,5 @@ public:
 	virtual IVisitorResult* Visit(CAssignStm *exp) = 0;
 	virtual IVisitorResult* Visit(CSimpleStm *exp) = 0;
 
+	virtual ~IVisitor() {};
 };

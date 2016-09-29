@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <map>
+#include <memory>
 
 #include "IVisitor.h"
 
@@ -14,11 +16,18 @@
 
 class CCalculateVisitor : public IVisitor {
 public:
-	IVisitorResult* Visit(CPrintStm *stm) override;
-	IVisitorResult* Visit(CCompoundStm *stm) override;
-	IVisitorResult* Visit(COpExp *exp) override;
-	IVisitorResult* Visit(CNumExp *exp) override;
-	IVisitorResult* Visit(CIdExp *exp) override;
-	IVisitorResult* Visit(CAssignStm *exp) override;
-	IVisitorResult* Visit(CSimpleStm *exp) override;
+	void Visit(CPrintStm *stm) override;
+	void Visit(CCompoundStm *stm) override;
+	void Visit(COpExp *exp) override;
+	void Visit(CNumExp *exp) override;
+	void Visit(CIdExp *exp) override;
+	void Visit(CAssignStm *exp) override;
+	void Visit(CSimpleStm *exp) override;
+
+private:
+	int childResult;
+
+	bool isChildResultInteger;
+
+	bool wasError = false;
 };
