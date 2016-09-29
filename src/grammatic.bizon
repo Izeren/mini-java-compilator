@@ -67,8 +67,8 @@ ClassDeclList:
 
 Statement:
 	'{' StatementList '}' { $$ = new CCompoundStatement) $2 ); }
-	| T_If '(' Exp ')' Statement T_Else Statement { $$ = new CIfStatement}( $3, $5, $7 ); }
-	| T_While '(' Exp ')' Statement { $$ = new CWhileStatement( $3, $5 ); }
+	| T_If '(' Exp ')' Statement T_Else Statement { $$ = new CIfStm}( $3, $5, $7 ); }
+	| T_While '(' Exp ')' Statement { $$ = new CWhileStm( $3, $5 ); }
 	| T_SystemOutPrintln '(' Exp ')' ';' { $$ = new CPrintStm( $3 ); }
 	| T_Identifier '=' Exp ';' { $$ = new CAssignStm $1, $3 ); }
 	| T_Identifier '[' Exp ']' '=' Exp ';' { $$ = new CAssignSubscriptStm( $1, $3, $6 ); }
