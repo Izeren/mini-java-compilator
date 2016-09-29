@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../INode.h"
+#include "INode.h"
 
 class IExpression : public INode {};
 

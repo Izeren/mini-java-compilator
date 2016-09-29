@@ -1,0 +1,36 @@
+SRC_DIR=src
+BUILD_DIR=build
+VISITORS_DIR=$(SRC_DIR)/shared_ptrs_visitors
+NODES_DIR=$(SRC_DIR)/shared_ptrs_nodes
+CFLAGS=-std=c++11
+LFLAGS=-lstdc++
+
+all: $(BUILD_DIR)/main.bin
+
+$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o Exp.o Stm.o PrintVisitor.o)
+	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
+
+$(BUILD_DIR)/main.o: $(SRC_DIR)/main_tmp.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+#Visitors block
+#-----------------------------------------------------------------
+$(BUILD_DIR)/PrintVisitor.o: $(VISITORS_DIR)/CPrintVisitor.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)/CalculateVisitor.o: $(VISITORS_DIR)/CalculateVisitor.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+#Expressions block
+#-----------------------------------------------------------------
+$(BUILD_DIR)/Exp.o: $(NODES_DIR)/Expressions.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+#Statements block
+#-----------------------------------------------------------------
+$(BUILD_DIR)/Stm.o: $(NODES_DIR)/Statements.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+clean:
+	rm -rf $(BUILD_DIR)/*.o
+	rm -rf $(BUILD_DIR)/*.bin

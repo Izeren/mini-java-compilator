@@ -7,9 +7,7 @@ CIdExp::CIdExp(const std::string &name, int *address) {
 	this->address = address;
 }
 
-CIdExp::CIdExp() {
-	this->CIdExp(BAD_ID);
-}
+CIdExp::CIdExp() : CIdExp(BAD_ID) {}
 
 void CIdExp::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
@@ -44,6 +42,4 @@ COpExp::COpExp(
 
 }
 
-COpExp::COpExp() {
-	this->COpExp(NULL, NULL);
-}
+COpExp::COpExp() : COpExp(NULL, NULL) {}
