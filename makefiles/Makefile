@@ -12,7 +12,7 @@ all: $(BUILD_DIR)/main.bin
 $(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o IdExp.o NumExp.o OpExp.o SimpleStm.o AssignStm.o PrintStm.o CompoundStm.o PrintResults.o PrintVisitor.o CalculateResults.o CalculateVisitor.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
-$(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp
+$(BUILD_DIR)/main.o: $(SRC_DIR)/main_tmp.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 #Visitors block

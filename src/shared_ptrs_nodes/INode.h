@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <string>
-#include "../visitors/IVisitor.h"
+#include "../shared_ptrs_visitors/IVisitor.h"
 
 const std::string BAD_ID("Error_name");
 

@@ -38,12 +38,14 @@ void yyerror ( const IProgram*&, char const * );
 %token T_Class T_Extends T_Public
 %token T_Static T_Void T_Main T_String
 
+
 // Особые (типизированные) токены
 %token <Symbol> T_Identifier
-
 %type <Program> Program
 
+
 %%
+
 
 Program: 
 	MainClass ClassDeclList { program = $$ = new CProgram( $1, $2); };
@@ -57,7 +59,8 @@ MainClass: T_Class T_Identifier '{'
 ;
 
 //Список классов
-ClassDeclList: T_Class '{' error '}'
+ClassDeclList:
+	T_Class '{' error '}'
 	{
 	fprinf( stderr, "[%d, %d] Class error!", @3.first_line, @3.first_column );
 	}
@@ -71,13 +74,13 @@ Statement:
 	| T_Identifier '[' Exp ']' '=' Exp ';' { $$ = new CAssignSubscriptStatement( $1, $3, $6 ); }
 
 Exp:
-	Exp '+' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Plus, $3 ); }
-	| Exp '-' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Minus, $3 ); }
-	| Exp '*' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Mult, $3 ); }
-	| Exp '/' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Div, $3 ); }
-	| Exp T_And Exp { $$ = new CLogicalExp( $1, CLogicalExp::O_And, $3 ); }
-	| Exp '<' Exp { $$ = new CCompareExp( $1, CCompareExp::O_Less, $3 ); }
-	| Exp '*' Exp { $$ = new CAriphmeticExp( $1, CAriphmeticExp::O_Mult, $3 ); }
-	| '-' Exp %prec T_UMinus { $$ = new CUnariMinusExp( $2 ); } 
+	Exp '+' Exp { $$ = new COpExp( $1, COpExp::Plus, $3 ); }
+	| Exp '-' Exp { $$ = new COpExp( $1, COpExp::Minus, $3 ); }
+	| Exp '*' Exp { $$ = new COpExp( $1, COpExp::Mult, $3 ); }
+	| Exp '/' Exp { $$ = new COpExp( $1, COpExp::Div, $3 ); }
+	//| Exp T_And Exp { $$ = new CLogicalExp( $1, CLogicalExp::O_And, $3 ); }
+	//| Exp '<' Exp { $$ = new CCompareExp( $1, CCompareExp::O_Less, $3 ); }
+	//| '-' Exp %prec T_UMinus { $$ = new CUnariMinusExp( $2 ); } 
+
 
 %%

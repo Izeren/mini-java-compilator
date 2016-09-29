@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../INode.h"
+#include "INode.h"
+#include "Expressions.h"
 
 class IStatement : public INode {};
 
@@ -27,12 +28,12 @@ public:
 class CPrintStm : public IStatement {
 public:
 	CPrintStm();
-	CPrintStm(std::shared_ptr<IStatement> expression);
+	CPrintStm(std::shared_ptr<IExpression> expression);
 
 	void Accept(IVisitor &visitor) override;
 
-	std::shared<IExpression> expression;
-};
+	std::shared_ptr<IExpression> expression;
+}; 
 
 class CSimpleStm : public IStatement {
 public:

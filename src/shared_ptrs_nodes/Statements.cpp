@@ -3,9 +3,7 @@
 //CAssignStm:
 //-------------------------------------------------------------------------------------------------
 
-CAssignStm::CAssignStm() {
-	this->CAssignStm(NULL, NULL);
-}
+CAssignStm::CAssignStm() : CAssignStm(NULL, NULL) {}
 
 CAssignStm::CAssignStm(
 	std::shared_ptr<CIdExp> leftExpression, 
@@ -24,9 +22,7 @@ void CAssignStm::Accept(IVisitor &visitor) {
 //CCompoundStm:
 //-------------------------------------------------------------------------------------------------
 
-CCompoundStm::CCompoundStm() {
-	this->CCompoundStm(NULL, NULL);
-}
+CCompoundStm::CCompoundStm() : CCompoundStm(NULL, NULL) {}
 
 CCompoundStm::CCompoundStm(
 	std::shared_ptr<IStatement> leftStatement,
@@ -44,9 +40,7 @@ void CCompoundStm::Accept(IVisitor &visitor) {
 //CPrintStm:
 //-------------------------------------------------------------------------------------------------
 
-CPrintStm::CPrintStm() {
-	this->CPrintStm(NULL);
-}
+CPrintStm::CPrintStm() : CPrintStm(NULL) {}
 
 CPrintStm::CPrintStm(std::shared_ptr<IExpression> expression) {
 	this->expression = expression;
@@ -59,9 +53,7 @@ void CPrintStm::Accept(IVisitor &visitor) {
 //CSimpleStm:
 //-------------------------------------------------------------------------------------------------
 
-CSimpleStm() {
-	this->CSimpleStm(NULL);
-}
+CSimpleStm::CSimpleStm() : CSimpleStm(NULL) {}
 
 CSimpleStm::CSimpleStm(std::shared_ptr<IStatement> statement) {
 	this->statement = statement;
