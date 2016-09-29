@@ -1,24 +1,14 @@
 #include <iostream>
 
 #include "IVisitor.h"
-#include "IVisitorResult.h"
-#include "CalculateResults.h"
 #include "CalculateVisitor.h"
 
-#include "../nodes/statements/CPrintStm.h"
-#include "../nodes/statements/CCompoundStm.h"
-#include "../nodes/statements/CAssignStm.h"
-#include "../nodes/expressions/COpExp.h"
-#include "../nodes/expressions/CNumExp.h"
-#include "../nodes/expressions/CIdExp.h"
-
-
-void CCalculateVisitor::Visit(CPrintStm *stm) {
+void CCalculateVisitor::Visit(CPrintStm &stm) {
 	if (wasError) {
 		return;
 	}
 
-	stm->expression.get()->Accept(this);
+	stm.expression.get()->Accept(*this);
 
 	if (wasError) {
 		return;
@@ -33,28 +23,28 @@ void CCalculateVisitor::Visit(CPrintStm *stm) {
 	this->isChildResultInteger = false;
 }
 
-void CCalculateVisitor::Visit(CCompoundStm *stm) {
+void CCalculateVisitor::Visit(CCompoundStm &stm) {
 	if (wasError) {
 		return;
 	}
 
-	stm->leftStatement.get()->Accept(this);
-	stm->rightStatement.get()->Accept(this);
+	stm.leftStatement.get()->Accept(*this);
+	stm.rightStatement.get()->Accept(*this);
 
 	this->isChildResultInteger = false;
 }
 
-void CCalculateVisitor::Visit(CSimpleStm *stm) {
+void CCalculateVisitor::Visit(CSimpleStm &stm) {
 	if (wasError) {
 		return;
 	}
 
-	stm->statement.get()->Accept(this);
+	stm.statement.get()->Accept(*this);
 
 	this->isChildResultInteger = false;	
 }
 
-void CCalculateVisitor::Visit(COpExp *exp) {
+void CCalculateVisitor::Visit(COpExp &exp) {
 	if (wasError) {
 		return;
 	}
@@ -62,7 +52,7 @@ void CCalculateVisitor::Visit(COpExp *exp) {
 	int leftResult;
 	int rightResult;
 
-	exp->leftOperand.get()->Accept(this);
+	exp.leftOperand.get()->Accept(*this);
 	if (!this->isChildResultInteger) {
 		wasError = true;
 		return;
@@ -70,7 +60,7 @@ void CCalculateVisitor::Visit(COpExp *exp) {
 
 	leftResult = this->childResult;
 
-	exp->rightOperand.get()->Accept(this);
+	exp.rightOperand.get()->Accept(*this);
 	if (!this->isChildResultInteger) {
 		wasError = true;
 		return;
@@ -84,7 +74,7 @@ void CCalculateVisitor::Visit(COpExp *exp) {
 
 
 	this->isChildResultInteger = true;
-	switch (exp->operation) {
+	switch (exp.operation) {
 		case PLUS:
 			this->childResult = leftResult + rightResult;
 			break;
@@ -105,30 +95,30 @@ void CCalculateVisitor::Visit(COpExp *exp) {
 	}
 }
 
-void CCalculateVisitor::Visit(CNumExp *exp) {
+void CCalculateVisitor::Visit(CNumExp &exp) {
 	if (wasError) {
 		return;
 	}
 
-	this->childResult = exp->number;
+	this->childResult = exp.number;
 	this->isChildResultInteger = true;
 }
 
-void CCalculateVisitor::Visit(CIdExp *exp) {
+void CCalculateVisitor::Visit(CIdExp &exp) {
 	if (wasError) {
 		return;
 	}
 
-	this->childResult = *(exp->address);
+	this->childResult = *(exp.address);
 	this->isChildResultInteger = true;
 }
 
-void CCalculateVisitor::Visit(CAssignStm *exp) {
+void CCalculateVisitor::Visit(CAssignStm &exp) {
 	if (wasError) {
 		return;
 	}
 
-	exp->rightExpression.get()->Accept(this);
+	exp.rightExpression.get()->Accept(*this);
 	if (!this->isChildResultInteger) {
 		wasError = true;
 		return;
@@ -140,7 +130,7 @@ void CCalculateVisitor::Visit(CAssignStm *exp) {
 
 	int rightResult = this->childResult;
 
-	*(exp->leftExpression.get()->address) = rightResult;
+	*(exp.leftExpression.get()->address) = rightResult;
 
 	this->isChildResultInteger = false;
 }

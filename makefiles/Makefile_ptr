@@ -7,7 +7,7 @@ LFLAGS=-lstdc++
 
 all: $(BUILD_DIR)/main.bin
 
-$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o Exp.o Stm.o PrintVisitor.o)
+$(BUILD_DIR)/main.bin: $(addprefix $(BUILD_DIR)/, main.o Exp.o Stm.o PrintVisitor.o CalculateVisitor.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main_tmp.cpp
