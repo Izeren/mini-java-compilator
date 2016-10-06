@@ -32,7 +32,6 @@ static void updateLocation() {
     printf( "%s", yytext );
 }
 
-enum TOKEN_TYPES { T_Class, T_Extends, T_Public, T_Int, BOOLEAN, IF, ELSE, THIS, NEW, RETURN, TRUE, FALSE, ID, BinaryOp, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE, PRINTLN, PRINT, NUM, WHILE, COMMA, COMMENT, DOT, SEMI };
 #define YY_USER_ACTION updateLocation();
 %}
 
@@ -45,115 +44,115 @@ IntegerLiteral [1-9]{DIGIT}*|0
 
 %%
 "class" {
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return T_Class;
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	return CLASS;
 }
 "extends" {
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return T_Extends; 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	return EXTENDS; 
 }
 "public" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
-	return T_Public;
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	return PUBLIC;
 }
 "System.out.println" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return PRINTLN;
 }
 "System.out.print" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return PRINT;
 }
 "int" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return T_Int;
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	return INT;
 }
 "boolean" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return BOOLEAN;
 }
 "if" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return IF;
 }
 "else" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return ELSE;
 }
 {IntegerLiteral} { 
-	std::cout << "(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return NUM;
 }
 "while" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return WHILE; 
 }
 "true" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return TRUE;
 }
 "false" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return FALSE;
 }
 "this" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return THIS;
 }
 "new" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return NEW;
 }
 "return" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return RETURN;
 }
 {ID} { 
-	std::cout << "(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return ID;
 }
 "&&"|"+"|"-"|"*" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return BinaryOp;
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	return BINARY_OP;
 }
 "(" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return LPAREN;
 }
 ")" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return RPAREN;
 }
 "[" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return LBRACKET;
 }
 "]" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return RBRACKET;
 }
 "{" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return LBRACE;
 }
 "}" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return RBRACE;
 }
 "," { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return COMMA;
 }
 "." { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return DOT; 
 }
 ";" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return SEMI; 
 }
 "/*"((("*"[^/])?)|[^*])*"*/" { 
-	std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return COMMENT;
 }
 . { ; }
