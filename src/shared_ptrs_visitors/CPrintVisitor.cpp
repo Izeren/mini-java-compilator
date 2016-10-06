@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <unordered_map>
 
-//std::unordered_map<TOperation, std::string> operationNames = {}
-
 CPrintVisitor::CPrintVisitor() {
 	lastVisited = 0;
 }
