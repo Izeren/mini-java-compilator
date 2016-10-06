@@ -32,7 +32,7 @@ void CConvertVisitor::Visit(COpExp &exp) {
 	if (exp.leftOperand) {
 		exp.leftOperand->Accept(*this);
 	}
-	this->code += " " stringOperation[exp.operation] + " ";
+	this->code += " " stringOperations[exp.operation] + " ";
 	if (exp.rightOperand) {
 		exp.rightOperand->Accept(*this);
 	}

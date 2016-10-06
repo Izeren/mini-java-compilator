@@ -26,6 +26,12 @@ void CNumExp::Accept(IVisitor &visitor) {
 //COpExp:
 //-------------------------------------------------------------------------------------------------
 
+std::unordered_map<TOperation, std::string> COpExp::stringOperations = {
+	{ PLUS, "+" },
+	{ MINUS, "-" },
+	{ MULTIPLY, "*" }
+};
+
 void COpExp::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }

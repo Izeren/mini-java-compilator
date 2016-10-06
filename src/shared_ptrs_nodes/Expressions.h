@@ -23,10 +23,13 @@ public:
 	int number;
 };
 
-static enum TOperation { PLUS, MINUS, TIMES};
+enum TOperation { PLUS, MINUS, TIMES};
 
 class COpExp : public IExpression {
 public:
+
+	static std::unordered_map<TOperation, std::string> stringOperations;
+
 	void Accept(IVisitor &visitor) override;
 	COpExp();
 	COpExp(
