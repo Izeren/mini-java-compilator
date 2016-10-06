@@ -23,7 +23,7 @@ public:
 	int number;
 };
 
-enum TOperation { PLUS, MINUS, MULTIPLY, DIVISE };
+static enum TOperation { PLUS, MINUS, TIMES};
 
 class COpExp : public IExpression {
 public:
@@ -32,7 +32,7 @@ public:
 	COpExp(
 		std::shared_ptr<IExpression> leftOperand, 
 		std::shared_ptr<IExpression> rightOperand, 
-		TOperation operation = PLUS
+		TOperation operation = TOperation::PLUS
 	);
 
 	std::shared_ptr<IExpression> leftOperand;

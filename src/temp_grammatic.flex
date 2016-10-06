@@ -111,9 +111,21 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	//std::cout << "(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return ID;
 }
-"&&"|"+"|"-"|"*" { 
+"&&" { 
 	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return BINARY_OP;
+	return AND;
+}
+"+" { 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	return PLUS;
+}
+"-" { 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	return MINUS;
+}
+"*" { 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	return TIMES;
 }
 "(" { 
 	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
