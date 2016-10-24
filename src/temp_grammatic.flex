@@ -107,9 +107,30 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return RETURN;
 }
+"main" {
+	return MAIN;
+}
+"static" {
+	return STATIC;
+}
+"void" {
+	return VOID;
+}
+"String" {
+	return STRING;
+}
 {ID} { 
 	//std::cout << "(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return ID;
+}
+"<" {
+	return LESS;
+}
+">" {
+	return GREATER;
+}
+"=" {
+	return EQUALS;
 }
 "&&" { 
 	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 

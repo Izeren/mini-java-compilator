@@ -7,10 +7,10 @@ CC=g++
 all: flex bison $(BUILD_DIR)/bison_main.bin
 
 flex: 
-	flex --header-file=src/lex.h -o src/lex.cpp src/grammatic.flex
+	flex --header-file=src/lex.h -o src/lex.cpp src/temp_grammatic.flex
 
 bison:
-	bison -d -o src/bison.cpp src/grammatic.y
+	bison -d -o src/bison.cpp src/grammatic.bizon
 
 $(BUILD_DIR)/bison_main.bin: $(addprefix $(BUILD_DIR)/, bison_main.o flex.o bison.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
