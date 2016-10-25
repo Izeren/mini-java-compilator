@@ -75,23 +75,15 @@ void CCalculateVisitor::Visit(COpExp &exp) {
 
 	this->isChildResultInteger = true;
 	switch (exp.operation) {
-		case PLUS:
+		case enums::TOperation::PLUS:
 			this->childResult = leftResult + rightResult;
 			break;
-		case MINUS:
+		case enums::TOperation::MINUS:
 			this->childResult = leftResult - rightResult;
 			break;
-		case MULTIPLY:
+		case enums::TOperation::MULTIPLY:
 			this->childResult = leftResult * rightResult;
 			break;
-		case DIVISE:
-			if (rightResult == 0) {
-				this->wasError = true;
-				break;
-			} else {
-				this->childResult = leftResult / rightResult;
-				break;
-			}
 	}
 }
 

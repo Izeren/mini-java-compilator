@@ -26,10 +26,10 @@ void CNumExp::Accept(IVisitor &visitor) {
 //COpExp:
 //-------------------------------------------------------------------------------------------------
 
-std::unordered_map<TOperation, std::string> COpExp::stringOperations = {
-	{ PLUS, "+" },
-	{ MINUS, "-" },
-	{ MULTIPLY, "*" }
+std::map<enums::TOperation, std::string> COpExp::stringOperations = {
+	{ enums::TOperation::PLUS, "+" },
+	{ enums::TOperation::MINUS, "-" },
+	{ enums::TOperation::MULTIPLY, "*" }
 };
 
 void COpExp::Accept(IVisitor &visitor) {
@@ -39,7 +39,7 @@ void COpExp::Accept(IVisitor &visitor) {
 COpExp::COpExp(
 	std::shared_ptr<IExpression> leftOperand, 
 	std::shared_ptr<IExpression> rightOperand, 
-	TOperation operation
+	enums::TOperation operation
 ) {
 
 	this->leftOperand = leftOperand;

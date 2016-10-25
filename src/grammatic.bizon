@@ -116,7 +116,7 @@ void yyerror ( const IProgram*&, char const * );
 
 
 Program:
-	Class { Program = $$ = new CProgram( $1 ); }
+	MainClass { Program = $$ = new CProgram( $1 ); }
 	| MainClass ClassDeclList { Program = $$ = new CProgram( $1, $2); }
 	;
 

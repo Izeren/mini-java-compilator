@@ -1,7 +1,8 @@
 #pragma once
 
 #include "INode.h"
-
+#include "../Utils.h"
+#include <map>
 class IExpression : public INode {};
 
 
@@ -23,22 +24,20 @@ public:
 	int number;
 };
 
-enum TOperation { PLUS, MINUS, TIMES};
-
 class COpExp : public IExpression {
 public:
 
-	static std::unordered_map<TOperation, std::string> stringOperations;
+	static std::map<enums::TOperation, std::string> stringOperations;
 
 	void Accept(IVisitor &visitor) override;
 	COpExp();
 	COpExp(
 		std::shared_ptr<IExpression> leftOperand, 
 		std::shared_ptr<IExpression> rightOperand, 
-		TOperation operation = TOperation::PLUS
+		enums::TOperation operation = enums::TOperation::PLUS
 	);
 
 	std::shared_ptr<IExpression> leftOperand;
 	std::shared_ptr<IExpression> rightOperand;
-	TOperation operation;
+	enums::TOperation operation;
 };

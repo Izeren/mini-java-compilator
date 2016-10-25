@@ -7,6 +7,7 @@
 #include "IVisitor.h"
 #include "../shared_ptrs_nodes/Statements.h"
 #include "../shared_ptrs_nodes/Expressions.h"
+#include "../Utils.h"
 
 class CCalculateVisitor : public IVisitor {
 public:
