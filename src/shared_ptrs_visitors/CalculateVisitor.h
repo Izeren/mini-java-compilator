@@ -7,7 +7,6 @@
 #include "IVisitor.h"
 #include "../shared_ptrs_nodes/Statements.h"
 #include "../shared_ptrs_nodes/Expressions.h"
-#include "../Utils.h"
 
 class CCalculateVisitor : public IVisitor {
 public:
@@ -18,6 +17,8 @@ public:
 	void Visit(CIdExp &exp) override;
 	void Visit(CAssignStm &exp) override;
 	void Visit(CSimpleStm &exp) override;
+
+	int GetResult();
 
 private:
 	int childResult;

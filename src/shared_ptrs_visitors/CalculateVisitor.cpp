@@ -41,7 +41,7 @@ void CCalculateVisitor::Visit(CSimpleStm &stm) {
 
 	stm.statement.get()->Accept(*this);
 
-	this->isChildResultInteger = false;	
+	this->isChildResultInteger = false;
 }
 
 void CCalculateVisitor::Visit(COpExp &exp) {
@@ -75,15 +75,23 @@ void CCalculateVisitor::Visit(COpExp &exp) {
 
 	this->isChildResultInteger = true;
 	switch (exp.operation) {
-		case enums::TOperation::PLUS:
-			this->childResult = leftResult + rightResult;
-			break;
-		case enums::TOperation::MINUS:
-			this->childResult = leftResult - rightResult;
-			break;
-		case enums::TOperation::MULTIPLY:
-			this->childResult = leftResult * rightResult;
-			break;
+	case PLUS:
+		this->childResult = leftResult + rightResult;
+		break;
+	case MINUS:
+		this->childResult = leftResult - rightResult;
+		break;
+	case MULTIPLY:
+		this->childResult = leftResult * rightResult;
+		break;
+		//case DIVISE:
+		//	if (rightResult == 0) {
+		//		this->wasError = true;
+		//		break;
+		//	} else {
+		//		this->childResult = leftResult / rightResult;
+		//		break;
+		//	}
 	}
 }
 
@@ -125,4 +133,8 @@ void CCalculateVisitor::Visit(CAssignStm &exp) {
 	*(exp.leftExpression.get()->address) = rightResult;
 
 	this->isChildResultInteger = false;
+}
+
+int CCalculateVisitor::GetResult() {
+	return childResult;
 }

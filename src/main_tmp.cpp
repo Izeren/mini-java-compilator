@@ -3,6 +3,7 @@
 #include "shared_ptrs_nodes\Expressions.h"
 #include "shared_ptrs_nodes\INode.h"
 #include "shared_ptrs_nodes\Statements.h"
+#include "shared_ptrs_visitors\CalculateVisitor.h"
 
 #include <fstream>
 #include <iostream>
@@ -57,18 +58,29 @@ void cutDownTree(INode *tree) {
 void testPrintVisitor() {
 
 	 INode* tree = buildTree();
-	// INode *tree = buildCaculatableExpression();
 
 	CPrintVisitor printVisitor = CPrintVisitor();
 	tree->Accept(printVisitor);
 
 	std::ofstream out("output.txt");
-	out << "digraph G{\ngraph[ordering=\"out\"];\n" << printVisitor.getDescription() << "}\n" << "\n";
+	out << "digraph G{\ngraph[ordering=\"out\"];\n" << printVisitor.GetResult() << "}\n" << "\n";
 
 	out.close();
 
-	//delete printVisitor;
 	cutDownTree(tree);
+}
+
+void testCalculateVisitor() {
+
+	COpExp *expression = buildCaculatableExpression();
+
+	CCalculateVisitor calculateVisitor = CCalculateVisitor();
+	expression->Accept(calculateVisitor);
+
+	int intResult = calculateVisitor.GetResult();
+	std::cout << intResult << "\n";
+
+	freeExpression(reinterpret_cast<COpExp *>(expression));
 
 }
 
@@ -76,6 +88,7 @@ void testPrintVisitor() {
 int main()
 {
 	testPrintVisitor();
+	testCalculateVisitor();
     return 0;
 }
 

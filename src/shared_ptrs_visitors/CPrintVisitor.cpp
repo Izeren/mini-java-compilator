@@ -40,7 +40,7 @@ void CPrintVisitor::Visit(COpExp &exp) {
 	int operationId = ++lastVisited;
 	this->description = "";
 	exp.rightOperand->Accept(*this);
-	std::string secondChildDescription = this->description;	
+	std::string secondChildDescription = this->description;
 	int rightId = lastVisited;
 	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
 	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(operationId) + "\n";
@@ -95,6 +95,6 @@ void CPrintVisitor::Visit(CSimpleStm &stm) {
 	++lastVisited;
 }
 
-std::string CPrintVisitor::getDescription() {
+std::string CPrintVisitor::GetResult() {
 	return description;
 }

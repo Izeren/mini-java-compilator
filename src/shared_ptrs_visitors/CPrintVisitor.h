@@ -18,8 +18,8 @@ public:
 	void Visit(CIdExp &exp) override;
 	void Visit(CAssignStm &exp) override;
 	void Visit(CSimpleStm &exp) override;
-    
-	std::string getDescription();
+
+	std::string GetResult();
 
 private:
 	int lastVisited;
