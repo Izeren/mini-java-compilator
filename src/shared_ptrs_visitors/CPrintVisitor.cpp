@@ -94,3 +94,7 @@ void CPrintVisitor::Visit(CSimpleStm &stm) {
 	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=CompoundStm]\n";
 	++lastVisited;
 }
+
+std::string CPrintVisitor::getDescription() {
+	return description;
+}
