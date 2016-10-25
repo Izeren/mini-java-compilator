@@ -2,10 +2,14 @@
 
 class CPrintStm;
 class CCompoundStm;
-class CAssignStm;
 class COpExp;
 class CNumExp;
-class CIdExp; 
+class CIdExp;
+class CLogExp;
+class CLogOpExp;
+class CCompExp;
+class CUnarMinusExp;
+class CAssignStm;
 class CSimpleStm;
 
 class IVisitor {
@@ -15,6 +19,10 @@ public:
 	virtual void Visit(COpExp &exp) = 0;
 	virtual void Visit(CNumExp &exp) = 0;
 	virtual void Visit(CIdExp &exp) = 0;
+	virtual void Visit(CLogExp &exp) = 0;
+	virtual void Visit(CLogOpExp &exp) = 0;
+	virtual void Visit(CCompExp &exp) = 0;
+	virtual void Visit(CUnarMinusExp &exp) = 0;
 	virtual void Visit(CAssignStm &exp) = 0;
 	virtual void Visit(CSimpleStm &exp) = 0;
 

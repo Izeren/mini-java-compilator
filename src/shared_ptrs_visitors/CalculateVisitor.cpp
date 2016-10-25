@@ -113,6 +113,118 @@ void CCalculateVisitor::Visit(CIdExp &exp) {
 	this->isChildResultInteger = true;
 }
 
+//
+void CCalculateVisitor::Visit(CLogExp &exp) {
+	if (wasError) {
+		return;
+	}
+
+	this->childResult = exp.variable;
+	this->isChildResultInteger = true;
+}
+
+void CCalculateVisitor::Visit(CLogOpExp &exp) {
+	if (wasError) {
+		return;
+	}
+
+	int leftResult;
+	int rightResult;
+
+	exp.leftOperand.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	leftResult = this->childResult;
+
+	exp.rightOperand.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	rightResult = this->childResult;
+
+	if (wasError) {
+		return;
+	}
+
+	this->isChildResultInteger = true;
+	switch (exp.operation) {
+	case AND:
+		this->childResult = (leftResult && rightResult);
+		break;
+	case OR:
+		this->childResult = (leftResult || rightResult);
+		break;
+	}
+}
+
+void CCalculateVisitor::Visit(CCompExp &exp) {
+	if (wasError) {
+		return;
+	}
+
+	int leftResult;
+	int rightResult;
+
+	exp.leftOperand.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	leftResult = this->childResult;
+
+	exp.rightOperand.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	rightResult = this->childResult;
+
+	if (wasError) {
+		return;
+	}
+
+	this->isChildResultInteger = true;
+	switch (exp.operation) {
+	case GREATER:
+		this->childResult = (leftResult > rightResult);
+		break;
+	case GREATER_OR_EQUAL:
+		this->childResult = (leftResult >= rightResult);
+		break;
+	case LESS:
+		this->childResult = (leftResult < rightResult);
+		break;
+	case LESS_OR_EQUAL:
+		this->childResult = (leftResult <= rightResult);
+		break;
+	}
+}
+
+void CCalculateVisitor::Visit(CUnarMinusExp &exp) {
+	if (wasError) {
+		return;
+	}
+
+	int rightResult;
+
+	exp.rightOperand.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	rightResult = this->childResult;
+
+	this->childResult = -rightResult;
+}
+
 void CCalculateVisitor::Visit(CAssignStm &exp) {
 	if (wasError) {
 		return;

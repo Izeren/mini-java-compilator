@@ -6,7 +6,7 @@
 CAssignStm::CAssignStm() : CAssignStm(NULL, NULL) {}
 
 CAssignStm::CAssignStm(
-	std::shared_ptr<CIdExp> leftExpression, 
+	std::shared_ptr<CIdExp> leftExpression,
 	std::shared_ptr<IExpression> rightExpression
 ) {
 	this->leftExpression = leftExpression;

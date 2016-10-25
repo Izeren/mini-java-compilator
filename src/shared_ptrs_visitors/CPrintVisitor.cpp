@@ -42,29 +42,90 @@ void CPrintVisitor::Visit(COpExp &exp) {
 	exp.rightOperand->Accept(*this);
 	std::string secondChildDescription = this->description;
 	int rightId = lastVisited;
+	this->description = "";
+	this->description += firstChildDescription;
+	this->description += "\t" + std::to_string(operationId) + "[label=" + exp.stringOperations[exp.operation] + "]\n";
+	this->description += secondChildDescription;
 	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
 	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(operationId) + "\n";
 	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(rightId) + "\n";
 	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=OpExp]\n";
-	this->description += "\t" + std::to_string(operationId) + "[label=Need to fix]\n";
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CNumExp &exp) {
 
 	++lastVisited;
-	this->description = "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
+	this->description = "\t" + std::to_string(lastVisited) + "[label=" + std::to_string(exp.number) + "]\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
 	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=NumExp]\n";
-	this->description += "\t" + std::to_string(lastVisited) + "[label=" + std::to_string(exp.number) + "]\n";
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CIdExp &exp) {
 
 	++lastVisited;
-	this->description = "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
+	this->description = "\t" + std::to_string(lastVisited) + "[label=" + exp.name + "]\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
 	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=IdExp]\n";
-	this->description += "\t" + std::to_string(lastVisited) + "[label=" + exp.name + "]\n";
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CLogExp &exp) {
+
+	++lastVisited;
+	this->description = "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=LogExp]\n";
+	this->description += "\t" + std::to_string(lastVisited) + "[label=" + std::to_string(exp.variable) + "]\n";
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CLogOpExp &exp) {
+	this->description = "";
+	exp.leftOperand->Accept(*this);
+	std::string firstChildDescription = this->description;
+	int leftId = lastVisited;
+	int operationId = ++lastVisited;
+	this->description = "";
+	exp.rightOperand->Accept(*this);
+	std::string secondChildDescription = this->description;
+	int rightId = lastVisited;
+	this->description = "";
+	this->description += firstChildDescription;
+	this->description += "\t" + std::to_string(operationId) + "[label=" + exp.stringOperations[exp.operation] + "]\n";
+	this->description += secondChildDescription;
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(operationId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(rightId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=LogOpExp]\n";
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CCompExp &exp) {
+	this->description = "";
+	exp.leftOperand->Accept(*this);
+	std::string firstChildDescription = this->description;
+	int leftId = lastVisited;
+	int operationId = ++lastVisited;
+	this->description = "";
+	exp.rightOperand->Accept(*this);
+	std::string secondChildDescription = this->description;
+	int rightId = lastVisited;
+	this->description = "";
+	this->description += firstChildDescription;
+	this->description += "\t" + std::to_string(operationId) + "[label=" + exp.stringOperations[exp.operation] + "]\n";
+	this->description += secondChildDescription;
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(operationId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(rightId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=CompExp]\n";
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CUnarMinusExp &exp) {
+	++lastVisited;
+	this->description = "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=UnarMinusExp]\n";
 	++lastVisited;
 }
 

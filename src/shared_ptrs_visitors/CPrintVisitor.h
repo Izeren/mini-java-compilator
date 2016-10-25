@@ -16,6 +16,10 @@ public:
 	void Visit(COpExp &exp) override;
 	void Visit(CNumExp &exp) override;
 	void Visit(CIdExp &exp) override;
+	void Visit(CLogExp &exp) override;
+	void Visit(CLogOpExp &exp) override;
+	void Visit(CCompExp &exp) override;
+	void Visit(CUnarMinusExp &exp) override;
 	void Visit(CAssignStm &exp) override;
 	void Visit(CSimpleStm &exp) override;
 

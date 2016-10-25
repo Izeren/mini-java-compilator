@@ -33,7 +33,7 @@ public:
 	void Accept(IVisitor &visitor) override;
 
 	std::shared_ptr<IExpression> expression;
-}; 
+};
 
 class CSimpleStm : public IStatement {
 public:

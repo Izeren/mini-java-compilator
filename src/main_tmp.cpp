@@ -4,6 +4,7 @@
 #include "shared_ptrs_nodes\INode.h"
 #include "shared_ptrs_nodes\Statements.h"
 #include "shared_ptrs_visitors\CalculateVisitor.h"
+#include "shared_ptrs_visitors\CConvertVisitor.h"
 
 #include <fstream>
 #include <iostream>
@@ -57,7 +58,7 @@ void cutDownTree(INode *tree) {
 
 void testPrintVisitor() {
 
-	 INode* tree = buildTree();
+	INode* tree = buildTree();
 
 	CPrintVisitor printVisitor = CPrintVisitor();
 	tree->Accept(printVisitor);
@@ -89,6 +90,7 @@ int main()
 {
 	testPrintVisitor();
 	testCalculateVisitor();
+
     return 0;
 }
 

@@ -6,7 +6,7 @@
 //std::unordered_map<TOperation, std::string> operationNames = {}
 
 CConvertVisitor::CConvertVisitor() {
-	lastVisited = 0;
+	//lastVisited = 0;
 }
 
 void CConvertVisitor::Visit(CPrintStm &stm) {
@@ -46,8 +46,43 @@ void CConvertVisitor::Visit(CIdExp &exp) {
 	this->code += exp.name;
 }
 
+void CConvertVisitor::Visit(CLogExp &exp) {
+	if (exp.variable) {
+		this->code += "true";
+	} else {
+		this->code += "false";
+	}
+}
+
+void CConvertVisitor::Visit(CLogOpExp &exp) {
+	if (exp.leftOperand) {
+		exp.leftOperand->Accept(*this);
+	}
+	this->code += " " + exp.stringOperations[exp.operation] + " ";
+	if (exp.rightOperand) {
+		exp.rightOperand->Accept(*this);
+	}
+}
+
+void CConvertVisitor::Visit(CCompExp &exp) {
+	if (exp.leftOperand) {
+		exp.leftOperand->Accept(*this);
+	}
+	this->code += " " + exp.stringOperations[exp.operation] + " ";
+	if (exp.rightOperand) {
+		exp.rightOperand->Accept(*this);
+	}
+}
+
+void CConvertVisitor::Visit(CUnarMinusExp &exp) {
+	this->code += "- ";
+	if (exp.rightOperand) {
+		exp.rightOperand->Accept(*this);
+	}
+}
+
 void CConvertVisitor::Visit(CAssignStm &stm) {
-	if (stm.leftExpression {
+	if (stm.leftExpression) {
 		stm.leftExpression->Accept(*this);
 	}
 	this->code += " = ";
