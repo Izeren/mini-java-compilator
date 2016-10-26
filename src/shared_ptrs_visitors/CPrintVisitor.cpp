@@ -3,196 +3,168 @@
 #include <algorithm>
 #include <unordered_map>
 
+void ChildrenAnswers::PushBack(std::string description, int id) {
+	this->descriptions.push_back(description);
+	this->ids.push_back(id);
+}
+
 CPrintVisitor::CPrintVisitor() {
 	lastVisited = 0;
 }
 
-void CPrintVisitor::Visit(CPrintStm &stm) {
+ChildrenAnswers CPrintVisitor::VisitChildren(std::vector<INode*> children) {
+	ChildrenAnswers answers = ChildrenAnswers();
+	for (int i = 0; i < children.size(); i++) {
+		children[i]->Accept(*this);
+		answers.PushBack(this->description, lastVisited);
+	}
+	return answers;
+}
 
+void CPrintVisitor::AddChildrenDescriptions(ChildrenAnswers answers) {
+	for (int i = 0; i < answers.descriptions.size(); i++) {
+		this->description += answers.descriptions[i];
+	}
+}
+
+void CPrintVisitor::AddChildrenIds(ChildrenAnswers answers) {
+	for (int i = 0; i < answers.descriptions.size(); i++) {
+		AddArrow(answers.ids[i]);
+	}
+}
+
+void CPrintVisitor::AddChildrenAnswers(ChildrenAnswers answers) {
+	this->description = "";
+	AddChildrenDescriptions(answers);
+	AddChildrenIds(answers);
+}
+
+std::string CPrintVisitor::ConstructLabel(std::string label, int id) {
+	return "\t" + std::to_string(id) + "[label=" + label + "]\n";
+}
+
+void CPrintVisitor::AddLabel(std::string label) {
+	this->description += ConstructLabel(label, lastVisited + 1);
+}
+
+void CPrintVisitor::AddArrow(int child_id) {
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(child_id) + "\n";
+}
+
+void CPrintVisitor::Visit(CPrintStm &stm) {
 	this->description = "";
 	stm.expression->Accept(*this);
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=PrintStm]\n";
+	AddArrow(lastVisited);
+	AddLabel("PrintStm");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CCompoundStm &stm) {
-	this->description = "";
-	stm.leftStatement->Accept(*this);
-	std::string firstChildDescription = this->description;
-	int leftId = lastVisited;
-	this->description = "";
-	stm.rightStatement->Accept(*this);
-	std::string secondChildDescription = this->description;
-	int rightId = lastVisited;
-	this->description = firstChildDescription + secondChildDescription;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(rightId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=CompoundStm]\n";
+	std::vector<INode*> children = { stm.leftStatement.get(), stm.rightStatement.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("CompoundStm");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(COpExp &exp) {
-	this->description = "";
-	exp.leftOperand->Accept(*this);
-	std::string firstChildDescription = this->description;
-	int leftId = lastVisited;
+	std::vector<INode*> children = { exp.leftOperand.get(), exp.rightOperand.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+
 	int operationId = ++lastVisited;
-	this->description = "";
-	exp.rightOperand->Accept(*this);
-	std::string secondChildDescription = this->description;
-	int rightId = lastVisited;
-	this->description = "";
-	this->description += firstChildDescription;
-	this->description += "\t" + std::to_string(operationId) + "[label=" + exp.stringOperations[exp.operation] + "]\n";
-	this->description += secondChildDescription;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(operationId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(rightId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=OpExp]\n";
+	std::string operationDescription = ConstructLabel(exp.stringOperations[exp.operation], operationId);
+	answers.PushBack(operationDescription, operationId);
+
+	AddChildrenAnswers(answers);
+	AddLabel("OpExp");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CNumExp &exp) {
-
 	++lastVisited;
-	this->description = "\t" + std::to_string(lastVisited) + "[label=" + std::to_string(exp.number) + "]\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=NumExp]\n";
+	this->description = ConstructLabel(std::to_string(exp.number), lastVisited);
+	AddArrow(lastVisited);
+	AddLabel("NumExp");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CIdExp &exp) {
-
 	++lastVisited;
-	this->description = "\t" + std::to_string(lastVisited) + "[label=" + exp.name + "]\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=IdExp]\n";
+	this->description = ConstructLabel(exp.name, lastVisited);
+	AddArrow(lastVisited);
+	AddLabel("IdExp");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CLogExp &exp) {
-
 	++lastVisited;
-	this->description = "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=LogExp]\n";
-	this->description += "\t" + std::to_string(lastVisited) + "[label=" + std::to_string(exp.variable) + "]\n";
+	this->description = ConstructLabel(std::to_string(exp.variable), lastVisited);
+	AddArrow(lastVisited);
+	AddLabel("LogExp");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CLogOpExp &exp) {
-	this->description = "";
-	exp.leftOperand->Accept(*this);
-	std::string firstChildDescription = this->description;
-	int leftId = lastVisited;
+	std::vector<INode*> children = { exp.leftOperand.get(), exp.rightOperand.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+
 	int operationId = ++lastVisited;
-	this->description = "";
-	exp.rightOperand->Accept(*this);
-	std::string secondChildDescription = this->description;
-	int rightId = lastVisited;
-	this->description = "";
-	this->description += firstChildDescription;
-	this->description += "\t" + std::to_string(operationId) + "[label=" + exp.stringOperations[exp.operation] + "]\n";
-	this->description += secondChildDescription;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(operationId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(rightId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=LogOpExp]\n";
+	std::string operationDescription = ConstructLabel(exp.stringOperations[exp.operation], operationId);
+	answers.PushBack(operationDescription, operationId);
+
+	AddChildrenAnswers(answers);
+	AddLabel("LogOpExp");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CCompExp &exp) {
-	this->description = "";
-	exp.leftOperand->Accept(*this);
-	std::string firstChildDescription = this->description;
-	int leftId = lastVisited;
+	std::vector<INode*> children = { exp.leftOperand.get(), exp.rightOperand.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+
 	int operationId = ++lastVisited;
-	this->description = "";
-	exp.rightOperand->Accept(*this);
-	std::string secondChildDescription = this->description;
-	int rightId = lastVisited;
-	this->description = "";
-	this->description += firstChildDescription;
-	this->description += "\t" + std::to_string(operationId) + "[label=" + exp.stringOperations[exp.operation] + "]\n";
-	this->description += secondChildDescription;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(operationId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(rightId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=CompExp]\n";
+	std::string operationDescription = ConstructLabel(exp.stringOperations[exp.operation], operationId);
+	answers.PushBack(operationDescription, operationId);
+
+	AddChildrenAnswers(answers);
+	AddLabel("CompExp");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CUnarMinusExp &exp) {
-	this->description = "";
-	exp.rightOperand->Accept(*this);
-	std::string childDescription = this->description;
-	int rightId = lastVisited;
-	this->description = "";
-	this->description += childDescription;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=UnarMinusExp]\n";
+	std::vector<INode*> children = { exp.rightOperand.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("UnarMinusExp");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CAssignStm &stm) {
-	this->description = "";
-	stm.leftExpression->Accept(*this);
-	std::string firstChildDescription = this->description;
-	int leftId = lastVisited;
-	this->description = "";
-	stm.rightExpression->Accept(*this);
-	std::string secondChildDescription = this->description;
-	int rightId = lastVisited;
-	this->description = firstChildDescription + secondChildDescription;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(leftId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(rightId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=AssignStm]\n";
+	std::vector<INode*> children = { stm.leftExpression.get(), stm.rightExpression.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("AssignStm");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CSimpleStm &stm) {
-	this->description = "";
-	stm.statement->Accept(*this);
-	int stmId = lastVisited;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(stmId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=CompoundStm]\n";
+	std::vector<INode*> children = { stm.statement.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("CompoundStm");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CIfStm &stm) {
-	this->description = "";
-	stm.conditionExpression->Accept(*this);
-	std::string conditionDescription = this->description;
-	int conditionId = lastVisited;
-	this->description = "";
-	stm.positiveStatement->Accept(*this);
-	std::string positiveDescription = this->description;
-	int positiveId = lastVisited;
-	this->description = "";
-	stm.negativeStatement->Accept(*this);
-	std::string negativeDescription = this->description;
-	int negativeId = lastVisited;
-	this->description = conditionDescription + positiveDescription + negativeDescription;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(conditionId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(positiveId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(negativeId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=IfStm]\n";
+	std::vector<INode*> children = { 
+		stm.conditionExpression.get(), 
+		stm.positiveStatement.get(), 
+		stm.negativeStatement.get() 
+	};
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("IfStm");
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CWhileStm &stm) {
-	this->description = "";
-	stm.conditionExpression->Accept(*this);
-	std::string conditionDescription = this->description;
-	int conditionId = lastVisited;
-	this->description = "";
-	stm.statement->Accept(*this);
-	std::string statementDescription = this->description;
-	int statementId = lastVisited;
-	this->description = conditionDescription + statementDescription;
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(conditionId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(statementId) + "\n";
-	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=IfStm]\n";
+	std::vector<INode*> children = { stm.conditionExpression.get(), stm.statement.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("WhileStm");
 	++lastVisited;
 }
 

@@ -6,6 +6,13 @@
 
 #include <string>
 
+struct ChildrenAnswers {
+	void PushBack(std::string description, int id);
+
+	std::vector<std::string> descriptions;
+	std::vector<int> ids;
+};
+
 class CPrintVisitor : public IVisitor {
 public:
 
@@ -28,6 +35,15 @@ public:
 	std::string GetResult();
 
 private:
+
+	ChildrenAnswers VisitChildren(std::vector<INode*> children);
+	void AddChildrenDescriptions(ChildrenAnswers answers);
+	void AddChildrenIds(ChildrenAnswers answers);
+	void AddChildrenAnswers(ChildrenAnswers answers);
+	std::string ConstructLabel(std::string label, int id);
+	void AddLabel(std::string label);
+	void AddArrow(int child_id);
+
 	int lastVisited;
 	std::string description;
 };
