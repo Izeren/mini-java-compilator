@@ -153,9 +153,11 @@ void CPrintVisitor::Visit(CSimpleStm &stm) {
 void CPrintVisitor::Visit(CIfStm &stm) {
 	std::vector<INode*> children = { 
 		stm.conditionExpression.get(), 
-		stm.positiveStatement.get(), 
-		stm.negativeStatement.get() 
+		stm.positiveStatement.get()
 	};
+	if (stm.negativeStatement) {
+		children.push_back(stm.negativeStatement.get());
+	}
 	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("IfStm");
 	++lastVisited;
