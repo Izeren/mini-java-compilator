@@ -50,6 +50,64 @@ COpExp *buildCaculatableExpression() {
 	return expression;
 }
 
+CCompoundStm* buildDifficultTree() {
+	int *i = new int;
+	*i = 0;
+	CCompoundStm* tree = new CCompoundStm(
+		std::shared_ptr<CCompoundStm>(new CCompoundStm(
+			std::shared_ptr<CSimpleStm>(new CSimpleStm(
+				std::shared_ptr<CAssignStm>(new CAssignStm(
+					std::shared_ptr<CIdExp>(new CIdExp("i", i)),
+					std::shared_ptr<IExpression>(new CNumExp(1))
+				))
+			)),
+			std::shared_ptr<CWhileStm>(new CWhileStm(
+				std::shared_ptr<CLogOpExp>(new CLogOpExp(
+					std::shared_ptr<CCompExp>(new CCompExp(
+						std::shared_ptr<CIdExp>(new CIdExp("i", i)),
+						std::shared_ptr<IExpression>(new CNumExp(4)),
+						LESS
+					)),
+					std::shared_ptr<CLogExp>(new CLogExp(true))
+				)),
+				std::shared_ptr<CSimpleStm>(new CSimpleStm(
+					std::shared_ptr<CAssignStm>(new CAssignStm(
+						std::shared_ptr<CIdExp>(new CIdExp("i", i)),
+						std::shared_ptr<IExpression>(new COpExp(
+							std::shared_ptr<IExpression>(new CIdExp("i", i)),
+							std::shared_ptr<IExpression>(new CNumExp(1)),
+							PLUS
+						))
+					))
+				))
+			))
+		)),
+		std::shared_ptr<CIfStm>(new CIfStm(
+			std::shared_ptr<CLogExp>(new CLogExp(false)),
+			std::shared_ptr<CSimpleStm>(new CSimpleStm(
+				std::shared_ptr<CAssignStm>(new CAssignStm(
+					std::shared_ptr<CIdExp>(new CIdExp("i", i)),
+					std::shared_ptr<IExpression>(new COpExp(
+						std::shared_ptr<IExpression>(new CIdExp("i", i)),
+						std::shared_ptr<IExpression>(new CNumExp(2)),
+						MULTIPLY
+					))
+				))
+			)),
+			std::shared_ptr<CSimpleStm>(new CSimpleStm(
+				std::shared_ptr<CAssignStm>(new CAssignStm(
+					std::shared_ptr<CIdExp>(new CIdExp("i", i)),
+					std::shared_ptr<IExpression>(new CUnarMinusExp(
+						std::shared_ptr<IExpression>(new CIdExp("i", i))
+					))
+				))
+			))
+		))
+	);
+
+	return tree;
+}
+
 void freeExpression(IExpression *expression) {
 	delete expression;
 }
@@ -89,7 +147,7 @@ void testCalculateVisitor() {
 
 void testConvertVisitor() {
 
-	INode* tree = buildTree();
+	INode* tree = buildDifficultTree();
 
 	CConvertVisitor convertVisitor = CConvertVisitor();
 	tree->Accept(convertVisitor);

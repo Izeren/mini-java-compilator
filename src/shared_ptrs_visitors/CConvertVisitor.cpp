@@ -23,11 +23,9 @@ void CConvertVisitor::Visit(CCompoundStm &stm) {
 	if (stm.leftStatement) {
 		stm.leftStatement->Accept(*this);
 	}
-	this->code += ";\n";
 	if (stm.rightStatement) {
 		stm.rightStatement->Accept(*this);
 	}
-	this->code += ";\n";
 }
 
 void CConvertVisitor::Visit(COpExp &exp) {
@@ -96,6 +94,7 @@ void CConvertVisitor::Visit(CAssignStm &stm) {
 void CConvertVisitor::Visit(CSimpleStm &stm) {
 	if (stm.statement) {
 		stm.statement->Accept(*this);
+		this->code += ";\n";
 	}
 }
 
