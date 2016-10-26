@@ -1,6 +1,8 @@
 #include "shared_ptrs_visitors\CPrintVisitor.h"
 #include "shared_ptrs_visitors\IVisitor.h"
 #include "shared_ptrs_nodes\Expressions.h"
+#include "stdafx.h"
+
 #include "shared_ptrs_nodes\INode.h"
 #include "shared_ptrs_nodes\Statements.h"
 #include "shared_ptrs_visitors\CalculateVisitor.h"
@@ -85,11 +87,26 @@ void testCalculateVisitor() {
 
 }
 
+void testConvertVisitor() {
+
+	INode* tree = buildTree();
+
+	CConvertVisitor convertVisitor = CConvertVisitor();
+	tree->Accept(convertVisitor);
+
+	std::string stringResult = convertVisitor.GetResult();
+	std::cout << stringResult << "\n";
+
+	freeExpression(reinterpret_cast<COpExp *>(tree));
+
+}
+
 
 int main()
 {
 	testPrintVisitor();
 	testCalculateVisitor();
+	testConvertVisitor();
 
     return 0;
 }

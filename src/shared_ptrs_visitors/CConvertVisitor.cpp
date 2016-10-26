@@ -12,8 +12,10 @@ CConvertVisitor::CConvertVisitor() {
 void CConvertVisitor::Visit(CPrintStm &stm) {
 
 	this->code += "System.out.println(";
-	stm.Accept(*this);
-	this->code += ");\n";
+	if (stm.expression) {
+		stm.expression->Accept(*this);
+	}
+	this->code += ")";
 
 }
 
@@ -124,4 +126,8 @@ void CConvertVisitor::Visit(CWhileStm &stm) {
 		stm.statement->Accept(*this);
 	}
 	this->code += "}\n";
+}
+
+std::string CConvertVisitor::GetResult() {
+	return code;
 }

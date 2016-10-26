@@ -25,6 +25,8 @@ public:
 	void Visit(CIfStm &exp) override;
 	void Visit(CWhileStm &exp) override;
 
+	std::string GetResult();
+
 private:
 	std::string code;
 };
