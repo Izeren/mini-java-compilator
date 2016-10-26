@@ -123,14 +123,18 @@ void CPrintVisitor::Visit(CCompExp &exp) {
 }
 
 void CPrintVisitor::Visit(CUnarMinusExp &exp) {
-	++lastVisited;
-	this->description = "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
+	this->description = "";
+	exp.rightOperand->Accept(*this);
+	std::string childDescription = this->description;
+	int rightId = lastVisited;
+	this->description = "";
+	this->description += childDescription;
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(lastVisited) + "\n";
 	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=UnarMinusExp]\n";
 	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CAssignStm &stm) {
-
 	this->description = "";
 	stm.leftExpression->Accept(*this);
 	std::string firstChildDescription = this->description;
@@ -147,12 +151,48 @@ void CPrintVisitor::Visit(CAssignStm &stm) {
 }
 
 void CPrintVisitor::Visit(CSimpleStm &stm) {
-
 	this->description = "";
 	stm.statement->Accept(*this);
 	int stmId = lastVisited;
 	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(stmId) + "\n";
 	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=CompoundStm]\n";
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CIfStm &stm) {
+	this->description = "";
+	stm.conditionExpression->Accept(*this);
+	std::string conditionDescription = this->description;
+	int conditionId = lastVisited;
+	this->description = "";
+	stm.positiveStatement->Accept(*this);
+	std::string positiveDescription = this->description;
+	int positiveId = lastVisited;
+	this->description = "";
+	stm.negativeStatement->Accept(*this);
+	std::string negativeDescription = this->description;
+	int negativeId = lastVisited;
+	this->description = conditionDescription + positiveDescription + negativeDescription;
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(conditionId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(positiveId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(negativeId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=IfStm]\n";
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CWhileStm &stm) {
+	this->description = "";
+	stm.conditionExpression->Accept(*this);
+	std::string conditionDescription = this->description;
+	int conditionId = lastVisited;
+	this->description = "";
+	stm.statement->Accept(*this);
+	std::string statementDescription = this->description;
+	int statementId = lastVisited;
+	this->description = conditionDescription + statementDescription;
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(conditionId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(statementId) + "\n";
+	this->description += "\t" + std::to_string(lastVisited + 1) + "[label=IfStm]\n";
 	++lastVisited;
 }
 

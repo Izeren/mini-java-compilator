@@ -5,6 +5,10 @@
 
 class IStatement : public INode {};
 
+
+//CAssignStm:
+//-------------------------------------------------------------------------------------------------
+
 class CAssignStm : public IStatement {
 public:
 	CAssignStm(std::shared_ptr<CIdExp> leftExpression, std::shared_ptr<IExpression> rightExpression);
@@ -14,6 +18,10 @@ public:
 	std::shared_ptr<CIdExp> leftExpression;
 	std::shared_ptr<IExpression> rightExpression;
 };
+
+
+//CCompoundStm:
+//-------------------------------------------------------------------------------------------------
 
 class CCompoundStm : public IStatement {
 public:
@@ -25,6 +33,10 @@ public:
 	std::shared_ptr<IStatement> rightStatement;
 };
 
+
+//CPrintStm:
+//-------------------------------------------------------------------------------------------------
+
 class CPrintStm : public IStatement {
 public:
 	CPrintStm();
@@ -35,11 +47,51 @@ public:
 	std::shared_ptr<IExpression> expression;
 };
 
+
+//CSimpleStm:
+//-------------------------------------------------------------------------------------------------
+
 class CSimpleStm : public IStatement {
 public:
 	CSimpleStm();
 	CSimpleStm(std::shared_ptr<IStatement> statement);
 	void Accept(IVisitor &visitor) override;
 
+	std::shared_ptr<IStatement> statement;
+};
+
+
+//CIfStm:
+//-------------------------------------------------------------------------------------------------
+
+class CIfStm : public IStatement {
+public:
+	CIfStm(
+		std::shared_ptr<IExpression> conditionExpression,
+		std::shared_ptr<IStatement> positiveStatement,
+		std::shared_ptr<IStatement> negativeStatement
+	);
+	CIfStm();
+	void Accept(IVisitor &visitor) override;
+
+	std::shared_ptr<IExpression> conditionExpression;
+	std::shared_ptr<IStatement> positiveStatement;
+	std::shared_ptr<IStatement> negativeStatement;
+};
+
+
+//CWhileStm:
+//-------------------------------------------------------------------------------------------------
+
+class CWhileStm : public IStatement {
+public:
+	CWhileStm(
+		std::shared_ptr<IExpression> conditionExpression,
+		std::shared_ptr<IStatement> statement
+	);
+	CWhileStm();
+	void Accept(IVisitor &visitor) override;
+
+	std::shared_ptr<IExpression> conditionExpression;
 	std::shared_ptr<IStatement> statement;
 };

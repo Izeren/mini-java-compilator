@@ -22,6 +22,8 @@ public:
 	void Visit(CUnarMinusExp &exp) override;
 	void Visit(CAssignStm &exp) override;
 	void Visit(CSimpleStm &exp) override;
+	void Visit(CIfStm &exp) override;
+	void Visit(CWhileStm &exp) override;
 
 private:
 	std::string code;

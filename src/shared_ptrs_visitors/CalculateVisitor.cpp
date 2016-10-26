@@ -247,6 +247,63 @@ void CCalculateVisitor::Visit(CAssignStm &exp) {
 	this->isChildResultInteger = false;
 }
 
+void CCalculateVisitor::Visit(CIfStm &exp) {
+	if (wasError) {
+		return;
+	}
+
+	exp.conditionExpression.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	if (wasError) {
+		return;
+	}
+
+	if (childResult) {
+		exp.positiveStatement.get()->Accept(*this);
+	}
+	else {
+		exp.negativeStatement.get()->Accept(*this);
+	}
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CWhileStm &exp) {
+	if (wasError) {
+		return;
+	}
+
+	exp.conditionExpression.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	if (wasError) {
+		return;
+	}
+
+	while (childResult) {
+		exp.statement.get()->Accept(*this);
+		exp.conditionExpression.get()->Accept(*this);
+
+		if (!this->isChildResultInteger) {
+			wasError = true;
+			return;
+		}
+
+		if (wasError) {
+			return;
+		}
+	}
+
+	this->isChildResultInteger = false;
+}
+
 int CCalculateVisitor::GetResult() {
 	return childResult;
 }

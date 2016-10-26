@@ -11,6 +11,8 @@ class CCompExp;
 class CUnarMinusExp;
 class CAssignStm;
 class CSimpleStm;
+class CIfStm;
+class CWhileStm;
 
 class IVisitor {
 public:
@@ -25,5 +27,6 @@ public:
 	virtual void Visit(CUnarMinusExp &exp) = 0;
 	virtual void Visit(CAssignStm &exp) = 0;
 	virtual void Visit(CSimpleStm &exp) = 0;
-
+	virtual void Visit(CIfStm &exp) = 0;
+	virtual void Visit(CWhileStm &exp) = 0;
 };

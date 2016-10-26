@@ -96,3 +96,32 @@ void CConvertVisitor::Visit(CSimpleStm &stm) {
 		stm.statement->Accept(*this);
 	}
 }
+
+void CConvertVisitor::Visit(CIfStm &stm) {
+	this->code += "if (";
+	if (stm.conditionExpression) {
+		stm.conditionExpression->Accept(*this);
+	}
+	this->code += ") {\n";
+	if (stm.positiveStatement) {
+		stm.positiveStatement->Accept(*this);
+	}
+	this->code += "}\n";
+	if (stm.negativeStatement) {
+		this->code += "else {\n";
+		stm.negativeStatement->Accept(*this);
+		this->code += "}\n";
+	}
+}
+
+void CConvertVisitor::Visit(CWhileStm &stm) {
+	this->code += "while (";
+	if (stm.conditionExpression) {
+		stm.conditionExpression->Accept(*this);
+	}
+	this->code += ") {\n";
+	if (stm.statement) {
+		stm.statement->Accept(*this);
+	}
+	this->code += "}\n";
+}

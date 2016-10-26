@@ -50,6 +50,7 @@ void CPrintStm::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }
 
+
 //CSimpleStm:
 //-------------------------------------------------------------------------------------------------
 
@@ -60,5 +61,45 @@ CSimpleStm::CSimpleStm(std::shared_ptr<IStatement> statement) {
 }
 
 void CSimpleStm::Accept(IVisitor &visitor) {
+	visitor.Visit(*this);
+}
+
+
+//CIfStm:
+//-------------------------------------------------------------------------------------------------
+
+CIfStm::CIfStm() : CIfStm(NULL, NULL, NULL) {}
+
+CIfStm::CIfStm(
+	std::shared_ptr<IExpression> conditionExpression,
+	std::shared_ptr<IStatement> positiveStatement,
+	std::shared_ptr<IStatement> negativeStatement
+) {
+	this->conditionExpression = conditionExpression;
+	this->positiveStatement = positiveStatement;
+	this->negativeStatement = negativeStatement;
+}
+
+
+void CIfStm::Accept(IVisitor &visitor) {
+	visitor.Visit(*this);
+}
+
+
+//CWhileStm:
+//-------------------------------------------------------------------------------------------------
+
+CWhileStm::CWhileStm() : CWhileStm(NULL, NULL) {}
+
+CWhileStm::CWhileStm(
+	std::shared_ptr<IExpression> conditionExpression,
+	std::shared_ptr<IStatement> statement
+) {
+	this->conditionExpression = conditionExpression;
+	this->statement = statement;
+}
+
+
+void CWhileStm::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }
