@@ -6,11 +6,11 @@
 CAssignStm::CAssignStm() : CAssignStm(NULL, NULL) {}
 
 CAssignStm::CAssignStm(
-	std::shared_ptr<CIdExp> leftExpression,
-	std::shared_ptr<IExpression> rightExpression
+	CIdExp* leftExpression,
+	IExpression* rightExpression
 ) {
-	this->leftExpression = leftExpression;
-	this->rightExpression = rightExpression;
+	this->leftExpression = std::unique_ptr<CIdExp>(leftExpression);
+	this->rightExpression = std::unique_ptr<IExpression>(rightExpression);
 }
 
 
@@ -25,11 +25,11 @@ void CAssignStm::Accept(IVisitor &visitor) {
 CCompoundStm::CCompoundStm() : CCompoundStm(NULL, NULL) {}
 
 CCompoundStm::CCompoundStm(
-	std::shared_ptr<IStatement> leftStatement,
-	std::shared_ptr<IStatement> rightStatement
+	IStatement* leftStatement,
+	IStatement* rightStatement
 ) {
-	this->leftStatement = leftStatement;
-	this->rightStatement = rightStatement;
+	this->leftStatement = std::unique_ptr<IStatement>(leftStatement);
+	this->rightStatement = std::unique_ptr<IStatement>(rightStatement);
 }
 
 void CCompoundStm::Accept(IVisitor &visitor) {
@@ -42,8 +42,8 @@ void CCompoundStm::Accept(IVisitor &visitor) {
 
 CPrintStm::CPrintStm() : CPrintStm(NULL) {}
 
-CPrintStm::CPrintStm(std::shared_ptr<IExpression> expression) {
-	this->expression = expression;
+CPrintStm::CPrintStm(IExpression* expression) {
+	this->expression = std::unique_ptr<IExpression>(expression);
 }
 
 void CPrintStm::Accept(IVisitor &visitor) {
@@ -56,8 +56,8 @@ void CPrintStm::Accept(IVisitor &visitor) {
 
 CSimpleStm::CSimpleStm() : CSimpleStm(NULL) {}
 
-CSimpleStm::CSimpleStm(std::shared_ptr<IStatement> statement) {
-	this->statement = statement;
+CSimpleStm::CSimpleStm(IStatement* statement) {
+	this->statement = std::unique_ptr<IStatement>(statement);
 }
 
 void CSimpleStm::Accept(IVisitor &visitor) {
@@ -71,13 +71,13 @@ void CSimpleStm::Accept(IVisitor &visitor) {
 CIfStm::CIfStm() : CIfStm(NULL, NULL, NULL) {}
 
 CIfStm::CIfStm(
-	std::shared_ptr<IExpression> conditionExpression,
-	std::shared_ptr<IStatement> positiveStatement,
-	std::shared_ptr<IStatement> negativeStatement
+	IExpression* conditionExpression,
+	IStatement* positiveStatement,
+	IStatement* negativeStatement
 ) {
-	this->conditionExpression = conditionExpression;
-	this->positiveStatement = positiveStatement;
-	this->negativeStatement = negativeStatement;
+	this->conditionExpression = std::unique_ptr<IExpression>(conditionExpression);
+	this->positiveStatement = std::unique_ptr<IStatement>(positiveStatement);
+	this->negativeStatement = std::unique_ptr<IStatement>(negativeStatement);
 }
 
 
@@ -92,11 +92,11 @@ void CIfStm::Accept(IVisitor &visitor) {
 CWhileStm::CWhileStm() : CWhileStm(NULL, NULL) {}
 
 CWhileStm::CWhileStm(
-	std::shared_ptr<IExpression> conditionExpression,
-	std::shared_ptr<IStatement> statement
+	IExpression* conditionExpression,
+	IStatement* statement
 ) {
-	this->conditionExpression = conditionExpression;
-	this->statement = statement;
+	this->conditionExpression = std::unique_ptr<IExpression>(conditionExpression);
+	this->statement = std::unique_ptr<IStatement>(statement);
 }
 
 

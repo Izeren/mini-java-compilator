@@ -13,16 +13,16 @@
 
 CCompoundStm* buildTree() {
 	CCompoundStm* tree = new CCompoundStm(
-		std::shared_ptr<IStatement>(new CAssignStm(
-			std::shared_ptr<CIdExp>(new CIdExp("a")),
-			std::shared_ptr<IExpression>(new COpExp(
-				std::shared_ptr<IExpression>(new CNumExp(5)),
-				std::shared_ptr<IExpression>(new CNumExp(3)),
+		(IStatement*)(new CAssignStm(
+			new CIdExp("a"),
+			(IExpression*)(new COpExp(
+				(IExpression*)(new CNumExp(5)),
+				(IExpression*)(new CNumExp(3)),
 				PLUS
 			))
 		)),
-		std::shared_ptr<IStatement>(new CPrintStm(
-			std::shared_ptr<IExpression>(new CIdExp("a"))
+		(IStatement*)(new CPrintStm(
+			(IExpression*)(new CIdExp("a"))
 		))
 	);
 
@@ -35,14 +35,14 @@ COpExp *buildCaculatableExpression() {
 	*a = 5;
 	*b = 6;
 	COpExp *expression = new COpExp(
-		std::shared_ptr<IExpression>(new COpExp(
-			std::shared_ptr<IExpression>(new CIdExp("a", a)),
-			std::shared_ptr<IExpression>(new CNumExp(3)),
+		(IExpression*)(new COpExp(
+			(IExpression*)(new CIdExp("a", a)),
+			(IExpression*)(new CNumExp(3)),
 			PLUS
 		)),
-		std::shared_ptr<IExpression>(new COpExp(
-			std::shared_ptr<IExpression>(new CIdExp("b", b)),
-			std::shared_ptr<IExpression>(new CIdExp("a", a)),
+		(IExpression*)(new COpExp(
+			(IExpression*)(new CIdExp("b", b)),
+			(IExpression*)(new CIdExp("a", a)),
 			MINUS
 		)),
 		MULTIPLY
@@ -54,51 +54,51 @@ CCompoundStm* buildDifficultTree() {
 	int *i = new int;
 	*i = 0;
 	CCompoundStm* tree = new CCompoundStm(
-		std::shared_ptr<CCompoundStm>(new CCompoundStm(
-			std::shared_ptr<CSimpleStm>(new CSimpleStm(
-				std::shared_ptr<CAssignStm>(new CAssignStm(
-					std::shared_ptr<CIdExp>(new CIdExp("i", i)),
-					std::shared_ptr<IExpression>(new CNumExp(1))
+		(CCompoundStm*)(new CCompoundStm(
+			(CSimpleStm*)(new CSimpleStm(
+				(CAssignStm*)(new CAssignStm(
+					(CIdExp*)(new CIdExp("i", i)),
+					(IExpression*)(new CNumExp(1))
 				))
 			)),
-			std::shared_ptr<CWhileStm>(new CWhileStm(
-				std::shared_ptr<CLogOpExp>(new CLogOpExp(
-					std::shared_ptr<CCompExp>(new CCompExp(
-						std::shared_ptr<CIdExp>(new CIdExp("i", i)),
-						std::shared_ptr<IExpression>(new CNumExp(4)),
+			(CWhileStm*)(new CWhileStm(
+				(CLogOpExp*)(new CLogOpExp(
+					(CCompExp*)(new CCompExp(
+						(CIdExp*)(new CIdExp("i", i)),
+						(IExpression*)(new CNumExp(4)),
 						LESS
 					)),
-					std::shared_ptr<CLogExp>(new CLogExp(true))
+					(CLogExp*)(new CLogExp(true))
 				)),
-				std::shared_ptr<CSimpleStm>(new CSimpleStm(
-					std::shared_ptr<CAssignStm>(new CAssignStm(
-						std::shared_ptr<CIdExp>(new CIdExp("i", i)),
-						std::shared_ptr<IExpression>(new COpExp(
-							std::shared_ptr<IExpression>(new CIdExp("i", i)),
-							std::shared_ptr<IExpression>(new CNumExp(1)),
+				(CSimpleStm*)(new CSimpleStm(
+					(CAssignStm*)(new CAssignStm(
+						(CIdExp*)(new CIdExp("i", i)),
+						(IExpression*)(new COpExp(
+							(IExpression*)(new CIdExp("i", i)),
+							(IExpression*)(new CNumExp(1)),
 							PLUS
 						))
 					))
 				))
 			))
 		)),
-		std::shared_ptr<CIfStm>(new CIfStm(
-			std::shared_ptr<CLogExp>(new CLogExp(false)),
-			std::shared_ptr<CSimpleStm>(new CSimpleStm(
-				std::shared_ptr<CAssignStm>(new CAssignStm(
-					std::shared_ptr<CIdExp>(new CIdExp("i", i)),
-					std::shared_ptr<IExpression>(new COpExp(
-						std::shared_ptr<IExpression>(new CIdExp("i", i)),
-						std::shared_ptr<IExpression>(new CNumExp(2)),
+		(CIfStm*)(new CIfStm(
+			(CLogExp*)(new CLogExp(false)),
+			(CSimpleStm*)(new CSimpleStm(
+				(CAssignStm*)(new CAssignStm(
+					(CIdExp*)(new CIdExp("i", i)),
+					(IExpression*)(new COpExp(
+						(IExpression*)(new CIdExp("i", i)),
+						(IExpression*)(new CNumExp(2)),
 						MULTIPLY
 					))
 				))
 			)),
-			std::shared_ptr<CSimpleStm>(new CSimpleStm(
-				std::shared_ptr<CAssignStm>(new CAssignStm(
-					std::shared_ptr<CIdExp>(new CIdExp("i", i)),
-					std::shared_ptr<IExpression>(new CUnarMinusExp(
-						std::shared_ptr<IExpression>(new CIdExp("i", i))
+			(CSimpleStm*)(new CSimpleStm(
+				(CAssignStm*)(new CAssignStm(
+					(CIdExp*)(new CIdExp("i", i)),
+					(IExpression*)(new CUnarMinusExp(
+						(IExpression*)(new CIdExp("i", i))
 					))
 				))
 			))
@@ -141,7 +141,7 @@ void testCalculateVisitor() {
 	int intResult = calculateVisitor.GetResult();
 	std::cout << intResult << "\n";
 
-	freeExpression(reinterpret_cast<COpExp *>(expression));
+	freeExpression(reinterpret_cast<COpExp*>(expression));
 
 }
 
@@ -155,7 +155,7 @@ void testConvertVisitor() {
 	std::string stringResult = convertVisitor.GetResult();
 	std::cout << stringResult << "\n";
 
-	freeExpression(reinterpret_cast<COpExp *>(tree));
+	freeExpression(reinterpret_cast<COpExp*>(tree));
 
 }
 
