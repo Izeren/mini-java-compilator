@@ -81,6 +81,10 @@ void CConvertVisitor::Visit(CUnarMinusExp &exp) {
 	}
 }
 
+void CConvertVisitor::Visit(CIdPtrExp &exp) {
+	this->code += exp.name;
+}
+
 void CConvertVisitor::Visit(CAssignStm &stm) {
 	if (stm.leftExpression) {
 		stm.leftExpression->Accept(*this);
@@ -125,6 +129,20 @@ void CConvertVisitor::Visit(CWhileStm &stm) {
 		stm.statement->Accept(*this);
 	}
 	this->code += "}\n";
+}
+
+void CConvertVisitor::Visit(CAssignSubscriptStm &stm) {
+	if (stm.idExpression) {
+		stm.idExpression->Accept(*this);
+	}
+	this->code += "[";
+	if (stm.offset) {
+		stm.offset->Accept(*this);
+	}
+	this->code += "] = ";
+	if (stm.valueExpression) {
+		stm.valueExpression->Accept(*this);
+	}
 }
 
 std::string CConvertVisitor::GetResult() {

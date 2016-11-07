@@ -136,6 +136,15 @@ void CPrintVisitor::Visit(CUnarMinusExp &exp) {
 	++lastVisited;
 }
 
+
+void CPrintVisitor::Visit(CIdPtrExp &exp) {
+	++lastVisited;
+	this->description = ConstructLabel(exp.name, lastVisited);
+	AddArrow(lastVisited);
+	AddLabel("IdPtrExp");
+	++lastVisited;
+}
+
 void CPrintVisitor::Visit(CAssignStm &stm) {
 	std::vector<INode*> children = { stm.leftExpression.get(), stm.rightExpression.get() };
 	AddChildrenAnswers(VisitChildren(children));
@@ -167,6 +176,13 @@ void CPrintVisitor::Visit(CWhileStm &stm) {
 	std::vector<INode*> children = { stm.conditionExpression.get(), stm.statement.get() };
 	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("WhileStm");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CAssignSubscriptStm &stm) {
+	std::vector<INode*> children = { stm.idExpression.get(), stm.offset.get(), stm.valueExpression.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("AssignSubscriptStm");
 	++lastVisited;
 }
 
