@@ -58,36 +58,6 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "private" {
 	return PRIVATE;
 }
-"System.out.println" { 
-	return PRINTLN;
-}
-"System.out.print" { 
-	return PRINT;
-}
-"int" { 
-	return INT;
-}
-"boolean" { 
-	return BOOLEAN;
-}
-"if" { 
-	return IF;
-}
-"else" { 
-	return ELSE;
-}
-{IntegerLiteral} { 
-	return NUM;
-}
-"while" { 
-	return WHILE; 
-}
-"true" { 
-	return TRUE;
-}
-"false" { 
-	return FALSE;
-}
 "this" { 
 	return THIS;
 }
@@ -103,23 +73,61 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "static" {
 	return STATIC;
 }
+
+"System.out.println" { 
+	return PRINTLN;
+}
+"System.out.print" { 
+	return PRINT;
+}
+
+"int" { 
+	return INT;
+}
 "void" {
 	return VOID;
 }
 "String" {
 	return STRING;
 }
+{IntegerLiteral} { 
+	return NUM;
+}
+
+"if" { 
+	return IF;
+}
+"else" { 
+	return ELSE;
+}
+"while" { 
+	return WHILE; 
+}
+
 {ID} { 
 	return ID;
+}
+"=" {
+	return ASSIGN;
+}
+"length" {
+	return LENGTH;
+}
+
+"boolean" { 
+	return BOOLEAN;
+}
+"true" { 
+	return TRUE;
+}
+"false" { 
+	return FALSE;
 }
 "<" {
 	return LESS;
 }
 ">" {
 	return GREATER;
-}
-"=" {
-	return ASSIGN;
 }
 "==" {
 	return EQUALS;
@@ -130,6 +138,7 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "||" { 
 	return OR;
 }
+
 "+" { 
 	return PLUS;
 }
@@ -139,6 +148,7 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "*" { 
 	return TIMES;
 }
+
 "(" { 
 	return LPAREN;
 }
