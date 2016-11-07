@@ -42,12 +42,12 @@ void COpExp::Accept(IVisitor &visitor) {
 }
 
 COpExp::COpExp(
-	std::shared_ptr<IExpression> leftOperand,
-	std::shared_ptr<IExpression> rightOperand,
+	IExpression* leftOperand,
+	IExpression* rightOperand,
 	TOperation operation
 ) {
-	this->leftOperand = leftOperand;
-	this->rightOperand = rightOperand;
+	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
+	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
 	this->operation = operation;
 }
 
@@ -78,12 +78,12 @@ void CLogOpExp::Accept(IVisitor &visitor) {
 }
 
 CLogOpExp::CLogOpExp(
-	std::shared_ptr<IExpression> leftOperand,
-	std::shared_ptr<IExpression> rightOperand,
+	IExpression* leftOperand,
+	IExpression* rightOperand,
 	TLogicalOperation operation
 ) {
-	this->leftOperand = leftOperand;
-	this->rightOperand = rightOperand;
+	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
+	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
 	this->operation = operation;
 }
 
@@ -103,20 +103,20 @@ void CCompExp::Accept(IVisitor &visitor) {
 }
 
 CCompExp::CCompExp(
-	std::shared_ptr<IExpression> leftOperand,
-	std::shared_ptr<IExpression> rightOperand,
+	IExpression* leftOperand,
+	IExpression* rightOperand,
 	TCompareOperation operation
 ) {
-	this->leftOperand = leftOperand;
-	this->rightOperand = rightOperand;
+	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
+	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
 	this->operation = operation;
 }
 
 
 //CUnarMinusExp:
 //-------------------------------------------------------------------------------------------------
-CUnarMinusExp::CUnarMinusExp(std::shared_ptr<IExpression> rightOperand) {
-	this->rightOperand = rightOperand;
+CUnarMinusExp::CUnarMinusExp(IExpression* rightOperand) {
+	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
 }
 
 void CUnarMinusExp::Accept(IVisitor &visitor) {

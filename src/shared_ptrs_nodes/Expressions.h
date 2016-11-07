@@ -45,13 +45,13 @@ public:
 	void Accept(IVisitor &visitor) override;
 	COpExp();
 	COpExp(
-		std::shared_ptr<IExpression> leftOperand,
-		std::shared_ptr<IExpression> rightOperand,
+		IExpression* leftOperand,
+		IExpression* rightOperand,
 		TOperation operation = TOperation::PLUS
 	);
 
-	std::shared_ptr<IExpression> leftOperand;
-	std::shared_ptr<IExpression> rightOperand;
+	std::unique_ptr<IExpression> leftOperand;
+	std::unique_ptr<IExpression> rightOperand;
 	TOperation operation;
 };
 
@@ -78,13 +78,13 @@ public:
 	void Accept(IVisitor &visitor) override;
 	CLogOpExp();
 	CLogOpExp(
-		std::shared_ptr<IExpression> leftOperand,
-		std::shared_ptr<IExpression> rightOperand,
+		IExpression* leftOperand,
+		IExpression* rightOperand,
 		TLogicalOperation operation = TLogicalOperation::AND
 	);
 
-	std::shared_ptr<IExpression> leftOperand;
-	std::shared_ptr<IExpression> rightOperand;
+	std::unique_ptr<IExpression> leftOperand;
+	std::unique_ptr<IExpression> rightOperand;
 	TLogicalOperation operation;
 };
 
@@ -102,13 +102,13 @@ public:
 	void Accept(IVisitor &visitor) override;
 	CCompExp();
 	CCompExp(
-		std::shared_ptr<IExpression> leftOperand,
-		std::shared_ptr<IExpression> rightOperand,
+		IExpression* leftOperand,
+		IExpression* rightOperand,
 		TCompareOperation operation = TCompareOperation::GREATER
 	);
 
-	std::shared_ptr<IExpression> leftOperand;
-	std::shared_ptr<IExpression> rightOperand;
+	std::unique_ptr<IExpression> leftOperand;
+	std::unique_ptr<IExpression> rightOperand;
 	TCompareOperation operation;
 };
 
@@ -118,7 +118,7 @@ public:
 
 class CUnarMinusExp : public IExpression {
 public:
-	CUnarMinusExp(std::shared_ptr<IExpression> rightOperand);
+	CUnarMinusExp(IExpression* rightOperand);
 	void Accept(IVisitor &visitor) override;
-	std::shared_ptr<IExpression> rightOperand;
+	std::unique_ptr<IExpression> rightOperand;
 };
