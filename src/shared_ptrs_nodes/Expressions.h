@@ -20,6 +20,19 @@ public:
 	std::string name;
 };
 
+//CIdPtrExp:
+//-------------------------------------------------------------------------------------------------
+
+class CIdPtrExp : public IExpression {
+public:
+	void Accept(IVisitor &visitor) override;
+	CIdPtrExp();
+	CIdPtrExp(const std::string &name, int *address = 0);
+	int *address;
+
+	std::string name;
+};
+
 
 //CNumExp:
 //-------------------------------------------------------------------------------------------------
