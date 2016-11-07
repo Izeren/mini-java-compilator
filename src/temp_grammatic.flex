@@ -52,6 +52,12 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "public" { 
 	return PUBLIC;
 }
+"protected" {
+	return PROTECTED;
+}
+"private" {
+	return PRIVATE;
+}
 "System.out.println" { 
 	return PRINTLN;
 }
