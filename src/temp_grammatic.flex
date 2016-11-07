@@ -107,9 +107,7 @@ IntegerLiteral [1-9]{DIGIT}*|0
 {ID} { 
 	return ID;
 }
-"=" {
-	return ASSIGN;
-}
+
 "length" {
 	return LENGTH;
 }
@@ -129,8 +127,17 @@ IntegerLiteral [1-9]{DIGIT}*|0
 ">" {
 	return GREATER;
 }
+"!=" {
+	return NOT_EQUAL;
+}
+"!" {
+	return NOT;
+}
 "==" {
-	return EQUALS;
+	return EQUAL;
+}
+"=" {
+	return ASSIGN;
 }
 "&&" { 
 	return AND;

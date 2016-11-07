@@ -58,11 +58,18 @@ void yyerror ( const IProgram*&, char const * );
 
 %token STRING
 
-%token LESS GREATER EQUALS
+%token LESS GREATER EQUAL NOT_EQUAL NOT
 
 %token ASSIGN
 
-
+%right T_equal
+%left T_or
+%left T_and
+%left T_less
+%left T_minus, T_plus
+%left T_times, T_divide, T_mod
+%right T_not
+%left DOT LBRACKET
 
 // Особые (типизированные) токены
 %type <Program> Program
