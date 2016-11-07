@@ -19,10 +19,11 @@ void yyerror ( const IProgram*&, char const * );
 
 %union {
 
-	const IProgram* Program; // Указатель на класс-программу
-	const IClass* Class; // Указатель на главный класс
+	const CProgram* Program; // Указатель на класс-программу
+	const CClass* Class; // Указатель на главный класс
 	const IStatement* Statement;
 	const IExpression* Exp;
+	const char *string;
 }
 
 %token CLASS
@@ -43,7 +44,7 @@ void yyerror ( const IProgram*&, char const * );
 
 %token ELSE
 
-%token NUM
+%token <string> NUM ID
 
 %token WHILE
 
@@ -56,8 +57,6 @@ void yyerror ( const IProgram*&, char const * );
 %token NEW
 
 %token RETURN
-
-%token ID
 
 %token LPAREN
 
@@ -80,6 +79,8 @@ void yyerror ( const IProgram*&, char const * );
 %token COMMENT
 
 %token AND
+
+%token OR
 
 %token PLUS
 
@@ -114,31 +115,41 @@ void yyerror ( const IProgram*&, char const * );
 
 %%
 
-
 Program:
-	MainClass { Program = $$ = new CProgram( $1 ); }
-	| MainClass ClassDeclList { Program = $$ = new CProgram( $1, $2); }
+	MainClass { Program = $$ = new CProgram($1, 0); }
+	| MainClass ClassDeclList { Program = $$ = new CProgram($1, $2); }
 	;
 
+/*
+	CClass(CIdExp *class_id, CClass *next_class, CIdExp *main_id, IStatement* code_block)
+	If class is Main
+	next_class == 0
+*/
 MainClass: 
 	CLASS ID LBRACE 
 		PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ID RPAREN
 		LBRACE 
-			Statement 
+			StatementList
 		RBRACE 
 	RBRACE
-	{
-		$$ = 0; //new CMainClass( $2, $12, $15 );
+	{	
+		//4th argument: true -- MainClass, false -- ordinary class 
+		$$ = new CClass( $2, $12, $15);
 	}
 	;
 
+
+/*
+CClass(Class *, )
+
+*/
 Class: 
-	CLASS ID LBRACE Statement RBRACE { $$ = 0 }//new CClass( $2, $4 ) }
+	CLASS ID LBRACE Statement RBRACE { $$ = 0 new CClass( $2, $4 ); }
 	;
 
 ClassDeclList:
-	Class
-	| Class ClassDeclList
+	Class { $$ = new CClass($1, 0); }
+	| Class ClassDeclList { $$ = new CClass( $1, $2 ); }
 	;
 
 StatementList:
@@ -153,16 +164,31 @@ Statement:
 	| WHILE LPAREN Exp RPAREN Statement { $$ = new CWhileStm( $3, $5 ); }
 	| PRINT LPAREN Exp RPAREN SEMI { $$ = new CPrintStm( $3 ); }
 	| PRINTLN LPAREN Exp RPAREN SEMI { $$ = new CPrintStm( $3 ); }
-	| ID EQUALS Exp SEMI { $$ = new CAssignStm( $1, $3 ); }
+	| ID EQUALS Exp SEMI { $$ = new CAssignStm(	 $1, $3 ); }
 	| ID LBRACKET Exp RBRACKET EQUALS Exp SEMI { $$ = new CAssignSubscriptStm( $1, $3, $6 ); }
 	;
+
+Function:
+	ID LPAREN ARG_LIST RPAREN 
+	LBRACE
+		StatementList
+	RBRACE
+	{
+		$$ = new CFunction($1, $3, $6);
+	}
+	;
+
+ARG_LIST:
+	TYPE
 
 Exp:
 	Exp PLUS Exp { $$ = new COpExp( $1, COpExp::TOperation::PLUS, $3 ); }
 	| Exp MINUS Exp { $$ = new COpExp( $1, COpExp::TOperation::Minus, $3 ); }
 	| Exp TIMES Exp { $$ = new COpExp( $1, COpExp::TOperation::TIMES, $3 ); }
-	| Exp AND Exp { $$ = new CLogicalExp( $1, CLogicalExp::O_And, $3 ); }
-	//| Exp LESS Exp { $$ = new CCompareExp( $1, CCompareExp::O_Less, $3 ); }
+	| Exp AND Exp { $$ = new CLogicalExp( $1, TLogicalOperation::AND, $3 ); }
+	| Exp OR Exp { $$ = new CLogicalExp( $1, TLogicalOperation::AND, $3 ); }
+
+	| Exp LESS Exp { $$ = new CCompareExp( $1, CCompareExp::O_Less, $3 ); }
 	//| MINUS Exp %prec T_UMinus { $$ = new CUnariMinusExp( $2 ); } 
 	;
 

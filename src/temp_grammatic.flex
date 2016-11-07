@@ -136,6 +136,10 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return AND;
 }
+"||" { 
+	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
+	return OR;
+}
 "+" { 
 	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return PLUS;
