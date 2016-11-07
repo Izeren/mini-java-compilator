@@ -26,79 +26,39 @@ void yyerror ( const IProgram*&, char const * );
 	const char *string;
 }
 
-%token CLASS
+%token NEW CLASS EXTENDS THIS RETURN
 
-%token EXTENDS
+%token PUBLIC PROTECTED PRIVATE STATIC
 
-%token PUBLIC
+%token PRINTLN PRINT
 
-%token PRINTLN
+%token INT VOID
 
-%token PRINT
+%token BOOLEAN TRUE FALSE
 
-%token INT
-
-%token BOOLEAN
-
-%token IF
-
-%token ELSE
+%token WHILE IF ELSE
 
 %token <string> NUM ID
 
-%token WHILE
+%token LPAREN RPAREN
 
-%token TRUE
+%token LBRACKET RBRACKET
 
-%token FALSE
+%token LBRACE RBRACE
 
-%token THIS
-
-%token NEW
-
-%token RETURN
-
-%token LPAREN
-
-%token RPAREN
-
-%token LBRACKET
-
-%token RBRACKET
-
-%token LBRACE
-
-%token RBRACE
-
-%token COMMA
-
-%token DOT
-
-%token SEMI
+%token COMMA DOT SEMI
 
 %token COMMENT
 
-%token AND
+%token AND OR
 
-%token OR
-
-%token PLUS
-
-%token MINUS
-
-%token TIMES
-
-%token STATIC
-
-%token VOID
+%token PLUS MINUS TIMES
 
 %token MAIN
 
 %token STRING
 
-%token LESS
-
-%token GREATER
+%token LESS GREATER EQUALS
 
 %token ASSIGN
 
