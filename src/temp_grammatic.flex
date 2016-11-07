@@ -119,6 +119,9 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	return GREATER;
 }
 "=" {
+	return ASSIGN;
+}
+"==" {
 	return EQUALS;
 }
 "&&" { 
