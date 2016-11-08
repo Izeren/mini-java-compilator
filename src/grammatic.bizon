@@ -62,13 +62,13 @@ void yyerror ( const IProgram*&, char const * );
 
 %token ASSIGN
 
-%right T_equal
-%left T_or
-%left T_and
-%left T_less
-%left T_minus, T_plus
-%left T_times, T_divide, T_mod
-%right T_not
+%right ASSIGN
+%left OR
+%left AND
+%left LESS
+%left MINUS, PLUS
+%left TIMES, DIVIDE, MOD
+%right NOT
 %left DOT LBRACKET
 
 // Особые (типизированные) токены
