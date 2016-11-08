@@ -8,9 +8,9 @@ public:
 
 	void Accept(IVisitor &visitor) override;
 	CProgram();
-	CProgram(CMainClass* _class, CCompoundStm* _classList);
+	CProgram(CMainClass* _class, CCLassList* _classList);
 
-	std::unique_ptr<CClass> mainClass;
-	std::unique_ptr<CCompoundStm> classList;
+	std::unique_ptr<CMainClass> mainClass;
+	std::unique_ptr<CCLassList> classList;
 
 };

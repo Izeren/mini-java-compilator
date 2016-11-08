@@ -15,6 +15,6 @@ CMainClass::CMainClass()
 CMainClass::CMainClass(CIdExp* _id, CMainMethod* _mainMethod)
 {
 	id = std::unique_ptr<CIdExp>(_id);
-	mainMethod = _mainMethod;
+	mainMethod = std::unique_ptr<CMainMethod>(_mainMethod;)
 }
 

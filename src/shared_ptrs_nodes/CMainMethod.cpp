@@ -14,6 +14,6 @@ CMainMethod::CMainMethod()
 
 CMainMethod::CMainMethod(CCompoundStm* _statementList)
 {
-	statementList = _statementList;
+	statementList = std::unique_ptr<CCompoundStm>(_statementList);
 }
 
