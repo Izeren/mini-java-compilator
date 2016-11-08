@@ -43,6 +43,9 @@ IntegerLiteral [1-9]{DIGIT}*|0
 %option noyywrap
 
 %%
+"/*"((("*"[^/])?)|[^*])*"*/" { 
+	return COMMENT;
+}
 "class" {
 	return CLASS;
 }
@@ -51,9 +54,6 @@ IntegerLiteral [1-9]{DIGIT}*|0
 }
 "public" { 
 	return PUBLIC;
-}
-"protected" {
-	return PROTECTED;
 }
 "private" {
 	return PRIVATE;
@@ -80,7 +80,9 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "System.out.print" { 
 	return PRINT;
 }
-
+"int[]" {
+	return INT_ARRAY
+}
 "int" { 
 	return INT;
 }
@@ -104,10 +106,6 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	return WHILE; 
 }
 
-{ID} { 
-	return ID;
-}
-
 "length" {
 	return LENGTH;
 }
@@ -127,14 +125,8 @@ IntegerLiteral [1-9]{DIGIT}*|0
 ">" {
 	return GREATER;
 }
-"!=" {
-	return NOT_EQUAL;
-}
 "!" {
 	return NOT;
-}
-"==" {
-	return EQUAL;
 }
 "=" {
 	return ASSIGN;
@@ -183,14 +175,12 @@ IntegerLiteral [1-9]{DIGIT}*|0
 ";" { 
 	return SEMI; 
 }
-"/*"((("*"[^/])?)|[^*])*"*/" { 
-	return COMMENT;
-}
-"/" {
-	return DIVIDE;
-}
 "%" {
 	return MOD;
 }
+{ID} { 
+	return ID;
+}
+
 . { ; }
 %%
