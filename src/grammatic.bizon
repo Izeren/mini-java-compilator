@@ -30,9 +30,9 @@ void yyerror ( const IProgram*&, char const * );
 
 %token PUBLIC PROTECTED PRIVATE STATIC
 
-%token PRINTLN PRINT
+%token PRINTLN
 
-%token INT VOID
+%token INT VOID INT_ARRAY
 
 %token BOOLEAN TRUE FALSE
 
@@ -129,7 +129,6 @@ Statement:
 	LBRACE StatementList RBRACE { $$ = new CCompoundStm( $2 ); }
 	| IF LPAREN Exp RPAREN Statement ELSE Statement { $$ = new CIfStm( $3, $5, $7 ); }
 	| WHILE LPAREN Exp RPAREN Statement { $$ = new CWhileStm( $3, $5 ); }
-	| PRINT LPAREN Exp RPAREN SEMI { $$ = new CPrintStm( $3 ); }
 	| PRINTLN LPAREN Exp RPAREN SEMI { $$ = new CPrintStm( $3 ); }
 	| ID ASSIGN Exp SEMI { $$ = new CAssignStm(	 $1, $3 ); }
 	| ID LBRACKET Exp RBRACKET ASSIGN Exp SEMI { $$ = new CAssignSubscriptStm( $1, $3, $6 ); }

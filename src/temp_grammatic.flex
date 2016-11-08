@@ -77,9 +77,6 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "System.out.println" { 
 	return PRINTLN;
 }
-"System.out.print" { 
-	return PRINT;
-}
 "int[]" {
 	return INT_ARRAY
 }
