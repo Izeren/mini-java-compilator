@@ -12,7 +12,7 @@ void CProgram::Accept(IVisitor &visitor) override
 CProgram::CProgram()
 {}
 
-CProgram::CProgram(CClass *_mainClass, CClassDeclarationList *_classList)
+CProgram::CProgram(CClass* _mainClass, CClassDeclarationList* _classList)
 {
 	mainClass = std::unique_ptr<CMainClass>(_mainClass);
 	classList = _classList;
