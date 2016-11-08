@@ -15,6 +15,21 @@ void CIdExp::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }
 
+//CIdPtrExp:
+//-------------------------------------------------------------------------------------------------
+
+CIdPtrExp::CIdPtrExp(const std::string &name, int *address) {
+	this->name = name;
+	this->address = address;
+}
+
+CIdPtrExp::CIdPtrExp() : CIdPtrExp(BAD_ID) {}
+
+void CIdPtrExp::Accept(IVisitor &visitor) {
+	visitor.Visit(*this);
+}
+
+
 
 //CNumExp:
 //-------------------------------------------------------------------------------------------------

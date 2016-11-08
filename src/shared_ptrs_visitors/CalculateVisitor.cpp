@@ -225,12 +225,21 @@ void CCalculateVisitor::Visit(CUnarMinusExp &exp) {
 	this->childResult = -rightResult;
 }
 
-void CCalculateVisitor::Visit(CAssignStm &exp) {
+void CCalculateVisitor::Visit(CIdPtrExp &exp) {
 	if (wasError) {
 		return;
 	}
 
-	exp.rightExpression.get()->Accept(*this);
+	this->childResult = *(exp.address);
+	this->isChildResultInteger = true;
+}
+
+void CCalculateVisitor::Visit(CAssignStm &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.rightExpression.get()->Accept(*this);
 	if (!this->isChildResultInteger) {
 		wasError = true;
 		return;
@@ -242,17 +251,17 @@ void CCalculateVisitor::Visit(CAssignStm &exp) {
 
 	int rightResult = this->childResult;
 
-	*(exp.leftExpression.get()->address) = rightResult;
+	*(stm.leftExpression.get()->address) = rightResult;
 
 	this->isChildResultInteger = false;
 }
 
-void CCalculateVisitor::Visit(CIfStm &exp) {
+void CCalculateVisitor::Visit(CIfStm &stm) {
 	if (wasError) {
 		return;
 	}
 
-	exp.conditionExpression.get()->Accept(*this);
+	stm.conditionExpression.get()->Accept(*this);
 	if (!this->isChildResultInteger) {
 		wasError = true;
 		return;
@@ -263,21 +272,21 @@ void CCalculateVisitor::Visit(CIfStm &exp) {
 	}
 
 	if (childResult) {
-		exp.positiveStatement.get()->Accept(*this);
+		stm.positiveStatement.get()->Accept(*this);
 	}
 	else {
-		exp.negativeStatement.get()->Accept(*this);
+		stm.negativeStatement.get()->Accept(*this);
 	}
 
 	this->isChildResultInteger = false;
 }
 
-void CCalculateVisitor::Visit(CWhileStm &exp) {
+void CCalculateVisitor::Visit(CWhileStm &stm) {
 	if (wasError) {
 		return;
 	}
 
-	exp.conditionExpression.get()->Accept(*this);
+	stm.conditionExpression.get()->Accept(*this);
 	if (!this->isChildResultInteger) {
 		wasError = true;
 		return;
@@ -288,8 +297,8 @@ void CCalculateVisitor::Visit(CWhileStm &exp) {
 	}
 
 	while (childResult) {
-		exp.statement.get()->Accept(*this);
-		exp.conditionExpression.get()->Accept(*this);
+		stm.statement.get()->Accept(*this);
+		stm.conditionExpression.get()->Accept(*this);
 
 		if (!this->isChildResultInteger) {
 			wasError = true;
@@ -300,6 +309,28 @@ void CCalculateVisitor::Visit(CWhileStm &exp) {
 			return;
 		}
 	}
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CAssignSubscriptStm &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.valueExpression.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	if (wasError) {
+		return;
+	}
+
+	int valueResult = this->childResult;
+
+	*(stm.idExpression.get()->addressc+ stm.offset.get().number) = valueResult;
 
 	this->isChildResultInteger = false;
 }

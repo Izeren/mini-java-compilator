@@ -43,68 +43,28 @@ IntegerLiteral [1-9]{DIGIT}*|0
 %option noyywrap
 
 %%
+"/*"((("*"[^/])?)|[^*])*"*/" { 
+	return COMMENT;
+}
 "class" {
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return CLASS;
 }
 "extends" {
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return EXTENDS; 
 }
 "public" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return PUBLIC;
 }
-"System.out.println" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return PRINTLN;
-}
-"System.out.print" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return PRINT;
-}
-"int" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return INT;
-}
-"boolean" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
-	return BOOLEAN;
-}
-"if" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return IF;
-}
-"else" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
-	return ELSE;
-}
-{IntegerLiteral} { 
-	//std::cout << "(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} ";
-	return NUM;
-}
-"while" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
-	return WHILE; 
-}
-"true" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
-	return TRUE;
-}
-"false" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
-	return FALSE;
+"private" {
+	return PRIVATE;
 }
 "this" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return THIS;
 }
 "new" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return NEW;
 }
 "return" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return RETURN;
 }
 "main" {
@@ -113,15 +73,51 @@ IntegerLiteral [1-9]{DIGIT}*|0
 "static" {
 	return STATIC;
 }
+
+"System.out.println" { 
+	return PRINTLN;
+}
+"System.out.print" { 
+	return PRINT;
+}
+"int[]" {
+	return INT_ARRAY
+}
+"int" { 
+	return INT;
+}
 "void" {
 	return VOID;
 }
 "String" {
 	return STRING;
 }
-{ID} { 
-	//std::cout << "(" << yytext << "){" << yylloc.first_line << ":" << yylloc.first_column << "} ";
-	return ID;
+{IntegerLiteral} { 
+	return NUM;
+}
+
+"if" { 
+	return IF;
+}
+"else" { 
+	return ELSE;
+}
+"while" { 
+	return WHILE; 
+}
+
+"length" {
+	return LENGTH;
+}
+
+"boolean" { 
+	return BOOLEAN;
+}
+"true" { 
+	return TRUE;
+}
+"false" { 
+	return FALSE;
 }
 "<" {
 	return LESS;
@@ -129,68 +125,62 @@ IntegerLiteral [1-9]{DIGIT}*|0
 ">" {
 	return GREATER;
 }
+"!" {
+	return NOT;
+}
 "=" {
-	return EQUALS;
+	return ASSIGN;
 }
 "&&" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return AND;
 }
 "||" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return OR;
 }
+
 "+" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return PLUS;
 }
 "-" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return MINUS;
 }
 "*" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return TIMES;
 }
+
 "(" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return LPAREN;
 }
 ")" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return RPAREN;
 }
 "[" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return LBRACKET;
 }
 "]" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return RBRACKET;
 }
 "{" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return LBRACE;
 }
 "}" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} "; 
 	return RBRACE;
 }
 "," { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return COMMA;
 }
 "." { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return DOT; 
 }
 ";" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
 	return SEMI; 
 }
-"/*"((("*"[^/])?)|[^*])*"*/" { 
-	//std::cout << "{" << yylloc.first_line << ":" << yylloc.first_column << "} ";
-	return COMMENT;
+"%" {
+	return MOD;
 }
+{ID} { 
+	return ID;
+}
+
 . { ; }
 %%

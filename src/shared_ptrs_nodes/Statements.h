@@ -19,6 +19,20 @@ public:
 	std::unique_ptr<IExpression> rightExpression;
 };
 
+//CAssignSubscriptStm:
+//-------------------------------------------------------------------------------------------------
+
+class CAssignSubscriptStm : public IStatement {
+public:
+	CAssignSubscriptStm(CIdPtrExp* idExpression, CNumExp* offset, IExpression* valueExpression);
+	CAssignSubscriptStm();
+	void Accept(IVisitor &visitor) override;
+
+	std::unique_ptr<CIdPtrExp> idExpression;
+	std::unique_ptr<CNumExp> offset;
+	std::unique_ptr<IExpression> valueExpression;
+};
+
 
 //CCompoundStm:
 //-------------------------------------------------------------------------------------------------

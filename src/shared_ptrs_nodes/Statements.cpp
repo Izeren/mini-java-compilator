@@ -19,6 +19,26 @@ void CAssignStm::Accept(IVisitor &visitor) {
 }
 
 
+//CAssignSubscriptStm:
+//-------------------------------------------------------------------------------------------------
+
+CAssignSubscriptStm::CAssignSubscriptStm() :CAssignSubscriptStm(NULL, NULL, NULL) {}
+
+CAssignSubscriptStm::CAssignSubscriptStm(
+	CIdPtrExp* idExpression,
+	CNumExp* offset,
+	IExpression* valueExpression
+) {
+	this->idExpression = std::unique_ptr<CIdPtrExp>(idExpression);
+	this->offset = std::unique_ptr<CNumExp>(offset);
+	this->valueExpression = std::unique_ptr<IExpression>(valueExpression);
+}
+
+void Accept(IVisitor &visitor) {
+	visitor.Visit(*this);
+}
+
+
 //CCompoundStm:
 //-------------------------------------------------------------------------------------------------
 

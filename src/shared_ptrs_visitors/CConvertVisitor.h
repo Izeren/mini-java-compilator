@@ -20,10 +20,12 @@ public:
 	void Visit(CLogOpExp &exp) override;
 	void Visit(CCompExp &exp) override;
 	void Visit(CUnarMinusExp &exp) override;
-	void Visit(CAssignStm &exp) override;
-	void Visit(CSimpleStm &exp) override;
-	void Visit(CIfStm &exp) override;
-	void Visit(CWhileStm &exp) override;
+	void Visit(CIdPtrExp &exp) override;
+	void Visit(CAssignStm &stm) override;
+	void Visit(CSimpleStm &stm) override;
+	void Visit(CIfStm &stm) override;
+	void Visit(CWhileStm &stm) override;
+	void Visit(CAssignSubscriptStm &stm) override;
 
 	std::string GetResult();
 
