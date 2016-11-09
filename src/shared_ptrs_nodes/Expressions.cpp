@@ -170,10 +170,11 @@ void CGetFieldExp::Accept (IVisitor& visitor) override
 //CCallMethodExp:
 //-------------------------------------------------------------------------------------------------
 
-CCallMethodExp::CCallMethodExp(CClass* _classOwner, CMethod* _method)
+CCallMethodExp::CCallMethodExp(CClass* _classOwner, CIdExp* _methodName, CExpList* _args)
 {
 	classOwner = _classOwner;
-	method = _method;
+	methodName = _methodName;
+	args = _args;
 }
 
 void CCallMethodExp::Accept(IVisitor& visitor) override

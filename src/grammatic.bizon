@@ -236,9 +236,9 @@ Expression:
 	|
 	Expression LBRACKET Expression RBRACKET { $$ = ??? }
 	|
-	Expression DOT LENGTH { $$ = ??? }
+	Expression DOT LENGTH { $$ = new CGetLength( $1 ); }
 	|
-	Expression DOT ID LPAREN ExpressionList RPAREN { $$ = ??? }
+	Expression DOT ID LPAREN ExpressionList RPAREN { $$ = new CCallMethod( $1, $3, $5 ); }
 	|
 	NUM { $$ = new CNumExpresion($1); }
 	|
