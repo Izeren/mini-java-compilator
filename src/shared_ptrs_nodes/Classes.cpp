@@ -160,7 +160,7 @@ CMainMethod::CMainMethod(CType* _returnType, CArgumentList* _arguments, CCompoun
 //-------------------------------------------------------------------------------------------------
 
 void CMainClass::Accept(IVisitor &visitor) {
-	//visitor.visit(*this);
+	visitor.Visit(*this);
 }
 
 CMainClass::CMainClass() {}
@@ -175,7 +175,7 @@ CMainClass::CMainClass(CIdExp* _id, CMainMethod* _mainMethod) {
 //-------------------------------------------------------------------------------------------------
 
 void CProgram::Accept(IVisitor &visitor) {
-	//visitor.visit(*this);
+	visitor.Visit(*this);
 }
 
 CProgram::CProgram() {}
