@@ -27,6 +27,13 @@ public:
 	void Visit(CLogOpExp &exp) override;
 	void Visit(CCompExp &exp) override;
 	void Visit(CUnarMinusExp &exp) override;
+	void Visit(CGetLength &exp) override;
+	void Visit(CGetField &exp) override;
+	void Visit(CCallMethod &exp) override;
+	void Visit(CExpList &exp) override;
+	void Visit(CNegativeExpression &exp) override;
+	void Visit(CArrayExpression &exp) override;
+	void Visit(CThisExpression &exp) override;
 
 	void Visit(CAssignStm &stm) override;
 	void Visit(CAssignSubscriptStm &stm) override;
@@ -47,15 +54,7 @@ public:
 	void Visit(CClassList &stm) override;
 	void Visit(CMainMethod &stm) override;
 	void Visit(CMainClass &stm) override;
-	void Visit(CProgram &stm) override;
-
-	void Visit(CGetLength &exp) override;
-	void Visit(CGetField &exp) override;
-	void Visit(CGetMethod &exp) override;
-	void Visit(CExpList &exp) override;
-	void Visit(CNegativeExpression &exp) override;
-	void Visit(CArrayExpression &exp) override;
-	void Visit(CThisExpression &exp) override;
+	void Visit(CProgram &stm) override;	
 
 	std::string GetResult();
 
