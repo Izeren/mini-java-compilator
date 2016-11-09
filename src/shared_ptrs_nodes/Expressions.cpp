@@ -1,6 +1,5 @@
 #include "Expressions.h"
 #include "Classes.h"
-#include <unordered_map>
 
 //CIdExp:
 //-------------------------------------------------------------------------------------------------
@@ -47,11 +46,11 @@ void CNumExp::Accept(IVisitor &visitor) {
 //COpExp:
 //-------------------------------------------------------------------------------------------------
 
-std::map<TOperation, std::string> COpExp::stringOperations = {
-	{ TOperation::PLUS, "+" },
-	{ TOperation::MINUS, "-" },
-	{ TOperation::MULTIPLY, "*" },
-	{ TOperation::MOD, "%" }
+std::map<enums::TOperation, std::string> COpExp::stringOperations = {
+	{ enums::TOperation::PLUS, "+" },
+	{ enums::TOperation::MINUS, "-" },
+	{ enums::TOperation::MULTIPLY, "*" },
+	{ enums::TOperation::MOD, "%" }
 };
 
 void COpExp::Accept(IVisitor &visitor) {
@@ -61,7 +60,7 @@ void COpExp::Accept(IVisitor &visitor) {
 COpExp::COpExp(
 	IExpression* leftOperand,
 	IExpression* rightOperand,
-	TOperation operation
+	enums::TOperation operation
 ) {
 	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
 	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
@@ -85,9 +84,9 @@ void CLogExp::Accept(IVisitor &visitor) {
 //CLogOExp:
 //-------------------------------------------------------------------------------------------------
 
-std::map<TLogicalOperation, std::string> CLogOpExp::stringOperations = {
-	{ TLogicalOperation::AND, "&&" },
-	{ TLogicalOperation::OR, "||" }
+std::map<enums::TLogicalOperation, std::string> CLogOpExp::stringOperations = {
+	{ enums::TLogicalOperation::AND, "&&" },
+	{ enums::TLogicalOperation::OR, "||" }
 };
 
 void CLogOpExp::Accept(IVisitor &visitor) {
@@ -97,7 +96,7 @@ void CLogOpExp::Accept(IVisitor &visitor) {
 CLogOpExp::CLogOpExp(
 	IExpression* leftOperand,
 	IExpression* rightOperand,
-	TLogicalOperation operation
+	enums::TLogicalOperation operation
 ) {
 	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
 	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
@@ -108,11 +107,11 @@ CLogOpExp::CLogOpExp(
 //CCompExp:
 //-------------------------------------------------------------------------------------------------
 
-std::map<TCompareOperation, std::string> CCompExp::stringOperations = {
-	{ TCompareOperation::GREATER, ">" },
-	{ TCompareOperation::GREATER_OR_EQUAL, ">=" },
-	{ TCompareOperation::LESS, "<" },
-	{ TCompareOperation::LESS_OR_EQUAL, "<=" }
+std::map<enums::TCompareOperation, std::string> CCompExp::stringOperations = {
+	{ enums::TCompareOperation::GREATER, ">" },
+	{ enums::TCompareOperation::GREATER_OR_EQUAL, ">=" },
+	{ enums::TCompareOperation::LESS, "<" },
+	{ enums::TCompareOperation::LESS_OR_EQUAL, "<=" }
 };
 
 void CCompExp::Accept(IVisitor &visitor) {

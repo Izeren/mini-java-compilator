@@ -1,9 +1,10 @@
 #pragma once
 
 #include "INode.h"
-#include <unordered_map>
+#include "../Utils.h"
 #include <map>
 
+using namespace enums;
 
 class IExpression : public INode {};
 
@@ -48,19 +49,17 @@ public:
 //COpExp:
 //-------------------------------------------------------------------------------------------------
 
-enum TOperation { PLUS, MINUS, MULTIPLY, MOD };
-
 class COpExp : public IExpression {
 public:
 
-	static std::map<TOperation, std::string> stringOperations;
+	static std::map<enums::TOperation, std::string> stringOperations;
 
 	void Accept(IVisitor &visitor) override;
 	COpExp();
 	COpExp(
 		IExpression* leftOperand,
 		IExpression* rightOperand,
-		TOperation operation = TOperation::PLUS
+		enums::TOperation operation = enums::TOperation::PLUS
 	);
 
 	std::unique_ptr<IExpression> leftOperand;
@@ -81,19 +80,17 @@ public:
 //CLogOpExp:
 //-------------------------------------------------------------------------------------------------
 
-enum TLogicalOperation { AND, OR };
-
 class CLogOpExp : public IExpression {
 public:
 
-	static std::map<TLogicalOperation, std::string> stringOperations;
+	static std::map<enums::TLogicalOperation, std::string> stringOperations;
 
 	void Accept(IVisitor &visitor) override;
 	CLogOpExp();
 	CLogOpExp(
 		IExpression* leftOperand,
 		IExpression* rightOperand,
-		TLogicalOperation operation = TLogicalOperation::AND
+		TLogicalOperation operation = enums::TLogicalOperation::AND
 	);
 
 	std::unique_ptr<IExpression> leftOperand;
@@ -104,19 +101,17 @@ public:
 //CCompExp:
 //-------------------------------------------------------------------------------------------------
 
-enum TCompareOperation { GREATER, GREATER_OR_EQUAL, LESS, LESS_OR_EQUAL };
-
 class CCompExp : public IExpression {
 public:
 
-	static std::map<TCompareOperation, std::string> stringOperations;
+	static std::map<enums::TCompareOperation, std::string> stringOperations;
 
 	void Accept(IVisitor &visitor) override;
 	CCompExp();
 	CCompExp(
 		IExpression* leftOperand,
 		IExpression* rightOperand,
-		TCompareOperation operation = TCompareOperation::GREATER
+		TCompareOperation operation = enums::TCompareOperation::GREATER
 	);
 
 	std::unique_ptr<IExpression> leftOperand;
@@ -150,6 +145,18 @@ public:
 };
 
 
+//CExpList:
+//-------------------------------------------------------------------------------------------------
+
+class CExpList : public IExpression {
+
+public:
+	CExpList(IExpression* _exp, CExpList* _expList);
+	void Accept(IVisitor& visitor) override;
+	std::unique_ptr<IExpression> exp;
+	std::unique_ptr<CExpList> expList;	
+};
+
 //CCallMethodExp:
 //-------------------------------------------------------------------------------------------------
 class CMethod;
@@ -163,17 +170,6 @@ public:
 	std::unique_ptr<CExpList> args;
 };
 
-//CExpList:
-//-------------------------------------------------------------------------------------------------
-
-class CExpList : public IExpression {
-
-public:
-	CExpList(IExpression* _exp, CExpList* _expList);
-	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<IExpression> exp;
-	std::unique_ptr<expList> expList;	
-};
 //CThisExpression:
 //-------------------------------------------------------------------------------------------------
 
