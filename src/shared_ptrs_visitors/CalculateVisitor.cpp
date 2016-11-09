@@ -3,45 +3,36 @@
 #include "IVisitor.h"
 #include "CalculateVisitor.h"
 
-void CCalculateVisitor::Visit(CPrintStm &stm) {
+
+
+//Expressions:
+//-------------------------------------------------------------------------------------------------
+
+void CCalculateVisitor::Visit(CIdExp &exp) {
 	if (wasError) {
 		return;
 	}
 
-	stm.expression.get()->Accept(*this);
-
-	if (wasError) {
-		return;
-	}
-
-	if (!this->isChildResultInteger) {
-		this->wasError = true;
-		return;
-	}
-
-	std::cout << this->childResult << '\n';
-	this->isChildResultInteger = false;
+	this->childResult = *(exp.address);
+	this->isChildResultInteger = true;
 }
 
-void CCalculateVisitor::Visit(CCompoundStm &stm) {
+void CCalculateVisitor::Visit(CIdPtrExp &exp) {
 	if (wasError) {
 		return;
 	}
 
-	stm.leftStatement.get()->Accept(*this);
-	stm.rightStatement.get()->Accept(*this);
-
-	this->isChildResultInteger = false;
+	this->childResult = *(exp.address);
+	this->isChildResultInteger = true;
 }
 
-void CCalculateVisitor::Visit(CSimpleStm &stm) {
+void CCalculateVisitor::Visit(CNumExp &exp) {
 	if (wasError) {
 		return;
 	}
 
-	stm.statement.get()->Accept(*this);
-
-	this->isChildResultInteger = false;
+	this->childResult = exp.number;
+	this->isChildResultInteger = true;
 }
 
 void CCalculateVisitor::Visit(COpExp &exp) {
@@ -95,25 +86,6 @@ void CCalculateVisitor::Visit(COpExp &exp) {
 	}
 }
 
-void CCalculateVisitor::Visit(CNumExp &exp) {
-	if (wasError) {
-		return;
-	}
-
-	this->childResult = exp.number;
-	this->isChildResultInteger = true;
-}
-
-void CCalculateVisitor::Visit(CIdExp &exp) {
-	if (wasError) {
-		return;
-	}
-
-	this->childResult = *(exp.address);
-	this->isChildResultInteger = true;
-}
-
-//
 void CCalculateVisitor::Visit(CLogExp &exp) {
 	if (wasError) {
 		return;
@@ -225,14 +197,10 @@ void CCalculateVisitor::Visit(CUnarMinusExp &exp) {
 	this->childResult = -rightResult;
 }
 
-void CCalculateVisitor::Visit(CIdPtrExp &exp) {
-	if (wasError) {
-		return;
-	}
 
-	this->childResult = *(exp.address);
-	this->isChildResultInteger = true;
-}
+
+//Statements:
+//-------------------------------------------------------------------------------------------------
 
 void CCalculateVisitor::Visit(CAssignStm &stm) {
 	if (wasError) {
@@ -252,6 +220,69 @@ void CCalculateVisitor::Visit(CAssignStm &stm) {
 	int rightResult = this->childResult;
 
 	*(stm.leftExpression.get()->address) = rightResult;
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CAssignSubscriptStm &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.valueExpression.get()->Accept(*this);
+	if (!this->isChildResultInteger) {
+		wasError = true;
+		return;
+	}
+
+	if (wasError) {
+		return;
+	}
+
+	int valueResult = this->childResult;
+
+	*(stm.idExpression->address + stm.offset->number) = valueResult;
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CCompoundStm &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.leftStatement.get()->Accept(*this);
+	stm.rightStatement.get()->Accept(*this);
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CPrintStm &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.expression.get()->Accept(*this);
+
+	if (wasError) {
+		return;
+	}
+
+	if (!this->isChildResultInteger) {
+		this->wasError = true;
+		return;
+	}
+
+	std::cout << this->childResult << '\n';
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CSimpleStm &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.statement.get()->Accept(*this);
 
 	this->isChildResultInteger = false;
 }
@@ -313,27 +344,137 @@ void CCalculateVisitor::Visit(CWhileStm &stm) {
 	this->isChildResultInteger = false;
 }
 
-void CCalculateVisitor::Visit(CAssignSubscriptStm &stm) {
+
+
+//Classes:
+//-------------------------------------------------------------------------------------------------
+
+void CCalculateVisitor::Visit(CType &stm) {
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CField &stm) {
 	if (wasError) {
 		return;
 	}
 
-	stm.valueExpression.get()->Accept(*this);
-	if (!this->isChildResultInteger) {
-		wasError = true;
-		return;
-	}
-
-	if (wasError) {
-		return;
-	}
-
-	int valueResult = this->childResult;
-
-	*(stm.idExpression->address + stm.offset->number) = valueResult;
+	stm.type.get()->Accept(*this);
+	stm.id.get()->Accept(*this);
 
 	this->isChildResultInteger = false;
 }
+
+void CCalculateVisitor::Visit(CFieldList &stm) {
+	if (wasError) {
+		return;
+	}
+
+	if (stm.field) {
+		stm.field.get()->Accept(*this);
+	}
+	if (stm.nextFields) {
+		stm.nextFields.get()->Accept(*this);
+	}
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CArgument &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.type.get()->Accept(*this);
+	stm.id.get()->Accept(*this);
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CArgumentList &stm) {
+	if (wasError) {
+		return;
+	}
+
+	if (stm.argument) {
+		stm.argument.get()->Accept(*this);
+	}
+	if (stm.nextArguments) {
+		stm.nextArguments.get()->Accept(*this);
+	}
+
+	this->isChildResultInteger = false;
+}
+
+void CCalculateVisitor::Visit(CMethod &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.arguments.get()->Accept(*this);
+	stm.statements.get()->Accept(*this);
+}
+
+void CCalculateVisitor::Visit(CMethodList &stm) {
+	if (wasError) {
+		return;
+	}
+	if (stm.method) {
+		stm.method.get()->Accept(*this);
+	}
+	if (stm.nextMethods) {
+		stm.nextMethods.get()->Accept(*this);
+	}
+}
+
+void CCalculateVisitor::Visit(CClass &stm) {
+	if (wasError) {
+		return;
+	}
+
+	stm.parentClass.get()->Accept(*this);
+	stm.id.get()->Accept(*this);
+	stm.fields.get()->Accept(*this);
+	stm.methods.get()->Accept(*this);
+}
+
+void CCalculateVisitor::Visit(CClassList &stm) {
+	if (wasError) {
+		return;
+	}
+	if (stm.cclass) {
+		stm.cclass.get()->Accept(*this);
+	}
+	if (stm.nextClasses) {
+		stm.nextClasses.get()->Accept(*this);
+	}
+}
+
+void CCalculateVisitor::Visit(CMainMethod &stm) {
+	if (wasError) {
+		return;
+	}
+	stm.arguments.get()->Accept(*this);
+	stm.statements->Accept(*this);
+}
+
+//void CCalculateVisitor::Visit(CMainClass &stm) {
+//	if (wasError) {
+//		return;
+//	}
+//	stm.id->Accept(*this);
+//	stm.mainMethod->Accept(*this);
+//}
+//
+//void CCalculateVisitor::Visit(CProgram &stm) {
+//	if (wasError) {
+//		return;
+//	}
+//	stm.mainClass->Accept(*this);
+//	if (stm.classList) {
+//		stm.classList->Accept(*this);
+//	}
+//}
+
 
 int CCalculateVisitor::GetResult() {
 	return childResult;

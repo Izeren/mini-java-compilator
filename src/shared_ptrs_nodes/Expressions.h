@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <map>
 
-class IExpression : public INode {};
 
+class IExpression : public INode {};
 
 //CIdExp:
 //-------------------------------------------------------------------------------------------------

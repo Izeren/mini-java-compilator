@@ -51,18 +51,33 @@ void CPrintVisitor::AddArrow(int child_id) {
 	this->description += "\t" + std::to_string(lastVisited + 1) + " -> " + std::to_string(child_id) + "\n";
 }
 
-void CPrintVisitor::Visit(CPrintStm &stm) {
-	this->description = "";
-	stm.expression->Accept(*this);
+
+
+
+//Expressions:
+//-------------------------------------------------------------------------------------------------
+
+void CPrintVisitor::Visit(CIdExp &exp) {
+	++lastVisited;
+	this->description = ConstructLabel(exp.name, lastVisited);
 	AddArrow(lastVisited);
-	AddLabel("PrintStm");
+	AddLabel("IdExp");
 	++lastVisited;
 }
 
-void CPrintVisitor::Visit(CCompoundStm &stm) {
-	std::vector<INode*> children = { stm.leftStatement.get(), stm.rightStatement.get() };
-	AddChildrenAnswers(VisitChildren(children));
-	AddLabel("CompoundStm");
+void CPrintVisitor::Visit(CIdPtrExp &exp) {
+	++lastVisited;
+	this->description = ConstructLabel(exp.name, lastVisited);
+	AddArrow(lastVisited);
+	AddLabel("IdPtrExp");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CNumExp &exp) {
+	++lastVisited;
+	this->description = ConstructLabel(std::to_string(exp.number), lastVisited);
+	AddArrow(lastVisited);
+	AddLabel("NumExp");
 	++lastVisited;
 }
 
@@ -76,22 +91,6 @@ void CPrintVisitor::Visit(COpExp &exp) {
 
 	AddChildrenAnswers(answers);
 	AddLabel("OpExp");
-	++lastVisited;
-}
-
-void CPrintVisitor::Visit(CNumExp &exp) {
-	++lastVisited;
-	this->description = ConstructLabel(std::to_string(exp.number), lastVisited);
-	AddArrow(lastVisited);
-	AddLabel("NumExp");
-	++lastVisited;
-}
-
-void CPrintVisitor::Visit(CIdExp &exp) {
-	++lastVisited;
-	this->description = ConstructLabel(exp.name, lastVisited);
-	AddArrow(lastVisited);
-	AddLabel("IdExp");
 	++lastVisited;
 }
 
@@ -137,18 +136,36 @@ void CPrintVisitor::Visit(CUnarMinusExp &exp) {
 }
 
 
-void CPrintVisitor::Visit(CIdPtrExp &exp) {
-	++lastVisited;
-	this->description = ConstructLabel(exp.name, lastVisited);
-	AddArrow(lastVisited);
-	AddLabel("IdPtrExp");
-	++lastVisited;
-}
+
+//Statements:
+//-------------------------------------------------------------------------------------------------
 
 void CPrintVisitor::Visit(CAssignStm &stm) {
 	std::vector<INode*> children = { stm.leftExpression.get(), stm.rightExpression.get() };
 	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("AssignStm");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CAssignSubscriptStm &stm) {
+	std::vector<INode*> children = { stm.idExpression.get(), stm.offset.get(), stm.valueExpression.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("AssignSubscriptStm");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CCompoundStm &stm) {
+	std::vector<INode*> children = { stm.leftStatement.get(), stm.rightStatement.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("CompoundStm");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CPrintStm &stm) {
+	this->description = "";
+	stm.expression->Accept(*this);
+	AddArrow(lastVisited);
+	AddLabel("PrintStm");
 	++lastVisited;
 }
 
@@ -179,12 +196,91 @@ void CPrintVisitor::Visit(CWhileStm &stm) {
 	++lastVisited;
 }
 
-void CPrintVisitor::Visit(CAssignSubscriptStm &stm) {
-	std::vector<INode*> children = { stm.idExpression.get(), stm.offset.get(), stm.valueExpression.get() };
-	AddChildrenAnswers(VisitChildren(children));
-	AddLabel("AssignSubscriptStm");
+
+
+//Classes:
+//-------------------------------------------------------------------------------------------------
+
+void CPrintVisitor::Visit(CType &stm) {
+	++lastVisited;
+	this->description = ConstructLabel(stm.name, lastVisited);
+	AddArrow(lastVisited);
+	AddLabel("Type");
 	++lastVisited;
 }
+
+void CPrintVisitor::Visit(CField &stm) {
+	std::vector<INode*> children = { stm.type.get(), stm.id.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("Field");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CFieldList &stm) {
+	std::vector<INode*> children = { stm.field.get(), stm.nextFields.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("FieldList");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CArgument &stm) {
+	std::vector<INode*> children = { stm.type.get(), stm.id.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("Argument");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CArgumentList &stm) {
+	std::vector<INode*> children = { stm.argument.get(), stm.nextArguments.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("ArgumentList");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CMethod &stm) {
+	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.statements.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+
+	int operationId = ++lastVisited;
+	std::string operationDescription = ConstructLabel(stm.name, operationId);
+	answers.PushBack(operationDescription, operationId);
+
+	AddChildrenAnswers(answers);
+	AddLabel("Method");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CMethodList &stm) {
+	std::vector<INode*> children = { stm.method.get(), stm.nextMethods.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("MethodList");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CClass &stm) {
+	std::vector<INode*> children = { stm.parentClass.get(), stm.id.get(), stm.fields.get(), stm.methods.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("Class");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CClassList &stm) {
+	std::vector<INode*> children = { stm.cclass.get(), stm.nextClasses.get() };
+	AddChildrenAnswers(VisitChildren(children));
+	AddLabel("ClassList");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CMainMethod &stm) {
+	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.statements.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("MainMethod");
+	++lastVisited;
+}
+
+
 
 std::string CPrintVisitor::GetResult() {
 	return description;
