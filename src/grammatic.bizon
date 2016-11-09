@@ -250,7 +250,7 @@ Expression:
 	|
 	THIS { $$ = new CThisExpression(); }
 	|
-	NEW INT LBRACKET Expression RBRACKET { $$ = ??? }
+	NEW INT LBRACKET Expression RBRACKET { $$ = CArrayExpression($4); }
 	|
 	NEW ID LPAREN RPAREN { $$ = new CIdExp($2); }
 	|
