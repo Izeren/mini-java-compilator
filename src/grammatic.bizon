@@ -20,9 +20,18 @@ void yyerror ( const IProgram*&, char const * );
 %union {
 
 	CProgram* Program; // Указатель на класс-программу
-	CClass* Class; // Указатель на главный класс
+	CClass* Class; // Указатель класс
 	IStatement* Statement;
-	IExpressionression* Expression;
+	IExpression* Expression;
+	CType* Type;
+	CField* VarDeclaration;
+	CFieldList* VarDeclaratitionList;
+	CArgument* Argument;
+	CArgumentList* ArgumentList;
+	CMethod* MethodDeclaration;
+	CMethodList* MethodDeclarationList;
+	CMainMethod* MainMethod;
+	CMainClass* MainClass;
 	char *string;
 	int IntValue;
 }
@@ -79,11 +88,20 @@ void yyerror ( const IProgram*&, char const * );
 // Особые (типизированные) токены
 %type <Program> Program
 %type <Expression> Expression
-%type <Class> MainClass
+%type <MainClass> MainClass
 %type <Class> Class
-%type <Class> ClassList
+%type <ClassDeclarationList> ClassDeclarationList
 %type <Statement> Statement
 %type <Statement> StatementList
+%type <MainMethod> MainMethod
+%type <MethodDeclaration> MethodDeclaration
+%type <MethodDeclarationList> MethodDeclarationList
+%type <VarDeclaration> VarDeclaration
+%type <VarDeclaratitionList> VarDeclaratitionList
+%type <Argument> Argument
+%type <Type> Type
+%type <ArgumentList> ArgumentList
+%type <ExpressionList> ExpressionList
 
 %%
 
