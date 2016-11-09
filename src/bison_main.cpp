@@ -1,3 +1,6 @@
+#include "shared_ptr_nodes/Expressions.h"
+#include "shared_ptr_nodes/Statements.h"
+#include "shared_ptr_nodes/Classes.h"
 #include "lex.h"
 #include "bison.hpp"
 

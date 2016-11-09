@@ -33,9 +33,11 @@ void yyerror ( const IProgram*&, char const * );
 
 %token PRINTLN
 
-%token INT VOID INT_ARRAY LENGTH
+%token <string> INT BOOLEAN
 
-%token BOOLEAN TRUE FALSE
+%token VOID INT_ARRAY LENGTH
+
+%token TRUE FALSE
 
 %token WHILE IF ELSE
 
@@ -79,16 +81,16 @@ void yyerror ( const IProgram*&, char const * );
 %type <Expression> Expression
 %type <Class> MainClass
 %type <Class> Class
-%type <Class> ClassDeclarationList
+%type <Class> ClassList
 %type <Statement> Statement
 %type <Statement> StatementList
 
 %%
 
 Program:
-	MainClass { Program = $$ = new CProgram($1, 0); }
+	MainClass { Program = $$ = new CProgram( $1, 0 ); }
 	|
-	MainClass ClassDeclarationList { Program = $$ = new CProgram($1, $2); }
+	MainClass ClassList { Program = $$ = new CProgram( $1, $2 ); }
 	;
 
 MainClass:
@@ -96,7 +98,7 @@ MainClass:
 		MainMethod
 	RBRACE
 	{	
-		$$ = ???
+		$$ = new CMainClass( $2, $4 );
 	}
 	;
 
@@ -106,7 +108,7 @@ MainMethod:
 		StatementList
 	RBRACE 
 	{	
-		$$ = ???
+		$$ = new CMainMethod( 0, 0, $12 );
 	}
 	;
 
@@ -120,64 +122,62 @@ Class:
 	CLASS ID LBRACE
 		VarDeclaratitionList
 		MethodDeclarationList
-	RBRACE { $$ = ??? }
+	RBRACE { $$ = new CClass( $2, 0, $4, $5 ); }
 	| 
 	CLASS ID EXTENDS ID LBRACE
 		VarDeclaratitionList
 		MethodDeclarationList
-	RBRACE { $$ = ??? } 
+	RBRACE { $$ = new CClass( $2, $4, $6, $7 ); } 
 	;
 
 MethodDeclaration:
 	PUBLIC Type ID LPAREN ArgumentList RPAREN LBRACE 
-		VarDeclaratitionList
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
-	{ $$ = ??? }
+	{ $$ = new CMethod( $2, $3, $5, $8 ); }
 	|
 	PRIVATE Type ID LPAREN ArgumentList RPAREN LBRACE 
-		VarDeclaratitionList
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
-	{ $$ = ??? }
+	{ $$ = new CMethod( $2, $3, $5, $8 ); }
 	;
 
 MethodDeclarationList:
 	{ $$ = nullptr; }
 	|
-	MethodDeclaration MethodDeclarationList { $$ = ??? }
+	MethodDeclaration MethodDeclarationList { $$ = CMethodList( $1, $2 ); }
 	;
 
 VarDeclaration:
-	Type ID SEMI { $$ = ??? }
+	Type ID SEMI { $$ = new CField( $1, $2 ); }
 	;
 
 VarDeclaratitionList:
 	{ $$ = nullptr; }
 	|
-	VarDeclaration VarDeclaratitionList { $$ = ??? }
+	VarDeclaration VarDeclaratitionList { $$ = new CFieldList( $1, $2 ); }
 	;
 
 Argument:
-	Type ID { $$ = ??? }
+	Type ID { $$ = new CArgument( $1, $2 ); }
 	;
 
 Type:
-	INT LBRACKET RBRACKET { $$ = ??? }
+	INT LBRACKET RBRACKET { $$ = new CType( $1 ); }
 	|
-	BOOLEAN { $$ = ??? }
+	BOOLEAN { $$ = new CType( $1 ); }
 	|
-	INT { $$ = ??? }
+	INT { $$ = new CType( $1 ); }
 	|
-	ID { $$ = ??? }
+	ID { $$ = new CType( $1 ); }
 	;
 
 ArgumentList:
 	{ $$ = nullptr; }
 	|
-	Argument ArgumentList { $$ = ??? }
+	Argument ArgumentList { $$ = CArgumentList( $1, $2 ); }
 	;
 
 StatementList:
@@ -223,15 +223,15 @@ Expression:
 	|
 	Expression DOT ID LPAREN ExpressionList RPAREN { $$ = ??? }
 	|
-	NUM { $$ = ??? }
+	NUM { $$ = $1 }
 	|
-	TRUE { $$ = ??? }
+	TRUE { $$ = $1 }
 	|
-	FALSE { $$ = ??? }
+	FALSE { $$ = $1 }
 	|
-	ID { $$ = ??? }
+	ID { $$ = $1 }
 	|
-	THIS { $$ = ??? }
+	THIS { $$ = $1 }
 	|
 	NEW INT LBRACKET Expression RBRACKET { $$ = ??? }
 	|
