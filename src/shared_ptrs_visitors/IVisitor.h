@@ -8,6 +8,14 @@ class CLogExp;
 class CLogOpExp;
 class CCompExp;
 class CUnarMinusExp;
+class CGetLengthExp;
+class CGetFieldExp;
+class CCallMethodExp;
+class CExpList;
+class CNegativeExpression;
+class CArrayExpression;
+class CThisExpression;
+class CByIndexExpression;
 
 class CAssignStm;
 class CAssignSubscriptStm;
@@ -40,6 +48,14 @@ public:
 	virtual void Visit(CLogOpExp &exp) = 0;
 	virtual void Visit(CCompExp &exp) = 0;
 	virtual void Visit(CUnarMinusExp &exp) = 0;
+	virtual void Visit(CGetLengthExp &exp) = 0;
+	virtual void Visit(CGetFieldExp &exp) = 0;
+	virtual void Visit(CCallMethodExp &exp) = 0;
+	virtual void Visit(CExpList &exp) = 0;
+	virtual void Visit(CNegativeExpression &exp) = 0;
+	virtual void Visit(CArrayExpression &exp) = 0;
+	virtual void Visit(CThisExpression &exp) = 0;
+	virtual void Visit(CByIndexExpression &exp) = 0;
 
 	virtual void Visit(CAssignStm &stm) = 0;
 	virtual void Visit(CAssignSubscriptStm &stm) = 0;

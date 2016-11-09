@@ -135,7 +135,7 @@ void CPrintVisitor::Visit(CUnarMinusExp &exp) {
 	++lastVisited;
 }
 
-void CPrintVisitor::Visit(CGetLength &exp)
+void CPrintVisitor::Visit(CGetLengthExp &exp)
 {
 	std::vector<INode*> children = { exp.array.get() };
 	ChildrenAnswers answers = VisitChildren(children);
@@ -144,7 +144,7 @@ void CPrintVisitor::Visit(CGetLength &exp)
 	++lastVisited;
 }
 
-void CPrintVisitor::Visit(CGetField &exp)
+void CPrintVisitor::Visit(CGetFieldExp &exp)
 {
 	std::vector<INode*> children = { exp.classOwner.get(), exp.field.get() };
 	ChildrenAnswers answers = VisitChildren(children);
@@ -153,7 +153,7 @@ void CPrintVisitor::Visit(CGetField &exp)
 	++lastVisited;	
 }
 
-void CPrintVisitor::Visit(CGetMethod &exp)
+void CPrintVisitor::Visit(CGetMethodExp &exp)
 {
 	std::vector<INode*> children = { exp.classOwner.get(), exp.methodName.get(), exp.args.get() };
 	ChildrenAnswers answers = VisitChildren(children);

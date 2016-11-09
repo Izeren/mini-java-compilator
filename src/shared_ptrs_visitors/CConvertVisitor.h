@@ -20,9 +20,9 @@ public:
 	void Visit(CLogOpExp &exp) override;
 	void Visit(CCompExp &exp) override;
 	void Visit(CUnarMinusExp &exp) override;
-	void Visit(CGetLength &exp) override;
-	void Visit(CGetField &exp) override;
-	void Visit(CCallMethod &exp) override;
+	void Visit(CGetLengthExp &exp) override;
+	void Visit(CGetFieldExp &exp) override;
+	void Visit(CCallMethodExp &exp) override;
 	void Visit(CExpList &exp) override;
 	void Visit(CNegativeExpression &exp) override;
 	void Visit(CArrayExpression &exp) override;

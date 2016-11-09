@@ -72,18 +72,18 @@ void CConvertVisitor::Visit(CUnarMinusExp &exp) {
 	}
 }
 
-void CConvertVisitor::Visit(CGetLength &exp) {
+void CConvertVisitor::Visit(CGetLengthExp &exp) {
 	exp.array->Accept(*this);
 	this->code += ".length";
 }
 
-void CConvertVisitor::Visit(CGetField &exp) {
+void CConvertVisitor::Visit(CGetFieldExp &exp) {
 	exp.classOwner->Accept(*this);
 	this->code += "."
 	exp.field->Accept(*this);
 }
 
-void CConvertVisitor::Visit(CCallMethod &exp) {
+void CConvertVisitor::Visit(CCallMethodExp &exp) {
 	exp.classOwner->Accept(*this);
 	this->code += "."
 	exp.methodName->Accept(*this);

@@ -13,7 +13,7 @@
 
 %code {    
 int yylex (void);
-void yyerror ( CProgram**, char const * );
+int yyerror ( CProgram **program, const char * );
 }
 
 %error-verbose // более подробная информация об ошибке
@@ -281,3 +281,11 @@ Idenifier:
 	;
 
 %%
+
+int yyerror(std::string s) {
+  return -1;
+}
+
+int yyerror(CProgram **program, const char *s) {
+	return yyerror(std::string(s));
+}
