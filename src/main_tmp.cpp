@@ -1,12 +1,13 @@
 #include "shared_ptrs_visitors\CPrintVisitor.h"
 #include "shared_ptrs_visitors\IVisitor.h"
 #include "shared_ptrs_nodes\Expressions.h"
-#include "stdafx.h"
 
 #include "shared_ptrs_nodes\INode.h"
 #include "shared_ptrs_nodes\Statements.h"
 #include "shared_ptrs_visitors\CalculateVisitor.h"
 #include "shared_ptrs_visitors\CConvertVisitor.h"
+
+#include "shared_ptrs_nodes\Classes.h"
 
 #include <fstream>
 #include <iostream>

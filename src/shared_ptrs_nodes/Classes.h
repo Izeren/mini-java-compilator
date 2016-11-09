@@ -5,47 +5,16 @@
 #include "Expressions.h"
 
 
-//CClassList:
+//CType:
 //-------------------------------------------------------------------------------------------------
 
-class CClassList : public INode {
+class CType : public INode {
 public:
-	CClassList(CClass* _cclass, CClassList* _nextClasses = NULL);
-	CClassList();
-	void Accept(IVisitor &visitor) override;
-
-	std::unique_ptr<CClass> cclass;
-	std::unique_ptr<CClassList> nextClasses;
-};
-
-
-//CClass:
-//-------------------------------------------------------------------------------------------------
-
-class CClass : public INode {
-public:
-	CClass(const std::string &_name, CIdExp* _parentClass = NULL, CFieldList* _fields = NULL, CMethodList* _methods = NULL);
-	CClass();
+	CType(const std::string &_name);
+	CType();
 	void Accept(IVisitor &visitor) override;
 
 	std::string name;
-	std::unique_ptr<CIdExp> parentClass;
-	std::unique_ptr<CFieldList> fields;
-	std::unique_ptr<CMethodList> methods;
-};
-
-
-//CFieldList:
-//-------------------------------------------------------------------------------------------------
-
-class CFieldList : public INode {
-public:
-	CFieldList(CField* _field, CFieldList* _nextFields = NULL);
-	CFieldList();
-	void Accept(IVisitor &visitor) override;
-
-	std::unique_ptr<CField> field;
-	std::unique_ptr<CFieldList> nextFields;
 };
 
 
@@ -63,30 +32,45 @@ public:
 };
 
 
-//CType:
+//CFieldList:
 //-------------------------------------------------------------------------------------------------
 
-class CType : public INode {
+class CFieldList : public INode {
 public:
-	CType(const std::string &_name);
-	CType();
+	CFieldList(CField* _field, CFieldList* _nextFields = NULL);
+	CFieldList();
 	void Accept(IVisitor &visitor) override;
 
-	std::string name;
+	std::unique_ptr<CField> field;
+	std::unique_ptr<CFieldList> nextFields;
 };
 
 
-//CMethodList:
+//CArgument:
 //-------------------------------------------------------------------------------------------------
 
-class CMethodList : public INode {
+class CArgument : public INode {
 public:
-	CMethodList(CMethod* _method, CMethodList* _nextMethods = NULL);
-	CMethodList();
+	CArgument(CType *_type, CIdExp *_id);
+	CArgument();
 	void Accept(IVisitor &visitor) override;
 
-	std::unique_ptr<CMethod> method;
-	std::unique_ptr<CMethodList> nextMethods;
+	std::unique_ptr<CType> type;
+	std::unique_ptr<CIdExp> id;
+};
+
+
+//CArgumentList:
+//-------------------------------------------------------------------------------------------------
+
+class CArgumentList : public INode {
+public:
+	CArgumentList(CArgument* _argument, CArgumentList* _argumentList);
+	CArgumentList();
+	void Accept(IVisitor &visitor) override;
+
+	std::unique_ptr<CArgument> argument;
+	std::unique_ptr<CArgumentList> argumentList;
 };
 
 
@@ -106,29 +90,92 @@ public:
 };
 
 
-//CArgumentList:
+//CMethodList:
 //-------------------------------------------------------------------------------------------------
 
-class CArgumentList : public INode {
+class CMethodList : public INode {
 public:
-	CArgumentList(CArgument* _argument, CArgumentList* _argumentList);
-	CArgumentList();
+	CMethodList(CMethod* _method, CMethodList* _nextMethods = NULL);
+	CMethodList();
 	void Accept(IVisitor &visitor) override;
 
-	std::unique_ptr<CArgument> argument;
-	std::unique_ptr<CArgumentList> argumentList;
+	std::unique_ptr<CMethod> method;
+	std::unique_ptr<CMethodList> nextMethods;
 };
 
 
-//CArgument:
+//CClass:
 //-------------------------------------------------------------------------------------------------
 
-class CArgument : public INode {
+class CClass : public INode {
 public:
-	CArgument(CType *_type, CIdExp *_id);
-	CArgument();
+	CClass(const std::string &_name, CIdExp* _parentClass = NULL, CFieldList* _fields = NULL, CMethodList* _methods = NULL);
+	CClass();
 	void Accept(IVisitor &visitor) override;
 
-	std::unique_ptr<CType> type;
+	std::string name;
+	std::unique_ptr<CIdExp> parentClass;
+	std::unique_ptr<CFieldList> fields;
+	std::unique_ptr<CMethodList> methods;
+};
+
+
+//CClassList:
+//-------------------------------------------------------------------------------------------------
+
+class CClassList : public INode {
+public:
+	CClassList(CClass* _cclass, CClassList* _nextClasses = NULL);
+	CClassList();
+	void Accept(IVisitor &visitor) override;
+
+	std::unique_ptr<CClass> cclass;
+	std::unique_ptr<CClassList> nextClasses;
+};
+
+
+//CMainMethod:
+//-------------------------------------------------------------------------------------------------
+
+class CMainMethod : public INode {
+public:
+
+	void Accept(IVisitor &visitor) override;
+	CMainMethod();
+	CMainMethod(CCompoundStm* _statementList);
+
+	std::unique_ptr<CCompoundStm> statementList;
+
+};
+
+
+//CMainClass:
+//-------------------------------------------------------------------------------------------------
+
+class CMainClass : public INode {
+public:
+
+	void Accept(IVisitor &visitor) override;
+	CMainClass();
+	CMainClass(CIdExp* _id, CMainMethod* _mainMethod);
+
 	std::unique_ptr<CIdExp> id;
+	std::unique_ptr<CMainMethod> mainMethod;
+
+};
+
+
+//CProgram:
+//-------------------------------------------------------------------------------------------------
+
+class CProgram : public INode {
+public:
+
+	void Accept(IVisitor &visitor) override;
+	CProgram();
+	CProgram(CMainClass* _class, CClassList* _classList);
+
+	std::unique_ptr<CMainClass> mainClass;
+	std::unique_ptr<CClassList> classList;
+
 };

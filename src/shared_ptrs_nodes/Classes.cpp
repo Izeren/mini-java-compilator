@@ -10,8 +10,8 @@ CClassList::CClassList(CClass* _cclass, CClassList* _nextClasses) {
 
 CClassList::CClassList() {};
 
-void CClassList::Accept(IVisitor &visitor) override {
-	visitor.Visit(*this);
+void CClassList::Accept(IVisitor &visitor) {
+	//visitor.Visit(*this);
 }
 
 
@@ -27,8 +27,8 @@ CClass::CClass(const std::string &_name, CIdExp* _parentClass, CFieldList* _fiel
 
 CClass::CClass() : CClass(NULL) {};
 
-void CClass::Accept(IVisitor &visitor) override {
-	visitor.Visit(*this);
+void CClass::Accept(IVisitor &visitor) {
+	//visitor.Visit(*this);
 }
 
 
@@ -42,8 +42,8 @@ CFieldList::CFieldList(CField* _field, CFieldList* _nextFields) {
 
 CFieldList::CFieldList() {};
 
-void CFieldList::Accept(IVisitor &visitor) override {
-	visitor.Visit(*this);
+void CFieldList::Accept(IVisitor &visitor) {
+	//visitor.Visit(*this);
 }
 
 
@@ -56,8 +56,8 @@ CField::CField(CType* _type, CIdExp* _id) {
 }
 CField::CField() : CField(NULL, NULL) {};
 
-void CField::Accept(IVisitor &visitor) override {
-	visitor.Visit(*this);
+void CField::Accept(IVisitor &visitor) {
+	//visitor.Visit(*this);
 }
 
 
@@ -70,8 +70,8 @@ CType::CType(const std::string &_name) {
 
 CType::CType() : CType(NULL) {};
 
-void CType::Accept(IVisitor &visitor) override {
-	visitor.Visit(*this);
+void CType::Accept(IVisitor &visitor) {
+	//visitor.Visit(*this);
 }
 
 
@@ -85,8 +85,8 @@ CMethodList::CMethodList(CMethod* _method, CMethodList* _nextMethods) {
 
 CMethodList::CMethodList() {};
 
-void CMethodList::Accept(IVisitor &visitor) override {
-	visitor.Visit(*this);
+void CMethodList::Accept(IVisitor &visitor) {
+	//visitor.Visit(*this);
 }
 
 
@@ -102,8 +102,8 @@ CMethod::CMethod(CType* _returnType, const std::string &_name, CArgumentList* _a
 
 CMethod::CMethod() : CMethod(NULL, NULL) {};
 
-void CMethod::Accept(IVisitor &visitor) override {
-	visitor.Visit(*this);
+void CMethod::Accept(IVisitor &visitor) {
+	//visitor.Visit(*this);
 }
 
 
@@ -119,25 +119,65 @@ CArgumentList::CArgumentList(CArgument* _argument, CArgumentList* _argumentList)
 CArgumentList::CArgumentList()
 {}
 
-void CArgumentList::Accept(IVisitor &visitor) override
-{
-	visitor.visit(*this);
+void CArgumentList::Accept(IVisitor &visitor) {
+	//visitor.visit(*this);
 }
 
 
 //CArgumentList:
 //-------------------------------------------------------------------------------------------------
 
-CArgument::CArgument(CType *_type, CIdExp *_id)
-{
+CArgument::CArgument(CType *_type, CIdExp *_id) {
 	type = std::unique_ptr<CType>(_type);
 	id = std::unique_ptr<CIdExp>(_id);
 }
 
-CArgument::CArgument()
-{}
+CArgument::CArgument() {}
 
-void CArgument::Accept(IVisitor &visitor) override
-{
-	visitor.visit(*this);
+void CArgument::Accept(IVisitor &visitor) {
+	//visitor.visit(*this);
+}
+
+
+//CMainMethod:
+//-------------------------------------------------------------------------------------------------
+
+void CMainMethod::Accept(IVisitor &visitor) {
+	//visitor.visit(*this);
+}
+
+CMainMethod::CMainMethod() {}
+
+CMainMethod::CMainMethod(CCompoundStm* _statementList) {
+	statementList = std::unique_ptr<CCompoundStm>(_statementList);
+}
+
+
+//CMainClass:
+//-------------------------------------------------------------------------------------------------
+
+void CMainClass::Accept(IVisitor &visitor) {
+	//visitor.visit(*this);
+}
+
+CMainClass::CMainClass() {}
+
+CMainClass::CMainClass(CIdExp* _id, CMainMethod* _mainMethod) {
+	id = std::unique_ptr<CIdExp>(_id);
+	mainMethod = std::unique_ptr<CMainMethod>(_mainMethod);
+}
+
+
+//CProgram:
+//-------------------------------------------------------------------------------------------------
+
+void CProgram::Accept(IVisitor &visitor) {
+	//visitor.visit(*this);
+}
+
+CProgram::CProgram() {}
+
+CProgram::CProgram(CMainClass* _mainClass, CClassList* _classList) {
+	mainClass = std::unique_ptr<CMainClass>(_mainClass);
+	classList = std::unique_ptr<CClassList>(_classList);
 }

@@ -26,7 +26,7 @@ CIdPtrExp::CIdPtrExp(const std::string &name, int *address) {
 CIdPtrExp::CIdPtrExp() : CIdPtrExp(BAD_ID) {}
 
 void CIdPtrExp::Accept(IVisitor &visitor) {
-	//visitor.Visit(*this);
+	visitor.Visit(*this);
 }
 
 
