@@ -34,8 +34,8 @@ CAssignSubscriptStm::CAssignSubscriptStm(
 	this->valueExpression = std::unique_ptr<IExpression>(valueExpression);
 }
 
-void Accept(IVisitor &visitor) {
-	visitor.Visit(*this);
+void CAssignSubscriptStm::Accept(IVisitor &visitor) {
+	//visitor.Visit(*this);
 }
 
 

@@ -330,7 +330,7 @@ void CCalculateVisitor::Visit(CAssignSubscriptStm &stm) {
 
 	int valueResult = this->childResult;
 
-	*(stm.idExpression.get()->addressc+ stm.offset.get().number) = valueResult;
+	*(stm.idExpression->address + stm.offset->number) = valueResult;
 
 	this->isChildResultInteger = false;
 }
