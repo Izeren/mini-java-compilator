@@ -84,7 +84,7 @@ void CConvertVisitor::Visit(CGetField &exp) {
 	this->code += " ";
 }
 
-void CConvertVisitor::Visit(CGetMethod &exp) {
+void CConvertVisitor::Visit(CCallMethod &exp) {
 	exp.classOwner->Accept(*this);
 	this->code += "."
 	exp.method->Accept(*this);

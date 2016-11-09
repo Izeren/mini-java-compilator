@@ -135,6 +135,66 @@ void CPrintVisitor::Visit(CUnarMinusExp &exp) {
 	++lastVisited;
 }
 
+void CPrintVisitor::Visit(CGetLength &exp)
+{
+	std::vector<INode*> children = { exp.array.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("Length");
+	++lastVisited;
+}
+
+void CPrintVisitor::Visit(CGetField &exp)
+{
+	std::vector<INode*> children = { exp.classOwner.get(), exp.field.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("Field");
+	++lastVisited;	
+}
+
+void CPrintVisitor::Visit(CGetMethod &exp)
+{
+	std::vector<INode*> children = { exp.classOwner.get(), exp.methodName.get(), exp.args.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("CallMethod");
+	++lastVisited;	
+}
+
+void CPrintVisitor::Visit(CExpList &exp)
+{
+	std::vector<INode*> children = { exp.exp.get(), exp.expList.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("ExpList");
+	++lastVisited;	
+}
+
+void CPrintVisitor::Visit(CNegativeExpression &exp)
+{
+	std::vector<INode*> children = { exp.expression.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("Negative");
+	++lastVisited;	
+}
+
+void CPrintVisitor::Visit(CArrayExpression &exp)
+{
+	std::vector<INode*> children = { exp.lengthExpression.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("Array");
+	++lastVisited;	
+}
+
+void CPrintVisitor::Visit(CThisExpression &exp)
+{
+	AddLabel("This");
+	++lastVisited;
+}
+
 
 
 //Statements:
@@ -293,66 +353,6 @@ void CPrintVisitor::Visit(CProgram &stm) {
 	ChildrenAnswers answers = VisitChildren(children);
 	AddChildrenAnswers(answers);
 	AddLabel("Program");
-	++lastVisited;
-}
-
-void CPrintVisitor::Visit(CGetLength &exp)
-{
-	std::vector<INode*> children = { exp.array.get() };
-	ChildrenAnswers answers = VisitChildren(children);
-	AddChildrenAnswers(answers);
-	AddLabel("Length");
-	++lastVisited;
-}
-
-void CPrintVisitor::Visit(CGetField &exp)
-{
-	std::vector<INode*> children = { exp.classOwner.get(), exp.field.get() };
-	ChildrenAnswers answers = VisitChildren(children);
-	AddChildrenAnswers(answers);
-	AddLabel("Field");
-	++lastVisited;	
-}
-
-void CPrintVisitor::Visit(CGetMethod &exp)
-{
-	std::vector<INode*> children = { exp.classOwner.get(), exp.method.get() };
-	ChildrenAnswers answers = VisitChildren(children);
-	AddChildrenAnswers(answers);
-	AddLabel("CallMethod");
-	++lastVisited;	
-}
-
-void CPrintVisitor::Visit(CExpList &exp)
-{
-	std::vector<INode*> children = { exp.exp.get(), exp.expList.get() };
-	ChildrenAnswers answers = VisitChildren(children);
-	AddChildrenAnswers(answers);
-	AddLabel("ExpList");
-	++lastVisited;	
-}
-
-void CPrintVisitor::Visit(CNegativeExpression &exp)
-{
-	std::vector<INode*> children = { exp.expression.get() };
-	ChildrenAnswers answers = VisitChildren(children);
-	AddChildrenAnswers(answers);
-	AddLabel("Negative");
-	++lastVisited;	
-}
-
-void CPrintVisitor::Visit(CArrayExpression &exp)
-{
-	std::vector<INode*> children = { exp.lengthExpression.get() };
-	ChildrenAnswers answers = VisitChildren(children);
-	AddChildrenAnswers(answers);
-	AddLabel("Array");
-	++lastVisited;	
-}
-
-void CPrintVisitor::Visit(CThisExpression &exp)
-{
-	AddLabel("This");
 	++lastVisited;
 }
 
