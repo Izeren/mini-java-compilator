@@ -42,6 +42,15 @@ public:
 	void Visit(CMainClass &stm) override;
 	void Visit(CProgram &stm) override;
 
+	void Visit(CGetLength &exp) override;
+	void Visit(CGetField &exp) override;
+	void Visit(CGetMethod &exp) override;
+	void Visit(CExpList &exp) override;
+	void Visit(CNegativeExpression &exp) override;
+	void Visit(CArrayExpression &exp) override;
+	void Visit(CThisExpression &exp) override;
+
+
 	std::string GetResult();
 
 private:
