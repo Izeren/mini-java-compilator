@@ -195,3 +195,33 @@ void CExpList::Accept(IVisitor& visitor) override
 {
 	visitor.Visit(*this);
 }
+//CThisExpression:
+//-------------------------------------------------------------------------------------------------
+CThisExpression::CThisExpression() {
+}
+
+void CThisExpression::Accept(IVisitor &visitor) {
+	visitor.Visit(*this);
+}
+
+//CNegativeExpression:
+//-------------------------------------------------------------------------------------------------
+
+CNegativeExpression::CNegativeExpression(IExpression* expression) {
+	this->expression = std::unique_ptr<IExpression>(expression);
+}
+
+void CNegativeExpression::Accept(IVisitor &visitor) {
+	visitor.Visit(*this);
+}
+
+//CArrayExpression:
+//-------------------------------------------------------------------------------------------------
+
+CArrayExpression::CArrayExpression(IExpression* lengthExpression) {
+	this->lengthExpression = std::unique_ptr<IExpression>(lengthExpression);
+}
+
+void CArrayExpression::Accept(IVisitor &visitor) {
+	visitor.Visit(*this);
+}

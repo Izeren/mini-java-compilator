@@ -101,7 +101,6 @@ public:
 	TLogicalOperation operation;
 };
 
-
 //CCompExp:
 //-------------------------------------------------------------------------------------------------
 
@@ -135,7 +134,6 @@ public:
 	void Accept(IVisitor &visitor) override;
 	std::unique_ptr<IExpression> rightOperand;
 };
-
 
 //CGetLengthExp:
 //-------------------------------------------------------------------------------------------------
@@ -185,3 +183,36 @@ public:
 	std::unique_ptr<IExpression> exp;
 	std::unique_ptr<expList> expList;	
 };
+//CThisExpression:
+//-------------------------------------------------------------------------------------------------
+
+class CThisExpression : public IExpression {
+public:
+	CThisExpression();
+
+	void Accept(IVisitor &visitor) override;
+}
+
+//CNegativeExpression:
+//-------------------------------------------------------------------------------------------------
+
+class CNegativeExpression : public IExpression {
+public:
+	CNegativeExpression(IExpression* expression);
+
+	void Accept(IVisitor &visitor) override;
+
+	std::unique_ptr<IExpression> expression;
+}
+
+//CArrayExpression:
+//-------------------------------------------------------------------------------------------------
+
+class CArrayExpression : public IExpression {
+public:
+	CArrayExpression(IExpression* lengthExpression);
+
+	void Accept(IVisitor &visitor) override;
+
+	std::unique_ptr<IExpression> lengthExpression;
+}
