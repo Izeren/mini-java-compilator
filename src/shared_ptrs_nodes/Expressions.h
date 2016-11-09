@@ -135,16 +135,6 @@ public:
 	std::unique_ptr<IExpression> rightOperand;
 };
 
-//CGetLengthExp:
-//-------------------------------------------------------------------------------------------------
-class CGetLengthExp : public IExpression {
-public: 
-	CGetLengthExp(CIdExp* _array);
-	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<CIdExp> array;
-};
-
-
 //CGetFieldExp:
 //-------------------------------------------------------------------------------------------------
 
@@ -216,3 +206,13 @@ public:
 
 	std::unique_ptr<IExpression> lengthExpression;
 }
+
+
+//CGetLengthExp:
+//-------------------------------------------------------------------------------------------------
+class CGetLengthExp : public IExpression {
+public: 
+	CGetLengthExp(CArrayExpression* _array);
+	void Accept(IVisitor& visitor) override;
+	std::unique_ptr<CArrayExpression> array;
+};

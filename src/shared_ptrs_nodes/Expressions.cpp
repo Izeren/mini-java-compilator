@@ -143,7 +143,7 @@ void CUnarMinusExp::Accept(IVisitor &visitor) {
 //CGetLengthExp:
 //-------------------------------------------------------------------------------------------------
 
-CGetLengthExp::CGetLengthExp(CIdExp* _array)
+CGetLengthExp::CGetLengthExp(CArrayExpression* _array)
 {
 	array = _array;
 }
