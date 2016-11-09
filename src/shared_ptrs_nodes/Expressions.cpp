@@ -171,9 +171,9 @@ void CGetFieldExp::Accept (IVisitor& visitor) override
 
 CCallMethodExp::CCallMethodExp(CClass* _classOwner, CIdExp* _methodName, CExpList* _args)
 {
-	classOwner = _classOwner;
-	methodName = _methodName;
-	args = _args;
+	classOwner = std::unique_ptr<CClass*>(_classOwner);
+	methodName = std::unique_ptr<CIdExp*>(_methodName);
+	args = std::unique_ptr<CExpList*>(_args);
 }
 
 void CCallMethodExp::Accept(IVisitor& visitor) override
@@ -181,14 +181,13 @@ void CCallMethodExp::Accept(IVisitor& visitor) override
 	visitor.Visit(*this);
 }
 
-
 //CExpList:
 //-------------------------------------------------------------------------------------------------
 
 CExpList::CExpList(IExpression* _exp, CExpList* _expList)
 {
-	exp = _exp;
-	expList = _expList;
+	exp = std::unique_ptr<IExpression*>(_exp);
+	expList = std::unique_ptr<CExpList*>(_expList);
 }
 
 void CExpList::Accept(IVisitor& visitor) override
