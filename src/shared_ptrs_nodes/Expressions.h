@@ -89,7 +89,7 @@ public:
 	CLogOpExp(
 		IExpression* leftOperand,
 		IExpression* rightOperand,
-		enums::TLogicalOperation operation = enums::TLogicalOperation::AND
+		enums::TLogicalOperation operation
 	);
 
 	std::unique_ptr<IExpression> leftOperand;

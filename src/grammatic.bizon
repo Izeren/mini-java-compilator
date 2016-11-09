@@ -39,6 +39,7 @@ void yyerror ( CProgram**, char const * );
 	CMainClass* MainClass;
 	CExpList* ExpressionList;
 	char *string;
+	int IntVal;
 	CIdExp* Idenifier;
 }
 
@@ -56,7 +57,7 @@ void yyerror ( CProgram**, char const * );
 
 %token WHILE IF ELSE
 
-%token <string> NUM
+%token <IntVal> NUM
 
 %token <string> ID
 
@@ -160,19 +161,21 @@ MethodDeclaration:
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
-	{ $$ = new CMethod( $2, $3, $5, $8 ); }
+	//true means public
+	{ $$ = new CMethod( $2, $3, $5, (CCompoundStm *)$8, true ); }
 	|
+	//false means private
 	PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE 
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
-	{ $$ = new CMethod( $2, $3, $5, $8 ); }
+	{ $$ = new CMethod( $2, $3, $5, (CCompoundStm *)$8, false ); }
 	;
 
 MethodDeclarationList:
 	{ $$ = nullptr; }
 	|
-	MethodDeclaration MethodDeclarationList { $$ = CMethodList( $1, $2 ); }
+	MethodDeclaration MethodDeclarationList { $$ = new CMethodList( $1, $2 ); }
 	;
 
 VarDeclaration:
@@ -190,11 +193,11 @@ Argument:
 	;
 
 Type:
-	INT LBRACKET RBRACKET { $$ = new CType( $1 ); }
+	INT LBRACKET RBRACKET { $$ = new CType( enums::TPrimitiveType::INT_ARRAY ); }
 	|
-	BOOLEAN { $$ = new CType( $1 ); }
+	BOOLEAN { $$ = new CType( enums::TPrimitiveType::BOOLEAN ); }
 	|
-	INT { $$ = new CType( $1 ); }
+	INT { $$ = new CType( enums::TPrimitiveType::INT ); }
 	|
 	Idenifier { $$ = new CType( $1 ); }
 	;
@@ -202,7 +205,7 @@ Type:
 ArgumentList:
 	{ $$ = nullptr; }
 	|
-	Argument ArgumentList { $$ = CArgumentList( $1, $2 ); }
+	Argument ArgumentList { $$ = new CArgumentList( $1, $2 ); }
 	;
 
 StatementList:
@@ -212,7 +215,7 @@ StatementList:
 	;
 
 Statement:
-	LBRACE StatementList RBRACE { $$ = $2 }
+	LBRACE StatementList RBRACE { $$ = $2; }
 	| 
 	IF LPAREN Expression RPAREN Statement ELSE Statement { $$ = new CIfStm( $3, $5, $7 ); }
 	| 
@@ -222,25 +225,25 @@ Statement:
 	| 
 	Idenifier ASSIGN Expression SEMI { $$ = new CAssignStm( $1, $3 ); }
 	| 
-	Idenifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI { $$ = new CAssignSubscriptStm( $1, $3, $6 ); }
+	Idenifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI { $$ = new CAssignSubscriptStm( $1, (CNumExp *)$3, $6 ); }
 	;
 
 Expression:
-	Expression PLUS Expression { $$ = new COpExpression( $1, enums::TOperation::PLUS, $3 ); }
+	Expression PLUS Expression { $$ = new COpExp( $1, $3, enums::TOperation::PLUS ); }
 	|
-	Expression MINUS Expression { $$ = new COpExpression( $1, enums::TOperation::Minus, $3 ); }
+	Expression MINUS Expression { $$ = new COpExp( $1, $3, enums::TOperation::MINUS ); }
 	|
-	Expression TIMES Expression { $$ = new COpExpression( $1, enums::TOperation::TIMES, $3 ); }
+	Expression TIMES Expression { $$ = new COpExp( $1, $3, enums::TOperation::MULTIPLY ); }
 	|
-	Expression AND Expression { $$ = new CLogOpExp( $1, enums::TLogicalOperation::AND, $3 ); }
+	Expression AND Expression { $$ = new CLogOpExp( $1, $3, enums::TLogicalOperation::AND ); }
 	|
-	Expression OR Expression { $$ = new CLogOpExp( $1, enums::TLogicalOperation::OR, $3 ); }
+	Expression OR Expression { $$ = new CLogOpExp( $1, $3, enums::TLogicalOperation::OR ); }
 	|
-	Expression LESS Expression { $$ = new CCompareExpression( $1, enums::TCompareOperation::LESS, $3 ); }
+	Expression LESS Expression { $$ = new CCompExp( $1, $3, enums::TCompareOperation::LESS ); }
 	|
-	Expression GREATER Expression { $$ = new CCompareExpression( $1, enums::TCompareOperation::GREATER, $3 ); }
+	Expression GREATER Expression { $$ = new CCompExp( $1, $3, enums::TCompareOperation::GREATER ); }
 	|
-	Expression MOD Expression { $$ = new COpExpression( $1, enums::TOperation::MOD, $3 ); }
+	Expression MOD Expression { $$ = new COpExp( $1, $3, enums::TOperation::MOD ); }
 	|
 	Expression LBRACKET Expression RBRACKET { $$ = new CByIndexExpression((CArrayExpression*) $1, $3); }
 	|
@@ -248,7 +251,7 @@ Expression:
 	|
 	Expression DOT Idenifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( (CClass*) $1, $3, (CExpList*) $5) ; }
 	|
-	NUM { $$ = new CNumExpresion($1); }
+	NUM { $$ = new CNumExp($1); }
 	|
 	TRUE { $$ = new CLogExp(true); }
 	|
@@ -258,13 +261,13 @@ Expression:
 	|
 	THIS { $$ = new CThisExpression(); }
 	|
-	NEW INT LBRACKET Expression RBRACKET { $$ = CArrayExpression($4); }
+	NEW INT LBRACKET Expression RBRACKET { $$ = new CArrayExpression($4); }
 	|
-	NEW Idenifier LPAREN RPAREN { $$ = new CIdExp($2); }
+	NEW Idenifier LPAREN RPAREN { $$ = $2; }
 	|
-	NOT Expression { $$ = CNegativeExpression($2); }
+	NOT Expression { $$ = new CNegativeExpression($2); }
 	|
-	LPAREN Expression RPAREN { $$ = $2 }	
+	LPAREN Expression RPAREN { $$ = $2; }	
 	;
 
 ExpressionList:

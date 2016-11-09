@@ -4,8 +4,14 @@
 //CType:
 //-------------------------------------------------------------------------------------------------
 
-CType::CType(const std::string &_name) {
-	name = _name;
+CType::CType(CIdExp* _name) {
+	name = std::unique_ptr<CIdExp>(_name);
+	isPrimitive = false;
+}
+
+CType::CType(enums::TPrimitiveType _type) {
+	isPrimitive = true;
+	type = _type;
 }
 
 CType::CType() : CType(NULL) {};

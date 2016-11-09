@@ -12,11 +12,14 @@ class IWrapper : public INode {};
 
 class CType : public IWrapper {
 public:
-	CType(const std::string &_name);
+	CType(CIdExp* _name);
+	CType(enums::TPrimitiveType _type);
 	CType();
 	void Accept(IVisitor &visitor) override;
 
-	std::string name;
+	std::unique_ptr<CIdExp> name;
+	enums::TPrimitiveType type;
+	bool isPrimitive;
 };
 
 
