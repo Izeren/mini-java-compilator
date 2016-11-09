@@ -2,12 +2,7 @@
 #include <iostream>
 #include "bison.hpp"
 
-struct {
-	int first_line;
-	int last_line;
-	int first_column;
-	int last_column;
-} yylloc;
+extern YYLTYPE yyloc;
 int line_number = 0;
 int column_number = 0;
 
@@ -78,7 +73,7 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	return PRINTLN;
 }
 "int[]" {
-	return INT_ARRAY
+	return INT_ARRAY;
 }
 "int" { 
 	return INT;

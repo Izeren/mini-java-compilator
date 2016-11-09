@@ -1,6 +1,6 @@
-#include "shared_ptr_nodes/Expressions.h"
-#include "shared_ptr_nodes/Statements.h"
-#include "shared_ptr_nodes/Classes.h"
+#include "shared_ptrs_nodes/Expressions.h"
+#include "shared_ptrs_nodes/Statements.h"
+#include "shared_ptrs_nodes/Classes.h"
 #include "lex.h"
 #include "bison.hpp"
 
@@ -11,5 +11,6 @@ int main( int argc, char **argv ) {
     else
         yyin = stdin;
 
-    yyparse();
+    CProgram *cProgram;
+    yyparse(&cProgram);
 }

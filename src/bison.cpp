@@ -62,16 +62,8 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "src/grammatic.bizon" /* yacc.c:339  */
 
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <string>
-    #include <stdbool.h>
-       
-    #define YYERROR_VERBOSE 1        
-
-#line 75 "src/bison.cpp" /* yacc.c:339  */
+#line 67 "src/bison.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -100,6 +92,21 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "src/grammatic.bizon" /* yacc.c:355  */
+
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string>
+    #include <stdbool.h>
+    #include "shared_ptrs_nodes/Expressions.h"
+	#include "shared_ptrs_nodes/Statements.h"
+	#include "shared_ptrs_nodes/Classes.h"
+
+       
+    #define YYERROR_VERBOSE 1        
+
+#line 110 "src/bison.cpp" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -157,7 +164,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 20 "src/grammatic.bizon" /* yacc.c:355  */
+#line 24 "src/grammatic.bizon" /* yacc.c:355  */
 
 
 	CProgram* Program; // Указатель на класс-программу
@@ -176,7 +183,7 @@ union YYSTYPE
 	CExpList* ExpressionList;
 	char *string;
 
-#line 180 "src/bison.cpp" /* yacc.c:355  */
+#line 187 "src/bison.cpp" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -201,20 +208,20 @@ struct YYLTYPE
 
 extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
-int yyparse (const IProgram*& program);
+int yyparse (CProgram** program);
 
 #endif /* !YY_YY_SRC_BISON_HPP_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 211 "src/bison.cpp" /* yacc.c:358  */
+#line 218 "src/bison.cpp" /* yacc.c:358  */
 /* Unqualified %code blocks.  */
-#line 10 "src/grammatic.bizon" /* yacc.c:359  */
-
+#line 14 "src/grammatic.bizon" /* yacc.c:359  */
+    
 int yylex (void);
-void yyerror ( const IProgram*&, char const * );
+void yyerror ( CProgram**, char const * );
 
-#line 218 "src/bison.cpp" /* yacc.c:359  */
+#line 225 "src/bison.cpp" /* yacc.c:359  */
 
 #ifdef short
 # undef short
@@ -518,12 +525,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   109,   109,   111,   115,   124,   134,   136,   140,   145,
-     152,   158,   166,   168,   172,   176,   178,   182,   186,   188,
-     190,   192,   196,   198,   202,   204,   208,   210,   212,   214,
-     216,   218,   222,   224,   226,   228,   230,   232,   234,   236,
-     238,   240,   242,   244,   246,   248,   250,   252,   254,   256,
-     258,   260,   264,   266
+       0,   113,   113,   115,   119,   128,   138,   140,   144,   149,
+     156,   162,   170,   172,   176,   180,   182,   186,   190,   192,
+     194,   196,   200,   202,   206,   208,   212,   214,   216,   218,
+     220,   222,   226,   228,   230,   232,   234,   236,   238,   240,
+     242,   244,   246,   248,   250,   252,   254,   256,   258,   260,
+     262,   264,   268,   270
 };
 #endif
 
@@ -881,7 +888,7 @@ do {                                                                      \
 `----------------------------------------*/
 
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, const IProgram*& program)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, CProgram** program)
 {
   FILE *yyo = yyoutput;
   YYUSE (yyo);
@@ -902,7 +909,7 @@ yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvalue
 `--------------------------------*/
 
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, const IProgram*& program)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, CProgram** program)
 {
   YYFPRINTF (yyoutput, "%s %s (",
              yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
@@ -942,7 +949,7 @@ do {                                                            \
 `------------------------------------------------*/
 
 static void
-yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, const IProgram*& program)
+yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, CProgram** program)
 {
   unsigned long int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -1222,7 +1229,7 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 `-----------------------------------------------*/
 
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, const IProgram*& program)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, CProgram** program)
 {
   YYUSE (yyvaluep);
   YYUSE (yylocationp);
@@ -1259,7 +1266,7 @@ int yynerrs;
 `----------*/
 
 int
-yyparse (const IProgram*& program)
+yyparse (CProgram** program)
 {
     int yystate;
     /* Number of tokens to shift before error messages enabled.  */
@@ -1512,323 +1519,323 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 109 "src/grammatic.bizon" /* yacc.c:1646  */
-    { Program = (yyval.Program) = new CProgram( (yyvsp[0].MainClass), 0 ); }
-#line 1518 "src/bison.cpp" /* yacc.c:1646  */
+#line 113 "src/grammatic.bizon" /* yacc.c:1646  */
+    { *program = (yyval.Program) = new CProgram( (yyvsp[0].MainClass), 0 ); }
+#line 1525 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 111 "src/grammatic.bizon" /* yacc.c:1646  */
-    { Program = (yyval.Program) = new CProgram( (yyvsp[-1].MainClass), (yyvsp[0].ClassDeclarationList) ); }
-#line 1524 "src/bison.cpp" /* yacc.c:1646  */
+#line 115 "src/grammatic.bizon" /* yacc.c:1646  */
+    { *program = (yyval.Program) = new CProgram( (yyvsp[-1].MainClass), (yyvsp[0].ClassDeclarationList) ); }
+#line 1531 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 118 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 122 "src/grammatic.bizon" /* yacc.c:1646  */
     {	
 		(yyval.MainClass) = new CMainClass( (yyvsp[-3].string), (yyvsp[-1].MainMethod) );
 	}
-#line 1532 "src/bison.cpp" /* yacc.c:1646  */
+#line 1539 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 128 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 132 "src/grammatic.bizon" /* yacc.c:1646  */
     {	
 		(yyval.MainMethod) = new CMainMethod( 0, 0, (yyvsp[-1].Statement) );
 	}
-#line 1540 "src/bison.cpp" /* yacc.c:1646  */
+#line 1547 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 134 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 138 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.ClassDeclarationList) = nullptr; }
-#line 1546 "src/bison.cpp" /* yacc.c:1646  */
+#line 1553 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 136 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 140 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.ClassDeclarationList) = new CClassDeclarationList( (yyvsp[-1].Class), (yyvsp[0].ClassDeclarationList) ); }
-#line 1552 "src/bison.cpp" /* yacc.c:1646  */
+#line 1559 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 143 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 147 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Class) = new CClass( (yyvsp[-4].string), 0, (yyvsp[-2].VarDeclaratitionList), (yyvsp[-1].MethodDeclarationList) ); }
-#line 1558 "src/bison.cpp" /* yacc.c:1646  */
+#line 1565 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 148 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 152 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Class) = new CClass( (yyvsp[-6].string), (yyvsp[-4].string), (yyvsp[-2].VarDeclaratitionList), (yyvsp[-1].MethodDeclarationList) ); }
-#line 1564 "src/bison.cpp" /* yacc.c:1646  */
+#line 1571 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 156 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 160 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.MethodDeclaration) = new CMethod( (yyvsp[-10].Type), (yyvsp[-9].string), (yyvsp[-7].ArgumentList), (yyvsp[-4].Statement) ); }
-#line 1570 "src/bison.cpp" /* yacc.c:1646  */
+#line 1577 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 162 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 166 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.MethodDeclaration) = new CMethod( (yyvsp[-10].Type), (yyvsp[-9].string), (yyvsp[-7].ArgumentList), (yyvsp[-4].Statement) ); }
-#line 1576 "src/bison.cpp" /* yacc.c:1646  */
+#line 1583 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 166 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 170 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.MethodDeclarationList) = nullptr; }
-#line 1582 "src/bison.cpp" /* yacc.c:1646  */
+#line 1589 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 168 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 172 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.MethodDeclarationList) = CMethodList( (yyvsp[-1].MethodDeclaration), (yyvsp[0].MethodDeclarationList) ); }
-#line 1588 "src/bison.cpp" /* yacc.c:1646  */
+#line 1595 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 172 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 176 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.VarDeclaration) = new CField( (yyvsp[-2].Type), (yyvsp[-1].string) ); }
-#line 1594 "src/bison.cpp" /* yacc.c:1646  */
+#line 1601 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 176 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 180 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.VarDeclaratitionList) = nullptr; }
-#line 1600 "src/bison.cpp" /* yacc.c:1646  */
+#line 1607 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 178 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 182 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.VarDeclaratitionList) = new CFieldList( (yyvsp[-1].VarDeclaration), (yyvsp[0].VarDeclaratitionList) ); }
-#line 1606 "src/bison.cpp" /* yacc.c:1646  */
+#line 1613 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 182 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 186 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Argument) = new CArgument( (yyvsp[-1].Type), (yyvsp[0].string) ); }
-#line 1612 "src/bison.cpp" /* yacc.c:1646  */
+#line 1619 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 186 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 190 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Type) = new CType( (yyvsp[-2].string) ); }
-#line 1618 "src/bison.cpp" /* yacc.c:1646  */
+#line 1625 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 188 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 192 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Type) = new CType( (yyvsp[0].string) ); }
-#line 1624 "src/bison.cpp" /* yacc.c:1646  */
+#line 1631 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 190 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 194 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Type) = new CType( (yyvsp[0].string) ); }
-#line 1630 "src/bison.cpp" /* yacc.c:1646  */
+#line 1637 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 192 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 196 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Type) = new CType( (yyvsp[0].string) ); }
-#line 1636 "src/bison.cpp" /* yacc.c:1646  */
+#line 1643 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 196 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 200 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.ArgumentList) = nullptr; }
-#line 1642 "src/bison.cpp" /* yacc.c:1646  */
+#line 1649 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 198 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 202 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.ArgumentList) = CArgumentList( (yyvsp[-1].Argument), (yyvsp[0].ArgumentList) ); }
-#line 1648 "src/bison.cpp" /* yacc.c:1646  */
+#line 1655 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 202 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 206 "src/grammatic.bizon" /* yacc.c:1646  */
     {(yyval.Statement) = nullptr; }
-#line 1654 "src/bison.cpp" /* yacc.c:1646  */
+#line 1661 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 204 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 208 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Statement) = new CCompoundStm((yyvsp[-1].Statement), (yyvsp[0].Statement)); }
-#line 1660 "src/bison.cpp" /* yacc.c:1646  */
+#line 1667 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 208 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 212 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Statement) = (yyvsp[-1].Statement) }
-#line 1666 "src/bison.cpp" /* yacc.c:1646  */
+#line 1673 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 210 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 214 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Statement) = new CIfStm( (yyvsp[-4].Expression), (yyvsp[-2].Statement), (yyvsp[0].Statement) ); }
-#line 1672 "src/bison.cpp" /* yacc.c:1646  */
+#line 1679 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 212 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 216 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Statement) = new CWhileStm( (yyvsp[-2].Expression), (yyvsp[0].Statement) ); }
-#line 1678 "src/bison.cpp" /* yacc.c:1646  */
+#line 1685 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 214 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 218 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Statement) = new CPrintStm( (yyvsp[-2].Expression) ); }
-#line 1684 "src/bison.cpp" /* yacc.c:1646  */
+#line 1691 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 216 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 220 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Statement) = new CAssignStm( (yyvsp[-3].string), (yyvsp[-1].Expression) ); }
-#line 1690 "src/bison.cpp" /* yacc.c:1646  */
+#line 1697 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 218 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 222 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Statement) = new CAssignSubscriptStm( (yyvsp[-6].string), (yyvsp[-4].Expression), (yyvsp[-1].Expression) ); }
-#line 1696 "src/bison.cpp" /* yacc.c:1646  */
+#line 1703 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 222 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 226 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), COpExpression::TOperation::PLUS, (yyvsp[0].Expression) ); }
-#line 1702 "src/bison.cpp" /* yacc.c:1646  */
+#line 1709 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 224 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 228 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), COpExpression::TOperation::Minus, (yyvsp[0].Expression) ); }
-#line 1708 "src/bison.cpp" /* yacc.c:1646  */
+#line 1715 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 226 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 230 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), COpExpression::TOperation::TIMES, (yyvsp[0].Expression) ); }
-#line 1714 "src/bison.cpp" /* yacc.c:1646  */
+#line 1721 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 228 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 232 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CLogOpExp( (yyvsp[-2].Expression), TLogicalOperation::AND, (yyvsp[0].Expression) ); }
-#line 1720 "src/bison.cpp" /* yacc.c:1646  */
+#line 1727 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 230 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 234 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CLogOpExp( (yyvsp[-2].Expression), TLogicalOperation::OR, (yyvsp[0].Expression) ); }
-#line 1726 "src/bison.cpp" /* yacc.c:1646  */
+#line 1733 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 232 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 236 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CCompareExpression( (yyvsp[-2].Expression), CCompareExpression::LESS, (yyvsp[0].Expression) ); }
-#line 1732 "src/bison.cpp" /* yacc.c:1646  */
+#line 1739 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 234 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 238 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CCompareExpression( (yyvsp[-2].Expression), CCompareExpression::GREATER, (yyvsp[0].Expression) ); }
-#line 1738 "src/bison.cpp" /* yacc.c:1646  */
+#line 1745 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 236 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 240 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), COpExpression::TOperation::MOD, (yyvsp[0].Expression) ); }
-#line 1744 "src/bison.cpp" /* yacc.c:1646  */
+#line 1751 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 238 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 242 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CByIndexExpression((CArrayExpression*) (yyvsp[-3].Expression), (yyvsp[-1].Expression)); }
-#line 1750 "src/bison.cpp" /* yacc.c:1646  */
+#line 1757 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 240 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 244 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CGetLengthExp( (CArrayExpression*) (yyvsp[-2].Expression) ); }
-#line 1756 "src/bison.cpp" /* yacc.c:1646  */
+#line 1763 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 242 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 246 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CCallMethodExp( (CClass*) (yyvsp[-5].Expression), (yyvsp[-3].string), (CExpList*) (yyvsp[-1].ExpressionList)) ; }
-#line 1762 "src/bison.cpp" /* yacc.c:1646  */
+#line 1769 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 244 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 248 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CNumExpresion((yyvsp[0].string)); }
-#line 1768 "src/bison.cpp" /* yacc.c:1646  */
+#line 1775 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 246 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 250 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CLogExp(true); }
-#line 1774 "src/bison.cpp" /* yacc.c:1646  */
+#line 1781 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 248 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 252 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CLogExp(false); }
-#line 1780 "src/bison.cpp" /* yacc.c:1646  */
+#line 1787 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 250 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 254 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CIdExp((yyvsp[0].string)); }
-#line 1786 "src/bison.cpp" /* yacc.c:1646  */
+#line 1793 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 252 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 256 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CThisExpression(); }
-#line 1792 "src/bison.cpp" /* yacc.c:1646  */
+#line 1799 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 254 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 258 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = CArrayExpression((yyvsp[-1].Expression)); }
-#line 1798 "src/bison.cpp" /* yacc.c:1646  */
+#line 1805 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 256 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 260 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = new CIdExp((yyvsp[-2].string)); }
-#line 1804 "src/bison.cpp" /* yacc.c:1646  */
+#line 1811 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 258 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 262 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = CNegativeExpression((yyvsp[0].Expression)); }
-#line 1810 "src/bison.cpp" /* yacc.c:1646  */
+#line 1817 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 260 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 264 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Expression) = (yyvsp[-1].Expression) }
-#line 1816 "src/bison.cpp" /* yacc.c:1646  */
+#line 1823 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 264 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 268 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.ExpressionList) = nullptr; }
-#line 1822 "src/bison.cpp" /* yacc.c:1646  */
+#line 1829 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 266 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 270 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.ExpressionList) = new CExpList((yyvsp[-2].Expression), (CExpList*) (yyvsp[0].ExpressionList)); }
-#line 1828 "src/bison.cpp" /* yacc.c:1646  */
+#line 1835 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1832 "src/bison.cpp" /* yacc.c:1646  */
+#line 1839 "src/bison.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2063,4 +2070,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 268 "src/grammatic.bizon" /* yacc.c:1906  */
+#line 272 "src/grammatic.bizon" /* yacc.c:1906  */

@@ -39,6 +39,21 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "src/grammatic.bizon" /* yacc.c:1909  */
+
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string>
+    #include <stdbool.h>
+    #include "shared_ptrs_nodes/Expressions.h"
+	#include "shared_ptrs_nodes/Statements.h"
+	#include "shared_ptrs_nodes/Classes.h"
+
+       
+    #define YYERROR_VERBOSE 1        
+
+#line 57 "src/bison.hpp" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -96,7 +111,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 20 "src/grammatic.bizon" /* yacc.c:1909  */
+#line 24 "src/grammatic.bizon" /* yacc.c:1909  */
 
 
 	CProgram* Program; // Указатель на класс-программу
@@ -115,7 +130,7 @@ union YYSTYPE
 	CExpList* ExpressionList;
 	char *string;
 
-#line 119 "src/bison.hpp" /* yacc.c:1909  */
+#line 134 "src/bison.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -140,6 +155,6 @@ struct YYLTYPE
 
 extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
-int yyparse (const IProgram*& program);
+int yyparse (CProgram** program);
 
 #endif /* !YY_YY_SRC_BISON_HPP_INCLUDED  */

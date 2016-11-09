@@ -1,20 +1,24 @@
-%{
+%code requires {
     #include <stdio.h>
     #include <stdlib.h>
     #include <string>
     #include <stdbool.h>
+    #include "shared_ptrs_nodes/Expressions.h"
+	#include "shared_ptrs_nodes/Statements.h"
+	#include "shared_ptrs_nodes/Classes.h"
+
        
     #define YYERROR_VERBOSE 1        
-%}
+}
 
-%code {
+%code {    
 int yylex (void);
-void yyerror ( const IProgram*&, char const * );
+void yyerror ( CProgram**, char const * );
 }
 
 %error-verbose // более подробная информация об ошибке
 %verbose // output-файл с правилами грамматики
-%parse-param { const IProgram*& program } // результат работы анализатора
+%parse-param { CProgram** program } // результат работы анализатора
 %locations  // Подключаем yylloc без появления @n в коде
 
 %union {
@@ -106,9 +110,9 @@ void yyerror ( const IProgram*&, char const * );
 %%
 
 Program:
-	MainClass { Program = $$ = new CProgram( $1, 0 ); }
+	MainClass { *program = $$ = new CProgram( $1, 0 ); }
 	|
-	MainClass ClassDeclarationList { Program = $$ = new CProgram( $1, $2 ); }
+	MainClass ClassDeclarationList { *program = $$ = new CProgram( $1, $2 ); }
 	;
 
 MainClass:

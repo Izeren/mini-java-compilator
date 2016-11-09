@@ -115,6 +115,13 @@ void CConvertVisitor::Visit(CThisExpression &exp) {
 	this->code += "this";
 }
 
+void CConvertVisitor::Visit(CByIndexExpression &exp)
+{
+	exp.arrayExpression->Accept(*this);
+	this->code += "[";
+	exp.indexExpression->Accept(*this);
+	this->code += "]";
+}
 
 
 
