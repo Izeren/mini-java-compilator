@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,17 +40,106 @@
 extern int yydebug;
 #endif
 
+/* Token type.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+  enum yytokentype
+  {
+    NEW = 258,
+    CLASS = 259,
+    EXTENDS = 260,
+    THIS = 261,
+    RETURN = 262,
+    PUBLIC = 263,
+    PRIVATE = 264,
+    STATIC = 265,
+    PRINTLN = 266,
+    INT = 267,
+    BOOLEAN = 268,
+    VOID = 269,
+    INT_ARRAY = 270,
+    LENGTH = 271,
+    TRUE = 272,
+    FALSE = 273,
+    WHILE = 274,
+    IF = 275,
+    ELSE = 276,
+    NUM = 277,
+    ID = 278,
+    LPAREN = 279,
+    RPAREN = 280,
+    LBRACKET = 281,
+    RBRACKET = 282,
+    LBRACE = 283,
+    RBRACE = 284,
+    COMMA = 285,
+    DOT = 286,
+    SEMI = 287,
+    COMMENT = 288,
+    AND = 289,
+    OR = 290,
+    PLUS = 291,
+    MINUS = 292,
+    TIMES = 293,
+    MOD = 294,
+    MAIN = 295,
+    STRING = 296,
+    LESS = 297,
+    GREATER = 298,
+    NOT = 299,
+    ASSIGN = 300
+  };
+#endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 20 "src/grammatic.bizon" /* yacc.c:1909  */
+
+
+	CProgram* Program; // Указатель на класс-программу
+	CClass* Class; // Указатель класс
+	IStatement* Statement;
+	IExpression* Expression;
+	CType* Type;
+	CField* VarDeclaration;
+	CFieldList* VarDeclaratitionList;
+	CArgument* Argument;
+	CArgumentList* ArgumentList;
+	CMethod* MethodDeclaration;
+	CMethodList* MethodDeclarationList;
+	CMainMethod* MainMethod;
+	CMainClass* MainClass;
+	CExpList* ExpressionList;
+	char *string;
+
+#line 119 "src/bison.hpp" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
+/* Location type.  */
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+typedef struct YYLTYPE YYLTYPE;
+struct YYLTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
+};
+# define YYLTYPE_IS_DECLARED 1
+# define YYLTYPE_IS_TRIVIAL 1
+#endif
+
 
 extern YYSTYPE yylval;
-
-int yyparse (void);
+extern YYLTYPE yylloc;
+int yyparse (const IProgram*& program);
 
 #endif /* !YY_YY_SRC_BISON_HPP_INCLUDED  */

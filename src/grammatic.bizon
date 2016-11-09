@@ -80,8 +80,8 @@ void yyerror ( const IProgram*&, char const * );
 %left OR
 %left AND
 %left LESS
-%left MINUS, PLUS
-%left TIMES, MOD
+%left MINUS PLUS
+%left TIMES MOD
 %right NOT
 %left DOT LBRACKET
 
@@ -108,7 +108,7 @@ void yyerror ( const IProgram*&, char const * );
 Program:
 	MainClass { Program = $$ = new CProgram( $1, 0 ); }
 	|
-	MainClass ClassList { Program = $$ = new CProgram( $1, $2 ); }
+	MainClass ClassDeclarationList { Program = $$ = new CProgram( $1, $2 ); }
 	;
 
 MainClass:
@@ -255,7 +255,7 @@ Expression:
 	|
 	NEW ID LPAREN RPAREN { $$ = new CIdExp($2); }
 	|
-	NOT Expression { $$ = CNegativeExpression($1); }
+	NOT Expression { $$ = CNegativeExpression($2); }
 	|
 	LPAREN Expression RPAREN { $$ = $2 }	
 	;
@@ -263,6 +263,6 @@ Expression:
 ExpressionList:
 	{ $$ = nullptr; }
 	|
-	Expression COMMA ExpressionList { $$ = new CExpList($1, (CExpList*) $2); }
+	Expression COMMA ExpressionList { $$ = new CExpList($1, (CExpList*) $3); }
 
 %%
