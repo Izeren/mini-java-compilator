@@ -223,21 +223,21 @@ Statement:
 	;
 
 Expression:
-	Expression PLUS Expression { $$ = new COpExpression( $1, COpExpression::TOperation::PLUS, $3 ); }
+	Expression PLUS Expression { $$ = new COpExpression( $1, enums::TOperation::PLUS, $3 ); }
 	|
-	Expression MINUS Expression { $$ = new COpExpression( $1, COpExpression::TOperation::Minus, $3 ); }
+	Expression MINUS Expression { $$ = new COpExpression( $1, enums::TOperation::Minus, $3 ); }
 	|
-	Expression TIMES Expression { $$ = new COpExpression( $1, COpExpression::TOperation::TIMES, $3 ); }
+	Expression TIMES Expression { $$ = new COpExpression( $1, enums::TOperation::TIMES, $3 ); }
 	|
-	Expression AND Expression { $$ = new CLogOpExp( $1, TLogicalOperation::AND, $3 ); }
+	Expression AND Expression { $$ = new CLogOpExp( $1, enums::TLogicalOperation::AND, $3 ); }
 	|
-	Expression OR Expression { $$ = new CLogOpExp( $1, TLogicalOperation::OR, $3 ); }
+	Expression OR Expression { $$ = new CLogOpExp( $1, enums::TLogicalOperation::OR, $3 ); }
 	|
-	Expression LESS Expression { $$ = new CCompareExpression( $1, CCompareExpression::LESS, $3 ); }
+	Expression LESS Expression { $$ = new CCompareExpression( $1, enums::TCompareOperation::LESS, $3 ); }
 	|
-	Expression GREATER Expression { $$ = new CCompareExpression( $1, CCompareExpression::GREATER, $3 ); }
+	Expression GREATER Expression { $$ = new CCompareExpression( $1, enums::TCompareOperation::GREATER, $3 ); }
 	|
-	Expression MOD Expression { $$ = new COpExpression( $1, COpExpression::TOperation::MOD, $3 ); }
+	Expression MOD Expression { $$ = new COpExpression( $1, enums::TOperation::MOD, $3 ); }
 	|
 	Expression LBRACKET Expression RBRACKET { $$ = new CByIndexExpression((CArrayExpression*) $1, $3); }
 	|
