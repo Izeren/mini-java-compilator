@@ -135,6 +135,44 @@ public:
 	std::unique_ptr<IExpression> rightOperand;
 };
 
+//CGetFieldExp:
+//-------------------------------------------------------------------------------------------------
+
+class CClass;
+class CField;
+
+class CGetFieldExp : public IExpression {
+public: 
+	CGetFieldExp(CClass* _classOwner, CField* _field);
+	void Accept(IVisitor& visitor) override;
+	std::unique_ptr<CClass> classOwner;
+	std::unique_ptr<CField> field;
+};
+
+
+//CCallMethodExp:
+//-------------------------------------------------------------------------------------------------
+class CMethod;
+
+class CCallMethodExp : public IExpression {
+public: 
+	CCallMethodExp(CClass* _classOwner, CMethod* _method);
+	void Accept(IVisitor& visitor) override;
+	std::unique_ptr<CClass> classOwner;
+	std::unique_ptr<CMethod> method;
+};
+
+//CExpList:
+//-------------------------------------------------------------------------------------------------
+
+class CExpList : public IExpression {
+
+public:
+	CExpList(IExpression* _exp, CExpList* _expList);
+	void Accept(IVisitor& visitor) override;
+	std::unique_ptr<IExpression> exp;
+	std::unique_ptr<expList> expList;	
+};
 //CThisExpression:
 //-------------------------------------------------------------------------------------------------
 
@@ -168,3 +206,13 @@ public:
 
 	std::unique_ptr<IExpression> lengthExpression;
 }
+
+
+//CGetLengthExp:
+//-------------------------------------------------------------------------------------------------
+class CGetLengthExp : public IExpression {
+public: 
+	CGetLengthExp(CArrayExpression* _array);
+	void Accept(IVisitor& visitor) override;
+	std::unique_ptr<CArrayExpression> array;
+};

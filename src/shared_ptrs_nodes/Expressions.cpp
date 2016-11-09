@@ -1,4 +1,5 @@
 #include "Expressions.h"
+#include "Classes.h"
 #include <unordered_map>
 
 //CIdExp:
@@ -139,6 +140,61 @@ void CUnarMinusExp::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }
 
+//CGetLengthExp:
+//-------------------------------------------------------------------------------------------------
+
+CGetLengthExp::CGetLengthExp(CArrayExpression* _array)
+{
+	array = _array;
+}
+
+void CGetLengthExp::Accept (IVisitor& visitor) override
+{
+	visitor.Visit(*this);
+}
+
+//CGetFieldExp:
+//-------------------------------------------------------------------------------------------------
+
+CGetFieldExp::CGetFieldExp(CClass* _classOwner, CField* _field)
+{
+	classOwner = _classOwner;
+	field = _field;
+}
+
+void CGetFieldExp::Accept (IVisitor& visitor) override
+{
+	visitor.Visit(*this);
+}
+
+//CCallMethodExp:
+//-------------------------------------------------------------------------------------------------
+
+CCallMethodExp::CCallMethodExp(CClass* _classOwner, CMethod* _method)
+{
+	classOwner = _classOwner;
+	method = _method;
+}
+
+void CCallMethodExp::Accept(IVisitor& visitor) override
+{
+	visitor.Visit(*this);
+}
+
+
+//CExpList:
+//-------------------------------------------------------------------------------------------------
+
+CExpList::CExpList(IExpression* _exp, CExpList* _expList)
+{
+	exp = _exp;
+	expList = _expList;
+}
+
+void CExpList::Accept(IVisitor& visitor) override
+{
+	visitor.Visit(*this);
+}
 //CThisExpression:
 //-------------------------------------------------------------------------------------------------
 CThisExpression::CThisExpression() {
