@@ -75,6 +75,13 @@ void CCalculateVisitor::Visit(COpExp &exp) {
 	case MULTIPLY:
 		this->childResult = leftResult * rightResult;
 		break;
+	case MOD:
+		if (rightResult == 0) {
+			wasError = true;
+			return;
+		}
+		this->childResult = leftResult % rightResult;
+		break;
 		//case DIVISE:
 		//	if (rightResult == 0) {
 		//		this->wasError = true;

@@ -48,7 +48,7 @@ public:
 //COpExp:
 //-------------------------------------------------------------------------------------------------
 
-enum TOperation { PLUS, MINUS, MULTIPLY };
+enum TOperation { PLUS, MINUS, MULTIPLY, MOD };
 
 class COpExp : public IExpression {
 public:

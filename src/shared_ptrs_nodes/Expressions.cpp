@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "Expressions.h"
 #include <unordered_map>
 
@@ -51,7 +49,8 @@ void CNumExp::Accept(IVisitor &visitor) {
 std::map<TOperation, std::string> COpExp::stringOperations = {
 	{ TOperation::PLUS, "+" },
 	{ TOperation::MINUS, "-" },
-	{ TOperation::MULTIPLY, "*" }
+	{ TOperation::MULTIPLY, "*" },
+	{ TOperation::MOD, "%" }
 };
 
 void COpExp::Accept(IVisitor &visitor) {
