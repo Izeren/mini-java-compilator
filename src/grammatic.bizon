@@ -33,7 +33,6 @@ void yyerror ( const IProgram*&, char const * );
 	CMainMethod* MainMethod;
 	CMainClass* MainClass;
 	char *string;
-	int IntValue;
 }
 
 %token NEW CLASS EXTENDS THIS RETURN
@@ -50,7 +49,7 @@ void yyerror ( const IProgram*&, char const * );
 
 %token WHILE IF ELSE
 
-%token <IntValue> NUM
+%token <string> NUM
 
 %token <string> ID
 
@@ -225,9 +224,9 @@ Expression:
 	|
 	Expression TIMES Expression { $$ = new COpExpression( $1, COpExpression::TOperation::TIMES, $3 ); }
 	|
-	Expression AND Expression { $$ = new CLogicalExpression( $1, TLogicalOperation::AND, $3 ); }
+	Expression AND Expression { $$ = new CLogOpExp( $1, TLogicalOperation::AND, $3 ); }
 	|
-	Expression OR Expression { $$ = new CLogicalExpression( $1, TLogicalOperation::OR, $3 ); }
+	Expression OR Expression { $$ = new CLogOpExp( $1, TLogicalOperation::OR, $3 ); }
 	|
 	Expression LESS Expression { $$ = new CCompareExpression( $1, CCompareExpression::LESS, $3 ); }
 	|
@@ -241,21 +240,21 @@ Expression:
 	|
 	Expression DOT ID LPAREN ExpressionList RPAREN { $$ = ??? }
 	|
-	NUM { $$ = $1 }
+	NUM { $$ = new CNumExpresion($1); }
 	|
-	TRUE { $$ = $1 }
+	TRUE { $$ = new CLogExp(true); }
 	|
-	FALSE { $$ = $1 }
+	FALSE { $$ = new CLogExp(false); }
 	|
-	ID { $$ = $1 }
+	ID { $$ = new CIdExp($1); }
 	|
-	THIS { $$ = $1 }
+	THIS { $$ = new CThisExpression(); }
 	|
 	NEW INT LBRACKET Expression RBRACKET { $$ = ??? }
 	|
-	NEW ID LPAREN RPAREN { $$ = ??? }
+	NEW ID LPAREN RPAREN { $$ = new CIdExp($2); }
 	|
-	NOT Expression { $$ = ??? }
+	NOT Expression { $$ = CNegativeExpression($1); }
 	|
 	LPAREN Expression RPAREN { $$ = $2 }	
 	;

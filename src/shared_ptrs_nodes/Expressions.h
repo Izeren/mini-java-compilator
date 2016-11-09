@@ -101,7 +101,6 @@ public:
 	TLogicalOperation operation;
 };
 
-
 //CCompExp:
 //-------------------------------------------------------------------------------------------------
 
@@ -135,3 +134,25 @@ public:
 	void Accept(IVisitor &visitor) override;
 	std::unique_ptr<IExpression> rightOperand;
 };
+
+//CThisExpression:
+//-------------------------------------------------------------------------------------------------
+
+class CThisExpression : public IExpression {
+public:
+	CThisExpression();
+
+	void Accept(IVisitor &visitor) override;
+}
+
+//CNegativeExpression:
+//-------------------------------------------------------------------------------------------------
+
+class CNegativeExpression : public IExpression {
+public:
+	CNegativeExpression(IExpression* expression);
+
+	void Accept(IVisitor &visitor) override;
+
+	std::unique_ptr<IExpression> expression;
+}
