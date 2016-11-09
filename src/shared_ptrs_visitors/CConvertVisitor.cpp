@@ -72,6 +72,48 @@ void CConvertVisitor::Visit(CUnarMinusExp &exp) {
 	}
 }
 
+void CConvertVisitor::Visit(CGetLength &exp) {
+	exp.array->Accept(*this);
+	this->code += ".length;\n";
+}
+
+void CConvertVisitor::Visit(CGetField &exp) {
+	exp.classOwner->Accept(*this);
+	this->code += "."
+	exp.field->Accept(*this);
+	this->code += " ";
+}
+
+void CConvertVisitor::Visit(CGetMethod &exp) {
+	exp.classOwner->Accept(*this);
+	this->code += "."
+	exp.method->Accept(*this);
+}
+
+void CConvertVisitor::Visit(CExpList &exp) {
+	exp.exp->Accept(*this);
+	if (exp.expList) {
+		exp.expList->Accept(*this);
+	}
+}
+
+void CConvertVisitor::Visit(CNegativeExpression &exp) {
+	this->code += " !(";
+	exp.expression->Accept(*this);
+	this->code += ") "
+}
+
+void CConvertVisitor::Visit(CArrayExpression &exp) {
+	this->code += " new int[";
+	exp.lengthExpression->Accept(*this);
+	this->code += "];\n"
+}
+
+void CConvertVisitor::Visit(CThisExpression &exp) {
+	this->code += "this";
+}
+
+
 
 
 //Statements:
