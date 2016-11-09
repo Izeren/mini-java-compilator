@@ -156,3 +156,15 @@ public:
 
 	std::unique_ptr<IExpression> expression;
 }
+
+//CArrayExpression:
+//-------------------------------------------------------------------------------------------------
+
+class CArrayExpression : public IExpression {
+public:
+	CArrayExpression(IExpression* lengthExpression);
+
+	void Accept(IVisitor &visitor) override;
+
+	std::unique_ptr<IExpression> lengthExpression;
+}
