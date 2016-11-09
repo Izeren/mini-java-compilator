@@ -234,7 +234,7 @@ Expression:
 	|
 	Expression MOD Expression { $$ = new COpExpression( $1, COpExpression::TOperation::MOD, $3 ); }
 	|
-	Expression LBRACKET Expression RBRACKET { $$ = ??? }
+	Expression LBRACKET Expression RBRACKET { $$ = new CByIndexExpression($1, $3); }
 	|
 	Expression DOT LENGTH { $$ = ??? }
 	|

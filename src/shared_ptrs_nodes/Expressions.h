@@ -181,7 +181,7 @@ public:
 	CThisExpression();
 
 	void Accept(IVisitor &visitor) override;
-}
+};
 
 //CNegativeExpression:
 //-------------------------------------------------------------------------------------------------
@@ -193,7 +193,7 @@ public:
 	void Accept(IVisitor &visitor) override;
 
 	std::unique_ptr<IExpression> expression;
-}
+};
 
 //CArrayExpression:
 //-------------------------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ public:
 	void Accept(IVisitor &visitor) override;
 
 	std::unique_ptr<IExpression> lengthExpression;
-}
+};
 
 
 //CGetLengthExp:
@@ -215,4 +215,13 @@ public:
 	CGetLengthExp(CArrayExpression* _array);
 	void Accept(IVisitor& visitor) override;
 	std::unique_ptr<CArrayExpression> array;
+};
+
+
+class CByIndexExpression : public IExpression {
+public:
+	CByIndexExpression(CArrayExpression* arrayExpression, IExpression* indexExpression);
+	void Accept(IVisitor& visitor) override;
+	std::unique_ptr<CArrayExpression> arrayExpression;
+	std::unique_ptr<IExpression> indexExpression;
 };

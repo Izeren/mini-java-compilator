@@ -225,3 +225,15 @@ CArrayExpression::CArrayExpression(IExpression* lengthExpression) {
 void CArrayExpression::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }
+
+//CByIndexExpression:
+//-------------------------------------------------------------------------------------------------
+
+CByIndexExpression::CByIndexExpression(CArrayExpression* arrayExpression, IExpression* indexExpression) {
+	this->arrayExpression = std::unique_ptr<CArrayExpression>(arrayExpression);
+	this->indexExpression = std::unique_ptr<IExpression>(indexExpression);
+}
+
+void CByIndexExpression::Accept(IVisitor &visitor) {
+	visitor.Visit(*this);
+}
