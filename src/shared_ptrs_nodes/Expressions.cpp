@@ -121,7 +121,7 @@ void CCompExp::Accept(IVisitor &visitor) {
 CCompExp::CCompExp(
 	IExpression* leftOperand,
 	IExpression* rightOperand,
-	TCompareOperation operation
+	enums::TCompareOperation operation
 ) {
 	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
 	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
@@ -144,10 +144,10 @@ void CUnarMinusExp::Accept(IVisitor &visitor) {
 
 CGetLengthExp::CGetLengthExp(CArrayExpression* _array)
 {
-	array = _array;
+	array = std::unique_ptr<CArrayExpression>(_array);
 }
 
-void CGetLengthExp::Accept (IVisitor& visitor) override
+void CGetLengthExp::Accept (IVisitor& visitor)
 {
 	visitor.Visit(*this);
 }
@@ -161,7 +161,7 @@ CGetFieldExp::CGetFieldExp(CClass* _classOwner, CField* _field)
 	field = _field;
 }
 
-void CGetFieldExp::Accept (IVisitor& visitor) override
+void CGetFieldExp::Accept (IVisitor& visitor)
 {
 	visitor.Visit(*this);
 }
@@ -176,7 +176,7 @@ CCallMethodExp::CCallMethodExp(CClass* _classOwner, CIdExp* _methodName, CExpLis
 	args = std::unique_ptr<CExpList*>(_args);
 }
 
-void CCallMethodExp::Accept(IVisitor& visitor) override
+void CCallMethodExp::Accept(IVisitor& visitor)
 {
 	visitor.Visit(*this);
 }
@@ -190,7 +190,7 @@ CExpList::CExpList(IExpression* _exp, CExpList* _expList)
 	expList = std::unique_ptr<CExpList*>(_expList);
 }
 
-void CExpList::Accept(IVisitor& visitor) override
+void CExpList::Accept(IVisitor& visitor)
 {
 	visitor.Visit(*this);
 }

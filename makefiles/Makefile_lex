@@ -1,6 +1,8 @@
 SRC_DIR=src
 BUILD_DIR=build
 SOURSE_DIR=resource
+VISITORS_DIR=$(SRC_DIR)/shared_ptrs_visitors
+NODES_DIR=$(SRC_DIR)/shared_ptrs_nodes
 CFLAGS=-std=c++11
 LFLAGS=-lstdc++
 CC=g++
@@ -12,9 +14,8 @@ flex:
 bison:
 	bison -d -o src/bison.cpp src/grammatic.bizon
 
-$(BUILD_DIR)/bison_main.bin: $(addprefix $(BUILD_DIR)/, bison_main.o flex.o bison.o)
+$(BUILD_DIR)/bison_main.bin: $(addprefix $(BUILD_DIR)/, bison_main.o flex.o bison.o expressions.o statements.o classes.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
-
 
 $(BUILD_DIR)/bison_main.o: $(SRC_DIR)/bison_main.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
@@ -23,6 +24,15 @@ $(BUILD_DIR)/flex.o: $(SRC_DIR)/lex.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 $(BUILD_DIR)/bison.o: $(SRC_DIR)/bison.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+
+$(BUILD_DIR)/expressions.o: $(NODES_DIR)/Expressions.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+
+$(BUILD_DIR)/statements.o: $(NODES_DIR)/Statements.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+
+$(BUILD_DIR)/classes.o: $(NODES_DIR)/Classes.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 clean:
