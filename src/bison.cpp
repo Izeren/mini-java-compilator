@@ -169,6 +169,7 @@ union YYSTYPE
 
 	CProgram* Program; // Указатель на класс-программу
 	CClass* Class; // Указатель класс
+	CClassList* ClassDeclarationList;
 	IStatement* Statement;
 	IExpression* Expression;
 	CType* Type;
@@ -182,8 +183,9 @@ union YYSTYPE
 	CMainClass* MainClass;
 	CExpList* ExpressionList;
 	char *string;
+	CIdExp* Idenifier;
 
-#line 187 "src/bison.cpp" /* yacc.c:355  */
+#line 189 "src/bison.cpp" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -214,14 +216,14 @@ int yyparse (CProgram** program);
 
 /* Copy the second part of user declarations.  */
 
-#line 218 "src/bison.cpp" /* yacc.c:358  */
+#line 220 "src/bison.cpp" /* yacc.c:358  */
 /* Unqualified %code blocks.  */
 #line 14 "src/grammatic.bizon" /* yacc.c:359  */
     
 int yylex (void);
 void yyerror ( CProgram**, char const * );
 
-#line 225 "src/bison.cpp" /* yacc.c:359  */
+#line 227 "src/bison.cpp" /* yacc.c:359  */
 
 #ifdef short
 # undef short
@@ -463,18 +465,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  5
+#define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   295
+#define YYLAST   346
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  46
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  17
+#define YYNNTS  18
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  53
+#define YYNRULES  54
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  155
+#define YYNSTATES  156
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -525,12 +527,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   113,   113,   115,   119,   128,   138,   140,   144,   149,
-     156,   162,   170,   172,   176,   180,   182,   186,   190,   192,
-     194,   196,   200,   202,   206,   208,   212,   214,   216,   218,
-     220,   222,   226,   228,   230,   232,   234,   236,   238,   240,
-     242,   244,   246,   248,   250,   252,   254,   256,   258,   260,
-     262,   264,   268,   270
+       0,   116,   116,   118,   122,   131,   141,   143,   147,   152,
+     159,   165,   173,   175,   179,   183,   185,   189,   193,   195,
+     197,   199,   203,   205,   209,   211,   215,   217,   219,   221,
+     223,   225,   229,   231,   233,   235,   237,   239,   241,   243,
+     245,   247,   249,   251,   253,   255,   257,   259,   261,   263,
+     265,   267,   271,   273,   277
 };
 #endif
 
@@ -549,7 +551,7 @@ static const char *const yytname[] =
   "ClassDeclarationList", "Class", "MethodDeclaration",
   "MethodDeclarationList", "VarDeclaration", "VarDeclaratitionList",
   "Argument", "Type", "ArgumentList", "StatementList", "Statement",
-  "Expression", "ExpressionList", YY_NULLPTR
+  "Expression", "ExpressionList", "Idenifier", YY_NULLPTR
 };
 #endif
 
@@ -566,10 +568,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -103
+#define YYPACT_NINF -116
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-103)))
+  (!!((Yystate) == (-116)))
 
 #define YYTABLE_NINF -1
 
@@ -580,22 +582,22 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-       7,   -18,    19,    38,    28,  -103,    39,  -103,    38,    69,
-       5,  -103,    70,    50,    68,     8,    78,  -103,    66,    80,
-    -103,  -103,     8,    52,    72,    67,     8,    82,  -103,     8,
-       8,    52,    81,    89,    99,    52,  -103,   101,   109,  -103,
-    -103,  -103,    94,   117,   114,   125,   126,  -103,     8,     8,
-     136,     8,   137,   141,   152,   156,  -103,  -103,   163,   165,
-     155,   256,   256,   166,   178,   181,   184,     1,   256,   209,
-     256,   214,   256,     6,     6,     6,     6,     6,   193,     6,
-    -103,     6,   201,    -5,  -103,  -103,  -103,  -103,  -103,     6,
-       6,    32,    47,    62,    91,   105,  -103,   119,   133,  -103,
-     207,   211,    77,    33,   204,     6,    -1,     6,     6,     6,
-       6,     6,     6,     6,     6,   256,   256,   199,  -103,   218,
-     220,     6,   225,  -103,  -103,   147,  -103,   234,   226,   217,
-     251,   251,    33,    33,   235,   203,  -103,   249,     6,  -103,
-    -103,   161,  -103,  -103,     6,   256,   175,  -103,   189,   255,
-    -103,  -103,     6,  -103,  -103
+      32,    16,    47,    46,  -116,    28,  -116,    16,  -116,    46,
+      51,     7,  -116,    56,    42,    16,    -5,    54,  -116,    60,
+      53,  -116,    -5,    33,    16,  -116,    50,    -5,    67,  -116,
+      -5,    -5,    33,    66,    64,    74,    33,  -116,    16,    16,
+    -116,  -116,  -116,    58,    75,    79,    87,    86,  -116,    -5,
+      -5,    91,    -5,    16,   102,   103,    16,  -116,  -116,   106,
+     108,   107,   308,   308,   109,   120,   126,   128,   308,   124,
+     308,   -23,   146,   308,    10,    10,    10,   127,    10,  -116,
+      10,    10,    10,   139,    -3,  -116,  -116,  -116,  -116,    10,
+      10,    39,  -116,   104,   123,  -116,   152,   166,   180,   194,
+    -116,   129,   143,   138,    14,   147,    10,   -12,    10,    10,
+      10,    10,    10,    10,    10,    10,   308,   308,   141,   137,
+    -116,   142,    10,   160,  -116,  -116,   208,  -116,   172,   278,
+      71,   303,   303,    14,    14,   287,   264,  -116,   177,  -116,
+      10,  -116,   222,  -116,  -116,    10,   308,   236,  -116,   250,
+     174,  -116,  -116,    10,  -116,  -116
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -603,36 +605,36 @@ static const yytype_int16 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,     0,     2,     0,     1,     0,     3,     6,     0,
-       0,     7,     0,     0,     0,    15,     0,     4,     0,    20,
-      19,    21,    15,    12,     0,     0,    15,     0,    16,     0,
-       0,    12,     0,     0,     0,    12,    18,     0,     0,    13,
-       8,    14,     0,     0,     0,     0,     0,     9,    22,    22,
-       0,    22,     0,     0,     0,     0,    23,    17,     0,     0,
-       0,    24,    24,     0,     0,     0,     0,     0,    24,     0,
-      24,     0,    24,     0,     0,     0,     0,     0,     0,     0,
-      25,     0,     0,     0,    47,    44,    45,    43,    46,     0,
-       0,     0,     0,     0,     0,     0,    26,     0,     0,     5,
-       0,     0,     0,    50,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    30,     0,
-       0,     0,     0,    51,    29,     0,    41,     0,    35,    36,
-      32,    33,    34,    39,    37,    38,    28,     0,     0,    10,
-      11,     0,    49,    40,    52,     0,     0,    48,     0,     0,
-      27,    31,    52,    42,    53
+       0,     0,     0,     2,    54,     0,     1,     0,     3,     6,
+       0,     0,     7,     0,     0,     0,    15,     0,     4,     0,
+      20,    19,    15,    12,     0,    21,     0,    15,     0,    16,
+       0,     0,    12,     0,     0,     0,    12,    18,     0,     0,
+      13,     8,    14,     0,     0,     0,     0,     0,     9,    22,
+      22,     0,    22,     0,     0,     0,     0,    23,    17,     0,
+       0,     0,    24,    24,     0,     0,     0,     0,    24,     0,
+      24,     0,     0,    24,     0,     0,     0,     0,     0,    25,
+       0,     0,     0,     0,     0,    47,    44,    45,    43,     0,
+       0,     0,    46,     0,     0,    26,     0,     0,     0,     0,
+       5,     0,     0,     0,    50,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      30,     0,     0,     0,    51,    29,     0,    41,     0,    35,
+      36,    32,    33,    34,    39,    37,    38,    28,     0,    10,
+       0,    11,     0,    49,    40,    52,     0,     0,    48,     0,
+       0,    27,    31,    52,    42,    53
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-    -103,  -103,  -103,  -103,   273,  -103,  -103,    18,  -103,    29,
-    -103,    -4,     3,   223,  -102,   -73,   131
+    -116,  -116,  -116,  -116,   198,  -116,  -116,    48,  -116,   -17,
+    -116,    -6,   -33,   -10,  -115,    11,    57,    -1
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
-      -1,     2,     3,    13,     7,     8,    31,    32,    22,    23,
-      51,    24,    53,    69,    70,   148,   149
+      -1,     2,     3,    14,     8,     9,    32,    33,    22,    23,
+      52,    24,    54,    69,    70,   149,   150,    92
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -640,92 +642,102 @@ static const yytype_int16 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      91,    92,    93,    94,    95,     4,    97,   100,    98,    83,
-      14,     1,    84,   136,   137,   126,   102,   103,   101,     5,
-      19,    20,   127,    85,    86,    37,    38,    76,    87,    88,
-      89,    21,   125,    15,   128,   129,   130,   131,   132,   133,
-     134,   135,     6,   150,    52,    52,    77,    52,   141,    39,
-      90,    28,    54,    43,    56,    35,     9,   104,   105,   105,
-      29,    30,    10,   106,   106,   146,   107,   108,   109,   110,
-     111,   112,   115,   105,   113,   114,   114,    12,   106,    17,
-      16,   107,   108,   109,   110,   111,   112,   116,   105,   113,
-     114,    18,    25,   106,    26,    33,   107,   108,   109,   110,
-     111,   112,   123,   105,   113,   114,    27,    34,   106,    36,
-      40,   107,   108,   109,   110,   111,   112,   105,   117,   113,
-     114,    41,   106,    42,    44,   107,   108,   109,   110,   111,
-     112,   105,    45,   113,   114,    46,   106,   118,    48,   107,
-     108,   109,   110,   111,   112,   105,    47,   113,   114,    49,
-     106,   119,    50,   107,   108,   109,   110,   111,   112,   105,
-      57,   113,   114,    55,   106,   120,    58,   107,   108,   109,
-     110,   111,   112,   105,   143,   113,   114,    59,   106,    60,
-      63,   107,   108,   109,   110,   111,   112,   105,   147,   113,
-     114,    61,   106,    62,    72,   107,   108,   109,   110,   111,
-     112,   105,    73,   113,   114,    74,   106,   151,    75,   107,
-     108,   109,   110,   111,   112,   105,    79,   113,   114,   152,
-     106,    81,    96,   107,   108,   109,   110,   111,   112,   105,
-      99,   113,   114,   121,   106,   122,   124,   107,   108,   109,
-     110,   111,   112,   105,   138,   113,   114,   139,   106,   140,
-     142,   107,   105,   109,   110,   111,   112,   106,   144,   113,
-     114,   105,   109,   110,   111,   112,   106,    64,   113,   114,
-     145,   109,   110,   111,   112,    65,    66,   105,   114,    67,
-     153,    11,   106,   154,    68,    71,     0,     0,     0,   111,
-     112,    78,     0,    80,   114,    82
+       5,   137,   138,    80,   127,    29,    11,    20,    21,   101,
+      36,     4,    15,    84,    19,    25,    85,    55,     4,    57,
+       4,    25,    81,    34,    38,    39,    25,    86,    87,    25,
+      25,   151,    88,     4,    89,    16,     1,    45,    46,     4,
+     106,    30,    31,    53,    53,   107,    53,     6,    25,    25,
+       7,    25,    58,    72,    90,    61,    10,   115,    77,    13,
+      79,    71,    71,    83,   105,   106,    17,    71,    26,    71,
+     107,    18,    71,   108,   109,   110,   111,   112,   113,    28,
+      40,   114,   115,   102,    44,    91,    93,    94,    27,    96,
+      35,    97,    98,    99,    37,    41,    42,   106,    43,    47,
+     103,   104,   107,    49,    48,   108,   128,   110,   111,   112,
+     113,    50,    51,   114,   115,    71,    71,   126,    56,   129,
+     130,   131,   132,   133,   134,   135,   136,    59,    60,   116,
+     106,    78,    64,   142,    62,   107,    63,    73,   108,   109,
+     110,   111,   112,   113,    74,    71,   114,   115,   117,   106,
+      75,   147,    76,    82,   107,   122,    95,   108,   109,   110,
+     111,   112,   113,   124,   106,   114,   115,   123,   100,   107,
+     139,   141,   108,   109,   110,   111,   112,   113,   106,   125,
+     114,   115,   140,   107,   118,   143,   108,   109,   110,   111,
+     112,   113,   106,   119,   114,   115,   145,   107,   146,   154,
+     108,   109,   110,   111,   112,   113,   106,    12,   114,   115,
+     155,   107,   120,     0,   108,   109,   110,   111,   112,   113,
+     106,     0,   114,   115,     0,   107,   121,     0,   108,   109,
+     110,   111,   112,   113,   106,   144,   114,   115,     0,   107,
+       0,     0,   108,   109,   110,   111,   112,   113,   106,   148,
+     114,   115,     0,   107,     0,     0,   108,   109,   110,   111,
+     112,   113,   106,     0,   114,   115,     0,   107,   152,     0,
+     108,   109,   110,   111,   112,   113,   106,     0,   114,   115,
+     153,   107,     0,     0,   108,   109,   110,   111,   112,   113,
+     106,     0,   114,   115,     0,   107,     0,     0,   108,   109,
+     110,   111,   112,   113,   106,     0,   114,   115,     0,   107,
+       0,     0,     0,   106,   110,   111,   112,   113,   107,    65,
+     114,   115,     0,   110,   111,   112,   113,    66,    67,   106,
+     115,     4,     0,     0,   107,     0,    68,     0,     0,     0,
+       0,   112,   113,     0,     0,     0,   115
 };
 
 static const yytype_int16 yycheck[] =
 {
-      73,    74,    75,    76,    77,    23,    79,    12,    81,     3,
-       5,     4,     6,   115,   116,    16,    89,    90,    23,     0,
-      12,    13,    23,    17,    18,    29,    30,    26,    22,    23,
-      24,    23,   105,    28,   107,   108,   109,   110,   111,   112,
-     113,   114,     4,   145,    48,    49,    45,    51,   121,    31,
-      44,    22,    49,    35,    51,    26,    28,    25,    26,    26,
-       8,     9,    23,    31,    31,   138,    34,    35,    36,    37,
-      38,    39,    25,    26,    42,    43,    43,     8,    31,    29,
-      10,    34,    35,    36,    37,    38,    39,    25,    26,    42,
-      43,    23,    14,    31,    28,    23,    34,    35,    36,    37,
-      38,    39,    25,    26,    42,    43,    26,    40,    31,    27,
-      29,    34,    35,    36,    37,    38,    39,    26,    27,    42,
-      43,    32,    31,    24,    23,    34,    35,    36,    37,    38,
-      39,    26,    23,    42,    43,    41,    31,    32,    24,    34,
-      35,    36,    37,    38,    39,    26,    29,    42,    43,    24,
-      31,    32,    26,    34,    35,    36,    37,    38,    39,    26,
-      23,    42,    43,    27,    31,    32,    25,    34,    35,    36,
-      37,    38,    39,    26,    27,    42,    43,    25,    31,    23,
-      25,    34,    35,    36,    37,    38,    39,    26,    27,    42,
-      43,    28,    31,    28,    28,    34,    35,    36,    37,    38,
-      39,    26,    24,    42,    43,    24,    31,    32,    24,    34,
-      35,    36,    37,    38,    39,    26,     7,    42,    43,    30,
-      31,     7,    29,    34,    35,    36,    37,    38,    39,    26,
-      29,    42,    43,    26,    31,    24,    32,    34,    35,    36,
-      37,    38,    39,    26,    45,    42,    43,    29,    31,    29,
-      25,    34,    26,    36,    37,    38,    39,    31,    24,    42,
-      43,    26,    36,    37,    38,    39,    31,    11,    42,    43,
-      21,    36,    37,    38,    39,    19,    20,    26,    43,    23,
-      25,     8,    31,   152,    28,    62,    -1,    -1,    -1,    38,
-      39,    68,    -1,    70,    43,    72
+       1,   116,   117,    26,    16,    22,     7,    12,    13,    12,
+      27,    23,     5,     3,    15,    16,     6,    50,    23,    52,
+      23,    22,    45,    24,    30,    31,    27,    17,    18,    30,
+      31,   146,    22,    23,    24,    28,     4,    38,    39,    23,
+      26,     8,     9,    49,    50,    31,    52,     0,    49,    50,
+       4,    52,    53,    63,    44,    56,    28,    43,    68,     8,
+      70,    62,    63,    73,    25,    26,    10,    68,    14,    70,
+      31,    29,    73,    34,    35,    36,    37,    38,    39,    26,
+      32,    42,    43,    84,    36,    74,    75,    76,    28,    78,
+      40,    80,    81,    82,    27,    29,    32,    26,    24,    41,
+      89,    90,    31,    24,    29,    34,   107,    36,    37,    38,
+      39,    24,    26,    42,    43,   116,   117,   106,    27,   108,
+     109,   110,   111,   112,   113,   114,   115,    25,    25,    25,
+      26,     7,    25,   122,    28,    31,    28,    28,    34,    35,
+      36,    37,    38,    39,    24,   146,    42,    43,    25,    26,
+      24,   140,    24,     7,    31,    26,    29,    34,    35,    36,
+      37,    38,    39,    25,    26,    42,    43,    24,    29,    31,
+      29,    29,    34,    35,    36,    37,    38,    39,    26,    32,
+      42,    43,    45,    31,    32,    25,    34,    35,    36,    37,
+      38,    39,    26,    27,    42,    43,    24,    31,    21,    25,
+      34,    35,    36,    37,    38,    39,    26,     9,    42,    43,
+     153,    31,    32,    -1,    34,    35,    36,    37,    38,    39,
+      26,    -1,    42,    43,    -1,    31,    32,    -1,    34,    35,
+      36,    37,    38,    39,    26,    27,    42,    43,    -1,    31,
+      -1,    -1,    34,    35,    36,    37,    38,    39,    26,    27,
+      42,    43,    -1,    31,    -1,    -1,    34,    35,    36,    37,
+      38,    39,    26,    -1,    42,    43,    -1,    31,    32,    -1,
+      34,    35,    36,    37,    38,    39,    26,    -1,    42,    43,
+      30,    31,    -1,    -1,    34,    35,    36,    37,    38,    39,
+      26,    -1,    42,    43,    -1,    31,    -1,    -1,    34,    35,
+      36,    37,    38,    39,    26,    -1,    42,    43,    -1,    31,
+      -1,    -1,    -1,    26,    36,    37,    38,    39,    31,    11,
+      42,    43,    -1,    36,    37,    38,    39,    19,    20,    26,
+      43,    23,    -1,    -1,    31,    -1,    28,    -1,    -1,    -1,
+      -1,    38,    39,    -1,    -1,    -1,    43
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     4,    47,    48,    23,     0,     4,    50,    51,    28,
-      23,    50,     8,    49,     5,    28,    10,    29,    23,    12,
-      13,    23,    54,    55,    57,    14,    28,    26,    55,     8,
-       9,    52,    53,    23,    40,    55,    27,    57,    57,    53,
-      29,    32,    24,    53,    23,    23,    41,    29,    24,    24,
-      26,    56,    57,    58,    58,    27,    58,    23,    25,    25,
-      23,    28,    28,    25,    11,    19,    20,    23,    28,    59,
-      60,    59,    28,    24,    24,    24,    26,    45,    59,     7,
-      59,     7,    59,     3,     6,    17,    18,    22,    23,    24,
-      44,    61,    61,    61,    61,    61,    29,    61,    61,    29,
-      12,    23,    61,    61,    25,    26,    31,    34,    35,    36,
-      37,    38,    39,    42,    43,    25,    25,    27,    32,    32,
-      32,    26,    24,    25,    32,    61,    16,    23,    61,    61,
-      61,    61,    61,    61,    61,    61,    60,    60,    45,    29,
-      29,    61,    25,    27,    24,    21,    61,    27,    61,    62,
-      60,    32,    30,    25,    62
+       0,     4,    47,    48,    23,    63,     0,     4,    50,    51,
+      28,    63,    50,     8,    49,     5,    28,    10,    29,    63,
+      12,    13,    54,    55,    57,    63,    14,    28,    26,    55,
+       8,     9,    52,    53,    63,    40,    55,    27,    57,    57,
+      53,    29,    32,    24,    53,    63,    63,    41,    29,    24,
+      24,    26,    56,    57,    58,    58,    27,    58,    63,    25,
+      25,    63,    28,    28,    25,    11,    19,    20,    28,    59,
+      60,    63,    59,    28,    24,    24,    24,    59,     7,    59,
+      26,    45,     7,    59,     3,     6,    17,    18,    22,    24,
+      44,    61,    63,    61,    61,    29,    61,    61,    61,    61,
+      29,    12,    63,    61,    61,    25,    26,    31,    34,    35,
+      36,    37,    38,    39,    42,    43,    25,    25,    32,    27,
+      32,    32,    26,    24,    25,    32,    61,    16,    63,    61,
+      61,    61,    61,    61,    61,    61,    61,    60,    60,    29,
+      45,    29,    61,    25,    27,    24,    21,    61,    27,    61,
+      62,    60,    32,    30,    25,    62
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -736,7 +748,7 @@ static const yytype_uint8 yyr1[] =
       57,    57,    58,    58,    59,    59,    60,    60,    60,    60,
       60,    60,    61,    61,    61,    61,    61,    61,    61,    61,
       61,    61,    61,    61,    61,    61,    61,    61,    61,    61,
-      61,    61,    62,    62
+      61,    61,    62,    62,    63
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -747,7 +759,7 @@ static const yytype_uint8 yyr2[] =
        1,     1,     0,     2,     0,     2,     3,     7,     5,     5,
        4,     7,     3,     3,     3,     3,     3,     3,     3,     3,
        4,     3,     6,     1,     1,     1,     1,     1,     5,     4,
-       2,     3,     0,     3
+       2,     3,     0,     3,     1
 };
 
 
@@ -1519,323 +1531,329 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 113 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 116 "src/grammatic.bizon" /* yacc.c:1646  */
     { *program = (yyval.Program) = new CProgram( (yyvsp[0].MainClass), 0 ); }
-#line 1525 "src/bison.cpp" /* yacc.c:1646  */
+#line 1537 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 115 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 118 "src/grammatic.bizon" /* yacc.c:1646  */
     { *program = (yyval.Program) = new CProgram( (yyvsp[-1].MainClass), (yyvsp[0].ClassDeclarationList) ); }
-#line 1531 "src/bison.cpp" /* yacc.c:1646  */
+#line 1543 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 122 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 125 "src/grammatic.bizon" /* yacc.c:1646  */
     {	
-		(yyval.MainClass) = new CMainClass( (yyvsp[-3].string), (yyvsp[-1].MainMethod) );
+		(yyval.MainClass) = new CMainClass( (yyvsp[-3].Idenifier), (yyvsp[-1].MainMethod) );
 	}
-#line 1539 "src/bison.cpp" /* yacc.c:1646  */
+#line 1551 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 132 "src/grammatic.bizon" /* yacc.c:1646  */
+#line 135 "src/grammatic.bizon" /* yacc.c:1646  */
     {	
 		(yyval.MainMethod) = new CMainMethod( 0, 0, (yyvsp[-1].Statement) );
 	}
-#line 1547 "src/bison.cpp" /* yacc.c:1646  */
-    break;
-
-  case 6:
-#line 138 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.ClassDeclarationList) = nullptr; }
-#line 1553 "src/bison.cpp" /* yacc.c:1646  */
-    break;
-
-  case 7:
-#line 140 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.ClassDeclarationList) = new CClassDeclarationList( (yyvsp[-1].Class), (yyvsp[0].ClassDeclarationList) ); }
 #line 1559 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 8:
-#line 147 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Class) = new CClass( (yyvsp[-4].string), 0, (yyvsp[-2].VarDeclaratitionList), (yyvsp[-1].MethodDeclarationList) ); }
+  case 6:
+#line 141 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.ClassDeclarationList) = nullptr; }
 #line 1565 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 9:
-#line 152 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Class) = new CClass( (yyvsp[-6].string), (yyvsp[-4].string), (yyvsp[-2].VarDeclaratitionList), (yyvsp[-1].MethodDeclarationList) ); }
+  case 7:
+#line 143 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.ClassDeclarationList) = new CClassDeclarationList( (yyvsp[-1].Class), (yyvsp[0].ClassDeclarationList) ); }
 #line 1571 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 10:
-#line 160 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.MethodDeclaration) = new CMethod( (yyvsp[-10].Type), (yyvsp[-9].string), (yyvsp[-7].ArgumentList), (yyvsp[-4].Statement) ); }
+  case 8:
+#line 150 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Class) = new CClass( (yyvsp[-4].Idenifier), 0, (yyvsp[-2].VarDeclaratitionList), (yyvsp[-1].MethodDeclarationList) ); }
 #line 1577 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 11:
-#line 166 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.MethodDeclaration) = new CMethod( (yyvsp[-10].Type), (yyvsp[-9].string), (yyvsp[-7].ArgumentList), (yyvsp[-4].Statement) ); }
+  case 9:
+#line 155 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Class) = new CClass( (yyvsp[-6].Idenifier), (yyvsp[-4].Idenifier), (yyvsp[-2].VarDeclaratitionList), (yyvsp[-1].MethodDeclarationList) ); }
 #line 1583 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 12:
-#line 170 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.MethodDeclarationList) = nullptr; }
+  case 10:
+#line 163 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.MethodDeclaration) = new CMethod( (yyvsp[-10].Type), (yyvsp[-9].Idenifier), (yyvsp[-7].ArgumentList), (yyvsp[-4].Statement) ); }
 #line 1589 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 13:
-#line 172 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.MethodDeclarationList) = CMethodList( (yyvsp[-1].MethodDeclaration), (yyvsp[0].MethodDeclarationList) ); }
+  case 11:
+#line 169 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.MethodDeclaration) = new CMethod( (yyvsp[-10].Type), (yyvsp[-9].Idenifier), (yyvsp[-7].ArgumentList), (yyvsp[-4].Statement) ); }
 #line 1595 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 14:
-#line 176 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.VarDeclaration) = new CField( (yyvsp[-2].Type), (yyvsp[-1].string) ); }
+  case 12:
+#line 173 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.MethodDeclarationList) = nullptr; }
 #line 1601 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 15:
-#line 180 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.VarDeclaratitionList) = nullptr; }
+  case 13:
+#line 175 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.MethodDeclarationList) = CMethodList( (yyvsp[-1].MethodDeclaration), (yyvsp[0].MethodDeclarationList) ); }
 #line 1607 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 16:
-#line 182 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.VarDeclaratitionList) = new CFieldList( (yyvsp[-1].VarDeclaration), (yyvsp[0].VarDeclaratitionList) ); }
+  case 14:
+#line 179 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.VarDeclaration) = new CField( (yyvsp[-2].Type), (yyvsp[-1].Idenifier) ); }
 #line 1613 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 17:
-#line 186 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Argument) = new CArgument( (yyvsp[-1].Type), (yyvsp[0].string) ); }
+  case 15:
+#line 183 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.VarDeclaratitionList) = nullptr; }
 #line 1619 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 18:
-#line 190 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Type) = new CType( (yyvsp[-2].string) ); }
+  case 16:
+#line 185 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.VarDeclaratitionList) = new CFieldList( (yyvsp[-1].VarDeclaration), (yyvsp[0].VarDeclaratitionList) ); }
 #line 1625 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 19:
-#line 192 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Type) = new CType( (yyvsp[0].string) ); }
+  case 17:
+#line 189 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Argument) = new CArgument( (yyvsp[-1].Type), (yyvsp[0].Idenifier) ); }
 #line 1631 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 20:
-#line 194 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Type) = new CType( (yyvsp[0].string) ); }
+  case 18:
+#line 193 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Type) = new CType( (yyvsp[-2].string) ); }
 #line 1637 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 21:
-#line 196 "src/grammatic.bizon" /* yacc.c:1646  */
+  case 19:
+#line 195 "src/grammatic.bizon" /* yacc.c:1646  */
     { (yyval.Type) = new CType( (yyvsp[0].string) ); }
 #line 1643 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 22:
-#line 200 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.ArgumentList) = nullptr; }
+  case 20:
+#line 197 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Type) = new CType( (yyvsp[0].string) ); }
 #line 1649 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 23:
-#line 202 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.ArgumentList) = CArgumentList( (yyvsp[-1].Argument), (yyvsp[0].ArgumentList) ); }
+  case 21:
+#line 199 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Type) = new CType( (yyvsp[0].Idenifier) ); }
 #line 1655 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 24:
-#line 206 "src/grammatic.bizon" /* yacc.c:1646  */
-    {(yyval.Statement) = nullptr; }
+  case 22:
+#line 203 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.ArgumentList) = nullptr; }
 #line 1661 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 25:
-#line 208 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Statement) = new CCompoundStm((yyvsp[-1].Statement), (yyvsp[0].Statement)); }
+  case 23:
+#line 205 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.ArgumentList) = CArgumentList( (yyvsp[-1].Argument), (yyvsp[0].ArgumentList) ); }
 #line 1667 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 26:
-#line 212 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Statement) = (yyvsp[-1].Statement) }
+  case 24:
+#line 209 "src/grammatic.bizon" /* yacc.c:1646  */
+    {(yyval.Statement) = nullptr; }
 #line 1673 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 27:
-#line 214 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Statement) = new CIfStm( (yyvsp[-4].Expression), (yyvsp[-2].Statement), (yyvsp[0].Statement) ); }
+  case 25:
+#line 211 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Statement) = new CCompoundStm((yyvsp[-1].Statement), (yyvsp[0].Statement)); }
 #line 1679 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 28:
-#line 216 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Statement) = new CWhileStm( (yyvsp[-2].Expression), (yyvsp[0].Statement) ); }
+  case 26:
+#line 215 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Statement) = (yyvsp[-1].Statement) }
 #line 1685 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 29:
-#line 218 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Statement) = new CPrintStm( (yyvsp[-2].Expression) ); }
+  case 27:
+#line 217 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Statement) = new CIfStm( (yyvsp[-4].Expression), (yyvsp[-2].Statement), (yyvsp[0].Statement) ); }
 #line 1691 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 30:
-#line 220 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Statement) = new CAssignStm( (yyvsp[-3].string), (yyvsp[-1].Expression) ); }
+  case 28:
+#line 219 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Statement) = new CWhileStm( (yyvsp[-2].Expression), (yyvsp[0].Statement) ); }
 #line 1697 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 31:
-#line 222 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Statement) = new CAssignSubscriptStm( (yyvsp[-6].string), (yyvsp[-4].Expression), (yyvsp[-1].Expression) ); }
+  case 29:
+#line 221 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Statement) = new CPrintStm( (yyvsp[-2].Expression) ); }
 #line 1703 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 32:
-#line 226 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), COpExpression::TOperation::PLUS, (yyvsp[0].Expression) ); }
+  case 30:
+#line 223 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Statement) = new CAssignStm( (yyvsp[-3].Idenifier), (yyvsp[-1].Expression) ); }
 #line 1709 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 33:
-#line 228 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), COpExpression::TOperation::Minus, (yyvsp[0].Expression) ); }
+  case 31:
+#line 225 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Statement) = new CAssignSubscriptStm( (yyvsp[-6].Idenifier), (yyvsp[-4].Expression), (yyvsp[-1].Expression) ); }
 #line 1715 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 34:
-#line 230 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), COpExpression::TOperation::TIMES, (yyvsp[0].Expression) ); }
+  case 32:
+#line 229 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), enums::TOperation::PLUS, (yyvsp[0].Expression) ); }
 #line 1721 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 35:
-#line 232 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CLogOpExp( (yyvsp[-2].Expression), TLogicalOperation::AND, (yyvsp[0].Expression) ); }
+  case 33:
+#line 231 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), enums::TOperation::Minus, (yyvsp[0].Expression) ); }
 #line 1727 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 36:
-#line 234 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CLogOpExp( (yyvsp[-2].Expression), TLogicalOperation::OR, (yyvsp[0].Expression) ); }
+  case 34:
+#line 233 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), enums::TOperation::TIMES, (yyvsp[0].Expression) ); }
 #line 1733 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 37:
-#line 236 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CCompareExpression( (yyvsp[-2].Expression), CCompareExpression::LESS, (yyvsp[0].Expression) ); }
+  case 35:
+#line 235 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CLogOpExp( (yyvsp[-2].Expression), enums::TLogicalOperation::AND, (yyvsp[0].Expression) ); }
 #line 1739 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 38:
-#line 238 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CCompareExpression( (yyvsp[-2].Expression), CCompareExpression::GREATER, (yyvsp[0].Expression) ); }
+  case 36:
+#line 237 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CLogOpExp( (yyvsp[-2].Expression), enums::TLogicalOperation::OR, (yyvsp[0].Expression) ); }
 #line 1745 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 39:
-#line 240 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), COpExpression::TOperation::MOD, (yyvsp[0].Expression) ); }
+  case 37:
+#line 239 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CCompareExpression( (yyvsp[-2].Expression), enums::TCompareOperation::LESS, (yyvsp[0].Expression) ); }
 #line 1751 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 40:
-#line 242 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CByIndexExpression((CArrayExpression*) (yyvsp[-3].Expression), (yyvsp[-1].Expression)); }
+  case 38:
+#line 241 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CCompareExpression( (yyvsp[-2].Expression), enums::TCompareOperation::GREATER, (yyvsp[0].Expression) ); }
 #line 1757 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 41:
-#line 244 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CGetLengthExp( (CArrayExpression*) (yyvsp[-2].Expression) ); }
+  case 39:
+#line 243 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new COpExpression( (yyvsp[-2].Expression), enums::TOperation::MOD, (yyvsp[0].Expression) ); }
 #line 1763 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 42:
-#line 246 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CCallMethodExp( (CClass*) (yyvsp[-5].Expression), (yyvsp[-3].string), (CExpList*) (yyvsp[-1].ExpressionList)) ; }
+  case 40:
+#line 245 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CByIndexExpression((CArrayExpression*) (yyvsp[-3].Expression), (yyvsp[-1].Expression)); }
 #line 1769 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 43:
-#line 248 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CNumExpresion((yyvsp[0].string)); }
+  case 41:
+#line 247 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CGetLengthExp( (CArrayExpression*) (yyvsp[-2].Expression) ); }
 #line 1775 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 44:
-#line 250 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CLogExp(true); }
+  case 42:
+#line 249 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CCallMethodExp( (CClass*) (yyvsp[-5].Expression), (yyvsp[-3].Idenifier), (CExpList*) (yyvsp[-1].ExpressionList)) ; }
 #line 1781 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 45:
-#line 252 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CLogExp(false); }
+  case 43:
+#line 251 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CNumExpresion((yyvsp[0].string)); }
 #line 1787 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 46:
-#line 254 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CIdExp((yyvsp[0].string)); }
+  case 44:
+#line 253 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CLogExp(true); }
 #line 1793 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 47:
-#line 256 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CThisExpression(); }
+  case 45:
+#line 255 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CLogExp(false); }
 #line 1799 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 48:
-#line 258 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = CArrayExpression((yyvsp[-1].Expression)); }
+  case 46:
+#line 257 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = (yyvsp[0].Idenifier); }
 #line 1805 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 49:
-#line 260 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = new CIdExp((yyvsp[-2].string)); }
+  case 47:
+#line 259 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CThisExpression(); }
 #line 1811 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 50:
-#line 262 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = CNegativeExpression((yyvsp[0].Expression)); }
+  case 48:
+#line 261 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = CArrayExpression((yyvsp[-1].Expression)); }
 #line 1817 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 51:
-#line 264 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.Expression) = (yyvsp[-1].Expression) }
+  case 49:
+#line 263 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = new CIdExp((yyvsp[-2].Idenifier)); }
 #line 1823 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 52:
-#line 268 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.ExpressionList) = nullptr; }
+  case 50:
+#line 265 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = CNegativeExpression((yyvsp[0].Expression)); }
 #line 1829 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
-  case 53:
-#line 270 "src/grammatic.bizon" /* yacc.c:1646  */
-    { (yyval.ExpressionList) = new CExpList((yyvsp[-2].Expression), (CExpList*) (yyvsp[0].ExpressionList)); }
+  case 51:
+#line 267 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Expression) = (yyvsp[-1].Expression) }
 #line 1835 "src/bison.cpp" /* yacc.c:1646  */
     break;
 
+  case 52:
+#line 271 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.ExpressionList) = nullptr; }
+#line 1841 "src/bison.cpp" /* yacc.c:1646  */
+    break;
 
-#line 1839 "src/bison.cpp" /* yacc.c:1646  */
+  case 53:
+#line 273 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.ExpressionList) = new CExpList((yyvsp[-2].Expression), (CExpList*) (yyvsp[0].ExpressionList)); }
+#line 1847 "src/bison.cpp" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 277 "src/grammatic.bizon" /* yacc.c:1646  */
+    { (yyval.Idenifier) = new CIdExp( (yyvsp[0].string) ); }
+#line 1853 "src/bison.cpp" /* yacc.c:1646  */
+    break;
+
+
+#line 1857 "src/bison.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2070,4 +2088,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 272 "src/grammatic.bizon" /* yacc.c:1906  */
+#line 280 "src/grammatic.bizon" /* yacc.c:1906  */

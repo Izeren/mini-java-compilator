@@ -4,7 +4,6 @@
 #include "../Utils.h"
 #include <map>
 
-using namespace enums;
 
 class IExpression : public INode {};
 
@@ -64,7 +63,7 @@ public:
 
 	std::unique_ptr<IExpression> leftOperand;
 	std::unique_ptr<IExpression> rightOperand;
-	TOperation operation;
+	enums::TOperation operation;
 };
 
 //CLogExp:
@@ -90,12 +89,12 @@ public:
 	CLogOpExp(
 		IExpression* leftOperand,
 		IExpression* rightOperand,
-		TLogicalOperation operation = enums::TLogicalOperation::AND
+		enums::TLogicalOperation operation = enums::TLogicalOperation::AND
 	);
 
 	std::unique_ptr<IExpression> leftOperand;
 	std::unique_ptr<IExpression> rightOperand;
-	TLogicalOperation operation;
+	enums::TLogicalOperation operation;
 };
 
 //CCompExp:
@@ -111,12 +110,12 @@ public:
 	CCompExp(
 		IExpression* leftOperand,
 		IExpression* rightOperand,
-		TCompareOperation operation = enums::TCompareOperation::GREATER
+		enums::TCompareOperation operation = enums::TCompareOperation::GREATER
 	);
 
 	std::unique_ptr<IExpression> leftOperand;
 	std::unique_ptr<IExpression> rightOperand;
-	TCompareOperation operation;
+	enums::TCompareOperation operation;
 };
 
 

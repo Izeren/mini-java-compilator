@@ -313,7 +313,11 @@ void CPrintVisitor::Visit(CMethod &stm) {
 	answers.PushBack(operationDescription, operationId);
 
 	AddChildrenAnswers(answers);
-	AddLabel("Method");
+	if (stm.isPublic) {
+		AddLabel("PublicMethod");
+	} else {
+		AddLabel("PrivateMethod")
+	}
 	++lastVisited;
 }
 

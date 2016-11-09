@@ -247,6 +247,11 @@ void CConvertVisitor::Visit(CArgumentList &stm) {
 }
 
 void CConvertVisitor::Visit(CMethod &stm) {
+	if (stm.isPublic) {
+		this->code += "public";
+	} else {
+		this->code += "private";
+	}
 	stm.returnType->Accept(*this);
 	this->code += stm.name;
 	this->code += "(";

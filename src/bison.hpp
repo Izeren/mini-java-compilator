@@ -116,6 +116,7 @@ union YYSTYPE
 
 	CProgram* Program; // Указатель на класс-программу
 	CClass* Class; // Указатель класс
+	CClassList* ClassDeclarationList;
 	IStatement* Statement;
 	IExpression* Expression;
 	CType* Type;
@@ -129,8 +130,9 @@ union YYSTYPE
 	CMainClass* MainClass;
 	CExpList* ExpressionList;
 	char *string;
+	CIdExp* Idenifier;
 
-#line 134 "src/bison.hpp" /* yacc.c:1909  */
+#line 136 "src/bison.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

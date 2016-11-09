@@ -79,11 +79,13 @@ void CArgumentList::Accept(IVisitor &visitor) {
 //CMethod:
 //-------------------------------------------------------------------------------------------------
 
-CMethod::CMethod(CType* _returnType, const std::string &_name, CArgumentList* _arguments, CCompoundStm* _statements) {
+CMethod::CMethod(CType* _returnType, CIdExp* _name, CArgumentList* _arguments, CCompoundStm* _statements, bool _isPublic)
+{
 	returnType = std::unique_ptr<CType>(_returnType);
-	name = _name;
+	name = std::unique_ptr<CIdExp>(_name);
 	arguments = std::unique_ptr<CArgumentList>(_arguments);
 	statements = std::unique_ptr<CCompoundStm>(_statements);
+	isPublic = _isPublic;
 }
 
 CMethod::CMethod() : CMethod(NULL, NULL) {};
