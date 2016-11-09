@@ -257,6 +257,22 @@ void CConvertVisitor::Visit(CMainMethod &stm) {
 	this->code += "}\n\n";
 }
 
+void CConvertVisitor::Visit(CMainClass &stm) {
+	stm.id->Accept(*this);
+	this->code += " {\n";
+	if (stm.mainMethod) {
+		stm.mainMethod->Accept(*this);
+	}
+	this->code += "}\n\n";
+}
+
+void CConvertVisitor::Visit(CProgram &stm) {
+	stm.mainClass->Accept(*this);
+	if (stm.classList) {
+		stm.classList->Accept(*this);
+	}
+}
+
 
 std::string CConvertVisitor::GetResult() {
 	return code;

@@ -59,6 +59,6 @@ public:
 	virtual void Visit(CClass &stm) = 0;
 	virtual void Visit(CClassList &stm) = 0;
 	virtual void Visit(CMainMethod &stm) = 0;
-	//virtual void Visit(CMainClass &stm) = 0;
-	//virtual void Visit(CProgram &stm) = 0;
+	virtual void Visit(CMainClass &stm) = 0;
+	virtual void Visit(CProgram &stm) = 0;
 };

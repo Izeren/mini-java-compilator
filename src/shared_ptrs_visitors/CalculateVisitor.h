@@ -39,8 +39,8 @@ public:
 	void Visit(CClass &stm) override;
 	void Visit(CClassList &stm) override;
 	void Visit(CMainMethod &stm) override;
-	//void Visit(CMainClass &stm) override;
-	//void Visit(CProgram &stm) override;
+	void Visit(CMainClass &stm) override;
+	void Visit(CProgram &stm) override;
 
 	int GetResult();
 

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Expressions.h"
 #include <unordered_map>
 

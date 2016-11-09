@@ -280,7 +280,21 @@ void CPrintVisitor::Visit(CMainMethod &stm) {
 	++lastVisited;
 }
 
+void CPrintVisitor::Visit(CMainClass &stm) {
+	std::vector<INode*> children = { stm.id.get(), stm.mainMethod.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("MainClass");
+	++lastVisited;
+}
 
+void CPrintVisitor::Visit(CProgram &stm) {
+	std::vector<INode*> children = { stm.mainClass.get(), stm.classList.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("Program");
+	++lastVisited;
+}
 
 std::string CPrintVisitor::GetResult() {
 	return description;

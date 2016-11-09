@@ -457,23 +457,23 @@ void CCalculateVisitor::Visit(CMainMethod &stm) {
 	stm.statements->Accept(*this);
 }
 
-//void CCalculateVisitor::Visit(CMainClass &stm) {
-//	if (wasError) {
-//		return;
-//	}
-//	stm.id->Accept(*this);
-//	stm.mainMethod->Accept(*this);
-//}
-//
-//void CCalculateVisitor::Visit(CProgram &stm) {
-//	if (wasError) {
-//		return;
-//	}
-//	stm.mainClass->Accept(*this);
-//	if (stm.classList) {
-//		stm.classList->Accept(*this);
-//	}
-//}
+void CCalculateVisitor::Visit(CMainClass &stm) {
+	if (wasError) {
+		return;
+	}
+	stm.id->Accept(*this);
+	stm.mainMethod->Accept(*this);
+}
+
+void CCalculateVisitor::Visit(CProgram &stm) {
+	if (wasError) {
+		return;
+	}
+	stm.mainClass->Accept(*this);
+	if (stm.classList) {
+		stm.classList->Accept(*this);
+	}
+}
 
 
 int CCalculateVisitor::GetResult() {
