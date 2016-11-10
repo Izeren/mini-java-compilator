@@ -86,11 +86,12 @@ public:
 
 class CMethod : public IWrapper {
 public:
-	CMethod(CType* _returnType, CIdExp* _name, CArgumentList* _arguments = NULL, CFieldList *_vars = NULL, CCompoundStm* _statements = NULL, bool _isPublic = true);
+	CMethod(CType* _returnType, IExpression* _returnExp, CIdExp* _name, CArgumentList* _arguments = NULL, CFieldList *_vars = NULL, CCompoundStm* _statements = NULL, bool _isPublic = true);
 	CMethod();
 	void Accept(IVisitor &visitor) override;
 
 	std::unique_ptr<CType> returnType;
+	std::unique_ptr<IExpression> returnExp;
 	std::unique_ptr<CIdExp> name;
 	std::unique_ptr<CArgumentList> arguments;
 	std::unique_ptr<CCompoundStm> statements;

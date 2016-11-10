@@ -312,7 +312,7 @@ void CPrintVisitor::Visit(CArgumentList &stm) {
 }
 
 void CPrintVisitor::Visit(CMethod &stm) {
-	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.vars.get(), stm.statements.get() };
+	std::vector<INode*> children = { stm.returnType.get(), stm.returnExp.get(), stm.arguments.get(), stm.vars.get(), stm.statements.get() };
 	ChildrenAnswers answers = VisitChildren(children);
 
 	AddChildrenAnswers(answers);

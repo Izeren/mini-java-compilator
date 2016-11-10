@@ -171,6 +171,7 @@ void CConvertVisitor::Visit(CAssignSubscriptStm &stm) {
 	if (stm.valueExpression) {
 		stm.valueExpression->Accept(*this);
 	}
+	this->code += ";\n";
 }
 
 void CConvertVisitor::Visit(CCompoundStm &stm) {
@@ -268,7 +269,6 @@ void CConvertVisitor::Visit(CArgument &stm) {
 	if (stm.id) {
 		stm.id->Accept(*this);
 	}
-	this->code += ",\n";
 }
 
 void CConvertVisitor::Visit(CArgumentList &stm) {
@@ -276,6 +276,7 @@ void CConvertVisitor::Visit(CArgumentList &stm) {
 		stm.argument->Accept(*this);
 	}
 	if (stm.nextArguments) {
+		this->code += ", ";
 		stm.nextArguments->Accept(*this);
 	}
 }
@@ -298,6 +299,11 @@ void CConvertVisitor::Visit(CMethod &stm) {
 	}
 	if (stm.statements) {
 		stm.statements->Accept(*this);
+	}
+	if (stm.returnExp) {
+		this->code += "return ";
+		stm.returnExp->Accept(*this);
+		this->code += ";\n";
 	}
 	this->code += "}\n\n";
 }

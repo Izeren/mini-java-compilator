@@ -35,6 +35,7 @@ void CIdPtrExp::Accept(IVisitor &visitor) {
 //-------------------------------------------------------------------------------------------------
 
 CNumExp::CNumExp(const char* number) {
+	std::cout << "test->" << number << "<-test\n";
 	this->number = atoi(number);
 }
 

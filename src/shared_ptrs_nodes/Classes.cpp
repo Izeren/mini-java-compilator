@@ -91,9 +91,10 @@ void CArgumentList::Accept(IVisitor &visitor) {
 //CMethod:
 //-------------------------------------------------------------------------------------------------
 
-CMethod::CMethod(CType* _returnType, CIdExp* _name, CArgumentList* _arguments, CFieldList* _vars, CCompoundStm* _statements, bool _isPublic)
+CMethod::CMethod(CType* _returnType, IExpression* _returnExp, CIdExp* _name, CArgumentList* _arguments, CFieldList* _vars, CCompoundStm* _statements, bool _isPublic)
 {
 	returnType = std::unique_ptr<CType>(_returnType);
+	returnExp = std::unique_ptr<IExpression>(_returnExp);
 	name = std::unique_ptr<CIdExp>(_name);
 	arguments = std::unique_ptr<CArgumentList>(_arguments);
 	statements = std::unique_ptr<CCompoundStm>(_statements);
@@ -101,7 +102,7 @@ CMethod::CMethod(CType* _returnType, CIdExp* _name, CArgumentList* _arguments, C
 	isPublic = _isPublic;
 }
 
-CMethod::CMethod() : CMethod(NULL, NULL) {};
+CMethod::CMethod() : CMethod(NULL, NULL, NULL) {};
 
 void CMethod::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);

@@ -983,152 +983,153 @@ case 16:
 YY_RULE_SETUP
 #line 92 "src/temp_grammatic.flex"
 { 
+	yylval.string = yytext;
 	return NUM;
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 96 "src/temp_grammatic.flex"
+#line 97 "src/temp_grammatic.flex"
 { 
 	return IF;
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 99 "src/temp_grammatic.flex"
+#line 100 "src/temp_grammatic.flex"
 { 
 	return ELSE;
 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 102 "src/temp_grammatic.flex"
+#line 103 "src/temp_grammatic.flex"
 { 
 	return WHILE; 
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 106 "src/temp_grammatic.flex"
+#line 107 "src/temp_grammatic.flex"
 {
 	return LENGTH;
 }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 110 "src/temp_grammatic.flex"
+#line 111 "src/temp_grammatic.flex"
 { 
 	return BOOLEAN;
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 113 "src/temp_grammatic.flex"
+#line 114 "src/temp_grammatic.flex"
 { 
 	return TRUE;
 }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 116 "src/temp_grammatic.flex"
+#line 117 "src/temp_grammatic.flex"
 { 
 	return FALSE;
 }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 119 "src/temp_grammatic.flex"
+#line 120 "src/temp_grammatic.flex"
 {
 	return LESS;
 }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 122 "src/temp_grammatic.flex"
+#line 123 "src/temp_grammatic.flex"
 {
 	return GREATER;
 }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 125 "src/temp_grammatic.flex"
+#line 126 "src/temp_grammatic.flex"
 {
 	return NOT;
 }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 128 "src/temp_grammatic.flex"
+#line 129 "src/temp_grammatic.flex"
 {
 	return ASSIGN;
 }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 131 "src/temp_grammatic.flex"
+#line 132 "src/temp_grammatic.flex"
 { 
 	return AND;
 }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 134 "src/temp_grammatic.flex"
+#line 135 "src/temp_grammatic.flex"
 { 
 	return OR;
 }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 138 "src/temp_grammatic.flex"
+#line 139 "src/temp_grammatic.flex"
 { 
 	return PLUS;
 }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 141 "src/temp_grammatic.flex"
+#line 142 "src/temp_grammatic.flex"
 { 
 	return MINUS;
 }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 144 "src/temp_grammatic.flex"
+#line 145 "src/temp_grammatic.flex"
 { 
 	return TIMES;
 }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 148 "src/temp_grammatic.flex"
+#line 149 "src/temp_grammatic.flex"
 { 
 	return LPAREN;
 }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 151 "src/temp_grammatic.flex"
+#line 152 "src/temp_grammatic.flex"
 { 
 	return RPAREN;
 }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 154 "src/temp_grammatic.flex"
+#line 155 "src/temp_grammatic.flex"
 { 
 	return LBRACKET;
 }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 157 "src/temp_grammatic.flex"
+#line 158 "src/temp_grammatic.flex"
 { 
 	return RBRACKET;
 }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 160 "src/temp_grammatic.flex"
+#line 161 "src/temp_grammatic.flex"
 { 
 	print_debug("{");
 	return LBRACE;
@@ -1136,7 +1137,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 164 "src/temp_grammatic.flex"
+#line 165 "src/temp_grammatic.flex"
 { 
 	print_debug("}");
 	return RBRACE;
@@ -1144,35 +1145,35 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 168 "src/temp_grammatic.flex"
+#line 169 "src/temp_grammatic.flex"
 { 
 	return COMMA;
 }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 171 "src/temp_grammatic.flex"
+#line 172 "src/temp_grammatic.flex"
 { 
 	return DOT; 
 }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 174 "src/temp_grammatic.flex"
+#line 175 "src/temp_grammatic.flex"
 { 
 	return SEMI; 
 }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 177 "src/temp_grammatic.flex"
+#line 178 "src/temp_grammatic.flex"
 {
 	return MOD;
 }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 180 "src/temp_grammatic.flex"
+#line 181 "src/temp_grammatic.flex"
 { 
 	yylval.string = yytext;
 	return ID;
@@ -1180,33 +1181,33 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 184 "src/temp_grammatic.flex"
+#line 185 "src/temp_grammatic.flex"
 {}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 186 "src/temp_grammatic.flex"
+#line 187 "src/temp_grammatic.flex"
 {}
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 188 "src/temp_grammatic.flex"
+#line 189 "src/temp_grammatic.flex"
 {}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 190 "src/temp_grammatic.flex"
+#line 191 "src/temp_grammatic.flex"
 {
 	std::cerr<<"ERROR IN FLEX:"<<yytext[0]<<std::endl;
   }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 193 "src/temp_grammatic.flex"
+#line 194 "src/temp_grammatic.flex"
 ECHO;
 	YY_BREAK
-#line 1210 "src/lex.cpp"
+#line 1211 "src/lex.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2207,7 +2208,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 193 "src/temp_grammatic.flex"
+#line 194 "src/temp_grammatic.flex"
 
 
 

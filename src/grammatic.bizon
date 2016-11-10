@@ -83,14 +83,14 @@ int yyerror ( CProgram **program, const char * );
 
 %token ASSIGN
 
-%right ASSIGN
-%left OR
-%left AND
-%left LESS
-%left MINUS PLUS
-%left TIMES MOD
+%left LBRACKET DOT LPAREN
 %right NOT
-%left DOT LBRACKET
+%left TIMES MOD
+%left MINUS PLUS
+%left LESS
+%left AND
+%left OR
+%right ASSIGN
 
 // Особые (типизированные) токены
 %type <Program> Program
@@ -114,8 +114,6 @@ int yyerror ( CProgram **program, const char * );
 %%
 
 Program:
-	MainClass { *program = $$ = new CProgram( $1, 0 ); }
-	|
 	MainClass ClassDeclarationList { *program = $$ = new CProgram( $1, $2 ); }
 	;
 
@@ -164,7 +162,7 @@ MethodDeclaration:
 		RETURN Expression SEMI
 	RBRACE
 	//true means public
-	{ $$ = new CMethod( $2, $3, $5, (CFieldList *)$8,(CCompoundStm *)$9, true ); }
+	{ $$ = new CMethod( $2, $11, $3, $5, (CFieldList *)$8,(CCompoundStm *)$9, true ); }
 	|
 	//false means private
 	PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE 
@@ -172,7 +170,7 @@ MethodDeclaration:
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
-	{ $$ = new CMethod( $2, $3, $5, (CFieldList *)$8, (CCompoundStm *)$9, false ); }
+	{ $$ = new CMethod( $2, $11, $3, $5, (CFieldList *)$8, (CCompoundStm *)$9, false ); }
 	;
 
 MethodDeclarationList:
@@ -255,6 +253,8 @@ Expression:
 	Expression DOT LENGTH { $$ = new CGetLengthExp( (CArrayExpression*) $1 ); }
 	|
 	Expression DOT Idenifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( (CClass*) $1, $3, (CExpList*) $5) ; }
+	|
+	MINUS NUM { $$ = new CNumExp( (std::string("-") + std::string($2)).c_str() ); }
 	|
 	NUM { $$ = new CNumExp($1); }
 	|

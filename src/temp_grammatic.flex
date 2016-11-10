@@ -90,6 +90,7 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	return STRING;
 }
 {IntegerLiteral} { 
+	yylval.string = yytext;
 	return NUM;
 }
 
