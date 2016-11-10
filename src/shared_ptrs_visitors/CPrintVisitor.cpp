@@ -166,13 +166,14 @@ void CPrintVisitor::Visit(CCallMethodExp &exp)
 	++lastVisited;	
 }
 
-void CPrintVisitor::Visit(CExpList &exp)
-{
-	std::vector<INode*> children = { exp.exp.get(), exp.expList.get() };
-	ChildrenAnswers answers = VisitChildren(children);
-	AddChildrenAnswers(answers);
+void CPrintVisitor::Visit(CExpList &stm) {
+	std::vector<INode*> children;
+	for (int index = 0; index < stm.exps.size(); ++index) {
+		children.push_back(stm.exps[index].get());
+	}
+	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("ExpList");
-	++lastVisited;	
+	++lastVisited;
 }
 
 void CPrintVisitor::Visit(CNegativeExpression &exp)
@@ -308,7 +309,10 @@ void CPrintVisitor::Visit(CArgument &stm) {
 }
 
 void CPrintVisitor::Visit(CArgumentList &stm) {
-	std::vector<INode*> children = { stm.argument.get(), stm.nextArguments.get() };
+	std::vector<INode*> children;
+	for (int index = 0; index < stm.arguments.size(); ++index) {
+		children.push_back(stm.arguments[index].get());
+	}
 	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("ArgumentList");
 	++lastVisited;
@@ -328,7 +332,10 @@ void CPrintVisitor::Visit(CMethod &stm) {
 }
 
 void CPrintVisitor::Visit(CMethodList &stm) {
-	std::vector<INode*> children = { stm.method.get(), stm.nextMethods.get() };
+	std::vector<INode*> children;
+	for (int index = 0; index < stm.methods.size(); ++index) {
+		children.push_back(stm.methods[index].get());
+	}
 	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("MethodList");
 	++lastVisited;
@@ -343,7 +350,10 @@ void CPrintVisitor::Visit(CClass &stm) {
 }
 
 void CPrintVisitor::Visit(CClassList &stm) {
-	std::vector<INode*> children = { stm.cclass.get(), stm.nextClasses.get() };
+	std::vector<INode*> children;
+	for (int index = 0; index < stm.classes.size(); ++index) {
+		children.push_back(stm.classes[index].get());
+	}
 	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("ClassList");
 	++lastVisited;
