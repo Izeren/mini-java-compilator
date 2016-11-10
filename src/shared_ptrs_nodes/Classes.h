@@ -72,12 +72,12 @@ public:
 
 class CArgumentList : public IWrapper {
 public:
-	CArgumentList(CArgument* _argument, CArgumentList* _nextArguments);
-	CArgumentList();
+    CArgumentList();
+    CArgumentList(CArgument* _argument);
+	void Add(CArgument* _argument);
 	void Accept(IVisitor &visitor) override;
 
-	std::unique_ptr<CArgument> argument;
-	std::unique_ptr<CArgumentList> nextArguments;
+    std::vector<std::unique_ptr<CArgument> > arguments;
 };
 
 
@@ -105,12 +105,11 @@ public:
 
 class CMethodList : public IWrapper {
 public:
-	CMethodList(CMethod* _method, CMethodList* _nextMethods = NULL);
-	CMethodList();
+    CMethodList();
+	void Add(CMethod* _method);
 	void Accept(IVisitor &visitor) override;
 
-	std::unique_ptr<CMethod> method;
-	std::unique_ptr<CMethodList> nextMethods;
+    std::vector<std::unique_ptr<CMethod> > methods;
 };
 
 
@@ -135,12 +134,11 @@ public:
 
 class CClassList : public IWrapper {
 public:
-	CClassList(CClass* _cclass, CClassList* _nextClasses = NULL);
-	CClassList();
+    CClassList();
+	void Add(CClass* _cclass);
 	void Accept(IVisitor &visitor) override;
 
-	std::unique_ptr<CClass> cclass;
-	std::unique_ptr<CClassList> nextClasses;
+    std::vector<std::unique_ptr<CClass> > classes;
 };
 
 

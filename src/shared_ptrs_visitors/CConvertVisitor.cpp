@@ -104,10 +104,19 @@ void CConvertVisitor::Visit(CCallMethodExp &exp) {
 	this->code += ")";
 }
 
-void CConvertVisitor::Visit(CExpList &exp) {
-	exp.exp->Accept(*this);
-	if (exp.expList) {
-		exp.expList->Accept(*this);
+void CConvertVisitor::Visit(CExpList &stm) {
+    bool is_first_exp = true;
+	if (stm.exps.size()) {
+		for (int index = 0; index < stm.exps.size(); ++index) {
+			if (stm.exps[index].get()) {
+                (if is_first_exp) {
+                    is_first_exp = false;
+                } else {
+                    this->code += ", ";
+                }
+				stm.exps[index].get()->Accept(*this);
+			}
+		}
 	}
 }
 
@@ -273,12 +282,18 @@ void CConvertVisitor::Visit(CArgument &stm) {
 }
 
 void CConvertVisitor::Visit(CArgumentList &stm) {
-	if (stm.argument) {
-		stm.argument->Accept(*this);
-	}
-	if (stm.nextArguments) {
-		this->code += ", ";
-		stm.nextArguments->Accept(*this);
+    bool is_first_argument = true;
+	if (stm.arguments.size()) {
+		for (int index = 0; index < stm.arguments.size(); ++index) {
+			if (stm.arguments[index].get()) {
+                (if is_first_argument) {
+                    is_first_argument = false;
+                } else {
+                    this->code += ", ";
+                }
+				stm.arguments[index].get()->Accept(*this);
+			}
+		}
 	}
 }
 
@@ -310,11 +325,12 @@ void CConvertVisitor::Visit(CMethod &stm) {
 }
 
 void CConvertVisitor::Visit(CMethodList &stm) {
-	if (stm.method) {
-		stm.method->Accept(*this);
-	}
-	if (stm.nextMethods) {
-		stm.nextMethods->Accept(*this);
+	if (stm.methods.size()) {
+		for (int index = 0; index < stm.methods.size(); ++index) {
+			if (stm.methods[index].get()) {
+				stm.methods[index].get()->Accept(*this);
+			}
+		}
 	}
 }
 
@@ -338,11 +354,12 @@ void CConvertVisitor::Visit(CClass &stm) {
 }
 
 void CConvertVisitor::Visit(CClassList &stm) {
-	if (stm.cclass) {
-		stm.cclass->Accept(*this);
-	}
-	if (stm.nextClasses) {
-		stm.nextClasses->Accept(*this);
+	if (stm.classes.size()) {
+		for (int index = 0; index < stm.classes.size(); ++index) {
+			if (stm.classes[index].get()) {
+				stm.classes[index].get()->Accept(*this);
+			}
+		}
 	}
 }
 

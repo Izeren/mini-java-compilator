@@ -147,12 +147,13 @@ public:
 //-------------------------------------------------------------------------------------------------
 
 class CExpList : public IExpression {
-
 public:
-	CExpList(IExpression* _exp, CExpList* _expList);
-	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<IExpression> exp;
-	std::unique_ptr<CExpList> expList;	
+    CExpList();
+    CExpList(IExpression* _exp);
+	void Add(IExpression* _exp);
+	void Accept(IVisitor &visitor) override;
+
+    std::vector<std::unique_ptr<IExpression> > exps;
 };
 
 //CCallMethodExp:

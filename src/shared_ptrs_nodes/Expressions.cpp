@@ -185,16 +185,23 @@ void CCallMethodExp::Accept(IVisitor& visitor)
 //CExpList:
 //-------------------------------------------------------------------------------------------------
 
-CExpList::CExpList(IExpression* _exp, CExpList* _expList)
-{
-	exp = std::unique_ptr<IExpression>(_exp);
-	expList = std::unique_ptr<CExpList>(_expList);
+CExpList::CExpList() {
+	exps = std::vector<std::unique_ptr<IExpression> >();
 }
 
-void CExpList::Accept(IVisitor& visitor)
-{
+CExpList::CExpList(IExpression* _exp) {
+	exps = std::vector<std::unique_ptr<IExpression> >();
+	exps.push_back(std::unique_ptr<IExpression>(_exp));
+}
+
+void CExpList::Add(IExpression* _exp) {
+	exps.push_back(std::unique_ptr<IExpression>(_exp));
+}
+
+void CExpList::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }
+
 //CThisExpression:
 //-------------------------------------------------------------------------------------------------
 CThisExpression::CThisExpression() {
