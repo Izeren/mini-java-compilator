@@ -150,10 +150,10 @@ class CMainMethod : public IWrapper {
 public:
 	void Accept(IVisitor &visitor) override;
 	CMainMethod();
-	CMainMethod(CType* _returnType, CArgumentList* _arguments, CFieldList* _vars, CCompoundStm* _statements);
+	CMainMethod(CType* _returnType, CIdExp* _args, CFieldList* _vars, CCompoundStm* _statements);
 
 	std::unique_ptr<CType> returnType;
-	std::unique_ptr<CArgumentList> arguments;
+	std::unique_ptr<CIdExp> args;
 	std::unique_ptr<CCompoundStm> statements;
 	std::unique_ptr<CFieldList> vars;
 

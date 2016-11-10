@@ -164,9 +164,9 @@ void CMainMethod::Accept(IVisitor &visitor) {
 
 CMainMethod::CMainMethod() {}
 
-CMainMethod::CMainMethod(CType* _returnType, CArgumentList* _arguments, CFieldList* _vars, CCompoundStm* _statements) {
+CMainMethod::CMainMethod(CType* _returnType, CIdExp* _args, CFieldList* _vars, CCompoundStm* _statements) {
 	returnType = std::unique_ptr<CType>(_returnType);
-	arguments = std::unique_ptr<CArgumentList>(_arguments);
+	args = std::unique_ptr<CIdExp>(_args);
 	statements = std::unique_ptr<CCompoundStm>(_statements);
 	vars = std::unique_ptr<CFieldList>(_vars);
 

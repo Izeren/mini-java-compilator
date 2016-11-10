@@ -73,22 +73,34 @@ void CConvertVisitor::Visit(CUnarMinusExp &exp) {
 }
 
 void CConvertVisitor::Visit(CGetLengthExp &exp) {
-	exp.array->Accept(*this);
+	if (exp.array) {
+		exp.array->Accept(*this);
+	}
 	this->code += ".length";
 }
 
 void CConvertVisitor::Visit(CGetFieldExp &exp) {
-	exp.classOwner->Accept(*this);
+	if (exp.classOwner) {
+		exp.classOwner->Accept(*this);
+	}
 	this->code += ".";
-	exp.field->Accept(*this);
+	if (exp.field) {
+		exp.field->Accept(*this);
+	}
 }
 
 void CConvertVisitor::Visit(CCallMethodExp &exp) {
-	exp.classOwner->Accept(*this);
+	if (exp.classOwner) {
+		exp.classOwner->Accept(*this);
+	}
 	this->code += ".";
-	exp.methodName->Accept(*this);
+	if (exp.methodName) {
+		exp.methodName->Accept(*this);
+	}
 	this->code += "(";
-	exp.args->Accept(*this);
+	if (exp.args) {
+		exp.args->Accept(*this);
+	}
 	this->code += ")";
 }
 
@@ -101,13 +113,17 @@ void CConvertVisitor::Visit(CExpList &exp) {
 
 void CConvertVisitor::Visit(CNegativeExpression &exp) {
 	this->code += "!(";
-	exp.expression->Accept(*this);
+	if (exp.expression) {
+		exp.expression->Accept(*this);
+	}
 	this->code += ")";
 }
 
 void CConvertVisitor::Visit(CArrayExpression &exp) {
 	this->code += " new int[";
-	exp.lengthExpression->Accept(*this);
+	if (exp.lengthExpression) {
+		exp.lengthExpression->Accept(*this);
+	}
 	this->code += "]";
 }
 
@@ -117,9 +133,13 @@ void CConvertVisitor::Visit(CThisExpression &exp) {
 
 void CConvertVisitor::Visit(CByIndexExpression &exp)
 {
-	exp.arrayExpression->Accept(*this);
+	if (exp.arrayExpression) {
+		exp.arrayExpression->Accept(*this);
+	}
 	this->code += "[";
-	exp.indexExpression->Accept(*this);
+	if (exp.indexExpression) {
+		exp.indexExpression->Accept(*this);
+	}
 	this->code += "]";
 }
 
@@ -136,6 +156,7 @@ void CConvertVisitor::Visit(CAssignStm &stm) {
 	if (stm.rightExpression) {
 		stm.rightExpression->Accept(*this);
 	}
+	this->code += ";\n";
 }
 
 void CConvertVisitor::Visit(CAssignSubscriptStm &stm) {
@@ -167,7 +188,7 @@ void CConvertVisitor::Visit(CPrintStm &stm) {
 	if (stm.expression) {
 		stm.expression->Accept(*this);
 	}
-	this->code += ")";
+	this->code += ");\n";
 
 }
 
@@ -222,8 +243,12 @@ void CConvertVisitor::Visit(CType &stm) {
 }
 
 void CConvertVisitor::Visit(CField &stm) {
-	stm.type->Accept(*this);
-	stm.id->Accept(*this);
+	if (stm.type) {
+		stm.type->Accept(*this);
+	}
+	if (stm.id) {
+		stm.id->Accept(*this);
+	}
 	this->code += ";\n";
 }
 
@@ -237,9 +262,13 @@ void CConvertVisitor::Visit(CFieldList &stm) {
 }
 
 void CConvertVisitor::Visit(CArgument &stm) {
-	stm.type->Accept(*this);
-	stm.id->Accept(*this);
-	this->code += ";\n";
+	if (stm.type){
+		stm.type->Accept(*this);
+	}
+	if (stm.id) {
+		stm.id->Accept(*this);
+	}
+	this->code += ",\n";
 }
 
 void CConvertVisitor::Visit(CArgumentList &stm) {
@@ -253,9 +282,9 @@ void CConvertVisitor::Visit(CArgumentList &stm) {
 
 void CConvertVisitor::Visit(CMethod &stm) {
 	if (stm.isPublic) {
-		this->code += "public";
+		this->code += "public ";
 	} else {
-		this->code += "private";
+		this->code += "private ";
 	}
 	stm.returnType->Accept(*this);
 	stm.name->Accept(*this);
@@ -283,9 +312,12 @@ void CConvertVisitor::Visit(CMethodList &stm) {
 }
 
 void CConvertVisitor::Visit(CClass &stm) {
-	stm.id->Accept(*this);
+	this->code += "class ";
+	if (stm.id) {
+		stm.id->Accept(*this);
+	}
 	if (stm.parentClass) {
-		this->code += " : ";
+		this->code += " extends ";
 		stm.parentClass->Accept(*this);
 	}
 	this->code += " {\n";
@@ -308,11 +340,13 @@ void CConvertVisitor::Visit(CClassList &stm) {
 }
 
 void CConvertVisitor::Visit(CMainMethod &stm) {
-	stm.returnType->Accept(*this);
-	this->code += "main";
-	this->code += "(";
-	if (stm.arguments) {
-		stm.arguments->Accept(*this);
+	if (stm.returnType) {
+		stm.returnType->Accept(*this);
+	}
+	this->code += "public static void main";
+	this->code += "(String[] ";
+	if (stm.args) {
+		stm.args->Accept(*this);
 	}
 	this->code += ") {\n";
 	if (stm.vars) {
@@ -325,7 +359,10 @@ void CConvertVisitor::Visit(CMainMethod &stm) {
 }
 
 void CConvertVisitor::Visit(CMainClass &stm) {
-	stm.id->Accept(*this);
+	this->code += "class ";
+	if (stm.id) {
+		stm.id->Accept(*this);
+	}
 	this->code += " {\n";
 	if (stm.mainMethod) {
 		stm.mainMethod->Accept(*this);
@@ -334,7 +371,9 @@ void CConvertVisitor::Visit(CMainClass &stm) {
 }
 
 void CConvertVisitor::Visit(CProgram &stm) {
-	stm.mainClass->Accept(*this);
+	if (stm.mainClass) {
+		stm.mainClass->Accept(*this);
+	}
 	if (stm.classList) {
 		stm.classList->Accept(*this);
 	}

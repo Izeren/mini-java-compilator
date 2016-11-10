@@ -348,7 +348,7 @@ void CPrintVisitor::Visit(CClassList &stm) {
 
 void CPrintVisitor::Visit(CMainMethod &stm) {
 	std::cout << "Point\n";
-	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.vars.get(), stm.statements.get() };
+	std::vector<INode*> children = { stm.returnType.get(), stm.args.get(), stm.vars.get(), stm.statements.get() };
 	ChildrenAnswers answers = VisitChildren(children);
 	AddChildrenAnswers(answers);
 	AddLabel("MainMethod");

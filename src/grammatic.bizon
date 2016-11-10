@@ -135,7 +135,7 @@ MainMethod:
 		StatementList
 	RBRACE 
 	{	
-		$$ = new CMainMethod( 0, 0, (CFieldList *) $12,(CCompoundStm *)$13 );
+		$$ = new CMainMethod( 0, $9, (CFieldList *) $12,(CCompoundStm *)$13 );
 	}
 	;
 
@@ -208,7 +208,9 @@ Type:
 ArgumentList:
 	%empty { $$ = nullptr; }
 	|
-	Argument ArgumentList { $$ = new CArgumentList( $1, $2 ); }
+	Argument { $$ = new CArgumentList( $1, 0 ); }
+	|
+	Argument COMMA ArgumentList { $$ = new CArgumentList( $1, $3 ); }
 	;
 
 StatementList:

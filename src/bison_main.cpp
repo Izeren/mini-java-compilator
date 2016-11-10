@@ -46,14 +46,15 @@ int main( int argc, char **argv ) {
 			std::cout << "Point 7\n";
 			std::unique_ptr<CProgram> program = std::unique_ptr<CProgram>(cProgram);
 			std::cout << "Point 8\n";
-			CPrintVisitor visitor = CPrintVisitor();
+			// CPrintVisitor visitor = CPrintVisitor();
+			CConvertVisitor visitor = CConvertVisitor();
 			std::cout << "Point 9\n";
 			std::cout << program.get() << "\n";
 			program->Accept(visitor);
 			std::cout << "Point 10\n";
 			std::string result = visitor.GetResult();
 			std::cout << "Point 11\n";
-			std::ofstream out(std::to_string(i) + "_digraph.txt", std::fstream::out);
+			std::ofstream out(std::to_string(i) + "res.java", std::fstream::out);
 			out << result;
 			out.close();
 		}
