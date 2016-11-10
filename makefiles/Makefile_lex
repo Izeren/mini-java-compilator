@@ -14,7 +14,7 @@ flex:
 bison:
 	bison -d -o src/bison.cpp src/grammatic.bizon
 
-$(BUILD_DIR)/bison_main.bin: $(addprefix $(BUILD_DIR)/, bison_main.o flex.o bison.o expressions.o statements.o classes.o)
+$(BUILD_DIR)/bison_main.bin: $(addprefix $(BUILD_DIR)/, bison_main.o flex.o bison.o expressions.o statements.o classes.o print_visitor.o convert_visitor.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
 $(BUILD_DIR)/bison_main.o: $(SRC_DIR)/bison_main.cpp
@@ -33,6 +33,12 @@ $(BUILD_DIR)/statements.o: $(NODES_DIR)/Statements.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 $(BUILD_DIR)/classes.o: $(NODES_DIR)/Classes.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+
+$(BUILD_DIR)/print_visitor.o: $(VISITORS_DIR)/CPrintVisitor.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+
+$(BUILD_DIR)/convert_visitor.o: $(VISITORS_DIR)/CConvertVisitor.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 clean:

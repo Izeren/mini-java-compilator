@@ -3,7 +3,8 @@
 #include "INode.h"
 #include "Statements.h"
 #include "Expressions.h"
-
+#include <string>
+#include <map>
 
 class IWrapper : public INode {};
 
@@ -12,6 +13,7 @@ class IWrapper : public INode {};
 
 class CType : public IWrapper {
 public:
+	static std::map<enums::TPrimitiveType, std::string> typeNames;
 	CType(CIdExp* _name);
 	CType(enums::TPrimitiveType _type);
 	CType();

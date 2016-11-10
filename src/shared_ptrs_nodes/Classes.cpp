@@ -20,6 +20,12 @@ void CType::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }
 
+std::map<enums::TPrimitiveType, std::string> CType::typeNames = {
+	{enums::TPrimitiveType::INT, "int"},
+	{enums::TPrimitiveType::BOOLEAN, "boolean"},
+	{enums::TPrimitiveType::INT_ARRAY, "int[]"}
+};
+
 
 //CField:
 //-------------------------------------------------------------------------------------------------

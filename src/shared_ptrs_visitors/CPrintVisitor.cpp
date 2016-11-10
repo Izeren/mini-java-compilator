@@ -153,7 +153,7 @@ void CPrintVisitor::Visit(CGetFieldExp &exp)
 	++lastVisited;	
 }
 
-void CPrintVisitor::Visit(CGetMethodExp &exp)
+void CPrintVisitor::Visit(CCallMethodExp &exp)
 {
 	std::vector<INode*> children = { exp.classOwner.get(), exp.methodName.get(), exp.args.get() };
 	ChildrenAnswers answers = VisitChildren(children);
@@ -269,10 +269,13 @@ void CPrintVisitor::Visit(CWhileStm &stm) {
 //-------------------------------------------------------------------------------------------------
 
 void CPrintVisitor::Visit(CType &stm) {
-	++lastVisited;
-	this->description = ConstructLabel(stm.name, lastVisited);
-	AddArrow(lastVisited);
-	AddLabel("Type");
+	if (stm.isPrimitive) {
+		AddLabel(CType::typeNames[stm.type]);
+	} else {
+		std::vector<INode*> children = { stm.name.get() };
+		AddChildrenAnswers(VisitChildren(children));
+		AddLabel("Type");
+	}
 	++lastVisited;
 }
 
@@ -308,15 +311,11 @@ void CPrintVisitor::Visit(CMethod &stm) {
 	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.statements.get() };
 	ChildrenAnswers answers = VisitChildren(children);
 
-	int operationId = ++lastVisited;
-	std::string operationDescription = ConstructLabel(stm.name, operationId);
-	answers.PushBack(operationDescription, operationId);
-
 	AddChildrenAnswers(answers);
 	if (stm.isPublic) {
 		AddLabel("PublicMethod");
 	} else {
-		AddLabel("PrivateMethod")
+		AddLabel("PrivateMethod");
 	}
 	++lastVisited;
 }

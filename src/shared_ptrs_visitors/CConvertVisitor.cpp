@@ -79,17 +79,17 @@ void CConvertVisitor::Visit(CGetLengthExp &exp) {
 
 void CConvertVisitor::Visit(CGetFieldExp &exp) {
 	exp.classOwner->Accept(*this);
-	this->code += "."
+	this->code += ".";
 	exp.field->Accept(*this);
 }
 
 void CConvertVisitor::Visit(CCallMethodExp &exp) {
 	exp.classOwner->Accept(*this);
-	this->code += "."
+	this->code += ".";
 	exp.methodName->Accept(*this);
-	this->code += "("
+	this->code += "(";
 	exp.args->Accept(*this);
-	this->code += ")"
+	this->code += ")";
 }
 
 void CConvertVisitor::Visit(CExpList &exp) {
@@ -102,13 +102,13 @@ void CConvertVisitor::Visit(CExpList &exp) {
 void CConvertVisitor::Visit(CNegativeExpression &exp) {
 	this->code += "!(";
 	exp.expression->Accept(*this);
-	this->code += ")"
+	this->code += ")";
 }
 
 void CConvertVisitor::Visit(CArrayExpression &exp) {
 	this->code += " new int[";
 	exp.lengthExpression->Accept(*this);
-	this->code += "]"
+	this->code += "]";
 }
 
 void CConvertVisitor::Visit(CThisExpression &exp) {
@@ -213,7 +213,12 @@ void CConvertVisitor::Visit(CWhileStm &stm) {
 //-------------------------------------------------------------------------------------------------
 
 void CConvertVisitor::Visit(CType &stm) {
-	this->code += stm.name  + " ";
+	if (stm.isPrimitive) {
+		this->code += CType::typeNames[stm.type] + " ";
+	} else {
+		stm.name->Accept(*this);
+		this->code += " ";
+	}
 }
 
 void CConvertVisitor::Visit(CField &stm) {
@@ -253,7 +258,7 @@ void CConvertVisitor::Visit(CMethod &stm) {
 		this->code += "private";
 	}
 	stm.returnType->Accept(*this);
-	this->code += stm.name;
+	stm.name->Accept(*this);
 	this->code += "(";
 	if (stm.arguments) {
 		stm.arguments->Accept(*this);

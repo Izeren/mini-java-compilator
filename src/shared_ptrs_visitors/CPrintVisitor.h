@@ -6,7 +6,7 @@
 #include "../shared_ptrs_nodes/Classes.h"
 
 #include <string>
-
+#include <vector>
 struct ChildrenAnswers {
 	void PushBack(std::string description, int id);
 
