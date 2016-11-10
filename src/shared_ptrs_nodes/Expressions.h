@@ -13,8 +13,7 @@ class IExpression : public INode {};
 class CIdExp : public IExpression {
 public:
 	void Accept(IVisitor &visitor) override;
-	CIdExp();
-	CIdExp(const std::string &name, int *address = 0);
+	CIdExp(char *name, int *address = 0);
 	int *address;
 
 	std::string name;
@@ -39,7 +38,7 @@ public:
 
 class CNumExp : public IExpression {
 public:
-	CNumExp(int number = 0);
+	CNumExp(const char* number = "0");
 	void Accept(IVisitor &visitor) override;
 	int number;
 };

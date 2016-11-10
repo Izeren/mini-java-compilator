@@ -12,7 +12,7 @@ flex:
 	flex --header-file=src/lex.h -o src/lex.cpp src/temp_grammatic.flex
 
 bison:
-	bison -d -o src/bison.cpp src/grammatic.bizon
+	bison -v -W -Wconflicts-rr -d -o src/bison.cpp src/grammatic.bizon
 
 $(BUILD_DIR)/bison_main.bin: $(addprefix $(BUILD_DIR)/, bison_main.o flex.o bison.o expressions.o statements.o classes.o print_visitor.o convert_visitor.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)

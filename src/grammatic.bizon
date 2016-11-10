@@ -6,6 +6,7 @@
     #include "shared_ptrs_nodes/Expressions.h"
 	#include "shared_ptrs_nodes/Statements.h"
 	#include "shared_ptrs_nodes/Classes.h"
+	#include <iostream>
 
        
     #define YYERROR_VERBOSE 1        
@@ -39,7 +40,6 @@ int yyerror ( CProgram **program, const char * );
 	CMainClass* MainClass;
 	CExpList* ExpressionList;
 	char *string;
-	int IntVal;
 	CIdExp* Idenifier;
 }
 
@@ -49,7 +49,7 @@ int yyerror ( CProgram **program, const char * );
 
 %token PRINTLN
 
-%token <string> INT BOOLEAN
+%token INT BOOLEAN
 
 %token VOID INT_ARRAY LENGTH
 
@@ -57,7 +57,7 @@ int yyerror ( CProgram **program, const char * );
 
 %token WHILE IF ELSE
 
-%token <IntVal> NUM
+%token <string> NUM
 
 %token <string> ID
 
@@ -69,7 +69,7 @@ int yyerror ( CProgram **program, const char * );
 
 %token COMMA DOT SEMI
 
-%token COMMENT
+//%token COMMENT
 
 %token AND OR
 
@@ -131,15 +131,16 @@ MainClass:
 MainMethod:
 	PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN
 	LBRACE
+		VarDeclaratitionList
 		StatementList
 	RBRACE 
 	{	
-		$$ = new CMainMethod( 0, 0, (CCompoundStm *)$12 );
+		$$ = new CMainMethod( 0, 0, (CFieldList *) $12,(CCompoundStm *)$13 );
 	}
 	;
 
 ClassDeclarationList:
-	{ $$ = nullptr; }
+	%empty { $$ = nullptr; }
 	|
 	Class ClassDeclarationList { $$ = new CClassList( $1, $2 ); }
 	;
@@ -158,22 +159,24 @@ Class:
 
 MethodDeclaration:
 	PUBLIC Type Idenifier LPAREN ArgumentList RPAREN LBRACE 
+		VarDeclaratitionList
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
 	//true means public
-	{ $$ = new CMethod( $2, $3, $5, (CCompoundStm *)$8, true ); }
+	{ $$ = new CMethod( $2, $3, $5, (CFieldList *)$8,(CCompoundStm *)$9, true ); }
 	|
 	//false means private
 	PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE 
+		VarDeclaratitionList
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
-	{ $$ = new CMethod( $2, $3, $5, (CCompoundStm *)$8, false ); }
+	{ $$ = new CMethod( $2, $3, $5, (CFieldList *)$8, (CCompoundStm *)$9, false ); }
 	;
 
 MethodDeclarationList:
-	{ $$ = nullptr; }
+	%empty { $$ = nullptr; }
 	|
 	MethodDeclaration MethodDeclarationList { $$ = new CMethodList( $1, $2 ); }
 	;
@@ -183,7 +186,7 @@ VarDeclaration:
 	;
 
 VarDeclaratitionList:
-	{ $$ = nullptr; }
+	%empty { $$ = nullptr; }
 	|
 	VarDeclaration VarDeclaratitionList { $$ = new CFieldList( $1, $2 ); }
 	;
@@ -193,7 +196,7 @@ Argument:
 	;
 
 Type:
-	INT LBRACKET RBRACKET { $$ = new CType( enums::TPrimitiveType::INT_ARRAY ); }
+	INT_ARRAY { $$ = new CType( enums::TPrimitiveType::INT_ARRAY ); }
 	|
 	BOOLEAN { $$ = new CType( enums::TPrimitiveType::BOOLEAN ); }
 	|
@@ -203,13 +206,13 @@ Type:
 	;
 
 ArgumentList:
-	{ $$ = nullptr; }
+	%empty { $$ = nullptr; }
 	|
 	Argument ArgumentList { $$ = new CArgumentList( $1, $2 ); }
 	;
 
 StatementList:
-	{$$ = nullptr; }
+	%empty {$$ = nullptr; }
 	|
 	Statement StatementList { $$ = new CCompoundStm($1, $2); }
 	;
@@ -271,7 +274,7 @@ Expression:
 	;
 
 ExpressionList:
-	{ $$ = nullptr; }
+	%empty { $$ = nullptr; }
 	|
 	Expression COMMA ExpressionList { $$ = new CExpList($1, (CExpList*) $3); }
 	;
@@ -287,5 +290,7 @@ int yyerror(std::string s) {
 }
 
 int yyerror(CProgram **program, const char *s) {
+	std::cout << s << "\n";
+	std::cout << "Something went wrong\n";
 	return yyerror(std::string(s));
 }

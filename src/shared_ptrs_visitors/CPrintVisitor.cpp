@@ -15,8 +15,11 @@ CPrintVisitor::CPrintVisitor() {
 ChildrenAnswers CPrintVisitor::VisitChildren(std::vector<INode*> children) {
 	ChildrenAnswers answers = ChildrenAnswers();
 	for (int i = 0; i < children.size(); i++) {
-		children[i]->Accept(*this);
-		answers.PushBack(this->description, lastVisited);
+		if ( children[i] ) {
+			children[i]->Accept(*this);
+			answers.PushBack(this->description, lastVisited);
+			this->description = "";
+		}
 	}
 	return answers;
 }
@@ -40,7 +43,7 @@ void CPrintVisitor::AddChildrenAnswers(ChildrenAnswers answers) {
 }
 
 std::string CPrintVisitor::ConstructLabel(std::string label, int id) {
-	return "\t" + std::to_string(id) + "[label=" + label + "]\n";
+	return "\t" + std::to_string(id) + "[label=\"" + label + "\"]\n";
 }
 
 void CPrintVisitor::AddLabel(std::string label) {
@@ -59,6 +62,7 @@ void CPrintVisitor::AddArrow(int child_id) {
 
 void CPrintVisitor::Visit(CIdExp &exp) {
 	++lastVisited;
+	std::cout << exp.name;
 	this->description = ConstructLabel(exp.name, lastVisited);
 	AddArrow(lastVisited);
 	AddLabel("IdExp");
@@ -308,7 +312,7 @@ void CPrintVisitor::Visit(CArgumentList &stm) {
 }
 
 void CPrintVisitor::Visit(CMethod &stm) {
-	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.statements.get() };
+	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.vars.get(), stm.statements.get() };
 	ChildrenAnswers answers = VisitChildren(children);
 
 	AddChildrenAnswers(answers);
@@ -343,7 +347,8 @@ void CPrintVisitor::Visit(CClassList &stm) {
 }
 
 void CPrintVisitor::Visit(CMainMethod &stm) {
-	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.statements.get() };
+	std::cout << "Point\n";
+	std::vector<INode*> children = { stm.returnType.get(), stm.arguments.get(), stm.vars.get(), stm.statements.get() };
 	ChildrenAnswers answers = VisitChildren(children);
 	AddChildrenAnswers(answers);
 	AddLabel("MainMethod");
@@ -369,5 +374,5 @@ void CPrintVisitor::Visit(CProgram &stm) {
 
 
 std::string CPrintVisitor::GetResult() {
-	return description;
+	return "digraph G{\ngraph[ordering=\"out\"];\n" + description + "}\n";
 }

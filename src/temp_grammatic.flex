@@ -27,6 +27,10 @@ static void updateLocation() {
     printf( "%s", yytext );
 }
 
+void print_debug(const char *text) {
+	//std::cout << text;
+}
+
 #define YY_USER_ACTION updateLocation();
 %}
 
@@ -39,7 +43,8 @@ IntegerLiteral [1-9]{DIGIT}*|0
 
 %%
 "/*"((("*"[^/])?)|[^*])*"*/" { 
-	return COMMENT;
+	print_debug("COMMENT");
+	//return COMMENT;
 }
 "class" {
 	return CLASS;
@@ -153,9 +158,11 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	return RBRACKET;
 }
 "{" { 
+	print_debug("{");
 	return LBRACE;
 }
 "}" { 
+	print_debug("}");
 	return RBRACE;
 }
 "," { 
@@ -171,8 +178,16 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	return MOD;
 }
 {ID} { 
+	yylval.string = yytext;
 	return ID;
 }
+" " {}
 
-. { ; }
+"\t" {}
+
+"\n" {}
+
+. {
+	std::cerr<<"ERROR IN FLEX:"<<yytext[0]<<std::endl;
+  }
 %%

@@ -264,6 +264,9 @@ void CConvertVisitor::Visit(CMethod &stm) {
 		stm.arguments->Accept(*this);
 	}
 	this->code += ") {\n";
+	if (stm.vars) {
+		stm.vars->Accept(*this);
+	}
 	if (stm.statements) {
 		stm.statements->Accept(*this);
 	}
@@ -312,6 +315,9 @@ void CConvertVisitor::Visit(CMainMethod &stm) {
 		stm.arguments->Accept(*this);
 	}
 	this->code += ") {\n";
+	if (stm.vars) {
+		stm.vars->Accept(*this);
+	}
 	if (stm.statements) {
 		stm.statements->Accept(*this);
 	}

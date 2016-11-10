@@ -1,15 +1,15 @@
 #include "Expressions.h"
 #include "Classes.h"
+#include <cstring>
+#include <iostream>
 
 //CIdExp:
 //-------------------------------------------------------------------------------------------------
 
-CIdExp::CIdExp(const std::string &name, int *address) {
-	this->name = name;
+CIdExp::CIdExp(char *name, int *address) {
+	this->name = std::string(name);
 	this->address = address;
 }
-
-CIdExp::CIdExp() : CIdExp(BAD_ID) {}
 
 void CIdExp::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
@@ -34,8 +34,8 @@ void CIdPtrExp::Accept(IVisitor &visitor) {
 //CNumExp:
 //-------------------------------------------------------------------------------------------------
 
-CNumExp::CNumExp(int number) {
-	this->number = number;
+CNumExp::CNumExp(const char* number) {
+	this->number = atoi(number);
 }
 
 void CNumExp::Accept(IVisitor &visitor) {
