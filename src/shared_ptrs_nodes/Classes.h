@@ -73,6 +73,7 @@ public:
 class CArgumentList : public IWrapper {
 public:
     CArgumentList();
+    CArgumentList(CArgument* _argument);
 	void Add(CArgument* _argument);
 	void Accept(IVisitor &visitor) override;
 

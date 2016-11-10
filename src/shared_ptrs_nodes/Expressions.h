@@ -149,6 +149,7 @@ public:
 class CExpList : public IExpression {
 public:
     CExpList();
+    CExpList(IExpression* _exp);
 	void Add(IExpression* _exp);
 	void Accept(IVisitor &visitor) override;
 

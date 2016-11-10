@@ -79,6 +79,11 @@ CArgumentList::CArgumentList() {
 	arguments = std::vector<std::unique_ptr<CArgument> >();
 }
 
+CArgumentList::CArgumentList(CArgument* _argument) {
+	arguments = std::vector<std::unique_ptr<CArgument> >();
+	arguments.push_back(std::unique_ptr<CArgument>(_argument));
+}
+
 void CArgumentList::Add(CArgument* _argument) {
 	arguments.push_back(std::unique_ptr<CArgument>(_argument));
 }
