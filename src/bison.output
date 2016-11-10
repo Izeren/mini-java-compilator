@@ -1,7 +1,3 @@
-State 23 conflicts: 1 shift/reduce
-State 62 conflicts: 1 shift/reduce
-State 63 conflicts: 1 shift/reduce
-State 67 conflicts: 1 shift/reduce
 State 109 conflicts: 1 shift/reduce
 State 134 conflicts: 1 shift/reduce
 State 135 conflicts: 1 shift/reduce
@@ -38,7 +34,7 @@ Grammar
    12 VarDeclaration: Type Idenifier SEMI
 
    13 VarDeclaratitionList: %empty
-   14                     | VarDeclaration VarDeclaratitionList
+   14                     | VarDeclaratitionList VarDeclaration
 
    15 Argument: Type Idenifier
 
@@ -319,24 +315,16 @@ State 16
 
     6 Class: CLASS Idenifier LBRACE . VarDeclaratitionList MethodDeclarationList RBRACE
 
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
     $default  reduce using rule 13 (VarDeclaratitionList)
 
-    VarDeclaration        go to state 23
-    VarDeclaratitionList  go to state 24
-    Type                  go to state 25
-    Idenifier             go to state 26
+    VarDeclaratitionList  go to state 20
 
 
 State 17
 
     3 MainMethod: PUBLIC STATIC . VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
 
-    VOID  shift, and go to state 27
+    VOID  shift, and go to state 21
 
 
 State 18
@@ -350,588 +338,572 @@ State 19
 
     7 Class: CLASS Idenifier EXTENDS Idenifier . LBRACE VarDeclaratitionList MethodDeclarationList RBRACE
 
-    LBRACE  shift, and go to state 28
+    LBRACE  shift, and go to state 22
 
 
 State 20
+
+    6 Class: CLASS Idenifier LBRACE VarDeclaratitionList . MethodDeclarationList RBRACE
+   14 VarDeclaratitionList: VarDeclaratitionList . VarDeclaration
+
+    PUBLIC     shift, and go to state 23
+    PRIVATE    shift, and go to state 24
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
+    ID         shift, and go to state 4
+
+    $default  reduce using rule 10 (MethodDeclarationList)
+
+    MethodDeclaration      go to state 28
+    MethodDeclarationList  go to state 29
+    VarDeclaration         go to state 30
+    Type                   go to state 31
+    Idenifier              go to state 32
+
+
+State 21
+
+    3 MainMethod: PUBLIC STATIC VOID . MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
+
+    MAIN  shift, and go to state 33
+
+
+State 22
+
+    7 Class: CLASS Idenifier EXTENDS Idenifier LBRACE . VarDeclaratitionList MethodDeclarationList RBRACE
+
+    $default  reduce using rule 13 (VarDeclaratitionList)
+
+    VarDeclaratitionList  go to state 34
+
+
+State 23
+
+    8 MethodDeclaration: PUBLIC . Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
+    ID         shift, and go to state 4
+
+    Type       go to state 35
+    Idenifier  go to state 32
+
+
+State 24
+
+    9 MethodDeclaration: PRIVATE . Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
+    ID         shift, and go to state 4
+
+    Type       go to state 36
+    Idenifier  go to state 32
+
+
+State 25
 
    18 Type: INT .
 
     $default  reduce using rule 18 (Type)
 
 
-State 21
+State 26
 
    17 Type: BOOLEAN .
 
     $default  reduce using rule 17 (Type)
 
 
-State 22
+State 27
 
    16 Type: INT_ARRAY .
 
     $default  reduce using rule 16 (Type)
 
 
-State 23
+State 28
 
-   14 VarDeclaratitionList: VarDeclaration . VarDeclaratitionList
+   11 MethodDeclarationList: MethodDeclaration . MethodDeclarationList
 
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
-    ID        [reduce using rule 13 (VarDeclaratitionList)]
-    $default  reduce using rule 13 (VarDeclaratitionList)
-
-    VarDeclaration        go to state 23
-    VarDeclaratitionList  go to state 29
-    Type                  go to state 25
-    Idenifier             go to state 26
-
-
-State 24
-
-    6 Class: CLASS Idenifier LBRACE VarDeclaratitionList . MethodDeclarationList RBRACE
-
-    PUBLIC   shift, and go to state 30
-    PRIVATE  shift, and go to state 31
+    PUBLIC   shift, and go to state 23
+    PRIVATE  shift, and go to state 24
 
     $default  reduce using rule 10 (MethodDeclarationList)
 
-    MethodDeclaration      go to state 32
-    MethodDeclarationList  go to state 33
+    MethodDeclaration      go to state 28
+    MethodDeclarationList  go to state 37
 
 
-State 25
+State 29
+
+    6 Class: CLASS Idenifier LBRACE VarDeclaratitionList MethodDeclarationList . RBRACE
+
+    RBRACE  shift, and go to state 38
+
+
+State 30
+
+   14 VarDeclaratitionList: VarDeclaratitionList VarDeclaration .
+
+    $default  reduce using rule 14 (VarDeclaratitionList)
+
+
+State 31
 
    12 VarDeclaration: Type . Idenifier SEMI
 
     ID  shift, and go to state 4
 
-    Idenifier  go to state 34
+    Idenifier  go to state 39
 
 
-State 26
+State 32
 
    19 Type: Idenifier .
 
     $default  reduce using rule 19 (Type)
 
 
-State 27
-
-    3 MainMethod: PUBLIC STATIC VOID . MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
-
-    MAIN  shift, and go to state 35
-
-
-State 28
-
-    7 Class: CLASS Idenifier EXTENDS Idenifier LBRACE . VarDeclaratitionList MethodDeclarationList RBRACE
-
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
-    $default  reduce using rule 13 (VarDeclaratitionList)
-
-    VarDeclaration        go to state 23
-    VarDeclaratitionList  go to state 36
-    Type                  go to state 25
-    Idenifier             go to state 26
-
-
-State 29
-
-   14 VarDeclaratitionList: VarDeclaration VarDeclaratitionList .
-
-    $default  reduce using rule 14 (VarDeclaratitionList)
-
-
-State 30
-
-    8 MethodDeclaration: PUBLIC . Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
-
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
-    Type       go to state 37
-    Idenifier  go to state 26
-
-
-State 31
-
-    9 MethodDeclaration: PRIVATE . Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
-
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
-    Type       go to state 38
-    Idenifier  go to state 26
-
-
-State 32
-
-   11 MethodDeclarationList: MethodDeclaration . MethodDeclarationList
-
-    PUBLIC   shift, and go to state 30
-    PRIVATE  shift, and go to state 31
-
-    $default  reduce using rule 10 (MethodDeclarationList)
-
-    MethodDeclaration      go to state 32
-    MethodDeclarationList  go to state 39
-
-
 State 33
 
-    6 Class: CLASS Idenifier LBRACE VarDeclaratitionList MethodDeclarationList . RBRACE
+    3 MainMethod: PUBLIC STATIC VOID MAIN . LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
 
-    RBRACE  shift, and go to state 40
+    LPAREN  shift, and go to state 40
 
 
 State 34
 
-   12 VarDeclaration: Type Idenifier . SEMI
-
-    SEMI  shift, and go to state 41
-
-
-State 35
-
-    3 MainMethod: PUBLIC STATIC VOID MAIN . LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
-
-    LPAREN  shift, and go to state 42
-
-
-State 36
-
     7 Class: CLASS Idenifier EXTENDS Idenifier LBRACE VarDeclaratitionList . MethodDeclarationList RBRACE
+   14 VarDeclaratitionList: VarDeclaratitionList . VarDeclaration
 
-    PUBLIC   shift, and go to state 30
-    PRIVATE  shift, and go to state 31
+    PUBLIC     shift, and go to state 23
+    PRIVATE    shift, and go to state 24
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
+    ID         shift, and go to state 4
 
     $default  reduce using rule 10 (MethodDeclarationList)
 
-    MethodDeclaration      go to state 32
-    MethodDeclarationList  go to state 43
+    MethodDeclaration      go to state 28
+    MethodDeclarationList  go to state 41
+    VarDeclaration         go to state 30
+    Type                   go to state 31
+    Idenifier              go to state 32
 
 
-State 37
+State 35
 
     8 MethodDeclaration: PUBLIC Type . Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
 
     ID  shift, and go to state 4
 
-    Idenifier  go to state 44
+    Idenifier  go to state 42
 
 
-State 38
+State 36
 
     9 MethodDeclaration: PRIVATE Type . Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
 
     ID  shift, and go to state 4
 
-    Idenifier  go to state 45
+    Idenifier  go to state 43
 
 
-State 39
+State 37
 
    11 MethodDeclarationList: MethodDeclaration MethodDeclarationList .
 
     $default  reduce using rule 11 (MethodDeclarationList)
 
 
-State 40
+State 38
 
     6 Class: CLASS Idenifier LBRACE VarDeclaratitionList MethodDeclarationList RBRACE .
 
     $default  reduce using rule 6 (Class)
 
 
+State 39
+
+   12 VarDeclaration: Type Idenifier . SEMI
+
+    SEMI  shift, and go to state 44
+
+
+State 40
+
+    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN . STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
+
+    STRING  shift, and go to state 45
+
+
 State 41
+
+    7 Class: CLASS Idenifier EXTENDS Idenifier LBRACE VarDeclaratitionList MethodDeclarationList . RBRACE
+
+    RBRACE  shift, and go to state 46
+
+
+State 42
+
+    8 MethodDeclaration: PUBLIC Type Idenifier . LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+
+    LPAREN  shift, and go to state 47
+
+
+State 43
+
+    9 MethodDeclaration: PRIVATE Type Idenifier . LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+
+    LPAREN  shift, and go to state 48
+
+
+State 44
 
    12 VarDeclaration: Type Idenifier SEMI .
 
     $default  reduce using rule 12 (VarDeclaration)
 
 
-State 42
-
-    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN . STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
-
-    STRING  shift, and go to state 46
-
-
-State 43
-
-    7 Class: CLASS Idenifier EXTENDS Idenifier LBRACE VarDeclaratitionList MethodDeclarationList . RBRACE
-
-    RBRACE  shift, and go to state 47
-
-
-State 44
-
-    8 MethodDeclaration: PUBLIC Type Idenifier . LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
-
-    LPAREN  shift, and go to state 48
-
-
 State 45
-
-    9 MethodDeclaration: PRIVATE Type Idenifier . LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
-
-    LPAREN  shift, and go to state 49
-
-
-State 46
 
     3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING . LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
 
-    LBRACKET  shift, and go to state 50
+    LBRACKET  shift, and go to state 49
 
 
-State 47
+State 46
 
     7 Class: CLASS Idenifier EXTENDS Idenifier LBRACE VarDeclaratitionList MethodDeclarationList RBRACE .
 
     $default  reduce using rule 7 (Class)
 
 
-State 48
+State 47
 
     8 MethodDeclaration: PUBLIC Type Idenifier LPAREN . ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
 
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
     ID         shift, and go to state 4
 
     $default  reduce using rule 20 (ArgumentList)
 
-    Argument      go to state 51
-    Type          go to state 52
+    Argument      go to state 50
+    Type          go to state 51
+    ArgumentList  go to state 52
+    Idenifier     go to state 32
+
+
+State 48
+
+    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN . ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
+    ID         shift, and go to state 4
+
+    $default  reduce using rule 20 (ArgumentList)
+
+    Argument      go to state 50
+    Type          go to state 51
     ArgumentList  go to state 53
-    Idenifier     go to state 26
+    Idenifier     go to state 32
 
 
 State 49
 
-    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN . ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET . RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
 
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
-    $default  reduce using rule 20 (ArgumentList)
-
-    Argument      go to state 51
-    Type          go to state 52
-    ArgumentList  go to state 54
-    Idenifier     go to state 26
+    RBRACKET  shift, and go to state 54
 
 
 State 50
 
-    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET . RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
-
-    RBRACKET  shift, and go to state 55
-
-
-State 51
-
    21 ArgumentList: Argument .
    22             | Argument . COMMA ArgumentList
 
-    COMMA  shift, and go to state 56
+    COMMA  shift, and go to state 55
 
     $default  reduce using rule 21 (ArgumentList)
 
 
-State 52
+State 51
 
    15 Argument: Type . Idenifier
 
     ID  shift, and go to state 4
 
-    Idenifier  go to state 57
+    Idenifier  go to state 56
+
+
+State 52
+
+    8 MethodDeclaration: PUBLIC Type Idenifier LPAREN ArgumentList . RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+
+    RPAREN  shift, and go to state 57
 
 
 State 53
 
-    8 MethodDeclaration: PUBLIC Type Idenifier LPAREN ArgumentList . RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList . RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
 
     RPAREN  shift, and go to state 58
 
 
 State 54
 
-    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList . RPAREN LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
-
-    RPAREN  shift, and go to state 59
-
-
-State 55
-
     3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET . Idenifier RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
 
     ID  shift, and go to state 4
 
-    Idenifier  go to state 60
+    Idenifier  go to state 59
 
 
-State 56
+State 55
 
    22 ArgumentList: Argument COMMA . ArgumentList
 
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
     ID         shift, and go to state 4
 
     $default  reduce using rule 20 (ArgumentList)
 
-    Argument      go to state 51
-    Type          go to state 52
-    ArgumentList  go to state 61
-    Idenifier     go to state 26
+    Argument      go to state 50
+    Type          go to state 51
+    ArgumentList  go to state 60
+    Idenifier     go to state 32
 
 
-State 57
+State 56
 
    15 Argument: Type Idenifier .
 
     $default  reduce using rule 15 (Argument)
 
 
-State 58
+State 57
 
     8 MethodDeclaration: PUBLIC Type Idenifier LPAREN ArgumentList RPAREN . LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+
+    LBRACE  shift, and go to state 61
+
+
+State 58
+
+    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList RPAREN . LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
 
     LBRACE  shift, and go to state 62
 
 
 State 59
 
-    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList RPAREN . LBRACE VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier . RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
 
-    LBRACE  shift, and go to state 63
+    RPAREN  shift, and go to state 63
 
 
 State 60
-
-    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier . RPAREN LBRACE VarDeclaratitionList StatementList RBRACE
-
-    RPAREN  shift, and go to state 64
-
-
-State 61
 
    22 ArgumentList: Argument COMMA ArgumentList .
 
     $default  reduce using rule 22 (ArgumentList)
 
 
-State 62
+State 61
 
     8 MethodDeclaration: PUBLIC Type Idenifier LPAREN ArgumentList RPAREN LBRACE . VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
 
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
-    ID        [reduce using rule 13 (VarDeclaratitionList)]
     $default  reduce using rule 13 (VarDeclaratitionList)
 
-    VarDeclaration        go to state 23
+    VarDeclaratitionList  go to state 64
+
+
+State 62
+
+    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE . VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+
+    $default  reduce using rule 13 (VarDeclaratitionList)
+
     VarDeclaratitionList  go to state 65
-    Type                  go to state 25
-    Idenifier             go to state 26
 
 
 State 63
 
-    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE . VarDeclaratitionList StatementList RETURN Expression SEMI RBRACE
+    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN . LBRACE VarDeclaratitionList StatementList RBRACE
 
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
-    ID        [reduce using rule 13 (VarDeclaratitionList)]
-    $default  reduce using rule 13 (VarDeclaratitionList)
-
-    VarDeclaration        go to state 23
-    VarDeclaratitionList  go to state 66
-    Type                  go to state 25
-    Idenifier             go to state 26
+    LBRACE  shift, and go to state 66
 
 
 State 64
 
-    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN . LBRACE VarDeclaratitionList StatementList RBRACE
+    8 MethodDeclaration: PUBLIC Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList . StatementList RETURN Expression SEMI RBRACE
+   14 VarDeclaratitionList: VarDeclaratitionList . VarDeclaration
 
-    LBRACE  shift, and go to state 67
+    PRINTLN    shift, and go to state 67
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
+    WHILE      shift, and go to state 68
+    IF         shift, and go to state 69
+    ID         shift, and go to state 4
+    LBRACE     shift, and go to state 70
+
+    $default  reduce using rule 23 (StatementList)
+
+    VarDeclaration  go to state 30
+    Type            go to state 31
+    StatementList   go to state 71
+    Statement       go to state 72
+    Idenifier       go to state 73
 
 
 State 65
 
-    8 MethodDeclaration: PUBLIC Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList . StatementList RETURN Expression SEMI RBRACE
+    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList . StatementList RETURN Expression SEMI RBRACE
+   14 VarDeclaratitionList: VarDeclaratitionList . VarDeclaration
 
-    PRINTLN  shift, and go to state 68
-    WHILE    shift, and go to state 69
-    IF       shift, and go to state 70
-    ID       shift, and go to state 4
-    LBRACE   shift, and go to state 71
+    PRINTLN    shift, and go to state 67
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
+    WHILE      shift, and go to state 68
+    IF         shift, and go to state 69
+    ID         shift, and go to state 4
+    LBRACE     shift, and go to state 70
 
     $default  reduce using rule 23 (StatementList)
 
-    StatementList  go to state 72
-    Statement      go to state 73
-    Idenifier      go to state 74
+    VarDeclaration  go to state 30
+    Type            go to state 31
+    StatementList   go to state 74
+    Statement       go to state 72
+    Idenifier       go to state 73
 
 
 State 66
 
-    9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList . StatementList RETURN Expression SEMI RBRACE
+    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE . VarDeclaratitionList StatementList RBRACE
 
-    PRINTLN  shift, and go to state 68
-    WHILE    shift, and go to state 69
-    IF       shift, and go to state 70
-    ID       shift, and go to state 4
-    LBRACE   shift, and go to state 71
+    $default  reduce using rule 13 (VarDeclaratitionList)
 
-    $default  reduce using rule 23 (StatementList)
-
-    StatementList  go to state 75
-    Statement      go to state 73
-    Idenifier      go to state 74
+    VarDeclaratitionList  go to state 75
 
 
 State 67
 
-    3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE . VarDeclaratitionList StatementList RBRACE
+   28 Statement: PRINTLN . LPAREN Expression RPAREN SEMI
 
-    INT        shift, and go to state 20
-    BOOLEAN    shift, and go to state 21
-    INT_ARRAY  shift, and go to state 22
-    ID         shift, and go to state 4
-
-    ID        [reduce using rule 13 (VarDeclaratitionList)]
-    $default  reduce using rule 13 (VarDeclaratitionList)
-
-    VarDeclaration        go to state 23
-    VarDeclaratitionList  go to state 76
-    Type                  go to state 25
-    Idenifier             go to state 26
+    LPAREN  shift, and go to state 76
 
 
 State 68
 
-   28 Statement: PRINTLN . LPAREN Expression RPAREN SEMI
+   27 Statement: WHILE . LPAREN Expression RPAREN Statement
 
     LPAREN  shift, and go to state 77
 
 
 State 69
 
-   27 Statement: WHILE . LPAREN Expression RPAREN Statement
+   26 Statement: IF . LPAREN Expression RPAREN Statement ELSE Statement
 
     LPAREN  shift, and go to state 78
 
 
 State 70
 
-   26 Statement: IF . LPAREN Expression RPAREN Statement ELSE Statement
-
-    LPAREN  shift, and go to state 79
-
-
-State 71
-
    25 Statement: LBRACE . StatementList RBRACE
 
-    PRINTLN  shift, and go to state 68
-    WHILE    shift, and go to state 69
-    IF       shift, and go to state 70
+    PRINTLN  shift, and go to state 67
+    WHILE    shift, and go to state 68
+    IF       shift, and go to state 69
     ID       shift, and go to state 4
-    LBRACE   shift, and go to state 71
+    LBRACE   shift, and go to state 70
 
     $default  reduce using rule 23 (StatementList)
 
-    StatementList  go to state 80
-    Statement      go to state 73
-    Idenifier      go to state 74
+    StatementList  go to state 79
+    Statement      go to state 72
+    Idenifier      go to state 80
 
 
-State 72
+State 71
 
     8 MethodDeclaration: PUBLIC Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList . RETURN Expression SEMI RBRACE
 
     RETURN  shift, and go to state 81
 
 
-State 73
+State 72
 
    24 StatementList: Statement . StatementList
 
-    PRINTLN  shift, and go to state 68
-    WHILE    shift, and go to state 69
-    IF       shift, and go to state 70
+    PRINTLN  shift, and go to state 67
+    WHILE    shift, and go to state 68
+    IF       shift, and go to state 69
     ID       shift, and go to state 4
-    LBRACE   shift, and go to state 71
+    LBRACE   shift, and go to state 70
 
     $default  reduce using rule 23 (StatementList)
 
     StatementList  go to state 82
-    Statement      go to state 73
-    Idenifier      go to state 74
+    Statement      go to state 72
+    Idenifier      go to state 80
 
 
-State 74
+State 73
 
+   19 Type: Idenifier .
    29 Statement: Idenifier . ASSIGN Expression SEMI
    30          | Idenifier . LBRACKET Expression RBRACKET ASSIGN Expression SEMI
 
     LBRACKET  shift, and go to state 83
     ASSIGN    shift, and go to state 84
 
+    $default  reduce using rule 19 (Type)
 
-State 75
+
+State 74
 
     9 MethodDeclaration: PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE VarDeclaratitionList StatementList . RETURN Expression SEMI RBRACE
 
     RETURN  shift, and go to state 85
 
 
-State 76
+State 75
 
     3 MainMethod: PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN LBRACE VarDeclaratitionList . StatementList RBRACE
+   14 VarDeclaratitionList: VarDeclaratitionList . VarDeclaration
 
-    PRINTLN  shift, and go to state 68
-    WHILE    shift, and go to state 69
-    IF       shift, and go to state 70
-    ID       shift, and go to state 4
-    LBRACE   shift, and go to state 71
+    PRINTLN    shift, and go to state 67
+    INT        shift, and go to state 25
+    BOOLEAN    shift, and go to state 26
+    INT_ARRAY  shift, and go to state 27
+    WHILE      shift, and go to state 68
+    IF         shift, and go to state 69
+    ID         shift, and go to state 4
+    LBRACE     shift, and go to state 70
 
     $default  reduce using rule 23 (StatementList)
 
-    StatementList  go to state 86
-    Statement      go to state 73
-    Idenifier      go to state 74
+    VarDeclaration  go to state 30
+    Type            go to state 31
+    StatementList   go to state 86
+    Statement       go to state 72
+    Idenifier       go to state 73
 
 
-State 77
+State 76
 
    28 Statement: PRINTLN LPAREN . Expression RPAREN SEMI
 
@@ -949,7 +921,7 @@ State 77
     Idenifier   go to state 96
 
 
-State 78
+State 77
 
    27 Statement: WHILE LPAREN . Expression RPAREN Statement
 
@@ -967,7 +939,7 @@ State 78
     Idenifier   go to state 96
 
 
-State 79
+State 78
 
    26 Statement: IF LPAREN . Expression RPAREN Statement ELSE Statement
 
@@ -985,11 +957,20 @@ State 79
     Idenifier   go to state 96
 
 
-State 80
+State 79
 
    25 Statement: LBRACE StatementList . RBRACE
 
     RBRACE  shift, and go to state 99
+
+
+State 80
+
+   29 Statement: Idenifier . ASSIGN Expression SEMI
+   30          | Idenifier . LBRACKET Expression RBRACKET ASSIGN Expression SEMI
+
+    LBRACKET  shift, and go to state 83
+    ASSIGN    shift, and go to state 84
 
 
 State 81
@@ -1638,28 +1619,28 @@ State 121
 
    27 Statement: WHILE LPAREN Expression RPAREN . Statement
 
-    PRINTLN  shift, and go to state 68
-    WHILE    shift, and go to state 69
-    IF       shift, and go to state 70
+    PRINTLN  shift, and go to state 67
+    WHILE    shift, and go to state 68
+    IF       shift, and go to state 69
     ID       shift, and go to state 4
-    LBRACE   shift, and go to state 71
+    LBRACE   shift, and go to state 70
 
     Statement  go to state 142
-    Idenifier  go to state 74
+    Idenifier  go to state 80
 
 
 State 122
 
    26 Statement: IF LPAREN Expression RPAREN . Statement ELSE Statement
 
-    PRINTLN  shift, and go to state 68
-    WHILE    shift, and go to state 69
-    IF       shift, and go to state 70
+    PRINTLN  shift, and go to state 67
+    WHILE    shift, and go to state 68
+    IF       shift, and go to state 69
     ID       shift, and go to state 4
-    LBRACE   shift, and go to state 71
+    LBRACE   shift, and go to state 70
 
     Statement  go to state 143
-    Idenifier  go to state 74
+    Idenifier  go to state 80
 
 
 State 123
@@ -2089,14 +2070,14 @@ State 151
 
    26 Statement: IF LPAREN Expression RPAREN Statement ELSE . Statement
 
-    PRINTLN  shift, and go to state 68
-    WHILE    shift, and go to state 69
-    IF       shift, and go to state 70
+    PRINTLN  shift, and go to state 67
+    WHILE    shift, and go to state 68
+    IF       shift, and go to state 69
     ID       shift, and go to state 4
-    LBRACE   shift, and go to state 71
+    LBRACE   shift, and go to state 70
 
     Statement  go to state 156
-    Idenifier  go to state 74
+    Idenifier  go to state 80
 
 
 State 152

@@ -184,9 +184,9 @@ VarDeclaration:
 	;
 
 VarDeclaratitionList:
-	%empty { $$ = nullptr; }
+	%empty { $$ = new CFieldList(); }
 	|
-	VarDeclaration VarDeclaratitionList { $$ = new CFieldList( $1, $2 ); }
+	VarDeclaratitionList VarDeclaration { $$ = $1; $1->Add( $2 ); }
 	;
 
 Argument:

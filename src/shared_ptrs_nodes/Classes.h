@@ -5,6 +5,7 @@
 #include "Expressions.h"
 #include <string>
 #include <map>
+#include <vector>
 
 class IWrapper : public INode {};
 
@@ -44,12 +45,11 @@ public:
 
 class CFieldList : public IWrapper {
 public:
-	CFieldList(CField* _field, CFieldList* _nextFields = NULL);
 	CFieldList();
+	void Add(CField* _field);
 	void Accept(IVisitor &visitor) override;
 
-	std::unique_ptr<CField> field;
-	std::unique_ptr<CFieldList> nextFields;
+	std::vector<std::unique_ptr<CField> > fields;
 };
 
 

@@ -291,7 +291,10 @@ void CPrintVisitor::Visit(CField &stm) {
 }
 
 void CPrintVisitor::Visit(CFieldList &stm) {
-	std::vector<INode*> children = { stm.field.get(), stm.nextFields.get() };
+	std::vector<INode*> children;
+	for (int index = 0; index < stm.fields.size(); ++index) {
+		children.push_back(stm.fields[index].get());
+	}
 	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("FieldList");
 	++lastVisited;

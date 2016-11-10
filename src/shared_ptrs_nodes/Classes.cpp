@@ -44,12 +44,13 @@ void CField::Accept(IVisitor &visitor) {
 //CFieldList:
 //-------------------------------------------------------------------------------------------------
 
-CFieldList::CFieldList(CField* _field, CFieldList* _nextFields) {
-	field = std::unique_ptr<CField>(_field);
-	nextFields = std::unique_ptr<CFieldList>(_nextFields);
+CFieldList::CFieldList() {
+	fields = std::vector<std::unique_ptr<CField> >();
 }
 
-CFieldList::CFieldList() {};
+void CFieldList::Add(CField* _field) {
+	fields.push_back(std::unique_ptr<CField>(_field));
+}
 
 void CFieldList::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);

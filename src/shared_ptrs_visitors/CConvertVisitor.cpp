@@ -254,11 +254,12 @@ void CConvertVisitor::Visit(CField &stm) {
 }
 
 void CConvertVisitor::Visit(CFieldList &stm) {
-	if (stm.field) {
-		stm.field->Accept(*this);
-	}
-	if (stm.nextFields) {
-		stm.nextFields->Accept(*this);
+	if (stm.fields.size()) {
+		for (int index = 0; index < stm.fields.size(); ++index) {
+			if (stm.fields[index].get()) {
+				stm.fields[index].get()->Accept(*this);
+			}
+		}
 	}
 }
 
