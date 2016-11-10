@@ -34,11 +34,13 @@ int yyerror ( CProgram **program, const char * );
 	CFieldList* VarDeclaratitionList;
 	CArgument* Argument;
 	CArgumentList* ArgumentList;
+	CArgumentList* NonEmptyArgumentList;
 	CMethod* MethodDeclaration;
 	CMethodList* MethodDeclarationList;
 	CMainMethod* MainMethod;
 	CMainClass* MainClass;
 	CExpList* ExpressionList;
+	CExpList* NonEmptyExpressionList;
 	char *string;
 	CIdExp* Idenifier;
 }
@@ -108,7 +110,9 @@ int yyerror ( CProgram **program, const char * );
 %type <Argument> Argument
 %type <Type> Type
 %type <ArgumentList> ArgumentList
+%type <NonEmptyArgumentList> NonEmptyArgumentList
 %type <ExpressionList> ExpressionList
+%type <NonEmptyExpressionList> NonEmptyExpressionList
 %type <Idenifier> Idenifier
 
 %%
@@ -138,9 +142,9 @@ MainMethod:
 	;
 
 ClassDeclarationList:
-	%empty { $$ = nullptr; }
+	%empty { $$ = new CClassList(); }
 	|
-	Class ClassDeclarationList { $$ = new CClassList( $1, $2 ); }
+	ClassDeclarationList Class { $$ = $1; $1->Add($2); }
 	;
 
 Class:
@@ -174,9 +178,9 @@ MethodDeclaration:
 	;
 
 MethodDeclarationList:
-	%empty { $$ = nullptr; }
+	%empty { $$ = new CMethodList(); }
 	|
-	MethodDeclaration MethodDeclarationList { $$ = new CMethodList( $1, $2 ); }
+	MethodDeclarationList MethodDeclaration { $$ = $1; $1->Add($2); }
 	;
 
 VarDeclaration:
@@ -203,18 +207,22 @@ Type:
 	Idenifier { $$ = new CType( $1 ); }
 	;
 
+NonEmptyArgumentList:
+	Argument { $$ = new CArgumentList($1); }
+	|
+	NonEmptyArgumentList COMMA Argument { $$ = $1; $1->Add($3); }
+	;
+
 ArgumentList:
-	%empty { $$ = nullptr; }
+	%empty { $$ = new ArgumentList(); }
 	|
-	Argument { $$ = new CArgumentList( $1, 0 ); }
-	|
-	Argument COMMA ArgumentList { $$ = new CArgumentList( $1, $3 ); }
+	NonEmptyArgumentList { $$ = $1; }
 	;
 
 StatementList:
-	%empty {$$ = nullptr; }
+	%empty {$$ = StatementList(); }
 	|
-	Statement StatementList { $$ = new CCompoundStm($1, $2); }
+	Statement StatementList { $$ = $2; $2->Add($1); }
 	;
 
 Statement:
@@ -275,10 +283,16 @@ Expression:
 	LPAREN Expression RPAREN { $$ = $2; }	
 	;
 
-ExpressionList:
-	%empty { $$ = nullptr; }
+NonEmptyExpressionList:
+	Expression { $$ = new CExpList($1); }
 	|
-	Expression COMMA ExpressionList { $$ = new CExpList($1, (CExpList*) $3); }
+	NonEmptyExpressionList COMMA Expression { $$ = $1; $1->Add($3); }
+	;
+
+ExpressionList:
+	%empty { $$ = new CExpList(); }
+	|
+	NonEmptyExpressionList { $$ = $1; }
 	;
 
 Idenifier:
