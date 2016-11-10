@@ -75,14 +75,13 @@ void CArgument::Accept(IVisitor &visitor) {
 //CArgumentList:
 //-------------------------------------------------------------------------------------------------
 
-CArgumentList::CArgumentList(CArgument* _argument, CArgumentList* _nextArguments)
-{
-	argument = std::unique_ptr<CArgument>(_argument);
-	nextArguments = std::unique_ptr<CArgumentList>(_nextArguments);
+CArgumentList::CArgumentList() {
+	arguments = std::vector<std::unique_ptr<CArgument> >();
 }
 
-CArgumentList::CArgumentList()
-{}
+void CArgumentList::Add(CArgument* _argument) {
+	arguments.push_back(std::unique_ptr<CArgument>(_argument));
+}
 
 void CArgumentList::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
@@ -113,12 +112,13 @@ void CMethod::Accept(IVisitor &visitor) {
 //CMethodList:
 //-------------------------------------------------------------------------------------------------
 
-CMethodList::CMethodList(CMethod* _method, CMethodList* _nextMethods) {
-	method = std::unique_ptr<CMethod>(_method);
-	nextMethods = std::unique_ptr<CMethodList>(_nextMethods);
+CMethodList::CMethodList() {
+	methods = std::vector<std::unique_ptr<CMethod> >();
 }
 
-CMethodList::CMethodList() {};
+void CMethodList::Add(CMethod* _method) {
+	methods.push_back(std::unique_ptr<CMethod>(_method));
+}
 
 void CMethodList::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
@@ -145,12 +145,13 @@ void CClass::Accept(IVisitor &visitor) {
 //CClassList:
 //-------------------------------------------------------------------------------------------------
 
-CClassList::CClassList(CClass* _cclass, CClassList* _nextClasses) {
-	cclass = std::unique_ptr<CClass>(_cclass);
-	nextClasses = std::unique_ptr<CClassList>(_nextClasses);
+CClassList::CClassList() {
+	classes = std::vector<std::unique_ptr<CClass> >();
 }
 
-CClassList::CClassList() {};
+void CClassList::Add(CClass* _class) {
+	classes.push_back(std::unique_ptr<CClass>(_class));
+}
 
 void CClassList::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
