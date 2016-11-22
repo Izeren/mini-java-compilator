@@ -89,7 +89,7 @@ int yyerror ( CProgram **program, const char * );
 %right NOT
 %left TIMES MOD
 %left MINUS PLUS
-%left LESS
+%left LESS GREATER
 %left AND
 %left OR
 %right ASSIGN
@@ -214,15 +214,15 @@ NonEmptyArgumentList:
 	;
 
 ArgumentList:
-	%empty { $$ = new ArgumentList(); }
+	%empty { $$ = new CArgumentList(); }
 	|
 	NonEmptyArgumentList { $$ = $1; }
 	;
 
 StatementList:
-	%empty {$$ = StatementList(); }
+	%empty {$$ = nullptr; }
 	|
-	Statement StatementList { $$ = $2; $2->Add($1); }
+	Statement StatementList { $$ = new CCompoundStm($1, $2); }
 	;
 
 Statement:

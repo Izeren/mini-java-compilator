@@ -3,6 +3,7 @@
 #include "INode.h"
 #include "../Utils.h"
 #include <map>
+#include <vector>
 
 
 class IExpression : public INode {};

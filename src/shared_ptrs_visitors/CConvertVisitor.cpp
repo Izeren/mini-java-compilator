@@ -109,7 +109,7 @@ void CConvertVisitor::Visit(CExpList &stm) {
 	if (stm.exps.size()) {
 		for (int index = 0; index < stm.exps.size(); ++index) {
 			if (stm.exps[index].get()) {
-                (if is_first_exp) {
+                if( is_first_exp) {
                     is_first_exp = false;
                 } else {
                     this->code += ", ";
@@ -286,7 +286,7 @@ void CConvertVisitor::Visit(CArgumentList &stm) {
 	if (stm.arguments.size()) {
 		for (int index = 0; index < stm.arguments.size(); ++index) {
 			if (stm.arguments[index].get()) {
-                (if is_first_argument) {
+                if( is_first_argument) {
                     is_first_argument = false;
                 } else {
                     this->code += ", ";

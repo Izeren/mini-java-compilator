@@ -1,14 +1,3 @@
-State 108 conflicts: 1 shift/reduce
-State 133 conflicts: 1 shift/reduce
-State 134 conflicts: 1 shift/reduce
-State 135 conflicts: 1 shift/reduce
-State 136 conflicts: 1 shift/reduce
-State 137 conflicts: 1 shift/reduce
-State 138 conflicts: 1 shift/reduce
-State 139 conflicts: 1 shift/reduce
-State 140 conflicts: 10 shift/reduce
-
-
 Grammar
 
     0 $accept: Program $end
@@ -1427,7 +1416,6 @@ State 108
     LESS     shift, and go to state 118
     GREATER  shift, and go to state 119
 
-    GREATER   [reduce using rule 51 (Expression)]
     $default  reduce using rule 51 (Expression)
 
 
@@ -1763,10 +1751,8 @@ State 133
    41           | Expression . DOT LENGTH
    42           | Expression . DOT Idenifier LPAREN ExpressionList RPAREN
 
-    OR       shift, and go to state 113
-    GREATER  shift, and go to state 119
+    OR  shift, and go to state 113
 
-    GREATER   [reduce using rule 35 (Expression)]
     $default  reduce using rule 35 (Expression)
 
 
@@ -1785,9 +1771,6 @@ State 134
    41           | Expression . DOT LENGTH
    42           | Expression . DOT Idenifier LPAREN ExpressionList RPAREN
 
-    GREATER  shift, and go to state 119
-
-    GREATER   [reduce using rule 36 (Expression)]
     $default  reduce using rule 36 (Expression)
 
 
@@ -1811,7 +1794,6 @@ State 135
     LESS     shift, and go to state 118
     GREATER  shift, and go to state 119
 
-    GREATER   [reduce using rule 32 (Expression)]
     $default  reduce using rule 32 (Expression)
 
 
@@ -1835,7 +1817,6 @@ State 136
     LESS     shift, and go to state 118
     GREATER  shift, and go to state 119
 
-    GREATER   [reduce using rule 33 (Expression)]
     $default  reduce using rule 33 (Expression)
 
 
@@ -1861,7 +1842,6 @@ State 137
     LESS     shift, and go to state 118
     GREATER  shift, and go to state 119
 
-    GREATER   [reduce using rule 34 (Expression)]
     $default  reduce using rule 34 (Expression)
 
 
@@ -1887,7 +1867,6 @@ State 138
     LESS     shift, and go to state 118
     GREATER  shift, and go to state 119
 
-    GREATER   [reduce using rule 39 (Expression)]
     $default  reduce using rule 39 (Expression)
 
 
@@ -1906,11 +1885,9 @@ State 139
    41           | Expression . DOT LENGTH
    42           | Expression . DOT Idenifier LPAREN ExpressionList RPAREN
 
-    AND      shift, and go to state 112
-    OR       shift, and go to state 113
-    GREATER  shift, and go to state 119
+    AND  shift, and go to state 112
+    OR   shift, and go to state 113
 
-    GREATER   [reduce using rule 37 (Expression)]
     $default  reduce using rule 37 (Expression)
 
 
@@ -1929,27 +1906,9 @@ State 140
    41           | Expression . DOT LENGTH
    42           | Expression . DOT Idenifier LPAREN ExpressionList RPAREN
 
-    LBRACKET  shift, and go to state 110
-    DOT       shift, and go to state 111
-    AND       shift, and go to state 112
-    OR        shift, and go to state 113
-    PLUS      shift, and go to state 114
-    MINUS     shift, and go to state 115
-    TIMES     shift, and go to state 116
-    MOD       shift, and go to state 117
-    LESS      shift, and go to state 118
-    GREATER   shift, and go to state 119
+    AND  shift, and go to state 112
+    OR   shift, and go to state 113
 
-    LBRACKET  [reduce using rule 38 (Expression)]
-    DOT       [reduce using rule 38 (Expression)]
-    AND       [reduce using rule 38 (Expression)]
-    OR        [reduce using rule 38 (Expression)]
-    PLUS      [reduce using rule 38 (Expression)]
-    MINUS     [reduce using rule 38 (Expression)]
-    TIMES     [reduce using rule 38 (Expression)]
-    MOD       [reduce using rule 38 (Expression)]
-    LESS      [reduce using rule 38 (Expression)]
-    GREATER   [reduce using rule 38 (Expression)]
     $default  reduce using rule 38 (Expression)
 
 

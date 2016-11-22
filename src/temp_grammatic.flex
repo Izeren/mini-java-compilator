@@ -46,6 +46,9 @@ IntegerLiteral [1-9]{DIGIT}*|0
 	print_debug("COMMENT");
 	//return COMMENT;
 }
+"//".* {
+
+}
 "class" {
 	return CLASS;
 }
