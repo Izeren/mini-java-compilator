@@ -2,6 +2,10 @@
 
 #include "SymbolInfo.h"
 
+
+//TypeInfo:
+//-------------------------------------------------------------------------------------------------
+
 TypeInfo::TypeInfo( enums::TPrimitiveType _type )
 	:isPrimitive( true ), type( _type )
 {}
@@ -19,6 +23,10 @@ void TypeInfo::Print( std::ofstream & out )
 	}
 }
 
+
+//VariableInfo:
+//-------------------------------------------------------------------------------------------------
+
 VariableInfo::VariableInfo( const std::string & _name, std::shared_ptr<TypeInfo> _type )
 	:name( _name ), type( _type )
 {}
@@ -30,6 +38,10 @@ void VariableInfo::Print( std::ofstream& out )
 	type->Print( out );
 	out << "\n";
 }
+
+
+//MethodInfo:
+//-------------------------------------------------------------------------------------------------
 
 MethodInfo::MethodInfo( const std::string & _name, bool _isPublic, std::shared_ptr<TypeInfo> _returnType )
 	:name( _name ), isPublic( _isPublic ), returnType( _returnType )
@@ -55,6 +67,10 @@ void MethodInfo::Print( std::ofstream& out )
 		out << "\t" << "\t" << "} " << "\n";
 	}
 }
+
+
+//ClassInfo:
+//-------------------------------------------------------------------------------------------------
 
 ClassInfo::ClassInfo( const std::string & _name )
 	:name( _name )
@@ -88,6 +104,10 @@ void ClassInfo::Print( std::ofstream& out )
 	}
 }
 
+
+//SymbolTable:
+//-------------------------------------------------------------------------------------------------
+
 void SymbolTable::AddClass( std::shared_ptr<ClassInfo> classInfo )
 {
 	classes.emplace( classInfo->name, classInfo );
@@ -100,4 +120,19 @@ void SymbolTable::Print( std::ofstream& out )
 		(elem.second)->Print( out );
 		out << "}" << "\n";
 	}
+}
+
+
+//CError:
+//-------------------------------------------------------------------------------------------------
+
+const std::string CError::REDEFINITION_FUNCTION = "Function redefined.";
+
+CError::CError( const std::string & _message )
+	:message(_message)
+{}
+
+std::string & CError::GetMessage()
+{
+	return message;
 }

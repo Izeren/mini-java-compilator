@@ -54,10 +54,11 @@ public:
 	void Visit( CMainClass &stm ) override;
 	void Visit( CProgram &stm ) override;
 
-	std::shared_ptr<SymbolTable> GetSymbolTable();
+	SymbolTable* GetSymbolTable();
+	std::vector<CError> GetErrors();
 
 private:
 	std::shared_ptr<SymbolTable> table;
-
 	std::shared_ptr<FullInfo> info;
+	std::vector<CError> errors;
 };

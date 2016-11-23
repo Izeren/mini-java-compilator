@@ -215,7 +215,7 @@ void CConstructSymbolTableVisitor::Visit( CWhileStm &stm )
 
 void CConstructSymbolTableVisitor::Visit( CType &stm )
 {
-    std::cout << "type\n";
+	std::cout << "type\n";
 	if( stm.isPrimitive ) {
 		info->iType = std::shared_ptr<TypeInfo>( new TypeInfo( stm.type ) );
 	} else {
@@ -291,9 +291,9 @@ void CConstructSymbolTableVisitor::Visit( CMethod &stm )
 
 	info->iType = nullptr;
 	stm.returnType->Accept( *this );
-    
+
 	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( info->iName, stm.isPublic, info->iType ) );
-    
+
 	if( stm.arguments ) {
 		stm.arguments->Accept( *this );
 	}
@@ -316,6 +316,9 @@ void CConstructSymbolTableVisitor::Visit( CMethodList &stm )
 			if( stm.methods[index].get() ) {
 				info->iMethod = nullptr;
 				stm.methods[index].get()->Accept( *this );
+				if( info->iClass->methods.find( info->iMethod->name ) != info->iClass->methods.end() ) {
+					errors.push_back( CError( CError::REDEFINITION_FUNCTION ) );
+				}
 				info->iClass->AddMethod( info->iMethod );
 			}
 		}
@@ -373,7 +376,7 @@ void CConstructSymbolTableVisitor::Visit( CMainMethod &stm )
 	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( MAIN_NAME, true, nullptr ) );
 
 	info->iType = std::shared_ptr<TypeInfo>( new TypeInfo( enums::TPrimitiveType::STRING_ARRAY ) );
-    
+
 	info->iName = "";
 	if( stm.args ) {
 		stm.args->Accept( *this );
@@ -420,7 +423,12 @@ void CConstructSymbolTableVisitor::Visit( CProgram &stm )
 }
 
 
-std::shared_ptr<SymbolTable> CConstructSymbolTableVisitor::GetSymbolTable()
+SymbolTable* CConstructSymbolTableVisitor::GetSymbolTable()
 {
-	return table;
+	return table.get();
+}
+
+std::vector<CError> CConstructSymbolTableVisitor::GetErrors()
+{
+	return errors;
 }

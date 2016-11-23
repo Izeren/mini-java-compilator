@@ -82,3 +82,16 @@ public:
 
 	std::unordered_map<std::string, std::shared_ptr<ClassInfo>> classes;
 };
+
+class CError
+{
+public:
+	CError( const std::string& _message );
+
+	std::string& GetMessage();
+
+	static const std::string REDEFINITION_FUNCTION;
+
+private:
+	std::string message;
+};
