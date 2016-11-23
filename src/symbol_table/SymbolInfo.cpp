@@ -33,10 +33,33 @@ VariableInfo::VariableInfo( const std::string & _name, std::shared_ptr<TypeInfo>
 
 void VariableInfo::Print( std::ofstream& out )
 {
-	out << "\t" << "\t" << "\t" << "name: " << name << "\n";
-	out << "\t" << "\t" << "\t" << "type: ";
+	out << "\t" << "\t" << "\t" << "\t" << "name: " << name << "\n";
+	out << "\t" << "\t" << "\t" << "\t" << "type: ";
 	type->Print( out );
 	out << "\n";
+}
+
+
+//VariablesInfo:
+//-------------------------------------------------------------------------------------------------
+
+VariablesInfo::VariablesInfo()
+{}
+
+void VariablesInfo::Print( std::ofstream & out )
+{
+	if( !variables.empty() ) {
+		for( auto elem : variables ) {
+			out << "\t" << "\t" << "\t" << "variable: {" << "\n";
+			(elem.second)->Print( out );
+			out << "\t" << "\t" << "\t" << "} " << "\n";
+		}
+	}
+}
+
+void VariablesInfo::AddVariable( std::shared_ptr<VariableInfo> variableInfo )
+{
+	variables.emplace( variableInfo->name, variableInfo );
 }
 
 
@@ -47,11 +70,6 @@ MethodInfo::MethodInfo( const std::string & _name, bool _isPublic, std::shared_p
 	:name( _name ), isPublic( _isPublic ), returnType( _returnType )
 {}
 
-void MethodInfo::AddVariable( std::shared_ptr<VariableInfo> variableInfo )
-{
-	variables.emplace( variableInfo->name, variableInfo );
-}
-
 void MethodInfo::Print( std::ofstream& out )
 {
 	out << "\t" << "\t" << "name: " << name << " " << "\n";
@@ -61,11 +79,9 @@ void MethodInfo::Print( std::ofstream& out )
 		out << "\n";
 	}
 	out << "\t" << "\t" << "isPublic: " << isPublic << " " << "\n";
-	for( auto elem : variables ) {
-		out << "\t" << "\t" << "variable: {" << "\n";
-		(elem.second)->Print( out );
-		out << "\t" << "\t" << "} " << "\n";
-	}
+	out << "\t" << "\t" << "variables: {" << "\n";
+	variables->Print( out );
+	out << "\t" << "\t" << "} " << "\n";
 }
 
 
@@ -75,11 +91,6 @@ void MethodInfo::Print( std::ofstream& out )
 ClassInfo::ClassInfo( const std::string & _name )
 	:name( _name )
 {}
-
-void ClassInfo::AddField( std::shared_ptr<VariableInfo> fieldInfo )
-{
-	fields.emplace( fieldInfo->name, fieldInfo );
-}
 
 void ClassInfo::AddMethod( std::shared_ptr<MethodInfo> methodInfo )
 {
@@ -92,11 +103,9 @@ void ClassInfo::Print( std::ofstream& out )
 	if( baseClass != "" ) {
 		out << "\t" << "base: " << baseClass << "\n";
 	}
-	for( auto elem : fields ) {
-		out << "\t" << "field: {" << "\n";
-		(elem.second)->Print( out );
-		out << "\t" << "} " << "\n";
-	}
+	out << "\t" << "fields: {" << "\n";
+	fields->Print( out );
+	out << "\t" << "} " << "\n";
 	for( auto elem : methods ) {
 		out << "\t" << "method: {" << "\n";
 		(elem.second)->Print( out );
@@ -136,3 +145,4 @@ std::string & CError::GetMessage()
 {
 	return message;
 }
+

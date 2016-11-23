@@ -249,7 +249,7 @@ void CConstructSymbolTableVisitor::Visit( CFieldList &stm )
 			if( stm.fields[index].get() ) {
 				info->iVariable = nullptr;
 				stm.fields[index].get()->Accept( *this );
-				info->iClass->AddField( info->iVariable );
+				info->iVariables->AddVariable( info->iVariable );
 			}
 		}
 	}
@@ -277,7 +277,7 @@ void CConstructSymbolTableVisitor::Visit( CArgumentList &stm )
 			if( stm.arguments[index].get() ) {
 				info->iVariable = nullptr;
 				stm.arguments[index].get()->Accept( *this );
-				info->iMethod->AddVariable( info->iVariable );
+				info->iVariables->AddVariable( info->iVariable );
 			}
 		}
 	}
@@ -294,12 +294,19 @@ void CConstructSymbolTableVisitor::Visit( CMethod &stm )
 
 	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( info->iName, stm.isPublic, info->iType ) );
 
+	if( info->iClass->methods.find( info->iMethod->name ) != info->iClass->methods.end() ) {
+		errors.push_back( CError( CError::REDEFINITION_FUNCTION ) );
+	}
+
+	info->iVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 	if( stm.arguments ) {
 		stm.arguments->Accept( *this );
 	}
 	if( stm.vars ) {
 		stm.vars->Accept( *this );
 	}
+	info->iMethod->variables = info->iVariables;
+
 	if( stm.statements ) {
 		stm.statements->Accept( *this );
 	}
@@ -316,9 +323,6 @@ void CConstructSymbolTableVisitor::Visit( CMethodList &stm )
 			if( stm.methods[index].get() ) {
 				info->iMethod = nullptr;
 				stm.methods[index].get()->Accept( *this );
-				if( info->iClass->methods.find( info->iMethod->name ) != info->iClass->methods.end() ) {
-					errors.push_back( CError( CError::REDEFINITION_FUNCTION ) );
-				}
 				info->iClass->AddMethod( info->iMethod );
 			}
 		}
@@ -340,9 +344,12 @@ void CConstructSymbolTableVisitor::Visit( CClass &stm )
 		info->iClass->baseClass = info->iName;
 	}
 
+	info->iVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 	if( stm.fields ) {
 		stm.fields->Accept( *this );
 	}
+	info->iClass->fields = info->iVariables;
+    
 	if( stm.methods ) {
 		stm.methods->Accept( *this );
 	}
@@ -375,14 +382,21 @@ void CConstructSymbolTableVisitor::Visit( CMainMethod &stm )
 
 	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( MAIN_NAME, true, nullptr ) );
 
+	//if( info->iClass->methods.find( info->iMethod->name ) != info->iClass->methods.end() ) {
+	//	errors.push_back( CError( CError::REDEFINITION_FUNCTION ) );
+	//}
+
 	info->iType = std::shared_ptr<TypeInfo>( new TypeInfo( enums::TPrimitiveType::STRING_ARRAY ) );
 
+
+	info->iVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 	info->iName = "";
 	if( stm.args ) {
 		stm.args->Accept( *this );
 	}
 	info->iVariable = std::shared_ptr<VariableInfo>( new VariableInfo( info->iName, info->iType ) );
-	info->iMethod->AddVariable( info->iVariable );
+	info->iVariables->AddVariable( info->iVariable );
+	info->iMethod->variables = info->iVariables;
 
 	if( stm.vars ) {
 		stm.vars->Accept( *this );
@@ -400,6 +414,7 @@ void CConstructSymbolTableVisitor::Visit( CMainClass &stm )
 		stm.id->Accept( *this );
 	}
 	info->iClass = std::shared_ptr<ClassInfo>( new ClassInfo( info->iName ) );
+	info->iClass->fields = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 
 	info->iMethod = nullptr;
 	if( stm.mainMethod ) {

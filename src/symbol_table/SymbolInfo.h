@@ -32,19 +32,29 @@ public:
 	std::shared_ptr<TypeInfo> type;
 };
 
+class VariablesInfo
+{
+public:
+    VariablesInfo();
+    
+	void Print( std::ofstream& out );
+
+	void AddVariable( std::shared_ptr<VariableInfo> variableInfo );
+
+	std::unordered_map<std::string, std::shared_ptr<VariableInfo>> variables;
+};
+
 class MethodInfo
 {
 public:
 	MethodInfo( const std::string& _name, bool _isPublic, std::shared_ptr<TypeInfo> _returnType );
-
-	void AddVariable( std::shared_ptr<VariableInfo> variableInfo );
 
 	void Print( std::ofstream& out );
 
 	std::string name;	
 	bool isPublic;
 	std::shared_ptr<TypeInfo> returnType;
-	std::unordered_map<std::string, std::shared_ptr<VariableInfo>> variables;
+	std::shared_ptr<VariablesInfo> variables;
 };
 
 class ClassInfo 
@@ -52,13 +62,12 @@ class ClassInfo
 public:
 	ClassInfo( const std::string& _name);
 
-	void AddField( std::shared_ptr<VariableInfo> fieldInfo );
 	void AddMethod( std::shared_ptr<MethodInfo> methodInfo );
 
 	void Print( std::ofstream& out );
 
 	std::string name;
-	std::unordered_map<std::string, std::shared_ptr<VariableInfo>> fields;
+	std::shared_ptr<VariablesInfo> fields;
 	std::unordered_map<std::string, std::shared_ptr<MethodInfo>> methods;
 	std::string baseClass;
 };
@@ -68,6 +77,7 @@ class FullInfo
 public:
 	std::shared_ptr<ClassInfo> iClass;
 	std::shared_ptr<MethodInfo> iMethod;
+	std::shared_ptr<VariablesInfo> iVariables;
 	std::shared_ptr<VariableInfo> iVariable;
 	std::shared_ptr<TypeInfo> iType;
 	std::string iName;
