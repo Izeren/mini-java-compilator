@@ -4,53 +4,50 @@
 #include <unordered_map>
 #include <memory> 
 #include <fstream>
+#include "../Utils.h"
+#include "../shared_ptrs_nodes/Classes.h"
 
-//class Info
-//{
-//public:
-//	Info( std::string& _name );
-//	std::string name;
-//};
 
-//class TypeInfo
-//{
-//public:
-//	std::string name;
-//};
-
-class PrimitiveTypeInfo
+class TypeInfo
 {
 public:
-	std::string name;
+	TypeInfo( enums::TPrimitiveType _type );
+	TypeInfo( const std::string& _className );
+
+	void Print( std::ofstream& out );
+
+	bool isPrimitive;
+	enums::TPrimitiveType type;
+	std::string className;
 };
 
 class VariableInfo
 {
 public:
-	VariableInfo( const std::string& _name, const std::string& _type );
+	VariableInfo( const std::string& _name, std::shared_ptr<TypeInfo> _type );
 
 	void Print( std::ofstream& out );
 
 	std::string name;
-	std::string type;
+	std::shared_ptr<TypeInfo> type;
 };
 
 class MethodInfo
 {
 public:
-	MethodInfo( const std::string& _name );
+	MethodInfo( const std::string& _name, bool _isPublic, std::shared_ptr<TypeInfo> _returnType );
 
 	void AddVariable( std::shared_ptr<VariableInfo> variableInfo );
 
 	void Print( std::ofstream& out );
 
-	std::string name;
-	std::unordered_map<std::string, std::shared_ptr<VariableInfo>> variables;
-	std::string returnType;
+	std::string name;	
 	bool isPublic;
+	std::shared_ptr<TypeInfo> returnType;
+	std::unordered_map<std::string, std::shared_ptr<VariableInfo>> variables;
 };
 
-class ClassInfo //: TypeInfo
+class ClassInfo 
 {
 public:
 	ClassInfo( const std::string& _name);
@@ -72,8 +69,8 @@ public:
 	std::shared_ptr<ClassInfo> iClass;
 	std::shared_ptr<MethodInfo> iMethod;
 	std::shared_ptr<VariableInfo> iVariable;
+	std::shared_ptr<TypeInfo> iType;
 	std::string iName;
-	std::string iType;
 };
 
 class SymbolTable

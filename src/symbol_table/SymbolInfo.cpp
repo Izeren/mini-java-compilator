@@ -1,17 +1,38 @@
+#include <iostream>
+
 #include "SymbolInfo.h"
 
-VariableInfo::VariableInfo( const std::string & _name, const std::string & _type )
-	:name(_name), type(_type)
+TypeInfo::TypeInfo( enums::TPrimitiveType _type )
+	:isPrimitive( true ), type( _type )
+{}
+
+TypeInfo::TypeInfo( const std::string& _className )
+	: isPrimitive( false ), className( _className )
+{}
+
+void TypeInfo::Print( std::ofstream & out )
+{
+	if( isPrimitive ) {
+		out << CType::typeNames[type];
+	} else {
+		out << className;
+	}
+}
+
+VariableInfo::VariableInfo( const std::string & _name, std::shared_ptr<TypeInfo> _type )
+	:name( _name ), type( _type )
 {}
 
 void VariableInfo::Print( std::ofstream& out )
 {
-	out << "\t" << "\t" << "\t" << "name: " << name << "\n"; 
-    out << "\t" << "\t" << "\t" << "type: " << type << "\n";
+	out << "\t" << "\t" << "\t" << "name: " << name << "\n";
+	out << "\t" << "\t" << "\t" << "type: ";
+	type->Print( out );
+	out << "\n";
 }
 
-MethodInfo::MethodInfo( const std::string & _name )
-	:name(_name)
+MethodInfo::MethodInfo( const std::string & _name, bool _isPublic, std::shared_ptr<TypeInfo> _returnType )
+	:name( _name ), isPublic( _isPublic ), returnType( _returnType )
 {}
 
 void MethodInfo::AddVariable( std::shared_ptr<VariableInfo> variableInfo )
@@ -22,7 +43,11 @@ void MethodInfo::AddVariable( std::shared_ptr<VariableInfo> variableInfo )
 void MethodInfo::Print( std::ofstream& out )
 {
 	out << "\t" << "\t" << "name: " << name << " " << "\n";
-	out << "\t" << "\t" << "returnType: " << returnType << " " << "\n";
+	if( returnType ) {
+		out << "\t" << "\t" << "returnType: ";
+		returnType->Print( out ); 
+		out << "\n";
+	}
 	out << "\t" << "\t" << "isPublic: " << isPublic << " " << "\n";
 	for( auto elem : variables ) {
 		out << "\t" << "\t" << "variable: {" << "\n";
@@ -32,7 +57,7 @@ void MethodInfo::Print( std::ofstream& out )
 }
 
 ClassInfo::ClassInfo( const std::string & _name )
-	:name(_name)
+	:name( _name )
 {}
 
 void ClassInfo::AddField( std::shared_ptr<VariableInfo> fieldInfo )

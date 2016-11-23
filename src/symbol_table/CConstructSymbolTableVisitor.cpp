@@ -215,14 +215,14 @@ void CConstructSymbolTableVisitor::Visit( CWhileStm &stm )
 
 void CConstructSymbolTableVisitor::Visit( CType &stm )
 {
-	std::cout << "type\n";
+    std::cout << "type\n";
 	if( stm.isPrimitive ) {
-		info->iType = CType::typeNames[stm.type];
+		info->iType = std::shared_ptr<TypeInfo>( new TypeInfo( stm.type ) );
 	} else {
 		std::string curName = info->iName;
 		info->iName = "";
 		stm.name->Accept( *this );
-		info->iType = info->iName;
+		info->iType = std::shared_ptr<TypeInfo>( new TypeInfo( info->iName ) );
 		info->iName = curName;
 	}
 }
@@ -230,7 +230,7 @@ void CConstructSymbolTableVisitor::Visit( CType &stm )
 void CConstructSymbolTableVisitor::Visit( CField &stm )
 {
 	std::cout << "field\n";
-	info->iType = "";
+	info->iType = nullptr;
 	if( stm.type ) {
 		stm.type->Accept( *this );
 	}
@@ -258,7 +258,7 @@ void CConstructSymbolTableVisitor::Visit( CFieldList &stm )
 void CConstructSymbolTableVisitor::Visit( CArgument &stm )
 {
 	std::cout << "arg\n";
-	info->iType = "";
+	info->iType = nullptr;
 	if( stm.type ) {
 		stm.type->Accept( *this );
 	}
@@ -288,18 +288,12 @@ void CConstructSymbolTableVisitor::Visit( CMethod &stm )
 	std::cout << "method\n";
 	info->iName = "";
 	stm.name->Accept( *this );
-	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( info->iName ) );
 
-	if( stm.isPublic ) {
-		info->iMethod->isPublic = true;
-	} else {
-		info->iMethod->isPublic = false;
-	}
-
-	info->iType = "";
+	info->iType = nullptr;
 	stm.returnType->Accept( *this );
-	info->iMethod->returnType = info->iType;
-
+    
+	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( info->iName, stm.isPublic, info->iType ) );
+    
 	if( stm.arguments ) {
 		stm.arguments->Accept( *this );
 	}
@@ -357,8 +351,6 @@ void CConstructSymbolTableVisitor::Visit( CClassList &stm )
 	if( stm.classes.size() ) {
 		for( int index = 0; index < stm.classes.size(); ++index ) {
 			if( stm.classes[index].get() ) {
-				std::cout << "1\n";
-				std::cout << stm.classes.size() << "\n";
 				info->iClass = nullptr;
 				stm.classes[index].get()->Accept( *this );
 				table->AddClass( info->iClass );
@@ -370,18 +362,19 @@ void CConstructSymbolTableVisitor::Visit( CClassList &stm )
 void CConstructSymbolTableVisitor::Visit( CMainMethod &stm )
 {
 	std::cout << "mainmethod\n";
-	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( MAIN_NAME ) );
 
+	// TODO: should be corrected?
 	//info->iType = "";
 	//if( stm.returnType ) {
 	//	stm.returnType->Accept( *this );
 	//}
 	//info->iMethod->returnType = info->iType;
 
-	info->iMethod->isPublic = true;
-	info->iMethod->returnType = "void";
+	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( MAIN_NAME, true, nullptr ) );
 
-	info->iType = "String[]";
+	info->iType = std::shared_ptr<TypeInfo>( new TypeInfo( enums::TPrimitiveType::STRING_ARRAY ) );
+    
+	info->iName = "";
 	if( stm.args ) {
 		stm.args->Accept( *this );
 	}
