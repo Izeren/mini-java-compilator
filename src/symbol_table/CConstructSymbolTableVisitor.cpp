@@ -1,8 +1,11 @@
 #include "CConstructSymbolTableVisitor.h"
 #include "../Utils.h"
+#include <iostream>
 
 CConstructSymbolTableVisitor::CConstructSymbolTableVisitor()
 {
+	info = std::shared_ptr<FullInfo>( new FullInfo() );
+	table = std::shared_ptr<SymbolTable>( new SymbolTable() );
 }
 
 
@@ -215,6 +218,7 @@ void CConstructSymbolTableVisitor::Visit( CWhileStm &stm )
 
 void CConstructSymbolTableVisitor::Visit( CType &stm )
 {
+    std::cout << "type\n";
 	if( stm.isPrimitive ) {
 		info->iType = CType::typeNames[stm.type];
 	} else {
@@ -228,6 +232,7 @@ void CConstructSymbolTableVisitor::Visit( CType &stm )
 
 void CConstructSymbolTableVisitor::Visit( CField &stm )
 {
+    std::cout << "field\n";
 	info->iType = "";
 	if( stm.type ) {
 		stm.type->Accept( *this );
@@ -241,6 +246,7 @@ void CConstructSymbolTableVisitor::Visit( CField &stm )
 
 void CConstructSymbolTableVisitor::Visit( CFieldList &stm )
 {
+    std::cout << "fieldlist\n";
 	if( stm.fields.size() ) {
 		for( int index = 0; index < stm.fields.size(); ++index ) {
 			if( stm.fields[index].get() ) {
@@ -254,6 +260,7 @@ void CConstructSymbolTableVisitor::Visit( CFieldList &stm )
 
 void CConstructSymbolTableVisitor::Visit( CArgument &stm )
 {
+    std::cout << "arg\n";
 	info->iType = "";
 	if( stm.type ) {
 		stm.type->Accept( *this );
@@ -267,6 +274,7 @@ void CConstructSymbolTableVisitor::Visit( CArgument &stm )
 
 void CConstructSymbolTableVisitor::Visit( CArgumentList &stm )
 {
+    std::cout << "arglist\n";
 	if( stm.arguments.size() ) {
 		for( int index = 0; index < stm.arguments.size(); ++index ) {
 			if( stm.arguments[index].get() ) {
@@ -280,6 +288,7 @@ void CConstructSymbolTableVisitor::Visit( CArgumentList &stm )
 
 void CConstructSymbolTableVisitor::Visit( CMethod &stm )
 {
+    std::cout << "method\n";
 	info->iName = "";
 	stm.name->Accept( *this );
 	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( info->iName ) );
@@ -290,7 +299,7 @@ void CConstructSymbolTableVisitor::Visit( CMethod &stm )
 		info->iMethod->isPublic = false;
 	}
 
-	info->iType = nullptr;
+	info->iType = "";
 	stm.returnType->Accept( *this );
 	info->iMethod->returnType = info->iType;
 
@@ -310,6 +319,7 @@ void CConstructSymbolTableVisitor::Visit( CMethod &stm )
 
 void CConstructSymbolTableVisitor::Visit( CMethodList &stm )
 {
+    std::cout << "methodlist\n";
 	if( stm.methods.size() ) {
 		for( int index = 0; index < stm.methods.size(); ++index ) {
 			if( stm.methods[index].get() ) {
@@ -323,6 +333,7 @@ void CConstructSymbolTableVisitor::Visit( CMethodList &stm )
 
 void CConstructSymbolTableVisitor::Visit( CClass &stm )
 {
+    std::cout << "class\n";
 	info->iName = "";
 	if( stm.id ) {
 		stm.id->Accept( *this );
@@ -345,9 +356,12 @@ void CConstructSymbolTableVisitor::Visit( CClass &stm )
 
 void CConstructSymbolTableVisitor::Visit( CClassList &stm )
 {
+    std::cout << "classlist\n";
 	if( stm.classes.size() ) {
 		for( int index = 0; index < stm.classes.size(); ++index ) {
 			if( stm.classes[index].get() ) {
+                std::cout << "1\n";
+                std::cout << stm.classes.size() << "\n";
 				info->iClass = nullptr;
 				stm.classes[index].get()->Accept( *this );
 				table->AddClass( info->iClass );
@@ -358,6 +372,7 @@ void CConstructSymbolTableVisitor::Visit( CClassList &stm )
 
 void CConstructSymbolTableVisitor::Visit( CMainMethod &stm )
 {
+    std::cout << "mainmethod\n";
 	info->iMethod = std::shared_ptr<MethodInfo>( new MethodInfo( MAIN_NAME ) );
 
 	info->iType = "";
@@ -383,6 +398,7 @@ void CConstructSymbolTableVisitor::Visit( CMainMethod &stm )
 
 void CConstructSymbolTableVisitor::Visit( CMainClass &stm )
 {
+    std::cout << "mainclass\n";
 	info->iName = "";
 	if( stm.id ) {
 		stm.id->Accept( *this );
@@ -398,6 +414,7 @@ void CConstructSymbolTableVisitor::Visit( CMainClass &stm )
 
 void CConstructSymbolTableVisitor::Visit( CProgram &stm )
 {
+    std::cout << "program\n";
 	if( stm.classList ) {
 		stm.classList->Accept( *this );
 	}
