@@ -2,6 +2,8 @@
 
 #include <string>
 #include <unordered_map>
+#include <memory> 
+#include <fstream>
 
 //class Info
 //{
@@ -27,6 +29,8 @@ class VariableInfo
 public:
 	VariableInfo( const std::string& _name, const std::string& _type );
 
+	void Print( std::ofstream& out );
+
 	std::string name;
 	std::string type;
 };
@@ -37,6 +41,8 @@ public:
 	MethodInfo( const std::string& _name );
 
 	void AddVariable( std::shared_ptr<VariableInfo> variableInfo );
+
+	void Print( std::ofstream& out );
 
 	std::string name;
 	std::unordered_map<std::string, std::shared_ptr<VariableInfo>> variables;
@@ -51,6 +57,8 @@ public:
 
 	void AddField( std::shared_ptr<VariableInfo> fieldInfo );
 	void AddMethod( std::shared_ptr<MethodInfo> methodInfo );
+
+	void Print( std::ofstream& out );
 
 	std::string name;
 	std::unordered_map<std::string, std::shared_ptr<VariableInfo>> fields;
@@ -72,6 +80,8 @@ class SymbolTable
 {
 public:
 	void AddClass( std::shared_ptr<ClassInfo> classInfo );
+
+	void Print( std::ofstream& out );
 
 	std::unordered_map<std::string, std::shared_ptr<ClassInfo>> classes;
 };

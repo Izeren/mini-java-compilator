@@ -59,6 +59,7 @@ int main( int argc, char **argv ) {
 			//std::string result = visitor.GetResult();
 			std::cout << "Point 12\n";
 			std::ofstream out(std::to_string(i) + "res.java", std::fstream::out);
+            visitor.GetSymbolTable()->Print(out);
 			//out << result;
 			out.close();
 		}
