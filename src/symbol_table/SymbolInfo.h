@@ -35,8 +35,8 @@ public:
 class VariablesInfo
 {
 public:
-    VariablesInfo();
-    
+	VariablesInfo();
+
 	void Print( std::ofstream& out );
 
 	void AddVariable( std::shared_ptr<VariableInfo> variableInfo );
@@ -100,7 +100,9 @@ public:
 
 	std::string& GetMessage();
 
-	static const std::string REDEFINITION_FUNCTION;
+	static const std::string FUNCTION_REDEFINITION;
+	static const std::string VARIABLE_REDEFINITION;
+	static const std::string CLASS_REDEFINITION;
 
 private:
 	std::string message;

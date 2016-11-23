@@ -135,7 +135,9 @@ void SymbolTable::Print( std::ofstream& out )
 //CError:
 //-------------------------------------------------------------------------------------------------
 
-const std::string CError::REDEFINITION_FUNCTION = "Function redefined.";
+const std::string CError::FUNCTION_REDEFINITION = "Function redefined.";
+const std::string CError::VARIABLE_REDEFINITION = "Variable redefined.";
+const std::string CError::CLASS_REDEFINITION = "Class redefined.";
 
 CError::CError( const std::string & _message )
 	:message(_message)
