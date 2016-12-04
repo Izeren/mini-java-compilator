@@ -35,7 +35,6 @@ void CIdPtrExp::Accept(IVisitor &visitor) {
 //-------------------------------------------------------------------------------------------------
 
 CNumExp::CNumExp(const char* number) {
-	std::cout << "test->" << number << "<-test\n";
 	this->number = atoi(number);
 }
 
@@ -232,6 +231,21 @@ CArrayExpression::CArrayExpression(IExpression* lengthExpression) {
 void CArrayExpression::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
 }
+
+//CNewIdentifier:
+//-------------------------------------------------------------------------------------------------
+
+CNewIdentifier::CNewIdentifier(CIdExp* identifier, CExpList *expressionList)
+{
+	this->identifier = std::unique_ptr<CIdExp>(identifier);
+	this->expressionList = std::unique_ptr<CExpList>(expressionList);
+}
+
+void CNewIdentifier::Accept(IVisitor &visitor)
+{
+	visitor.Visit(*this);
+}
+
 
 //CByIndexExpression:
 //-------------------------------------------------------------------------------------------------

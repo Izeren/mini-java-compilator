@@ -204,6 +204,18 @@ public:
 	std::unique_ptr<IExpression> lengthExpression;
 };
 
+//CNewIdentifier:
+//-------------------------------------------------------------------------------------------------
+class CNewIdentifier : public IExpression {
+public:
+	CNewIdentifier(CIdExp* identifier, CExpList *expressionList);
+
+	void Accept(IVisitor &visitor) override;
+
+	std::unique_ptr<CIdExp> identifier;
+	std::unique_ptr<CExpList> expressionList;
+};
+
 
 //CGetLengthExp:
 //-------------------------------------------------------------------------------------------------

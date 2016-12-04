@@ -14,6 +14,9 @@ public:
 
 class PositionedNode : public INode {
 public:
-	int lineNumber;
-	int columnNumber;
+	int firstLineNumber;
+	int firstColumnNumber;
+	int lastLineNumber;
+	int lastColumnNumber;
+	std::string GetStringLocation();
 };

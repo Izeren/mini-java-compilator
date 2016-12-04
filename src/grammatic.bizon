@@ -9,7 +9,7 @@
 	#include <iostream>
 
     #define YYERROR_VERBOSE 1   
-    #define SAVE_LOCATION p->lineNumber=yylloc.last_line;p->columnNumber=yylloc.last_column;     
+    #define SAVE_LOCATION p->firstLineNumber=yylloc.first_line;p->firstColumnNumber=yylloc.first_column;p->lastLineNumber=yylloc.last_line;p->lastColumnNumber=yylloc.last_column;
 }
 
 %code {    
@@ -319,13 +319,13 @@ Expression:
 	|
 	FALSE { auto p = $$ = new CLogExp(false); SAVE_LOCATION }
 	|
-	Idenifier { $$ = $1; }
+	Idenifier { auto p = $$ = $1; SAVE_LOCATION }
 	|
 	THIS { auto p = $$ = new CThisExpression(); SAVE_LOCATION }
 	|
 	NEW INT LBRACKET Expression RBRACKET { auto p = $$ = new CArrayExpression($4); SAVE_LOCATION }
 	|
-	NEW Idenifier LPAREN RPAREN { $$ = $2; }
+	NEW Idenifier LPAREN ExpressionList RPAREN { auto p = $$ = new CNewIdentifier($2, (CExpList*)$4); SAVE_LOCATION }
 	|
 	NOT Expression { auto p = $$ = new CNegativeExpression($2); SAVE_LOCATION }
 	|
