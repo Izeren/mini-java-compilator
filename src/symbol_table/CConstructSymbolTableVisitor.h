@@ -32,6 +32,7 @@ public:
 	void Visit( CArrayExpression &exp ) override;
 	void Visit( CThisExpression &exp ) override;
 	void Visit( CByIndexExpression &exp ) override;
+	void Visit( CNewIdentifier &exp ) override;
 
 	void Visit( CAssignStm &stm ) override;
 	void Visit( CAssignSubscriptStm &stm ) override;
