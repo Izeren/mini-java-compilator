@@ -15,17 +15,17 @@ CConvertVisitor::CConvertVisitor() {
 //-------------------------------------------------------------------------------------------------
 
 void CConvertVisitor::Visit(CIdExp &exp) {
-	this->code += exp.GetStringLocation(); 
+	this->code += exp.position.GetStringPosition();
 	this->code += exp.name;
 }
 
 void CConvertVisitor::Visit(CIdPtrExp &exp) {
-	this->code += exp.GetStringLocation();
+	this->code += exp.position.GetStringPosition();
 	this->code += exp.name;
 }
 
 void CConvertVisitor::Visit(CNumExp &exp) {
-	this->code += exp.GetStringLocation();
+	this->code += exp.position.GetStringPosition();
 	this->code += std::to_string(exp.number);
 }
 
@@ -34,7 +34,7 @@ void CConvertVisitor::Visit(COpExp &exp) {
 	if (exp.leftOperand) {
 		exp.leftOperand->Accept(*this);
 	}
-	this->code += exp.GetStringLocation();
+	this->code += exp.position.GetStringPosition();
 	this->code += " " + COpExp::stringOperations[exp.operation] + " ";
 	if (exp.rightOperand) {
 		exp.rightOperand->Accept(*this);
@@ -42,7 +42,7 @@ void CConvertVisitor::Visit(COpExp &exp) {
 }
 
 void CConvertVisitor::Visit(CLogExp &exp) {
-	this->code += exp.GetStringLocation();
+	this->code += exp.position.GetStringPosition();
 	if (exp.variable) {
 		this->code += "true";
 	}
@@ -55,7 +55,7 @@ void CConvertVisitor::Visit(CLogOpExp &exp) {
 	if (exp.leftOperand) {
 		exp.leftOperand->Accept(*this);
 	}
-	this->code += exp.GetStringLocation();
+	this->code += exp.position.GetStringPosition();
 	this->code += " " + exp.stringOperations[exp.operation] + " ";
 	if (exp.rightOperand) {
 		exp.rightOperand->Accept(*this);

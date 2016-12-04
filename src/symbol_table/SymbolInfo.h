@@ -8,6 +8,16 @@
 #include "../shared_ptrs_nodes/Classes.h"
 
 
+class PositionInfo
+{
+public:
+	int firstLine;
+	int lastLine;
+	int firstColumn;
+	int lastColumn;
+	std::string GetStringPosition() const;
+};
+
 class TypeInfo
 {
 public:
@@ -96,9 +106,10 @@ public:
 class CError
 {
 public:
-	CError( const std::string& _message );
+	CError( const std::string& _message, const PositionInfo &position);
 
 	std::string& GetMessage();
+	PositionInfo GetPosition() const;
 
 	static const std::string FUNCTION_REDEFINITION;
 	static const std::string VARIABLE_REDEFINITION;
@@ -106,4 +117,5 @@ public:
 
 private:
 	std::string message;
+	PositionInfo position;
 };

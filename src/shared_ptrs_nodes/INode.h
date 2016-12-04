@@ -5,6 +5,7 @@
 #include "../shared_ptrs_visitors/IVisitor.h"
 
 const std::string BAD_ID("Error_name");
+class PositionInfo;
 
 class INode {
 public:
@@ -14,9 +15,5 @@ public:
 
 class PositionedNode : public INode {
 public:
-	int firstLineNumber;
-	int firstColumnNumber;
-	int lastLineNumber;
-	int lastColumnNumber;
-	std::string GetStringLocation();
+	PositionInfo& position;
 };

@@ -1,0 +1,21 @@
+<component name="ProjectDictionaryState">
+  <dictionary name="izeren">
+    <words>
+      <w>cout</w>
+      <w>extern</w>
+      <w>iostream</w>
+      <w>lbrace</w>
+      <w>lbracket</w>
+      <w>lparen</w>
+      <w>noyywrap</w>
+      <w>ptrs</w>
+      <w>rbracket</w>
+      <w>rparen</w>
+      <w>stdbool</w>
+      <w>yyerror</w>
+      <w>yylex</w>
+      <w>yylloc</w>
+      <w>yyltype</w>
+    </words>
+  </dictionary>
+</component>

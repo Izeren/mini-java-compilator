@@ -1,8 +1,9 @@
-#include "CTypeCheckerCTypeCheckerVisitor::Visitor.h"
+#include "CTypeCheckerVisitor.h"
+#include "../symbol_table/SymbolInfo.h"
 
-CTypeCheckerCTypeCheckerVisitor::Visitor::CTypeCheckerCTypeCheckerVisitor::Visitor(std::shared_ptr<SymbolTable> table) 
-{
-	this->table = table;
+CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table, IExpression &lastCalculated,
+										 CType &lastCalculatedType)
+		: lastCalculated(lastCalculated), lastCalculatedType(lastCalculatedType), table(table) {
 }
 
 
@@ -10,18 +11,34 @@ CTypeCheckerCTypeCheckerVisitor::Visitor::CTypeCheckerCTypeCheckerVisitor::Visit
 //---------------------------------------------------------------------------------------
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
 {
-
+	lastCalculated = exp;
 }
 void CTypeCheckerVisitor::Visit( CIdPtrExp &exp ) 
 {
-
+	lastCalculated = exp;
 }
 void CTypeCheckerVisitor::Visit( CNumExp &exp ) 
 {
-
+	lastCalculated = exp;
 }
 void CTypeCheckerVisitor::Visit( COpExp &exp ) 
 {
+	if( exp.leftOperand ){
+		exp.leftOperand->Accept( *this );
+	}
+    if( !lastCalculatedType.isPrimitive ) {
+		errors.push_back( CError("Left operand has non-primitive type is not defined", exp.position) );
+	}
+	auto leftType = lastCalculatedType;
+	if( exp.rightOperand ) {
+		exp.rightOperand->Accept( *this );
+	}
+	if( !lastCalculatedType.isPrimitive ) {
+		errors.push_back( CError("Right operand has non-primitive type is not defined", exp.position) );
+	}
+	if( leftType.type != lastCalculatedType.type ) {
+		errors.push_back( CError( "Operands have different primitive types", exp.position ) );
+	}
 
 }
 void CTypeCheckerVisitor::Visit( CLogExp &exp ) 
@@ -163,5 +180,5 @@ std::shared_ptr<SymbolTable> GetSymbolTable() const
 }
 std::vector<CError> GetErrors()
 {
-	
+
 }

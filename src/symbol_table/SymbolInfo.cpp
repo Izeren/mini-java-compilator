@@ -2,7 +2,17 @@
 
 #include "SymbolInfo.h"
 
-
+//PositionInfo
+//-------------------------------------------------------------------------------------------------
+std::string PositionInfo::GetStringPosition() const {
+	std::string result = "\"";
+	result += firstLine + " ";
+	result += firstColumn + " ";
+	result += lastLine + " ";
+	result += lastColumn;
+	result += "\"";
+	return result;
+}
 //TypeInfo:
 //-------------------------------------------------------------------------------------------------
 
@@ -139,12 +149,16 @@ const std::string CError::FUNCTION_REDEFINITION = "Function redefined.";
 const std::string CError::VARIABLE_REDEFINITION = "Variable redefined.";
 const std::string CError::CLASS_REDEFINITION = "Class redefined.";
 
-CError::CError( const std::string & _message )
-	:message(_message)
+CError::CError( const std::string & _message, const PositionInfo& position )
+	:message(_message), position(position)
 {}
 
 std::string & CError::GetMessage()
 {
 	return message;
+}
+
+PositionInfo CError::GetPosition() const {
+	return position;
 }
 

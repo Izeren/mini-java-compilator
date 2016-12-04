@@ -9,7 +9,7 @@
 	#include <iostream>
 
     #define YYERROR_VERBOSE 1   
-    #define SAVE_LOCATION p->firstLineNumber=yylloc.first_line;p->firstColumnNumber=yylloc.first_column;p->lastLineNumber=yylloc.last_line;p->lastColumnNumber=yylloc.last_column;
+    #define SAVE_LOCATION p->position.firstLine=yylloc.first_line;p->position.firstColumn=yylloc.first_column;p->position.lastLine=yylloc.last_line;p->position.lastColumn=yylloc.last_column;
 }
 
 %code {    
@@ -33,7 +33,7 @@
 	IExpression* Expression;
 	CType* Type;
 	CField* VarDeclaration;
-	CFieldList* VarDeclaratitionList;
+	CFieldList* VarDeclarationList;
 	CArgument* Argument;
 	CArgumentList* ArgumentList;
 	CArgumentList* NonEmptyArgumentList;
@@ -44,7 +44,7 @@
 	CExpList* ExpressionList;
 	CExpList* NonEmptyExpressionList;
 	char *string;
-	CIdExp* Idenifier;
+	CIdExp* Identifier;
 }
 
 %token NEW CLASS EXTENDS THIS RETURN
@@ -108,14 +108,14 @@
 %type <MethodDeclaration> MethodDeclaration
 %type <MethodDeclarationList> MethodDeclarationList
 %type <VarDeclaration> VarDeclaration
-%type <VarDeclaratitionList> VarDeclaratitionList
+%type <VarDeclarationList> VarDeclarationList
 %type <Argument> Argument
 %type <Type> Type
 %type <ArgumentList> ArgumentList
 %type <NonEmptyArgumentList> NonEmptyArgumentList
 %type <ExpressionList> ExpressionList
 %type <NonEmptyExpressionList> NonEmptyExpressionList
-%type <Idenifier> Idenifier
+%type <Identifier> Identifier
 
 %%
 
@@ -127,7 +127,7 @@ Program:
 	;
 
 MainClass:
-	CLASS Idenifier LBRACE 
+	CLASS Identifier LBRACE
 		MainMethod
 	RBRACE
 	{	
@@ -137,9 +137,9 @@ MainClass:
 	;
 
 MainMethod:
-	PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Idenifier RPAREN
+	PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Identifier RPAREN
 	LBRACE
-		VarDeclaratitionList
+		VarDeclarationList
 		StatementList
 	RBRACE 
 	{	
@@ -158,16 +158,16 @@ ClassDeclarationList:
 	;
 
 Class:
-	CLASS Idenifier LBRACE
-		VarDeclaratitionList
+	CLASS Identifier LBRACE
+		VarDeclarationList
 		MethodDeclarationList
 	RBRACE { 
 		auto p = $$ = new CClass( $2, 0, $4, $5 );
 		SAVE_LOCATION
 	}
 	| 
-	CLASS Idenifier EXTENDS Idenifier LBRACE
-		VarDeclaratitionList
+	CLASS Identifier EXTENDS Identifier LBRACE
+		VarDeclarationList
 		MethodDeclarationList
 	RBRACE { 
 		auto p = $$ = new CClass( $2, $4, $6, $7 ); 
@@ -176,8 +176,8 @@ Class:
 	;
 
 MethodDeclaration:
-	PUBLIC Type Idenifier LPAREN ArgumentList RPAREN LBRACE 
-		VarDeclaratitionList
+	PUBLIC Type Identifier LPAREN ArgumentList RPAREN LBRACE
+		VarDeclarationList
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
@@ -188,8 +188,8 @@ MethodDeclaration:
 	}
 	|
 	//false means private
-	PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE 
-		VarDeclaratitionList
+	PRIVATE Type Identifier LPAREN ArgumentList RPAREN LBRACE
+		VarDeclarationList
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
@@ -212,26 +212,26 @@ MethodDeclarationList:
 	;
 
 VarDeclaration:
-	Type Idenifier SEMI { 
+	Type Identifier SEMI {
 		auto p = $$ = new CField( $1, $2 ); 
 		SAVE_LOCATION
 	}
 	;
 
-VarDeclaratitionList:
+VarDeclarationList:
 	%empty { 
 		auto p = $$ = new CFieldList(); 
 		SAVE_LOCATION
 	}
 	|
-	VarDeclaratitionList VarDeclaration { 
+	VarDeclarationList VarDeclaration {
 		auto p = $$ = $1; $1->Add( $2 ); 
 		SAVE_LOCATION
 	}
 	;
 
 Argument:
-	Type Idenifier { 
+	Type Identifier {
 		auto p = $$ = new CArgument( $1, $2 ); 
 		SAVE_LOCATION
 	}
@@ -253,7 +253,7 @@ Type:
 		SAVE_LOCATION
 	}
 	|
-	Idenifier { auto p = $$ = new CType( $1 ); SAVE_LOCATION }
+	Identifier { auto p = $$ = new CType( $1 ); SAVE_LOCATION }
 	;
 
 NonEmptyArgumentList:
@@ -283,9 +283,9 @@ Statement:
 	| 
 	PRINTLN LPAREN Expression RPAREN SEMI { auto p = $$ = new CPrintStm( $3 ); SAVE_LOCATION }
 	| 
-	Idenifier ASSIGN Expression SEMI { auto p = $$ = new CAssignStm( $1, $3 ); SAVE_LOCATION }
+	Identifier ASSIGN Expression SEMI { auto p = $$ = new CAssignStm( $1, $3 ); SAVE_LOCATION }
 	| 
-	Idenifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI { auto p = $$ = new CAssignSubscriptStm( $1, (CNumExp *)$3, $6 ); SAVE_LOCATION }
+	Identifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI { auto p = $$ = new CAssignSubscriptStm( $1, (CNumExp *)$3, $6 ); SAVE_LOCATION }
 	;
 
 Expression:
@@ -309,7 +309,7 @@ Expression:
 	|
 	Expression DOT LENGTH { auto p = $$ = new CGetLengthExp( (CArrayExpression*) $1 ); SAVE_LOCATION }
 	|
-	Expression DOT Idenifier LPAREN ExpressionList RPAREN { auto p = $$ = new CCallMethodExp( (CClass*) $1, $3, (CExpList*) $5) ; SAVE_LOCATION }
+	Expression DOT Identifier LPAREN ExpressionList RPAREN { auto p = $$ = new CCallMethodExp( (CClass*) $1, $3, (CExpList*) $5) ; SAVE_LOCATION }
 	|
 	MINUS NUM { auto p = $$ = new CNumExp( (std::string("-") + std::string($2)).c_str() ); SAVE_LOCATION }
 	|
@@ -319,13 +319,13 @@ Expression:
 	|
 	FALSE { auto p = $$ = new CLogExp(false); SAVE_LOCATION }
 	|
-	Idenifier { auto p = $$ = $1; SAVE_LOCATION }
+	Identifier { auto p = $$ = $1; SAVE_LOCATION }
 	|
 	THIS { auto p = $$ = new CThisExpression(); SAVE_LOCATION }
 	|
 	NEW INT LBRACKET Expression RBRACKET { auto p = $$ = new CArrayExpression($4); SAVE_LOCATION }
 	|
-	NEW Idenifier LPAREN ExpressionList RPAREN { auto p = $$ = new CNewIdentifier($2, (CExpList*)$4); SAVE_LOCATION }
+	NEW Identifier LPAREN ExpressionList RPAREN { auto p = $$ = new CNewIdentifier($2, (CExpList*)$4); SAVE_LOCATION }
 	|
 	NOT Expression { auto p = $$ = new CNegativeExpression($2); SAVE_LOCATION }
 	|
@@ -344,7 +344,7 @@ ExpressionList:
 	NonEmptyExpressionList { $$ = $1; }
 	;
 
-Idenifier:
+Identifier:
 	ID { auto p = $$ = new CIdExp( $1 ); SAVE_LOCATION }
 	;
 

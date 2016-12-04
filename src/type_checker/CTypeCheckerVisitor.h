@@ -4,7 +4,7 @@
 #include "../shared_ptrs_nodes/Statements.h"
 #include "../shared_ptrs_nodes/Expressions.h"
 #include "../shared_ptrs_nodes/Classes.h"
-#include "SymbolInfo.h"
+#include "../symbol_table/SymbolInfo.h"
 
 #include <string>
 
@@ -12,7 +12,8 @@ class CTypeCheckerVisitor : public IVisitor
 {
 public:
 
-	CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table);
+	CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table, IExpression &lastCalculated,
+										 CType &lastCalculatedType);
 
 	void Visit( CIdExp &exp ) override;
 	void Visit( CIdPtrExp &exp ) override;
@@ -60,5 +61,6 @@ private:
 	std::shared_ptr<SymbolTable> table;
 	std::shared_ptr<FullInfo> info;
 	std::vector<CError> errors;
-	std::shared_ptr<IExpression> lastCalculated;
+	IExpression& lastCalculated;
+    CType& lastCalculatedType;
 };
