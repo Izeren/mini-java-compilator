@@ -7,7 +7,7 @@
 #include <map>
 #include <vector>
 
-class IWrapper : public INode {};
+class IWrapper : public PositionedNode {};
 
 //CType:
 //-------------------------------------------------------------------------------------------------

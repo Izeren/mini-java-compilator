@@ -2,7 +2,7 @@
 #include <iostream>
 #include "bison.hpp"
 
-extern YYLTYPE yyloc;
+extern YYLTYPE yylloc;
 int line_number = 0;
 int column_number = 0;
 

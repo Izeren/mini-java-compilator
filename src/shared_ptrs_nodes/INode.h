@@ -11,3 +11,9 @@ public:
 	virtual void Accept(IVisitor &) = 0;
 	virtual ~INode() {}
 };
+
+class PositionedNode : public INode {
+public:
+	int lineNumber;
+	int columnNumber;
+};

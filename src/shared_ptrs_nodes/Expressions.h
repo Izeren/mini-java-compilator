@@ -6,7 +6,7 @@
 #include <vector>
 
 
-class IExpression : public INode {};
+class IExpression : public PositionedNode {};
 
 //CIdExp:
 //-------------------------------------------------------------------------------------------------

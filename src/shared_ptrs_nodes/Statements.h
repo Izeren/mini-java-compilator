@@ -3,7 +3,7 @@
 #include "INode.h"
 #include "Expressions.h"
 
-class IStatement : public INode {};
+class IStatement : public PositionedNode {};
 
 
 //CAssignStm:

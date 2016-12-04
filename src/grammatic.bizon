@@ -8,13 +8,15 @@
 	#include "shared_ptrs_nodes/Classes.h"
 	#include <iostream>
 
-       
-    #define YYERROR_VERBOSE 1        
+    #define YYERROR_VERBOSE 1   
+    #define SAVE_LOCATION p->lineNumber=yylloc.last_line;p->columnNumber=yylloc.last_column;     
 }
 
 %code {    
-int yylex (void);
-int yyerror ( CProgram **program, const char * );
+	int yylex (void);
+	int yyerror ( CProgram **program, const char * );
+	extern YYLTYPE yylloc;
+	
 }
 
 %error-verbose // более подробная информация об ошибке
@@ -118,7 +120,10 @@ int yyerror ( CProgram **program, const char * );
 %%
 
 Program:
-	MainClass ClassDeclarationList { *program = $$ = new CProgram( $1, $2 ); }
+	MainClass ClassDeclarationList { 
+		auto p = *program = $$ = new CProgram( $1, $2 ); 
+		SAVE_LOCATION
+	}
 	;
 
 MainClass:
@@ -126,7 +131,8 @@ MainClass:
 		MainMethod
 	RBRACE
 	{	
-		$$ = new CMainClass( $2, $4 );
+		auto p = $$ = new CMainClass( $2, $4 );
+		SAVE_LOCATION
 	}
 	;
 
@@ -137,26 +143,36 @@ MainMethod:
 		StatementList
 	RBRACE 
 	{	
-		$$ = new CMainMethod( 0, $9, (CFieldList *) $12,(CCompoundStm *)$13 );
+		auto p = $$ = new CMainMethod( 0, $9, (CFieldList *) $12,(CCompoundStm *)$13 );
+		SAVE_LOCATION
 	}
 	;
 
 ClassDeclarationList:
-	%empty { $$ = new CClassList(); }
+	%empty { 
+		auto p = $$ = new CClassList();
+		SAVE_LOCATION
+	}
 	|
-	ClassDeclarationList Class { $$ = $1; $1->Add($2); }
+	ClassDeclarationList Class { auto p = $$ = $1; $1->Add($2); }
 	;
 
 Class:
 	CLASS Idenifier LBRACE
 		VarDeclaratitionList
 		MethodDeclarationList
-	RBRACE { $$ = new CClass( $2, 0, $4, $5 ); }
+	RBRACE { 
+		auto p = $$ = new CClass( $2, 0, $4, $5 );
+		SAVE_LOCATION
+	}
 	| 
 	CLASS Idenifier EXTENDS Idenifier LBRACE
 		VarDeclaratitionList
 		MethodDeclarationList
-	RBRACE { $$ = new CClass( $2, $4, $6, $7 ); } 
+	RBRACE { 
+		auto p = $$ = new CClass( $2, $4, $6, $7 ); 
+		SAVE_LOCATION
+	} 
 	;
 
 MethodDeclaration:
@@ -166,7 +182,10 @@ MethodDeclaration:
 		RETURN Expression SEMI
 	RBRACE
 	//true means public
-	{ $$ = new CMethod( $2, $11, $3, $5, (CFieldList *)$8,(CCompoundStm *)$9, true ); }
+	{ 
+		auto p = $$ = new CMethod( $2, $11, $3, $5, (CFieldList *)$8,(CCompoundStm *)$9, true ); 
+		SAVE_LOCATION
+	}
 	|
 	//false means private
 	PRIVATE Type Idenifier LPAREN ArgumentList RPAREN LBRACE 
@@ -174,47 +193,77 @@ MethodDeclaration:
 		StatementList
 		RETURN Expression SEMI
 	RBRACE
-	{ $$ = new CMethod( $2, $11, $3, $5, (CFieldList *)$8, (CCompoundStm *)$9, false ); }
+	{ 
+		auto p = $$ = new CMethod( $2, $11, $3, $5, (CFieldList *)$8, (CCompoundStm *)$9, false );
+		SAVE_LOCATION 
+	}
 	;
 
 MethodDeclarationList:
-	%empty { $$ = new CMethodList(); }
+	%empty { 
+		auto p = $$ = new CMethodList(); 
+		SAVE_LOCATION
+	}
 	|
-	MethodDeclarationList MethodDeclaration { $$ = $1; $1->Add($2); }
+	MethodDeclarationList MethodDeclaration { 
+		auto p = $$ = $1; $1->Add($2); 
+		SAVE_LOCATION
+	}
 	;
 
 VarDeclaration:
-	Type Idenifier SEMI { $$ = new CField( $1, $2 ); }
+	Type Idenifier SEMI { 
+		auto p = $$ = new CField( $1, $2 ); 
+		SAVE_LOCATION
+	}
 	;
 
 VarDeclaratitionList:
-	%empty { $$ = new CFieldList(); }
+	%empty { 
+		auto p = $$ = new CFieldList(); 
+		SAVE_LOCATION
+	}
 	|
-	VarDeclaratitionList VarDeclaration { $$ = $1; $1->Add( $2 ); }
+	VarDeclaratitionList VarDeclaration { 
+		auto p = $$ = $1; $1->Add( $2 ); 
+		SAVE_LOCATION
+	}
 	;
 
 Argument:
-	Type Idenifier { $$ = new CArgument( $1, $2 ); }
+	Type Idenifier { 
+		auto p = $$ = new CArgument( $1, $2 ); 
+		SAVE_LOCATION
+	}
 	;
 
 Type:
-	INT_ARRAY { $$ = new CType( enums::TPrimitiveType::INT_ARRAY ); }
+	INT_ARRAY { 
+		auto p = $$ = new CType( enums::TPrimitiveType::INT_ARRAY ); 
+		SAVE_LOCATION
+	}
 	|
-	BOOLEAN { $$ = new CType( enums::TPrimitiveType::BOOLEAN ); }
+	BOOLEAN { 
+		auto p = $$ = new CType( enums::TPrimitiveType::BOOLEAN ); 
+		SAVE_LOCATION
+	}
 	|
-	INT { $$ = new CType( enums::TPrimitiveType::INT ); }
+	INT { 
+		auto p = $$ = new CType( enums::TPrimitiveType::INT ); 
+		SAVE_LOCATION
+	}
 	|
-	Idenifier { $$ = new CType( $1 ); }
+	Idenifier { auto p = $$ = new CType( $1 ); SAVE_LOCATION }
 	;
 
 NonEmptyArgumentList:
-	Argument { $$ = new CArgumentList($1); }
+	Argument { auto p = $$ = new CArgumentList($1); SAVE_LOCATION }
 	|
-	NonEmptyArgumentList COMMA Argument { $$ = $1; $1->Add($3); }
+	NonEmptyArgumentList COMMA Argument { auto p = $$ = $1; $1->Add($3); SAVE_LOCATION }
 	;
 
 ArgumentList:
-	%empty { $$ = new CArgumentList(); }
+	%empty { auto p = $$ = new CArgumentList(); SAVE_LOCATION }
 	|
 	NonEmptyArgumentList { $$ = $1; }
 	;
@@ -222,81 +271,81 @@ ArgumentList:
 StatementList:
 	%empty {$$ = nullptr; }
 	|
-	Statement StatementList { $$ = new CCompoundStm($1, $2); }
+	Statement StatementList { auto p = $$ = new CCompoundStm($1, $2); SAVE_LOCATION }
 	;
 
 Statement:
 	LBRACE StatementList RBRACE { $$ = $2; }
 	| 
-	IF LPAREN Expression RPAREN Statement ELSE Statement { $$ = new CIfStm( $3, $5, $7 ); }
+	IF LPAREN Expression RPAREN Statement ELSE Statement { auto p = $$ = new CIfStm( $3, $5, $7 ); SAVE_LOCATION }
 	| 
-	WHILE LPAREN Expression RPAREN Statement { $$ = new CWhileStm( $3, $5 ); }
+	WHILE LPAREN Expression RPAREN Statement { auto p = $$ = new CWhileStm( $3, $5 ); SAVE_LOCATION }
 	| 
-	PRINTLN LPAREN Expression RPAREN SEMI { $$ = new CPrintStm( $3 ); }
+	PRINTLN LPAREN Expression RPAREN SEMI { auto p = $$ = new CPrintStm( $3 ); SAVE_LOCATION }
 	| 
-	Idenifier ASSIGN Expression SEMI { $$ = new CAssignStm( $1, $3 ); }
+	Idenifier ASSIGN Expression SEMI { auto p = $$ = new CAssignStm( $1, $3 ); SAVE_LOCATION }
 	| 
-	Idenifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI { $$ = new CAssignSubscriptStm( $1, (CNumExp *)$3, $6 ); }
+	Idenifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI { auto p = $$ = new CAssignSubscriptStm( $1, (CNumExp *)$3, $6 ); SAVE_LOCATION }
 	;
 
 Expression:
-	Expression PLUS Expression { $$ = new COpExp( $1, $3, enums::TOperation::PLUS ); }
+	Expression PLUS Expression { auto p = $$ = new COpExp( $1, $3, enums::TOperation::PLUS ); SAVE_LOCATION }
 	|
-	Expression MINUS Expression { $$ = new COpExp( $1, $3, enums::TOperation::MINUS ); }
+	Expression MINUS Expression { auto p = $$ = new COpExp( $1, $3, enums::TOperation::MINUS ); SAVE_LOCATION }
 	|
-	Expression TIMES Expression { $$ = new COpExp( $1, $3, enums::TOperation::MULTIPLY ); }
+	Expression TIMES Expression { auto p = $$ = new COpExp( $1, $3, enums::TOperation::MULTIPLY ); SAVE_LOCATION }
 	|
-	Expression AND Expression { $$ = new CLogOpExp( $1, $3, enums::TLogicalOperation::AND ); }
+	Expression AND Expression { auto p = $$ = new CLogOpExp( $1, $3, enums::TLogicalOperation::AND ); SAVE_LOCATION }
 	|
-	Expression OR Expression { $$ = new CLogOpExp( $1, $3, enums::TLogicalOperation::OR ); }
+	Expression OR Expression { auto p = $$ = new CLogOpExp( $1, $3, enums::TLogicalOperation::OR ); SAVE_LOCATION }
 	|
-	Expression LESS Expression { $$ = new CCompExp( $1, $3, enums::TCompareOperation::LESS ); }
+	Expression LESS Expression { auto p = $$ = new CCompExp( $1, $3, enums::TCompareOperation::LESS ); SAVE_LOCATION }
 	|
-	Expression GREATER Expression { $$ = new CCompExp( $1, $3, enums::TCompareOperation::GREATER ); }
+	Expression GREATER Expression { auto p = $$ = new CCompExp( $1, $3, enums::TCompareOperation::GREATER ); SAVE_LOCATION }
 	|
-	Expression MOD Expression { $$ = new COpExp( $1, $3, enums::TOperation::MOD ); }
+	Expression MOD Expression { auto p = $$ = new COpExp( $1, $3, enums::TOperation::MOD ); SAVE_LOCATION }
 	|
-	Expression LBRACKET Expression RBRACKET { $$ = new CByIndexExpression((CArrayExpression*) $1, $3); }
+	Expression LBRACKET Expression RBRACKET { auto p = $$ = new CByIndexExpression((CArrayExpression*) $1, $3); SAVE_LOCATION }
 	|
-	Expression DOT LENGTH { $$ = new CGetLengthExp( (CArrayExpression*) $1 ); }
+	Expression DOT LENGTH { auto p = $$ = new CGetLengthExp( (CArrayExpression*) $1 ); SAVE_LOCATION }
 	|
-	Expression DOT Idenifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( (CClass*) $1, $3, (CExpList*) $5) ; }
+	Expression DOT Idenifier LPAREN ExpressionList RPAREN { auto p = $$ = new CCallMethodExp( (CClass*) $1, $3, (CExpList*) $5) ; SAVE_LOCATION }
 	|
-	MINUS NUM { $$ = new CNumExp( (std::string("-") + std::string($2)).c_str() ); }
+	MINUS NUM { auto p = $$ = new CNumExp( (std::string("-") + std::string($2)).c_str() ); SAVE_LOCATION }
 	|
-	NUM { $$ = new CNumExp($1); }
+	NUM { auto p = $$ = new CNumExp($1); SAVE_LOCATION }
 	|
-	TRUE { $$ = new CLogExp(true); }
+	TRUE { auto p = $$ = new CLogExp(true); SAVE_LOCATION }
 	|
-	FALSE { $$ = new CLogExp(false); }
+	FALSE { auto p = $$ = new CLogExp(false); SAVE_LOCATION }
 	|
 	Idenifier { $$ = $1; }
 	|
-	THIS { $$ = new CThisExpression(); }
+	THIS { auto p = $$ = new CThisExpression(); SAVE_LOCATION }
 	|
-	NEW INT LBRACKET Expression RBRACKET { $$ = new CArrayExpression($4); }
+	NEW INT LBRACKET Expression RBRACKET { auto p = $$ = new CArrayExpression($4); SAVE_LOCATION }
 	|
 	NEW Idenifier LPAREN RPAREN { $$ = $2; }
 	|
-	NOT Expression { $$ = new CNegativeExpression($2); }
+	NOT Expression { auto p = $$ = new CNegativeExpression($2); SAVE_LOCATION }
 	|
 	LPAREN Expression RPAREN { $$ = $2; }	
 	;
 
 NonEmptyExpressionList:
-	Expression { $$ = new CExpList($1); }
+	Expression { auto p = $$ = new CExpList($1); SAVE_LOCATION }
 	|
-	NonEmptyExpressionList COMMA Expression { $$ = $1; $1->Add($3); }
+	NonEmptyExpressionList COMMA Expression { auto p = $$ = $1; $1->Add($3); SAVE_LOCATION }
 	;
 
 ExpressionList:
-	%empty { $$ = new CExpList(); }
+	%empty { auto p = $$ = new CExpList(); SAVE_LOCATION }
 	|
 	NonEmptyExpressionList { $$ = $1; }
 	;
 
 Idenifier:
-	ID { $$ = new CIdExp( $1 ); }
+	ID { auto p = $$ = new CIdExp( $1 ); SAVE_LOCATION }
 	;
 
 %%
