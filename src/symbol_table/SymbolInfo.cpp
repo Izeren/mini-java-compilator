@@ -148,7 +148,7 @@ void SymbolTable::Print( std::ofstream& out )
 const std::string CError::FUNCTION_REDEFINITION = "Function redefined.";
 const std::string CError::VARIABLE_REDEFINITION = "Variable redefined.";
 const std::string CError::CLASS_REDEFINITION = "Class redefined.";
-
+const std::string CError::AST_ERROR = "AST construction error.";
 CError::CError( const std::string & _message, const PositionInfo& position )
 	:message(_message), position(position)
 {}
@@ -160,5 +160,33 @@ std::string & CError::GetMessage()
 
 PositionInfo CError::GetPosition() const {
 	return position;
+}
+
+std::string CError::GetTypeErrorMessage(const TypeInfo &expected, const TypeInfo &got) const {
+    std::string errorMessage = "";
+	errorMessage += "Type mismatch, expected: ";
+	if( expected.isPrimitive ) {
+		errorMessage += CType::typeNames[expected.type];
+	} else {
+		errorMessage += expected.className;
+	}
+	errorMessage += " got: ";
+	if( got.isPrimitive ) {
+		errorMessage += CType::typeNames[got.type];
+	} else {
+		errorMessage += got.className;
+	}
+	errorMessage += ".";
+	return errorMessage;
+}
+
+std::string CError::GetUndeclaredErrorMessage(const ClassInfo &classInfo) const {
+    std::string errorMessage = "Class: " + classInfo.name + " is undeclared.";
+	return errorMessage;
+}
+
+std::string CError::GetHasNoMemberErrorMessage(const std::string &className, const std::string &fieldName) const {
+    std::string errorMessage = "Class: " + className + " has no member: " + fieldName + ".";
+	return errorMessage;
 }
 

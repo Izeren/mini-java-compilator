@@ -4,7 +4,7 @@
 #include "../nodes/statements/CAssignStm.h"
 
 CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table, IExpression &lastCalculated,
-										 CType &lastCalculatedType)
+										 TypeInfo& lastCalculatedType)
 		: lastCalculated(lastCalculated), lastCalculatedType(lastCalculatedType), table(table) {
 }
 
@@ -13,67 +13,155 @@ CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table, IEx
 //---------------------------------------------------------------------------------------
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
 {
-	lastCalculated = exp;
 }
 void CTypeCheckerVisitor::Visit( CIdPtrExp &exp ) 
 {
-	lastCalculated = exp;
+	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT_ARRAY );
 }
 void CTypeCheckerVisitor::Visit( CNumExp &exp ) 
 {
-	lastCalculated = exp;
+	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
 }
 void CTypeCheckerVisitor::Visit( COpExp &exp ) 
 {
 	if( exp.leftOperand ){
 		exp.leftOperand->Accept( *this );
 	}
-    if( !lastCalculatedType.isPrimitive ) {
-		errors.push_back( CError("Left operand has non-primitive type is not defined", exp.position) );
+    if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+		errors.push_back( CError ( errorMessage, exp.position ) );
+		lastCalculatedType = TypeInfo(enums::TPrimitiveType::ERROR_TYPE);
+		return;
 	}
-	auto leftType = lastCalculatedType;
 	if( exp.rightOperand ) {
 		exp.rightOperand->Accept( *this );
 	}
-	if( !lastCalculatedType.isPrimitive ) {
-		errors.push_back( CError("Right operand has non-primitive type is not defined", exp.position) );
+	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+		errors.push_back( CError( errorMessage, exp.position) );
+        lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		return;
 	}
-	if( leftType.type != lastCalculatedType.type ) {
-		errors.push_back( CError( "Operands have different primitive types", exp.position ) );
-	}
-
+	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
 }
+
 void CTypeCheckerVisitor::Visit( CLogExp &exp ) 
 {
-
+	lastCalculatedType = TypeInfo( enums::TPrimitiveType::BOOLEAN );
 }
+
 void CTypeCheckerVisitor::Visit( CLogOpExp &exp ) 
 {
-
+	if( exp.leftOperand ) {
+		exp.leftOperand->Accept( *this );
+	}
+	if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::BOOLEAN ), lastCalculatedType );
+		errors.push_back( CError( errorMessage, exp.position ) );
+		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		return;
+	}
+	if( exp.rightOperand ) {
+		exp.rightOperand->Accept( *this );
+	}
+	if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::BOOLEAN ), lastCalculatedType );
+		errors.push_back( CError( errorMessage, exp.position));
+		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		return;
+	}
+	lastCalculatedType = TypeInfo( enums::TPrimitiveType::BOOLEAN );
 }
+
 void CTypeCheckerVisitor::Visit( CCompExp &exp ) 
 {
-
+	if( exp.leftOperand ) {
+		exp.leftOperand->Accept( *this );
+	}
+	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+		errors.push_back( CError( errorMessage, exp.position ) );
+		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		return;
+	}
+	if( exp.rightOperand ) {
+		exp.rightOperand->Accept( *this );
+	}
+	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+		errors.push_back( CError( errorMessage, exp.position ) );
+		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		return;
+	}
+	lastCalculatedType = TypeInfo( enums::TPrimitiveType::BOOLEAN );
 }
+
 void CTypeCheckerVisitor::Visit( CUnarMinusExp &exp ) 
 {
-
+	if( exp.rightOperand ) {
+		exp.rightOperand->Accept( *this );
+	}
+	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+		errors.push_back( CError( errorMessage, exp.position ) );
+		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		return;
+	}
+	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
 }
 void CTypeCheckerVisitor::Visit( CGetLengthExp &exp ) 
 {
-
+	if( exp.array ) {
+		exp.array->Accept( *this );
+	}
+	if( lastCalculatedType.type != enums::TPrimitiveType::INT_ARRAY ) {
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT_ARRAY ), lastCalculatedType );
+		errors.push_back( CError( errorMessage, exp.position ) );
+		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		return;
+	}
+	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
 }
+
 void CTypeCheckerVisitor::Visit( CGetFieldExp &exp ) 
 {
+	if( exp.classOwner && exp.field ) {
+		std::string ownerName = exp.classOwner->id->name;
+		std::string fieldName = exp.field->id->name;
+		auto ownerIterator = table->classes.find(ownerName);
+		if( ownerIterator == table->classes.end() ) {
+			auto errorMessage = CError::GetUndeclaredErrorMessage( ownerName );
+			errors.push_back( CError( errorMessage, exp.position ) );
+			lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+			return;
+		}
+        auto ownerInfo = table->classes[ownerName];
+        auto variablesInfo = ownerInfo->fields;
+        auto fieldIterator = variablesInfo->variables.find(fieldName);
+        if( fieldIterator == variablesInfo->variables.end() ) {
+            auto errorMessage = CError::GetHasNoMemberErrorMessage( ownerName, fieldName );
+            errors.push_back( CError( errorMessage, exp.position ) );
+            lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+            return;
+        }
 
+		auto fieldInfo = variablesInfo->variables[fieldName];
+		lastCalculatedType = *(fieldInfo->type);
+	} else {
+		errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+	}
 }
+
 void CTypeCheckerVisitor::Visit( CCallMethodExp &exp ) 
 {
+	if( exp.args && exp.classOwner && exp.methodName) {
 
+	} else {
+		errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+	}
 }
 void CTypeCheckerVisitor::Visit( CExpList &exp ) 
 {
-
 }
 void CTypeCheckerVisitor::Visit( CNegativeExpression &exp ) 
 {
@@ -85,7 +173,8 @@ void CTypeCheckerVisitor::Visit( CArrayExpression &exp )
 		exp.lengthExpression->Accept( *this );
 	}
 	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-		errors.push_back( CError( "Length of the array must be integer", exp.position ) );
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType.type );
+		errors.push_back( CError( errorMessage, exp.position ) );
 	}
 }
 void CTypeCheckerVisitor::Visit( CThisExpression &exp ) 
@@ -101,7 +190,8 @@ void CTypeCheckerVisitor::Visit( CByIndexExpression &exp )
 		exp.indexExpression->Accept( *this );
 	}
 	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-		errors.push_back( CError( "The index of the array must be integer", exp.position ) );
+		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType.type );
+		errors.push_back( CError( errorMessage, exp.position ) );
 	}
 }
 void CTypeCheckerVisitor::Visit( CNewIdentifier &exp ) 

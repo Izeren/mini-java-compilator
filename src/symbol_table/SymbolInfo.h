@@ -114,6 +114,10 @@ public:
 	static const std::string FUNCTION_REDEFINITION;
 	static const std::string VARIABLE_REDEFINITION;
 	static const std::string CLASS_REDEFINITION;
+    static const std::string AST_ERROR;
+	static std::string GetTypeErrorMessage( const TypeInfo& expected, const TypeInfo& got ) const;
+    static std::string GetUndeclaredErrorMessage( const ClassInfo& classInfo ) const;
+	static std::string GetHasNoMemberErrorMessage( const std::string& className, const std::string& fieldName ) const;
 
 private:
 	std::string message;
