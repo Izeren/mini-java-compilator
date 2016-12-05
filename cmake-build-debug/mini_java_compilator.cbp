@@ -225,9 +225,6 @@
 		<Unit filename="/home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_nodes/Expressions.h">
 			<Option target="mini_java_compilator"/>
 		</Unit>
-		<Unit filename="/home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_nodes/INode.cpp">
-			<Option target="mini_java_compilator"/>
-		</Unit>
 		<Unit filename="/home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_nodes/INode.h">
 			<Option target="mini_java_compilator"/>
 		</Unit>

@@ -8,7 +8,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/mini_java_compilator.dir/src/nodes/statements/CSimpleStm.cpp.o"
   "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Classes.cpp.o"
   "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Expressions.cpp.o"
-  "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o"
   "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o"
   "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o"
   "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o"

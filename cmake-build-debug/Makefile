@@ -582,33 +582,6 @@ src/shared_ptrs_nodes/Expressions.cpp.s:
 	$(MAKE) -f CMakeFiles/mini_java_compilator.dir/build.make CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Expressions.cpp.s
 .PHONY : src/shared_ptrs_nodes/Expressions.cpp.s
 
-src/shared_ptrs_nodes/INode.o: src/shared_ptrs_nodes/INode.cpp.o
-
-.PHONY : src/shared_ptrs_nodes/INode.o
-
-# target to build an object file
-src/shared_ptrs_nodes/INode.cpp.o:
-	$(MAKE) -f CMakeFiles/mini_java_compilator.dir/build.make CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o
-.PHONY : src/shared_ptrs_nodes/INode.cpp.o
-
-src/shared_ptrs_nodes/INode.i: src/shared_ptrs_nodes/INode.cpp.i
-
-.PHONY : src/shared_ptrs_nodes/INode.i
-
-# target to preprocess a source file
-src/shared_ptrs_nodes/INode.cpp.i:
-	$(MAKE) -f CMakeFiles/mini_java_compilator.dir/build.make CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.i
-.PHONY : src/shared_ptrs_nodes/INode.cpp.i
-
-src/shared_ptrs_nodes/INode.s: src/shared_ptrs_nodes/INode.cpp.s
-
-.PHONY : src/shared_ptrs_nodes/INode.s
-
-# target to generate assembly for a file
-src/shared_ptrs_nodes/INode.cpp.s:
-	$(MAKE) -f CMakeFiles/mini_java_compilator.dir/build.make CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.s
-.PHONY : src/shared_ptrs_nodes/INode.cpp.s
-
 src/shared_ptrs_nodes/Statements.o: src/shared_ptrs_nodes/Statements.cpp.o
 
 .PHONY : src/shared_ptrs_nodes/Statements.o
@@ -939,9 +912,6 @@ help:
 	@echo "... src/shared_ptrs_nodes/Expressions.o"
 	@echo "... src/shared_ptrs_nodes/Expressions.i"
 	@echo "... src/shared_ptrs_nodes/Expressions.s"
-	@echo "... src/shared_ptrs_nodes/INode.o"
-	@echo "... src/shared_ptrs_nodes/INode.i"
-	@echo "... src/shared_ptrs_nodes/INode.s"
 	@echo "... src/shared_ptrs_nodes/Statements.o"
 	@echo "... src/shared_ptrs_nodes/Statements.i"
 	@echo "... src/shared_ptrs_nodes/Statements.s"

@@ -1,5 +1,7 @@
 #include "CTypeCheckerVisitor.h"
 #include "../symbol_table/SymbolInfo.h"
+#include "../nodes/statements/CPrintStm.h"
+#include "../nodes/statements/CAssignStm.h"
 
 CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table, IExpression &lastCalculated,
 										 CType &lastCalculatedType)
@@ -79,7 +81,12 @@ void CTypeCheckerVisitor::Visit( CNegativeExpression &exp )
 }
 void CTypeCheckerVisitor::Visit( CArrayExpression &exp ) 
 {
-
+	if ( exp.lengthExpression ) {
+		exp.lengthExpression->Accept( *this );
+	}
+	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+		errors.push_back( CError( "Length of the array must be integer", exp.position ) );
+	}
 }
 void CTypeCheckerVisitor::Visit( CThisExpression &exp ) 
 {
@@ -87,7 +94,15 @@ void CTypeCheckerVisitor::Visit( CThisExpression &exp )
 }
 void CTypeCheckerVisitor::Visit( CByIndexExpression &exp ) 
 {
-
+	if( exp.arrayExpression ) {
+		exp.arrayExpression->Accept( *this );
+	}
+	if( exp.indexExpression ) {
+		exp.indexExpression->Accept( *this );
+	}
+	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+		errors.push_back( CError( "The index of the array must be integer", exp.position ) );
+	}
 }
 void CTypeCheckerVisitor::Visit( CNewIdentifier &exp ) 
 {
@@ -97,7 +112,16 @@ void CTypeCheckerVisitor::Visit( CNewIdentifier &exp )
 //---------------------------------------------------------------------------------------
 void CTypeCheckerVisitor::Visit( CAssignStm &stm ) 
 {
-
+	if( stm.leftExpression ) {
+		stm.leftExpression->Accept( *this );
+	}
+	auto leftType = lastCalculatedType.type;
+	if( stm.rightExpression ) {
+		stm.rightExpression->Accept( *this );
+	}
+	if( leftType != lastCalculatedType.type ) {
+		errors.push_back( CError( "The type of the assigned value must be the same as the type of variable", stm.position) );
+	}
 }
 void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm ) 
 {
@@ -109,7 +133,12 @@ void CTypeCheckerVisitor::Visit( CCompoundStm &stm )
 }
 void CTypeCheckerVisitor::Visit( CPrintStm &stm ) 
 {
-
+    if( stm.expression ) {
+        stm.expression->Accept( *this );
+    }
+    if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+        errors.push_back( CError( "The type of the expression to be printed should be INT", stm.position ) );
+    }
 }
 void CTypeCheckerVisitor::Visit( CSimpleStm &stm ) 
 {
@@ -117,11 +146,30 @@ void CTypeCheckerVisitor::Visit( CSimpleStm &stm )
 }
 void CTypeCheckerVisitor::Visit( CIfStm &stm ) 
 {
-
+	if( stm.conditionExpression ) {
+		stm.conditionExpression->Accept( *this );
+		if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
+			errors.push_back( CError( "The expression in If statement must be boolean", stm.position ) );
+		}
+	}
+	if( stm.positiveStatement ) {
+		stm.positiveStatement->Accept( *this );
+	}
+	if( stm.negativeStatement ) {
+		stm.negativeStatement->Accept( *this );
+	}
 }
 void CTypeCheckerVisitor::Visit( CWhileStm &stm ) 
 {
-
+	if( stm.conditionExpression ) {
+		stm.conditionExpression->Accept( *this );
+		if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
+			errors.push_back( CError( "The expression in While statement must be boolean", stm.position ) );
+		}
+	}
+	if( stm.statement ) {
+		stm.statement->Accept( *this );
+	}
 }
 //Classes visit methods
 //---------------------------------------------------------------------------------------

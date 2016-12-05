@@ -273,33 +273,9 @@ CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Expressions.cpp.o.prov
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Expressions.cpp.o.provides.build: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Expressions.cpp.o
 
 
-CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
-CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o: ../src/shared_ptrs_nodes/INode.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_nodes/INode.cpp
-
-CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_nodes/INode.cpp > CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.i
-
-CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_nodes/INode.cpp -o CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.s
-
-CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o.requires:
-
-.PHONY : CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o.requires
-
-CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o.provides: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o.requires
-	$(MAKE) -f CMakeFiles/mini_java_compilator.dir/build.make CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o.provides.build
-.PHONY : CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o.provides
-
-CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o.provides.build: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o
-
-
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o: ../src/shared_ptrs_nodes/Statements.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_nodes/Statements.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.i: cmake_force
@@ -323,7 +299,7 @@ CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o.provi
 
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o: ../src/shared_ptrs_visitors/CalculateVisitor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_visitors/CalculateVisitor.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.i: cmake_force
@@ -347,7 +323,7 @@ CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cp
 
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o: ../src/shared_ptrs_visitors/CConvertVisitor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_visitors/CConvertVisitor.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.i: cmake_force
@@ -371,7 +347,7 @@ CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CPrintVisitor.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CPrintVisitor.cpp.o: ../src/shared_ptrs_visitors/CPrintVisitor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CPrintVisitor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CPrintVisitor.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CPrintVisitor.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/shared_ptrs_visitors/CPrintVisitor.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CPrintVisitor.cpp.i: cmake_force
@@ -395,7 +371,7 @@ CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CPrintVisitor.cpp.o
 
 CMakeFiles/mini_java_compilator.dir/src/symbol_table/CConstructSymbolTableVisitor.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/symbol_table/CConstructSymbolTableVisitor.cpp.o: ../src/symbol_table/CConstructSymbolTableVisitor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/symbol_table/CConstructSymbolTableVisitor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/symbol_table/CConstructSymbolTableVisitor.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/symbol_table/CConstructSymbolTableVisitor.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/symbol_table/CConstructSymbolTableVisitor.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/symbol_table/CConstructSymbolTableVisitor.cpp.i: cmake_force
@@ -419,7 +395,7 @@ CMakeFiles/mini_java_compilator.dir/src/symbol_table/CConstructSymbolTableVisito
 
 CMakeFiles/mini_java_compilator.dir/src/symbol_table/SymbolInfo.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/symbol_table/SymbolInfo.cpp.o: ../src/symbol_table/SymbolInfo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/symbol_table/SymbolInfo.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/symbol_table/SymbolInfo.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/symbol_table/SymbolInfo.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/symbol_table/SymbolInfo.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/symbol_table/SymbolInfo.cpp.i: cmake_force
@@ -443,7 +419,7 @@ CMakeFiles/mini_java_compilator.dir/src/symbol_table/SymbolInfo.cpp.o.provides.b
 
 CMakeFiles/mini_java_compilator.dir/src/type_checker/CTypeCheckerVisitor.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/type_checker/CTypeCheckerVisitor.cpp.o: ../src/type_checker/CTypeCheckerVisitor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/type_checker/CTypeCheckerVisitor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/type_checker/CTypeCheckerVisitor.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/type_checker/CTypeCheckerVisitor.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/type_checker/CTypeCheckerVisitor.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/type_checker/CTypeCheckerVisitor.cpp.i: cmake_force
@@ -467,7 +443,7 @@ CMakeFiles/mini_java_compilator.dir/src/type_checker/CTypeCheckerVisitor.cpp.o.p
 
 CMakeFiles/mini_java_compilator.dir/src/visitors/CalculateResults.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/visitors/CalculateResults.cpp.o: ../src/visitors/CalculateResults.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/visitors/CalculateResults.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/visitors/CalculateResults.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/visitors/CalculateResults.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/visitors/CalculateResults.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/visitors/CalculateResults.cpp.i: cmake_force
@@ -491,7 +467,7 @@ CMakeFiles/mini_java_compilator.dir/src/visitors/CalculateResults.cpp.o.provides
 
 CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintResults.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintResults.cpp.o: ../src/visitors/CPrintResults.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintResults.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintResults.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintResults.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/visitors/CPrintResults.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintResults.cpp.i: cmake_force
@@ -515,7 +491,7 @@ CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintResults.cpp.o.provides.bu
 
 CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintVisitor.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintVisitor.cpp.o: ../src/visitors/CPrintVisitor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintVisitor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintVisitor.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintVisitor.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/visitors/CPrintVisitor.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintVisitor.cpp.i: cmake_force
@@ -539,7 +515,7 @@ CMakeFiles/mini_java_compilator.dir/src/visitors/CPrintVisitor.cpp.o.provides.bu
 
 CMakeFiles/mini_java_compilator.dir/src/bison.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/bison.cpp.o: ../src/bison.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/bison.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/bison.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/bison.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/bison.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/bison.cpp.i: cmake_force
@@ -563,7 +539,7 @@ CMakeFiles/mini_java_compilator.dir/src/bison.cpp.o.provides.build: CMakeFiles/m
 
 CMakeFiles/mini_java_compilator.dir/src/bison_main.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/bison_main.cpp.o: ../src/bison_main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/bison_main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/bison_main.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/bison_main.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/bison_main.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/bison_main.cpp.i: cmake_force
@@ -587,7 +563,7 @@ CMakeFiles/mini_java_compilator.dir/src/bison_main.cpp.o.provides.build: CMakeFi
 
 CMakeFiles/mini_java_compilator.dir/src/lex.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/lex.cpp.o: ../src/lex.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/lex.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/lex.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/lex.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/lex.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/lex.cpp.i: cmake_force
@@ -611,7 +587,7 @@ CMakeFiles/mini_java_compilator.dir/src/lex.cpp.o.provides.build: CMakeFiles/min
 
 CMakeFiles/mini_java_compilator.dir/src/main.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/main.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/main.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/main.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/main.cpp.i: cmake_force
@@ -635,7 +611,7 @@ CMakeFiles/mini_java_compilator.dir/src/main.cpp.o.provides.build: CMakeFiles/mi
 
 CMakeFiles/mini_java_compilator.dir/src/main_symboltable.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/main_symboltable.cpp.o: ../src/main_symboltable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/main_symboltable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/main_symboltable.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/main_symboltable.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/main_symboltable.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/main_symboltable.cpp.i: cmake_force
@@ -659,7 +635,7 @@ CMakeFiles/mini_java_compilator.dir/src/main_symboltable.cpp.o.provides.build: C
 
 CMakeFiles/mini_java_compilator.dir/src/main_tmp.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/src/main_tmp.cpp.o: ../src/main_tmp.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/main_tmp.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/mini_java_compilator.dir/src/main_tmp.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/src/main_tmp.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/src/main_tmp.cpp
 
 CMakeFiles/mini_java_compilator.dir/src/main_tmp.cpp.i: cmake_force
@@ -683,7 +659,7 @@ CMakeFiles/mini_java_compilator.dir/src/main_tmp.cpp.o.provides.build: CMakeFile
 
 CMakeFiles/mini_java_compilator.dir/bison.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/bison.cpp.o: ../bison.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/mini_java_compilator.dir/bison.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/mini_java_compilator.dir/bison.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/bison.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/bison.cpp
 
 CMakeFiles/mini_java_compilator.dir/bison.cpp.i: cmake_force
@@ -707,7 +683,7 @@ CMakeFiles/mini_java_compilator.dir/bison.cpp.o.provides.build: CMakeFiles/mini_
 
 CMakeFiles/mini_java_compilator.dir/lex.cpp.o: CMakeFiles/mini_java_compilator.dir/flags.make
 CMakeFiles/mini_java_compilator.dir/lex.cpp.o: ../lex.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/mini_java_compilator.dir/lex.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/mini_java_compilator.dir/lex.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mini_java_compilator.dir/lex.cpp.o -c /home/izeren/Documents/mipt/mini-java-compilator/lex.cpp
 
 CMakeFiles/mini_java_compilator.dir/lex.cpp.i: cmake_force
@@ -740,7 +716,6 @@ mini_java_compilator_OBJECTS = \
 "CMakeFiles/mini_java_compilator.dir/src/nodes/statements/CSimpleStm.cpp.o" \
 "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Classes.cpp.o" \
 "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Expressions.cpp.o" \
-"CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o" \
 "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o" \
 "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o" \
 "CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o" \
@@ -772,7 +747,6 @@ mini_java_compilator: CMakeFiles/mini_java_compilator.dir/src/nodes/statements/C
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/src/nodes/statements/CSimpleStm.cpp.o
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Classes.cpp.o
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Expressions.cpp.o
-mini_java_compilator: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o
@@ -793,7 +767,7 @@ mini_java_compilator: CMakeFiles/mini_java_compilator.dir/bison.cpp.o
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/lex.cpp.o
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/build.make
 mini_java_compilator: CMakeFiles/mini_java_compilator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Linking CXX executable mini_java_compilator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Linking CXX executable mini_java_compilator"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mini_java_compilator.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -810,7 +784,6 @@ CMakeFiles/mini_java_compilator.dir/requires: CMakeFiles/mini_java_compilator.di
 CMakeFiles/mini_java_compilator.dir/requires: CMakeFiles/mini_java_compilator.dir/src/nodes/statements/CSimpleStm.cpp.o.requires
 CMakeFiles/mini_java_compilator.dir/requires: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Classes.cpp.o.requires
 CMakeFiles/mini_java_compilator.dir/requires: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Expressions.cpp.o.requires
-CMakeFiles/mini_java_compilator.dir/requires: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/INode.cpp.o.requires
 CMakeFiles/mini_java_compilator.dir/requires: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_nodes/Statements.cpp.o.requires
 CMakeFiles/mini_java_compilator.dir/requires: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CalculateVisitor.cpp.o.requires
 CMakeFiles/mini_java_compilator.dir/requires: CMakeFiles/mini_java_compilator.dir/src/shared_ptrs_visitors/CConvertVisitor.cpp.o.requires

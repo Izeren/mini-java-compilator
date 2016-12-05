@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/izeren/Documents/mipt/mini-java-compilator/cmake-build-
 CMakeFiles/mini_java_compilator.dir/all:
 	$(MAKE) -f CMakeFiles/mini_java_compilator.dir/build.make CMakeFiles/mini_java_compilator.dir/depend
 	$(MAKE) -f CMakeFiles/mini_java_compilator.dir/build.make CMakeFiles/mini_java_compilator.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 "Built target mini_java_compilator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28 "Built target mini_java_compilator"
 .PHONY : CMakeFiles/mini_java_compilator.dir/all
 
 # Include target in all.
@@ -76,7 +76,7 @@ all: CMakeFiles/mini_java_compilator.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mini_java_compilator.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles 29
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles 28
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/mini_java_compilator.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/mini_java_compilator.dir/rule
