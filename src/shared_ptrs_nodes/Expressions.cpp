@@ -2,7 +2,7 @@
 #include "Classes.h"
 #include <cstring>
 #include <iostream>
-
+//#include "../symbol_table/SymbolInfo.h"
 //CIdExp:
 //-------------------------------------------------------------------------------------------------
 
@@ -203,11 +203,13 @@ void CExpList::Accept(IVisitor &visitor) {
 
 //CThisExpression:
 //-------------------------------------------------------------------------------------------------
-CThisExpression::CThisExpression() {
-}
 
 void CThisExpression::Accept(IVisitor &visitor) {
 	visitor.Visit(*this);
+}
+
+CThisExpression::CThisExpression(CIdExp *identifier) {
+	this->identifier = std::unique_ptr<CIdExp>( identifier );
 }
 
 //CNegativeExpression:
@@ -235,10 +237,9 @@ void CArrayExpression::Accept(IVisitor &visitor) {
 //CNewIdentifier:
 //-------------------------------------------------------------------------------------------------
 
-CNewIdentifier::CNewIdentifier(CIdExp* identifier, CExpList *expressionList)
+CNewIdentifier::CNewIdentifier( CIdExp* identifier )
 {
 	this->identifier = std::unique_ptr<CIdExp>(identifier);
-	this->expressionList = std::unique_ptr<CExpList>(expressionList);
 }
 
 void CNewIdentifier::Accept(IVisitor &visitor)

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <unordered_map>
+#include "../symbol_table/SymbolInfo.h"
 
 //std::unordered_map<TOperation, std::string> operationNames = {}
 
@@ -149,15 +150,14 @@ void CConvertVisitor::Visit(CNewIdentifier &exp)
 	if (exp.identifier){
 		exp.identifier->Accept(*this);
 	} 
-	this->code += "(";
-	if (exp.expressionList) {
-		exp.expressionList->Accept(*this);
-	}
-	this->code += ")";
+	this->code += "()";
 }
 
 void CConvertVisitor::Visit(CThisExpression &exp) {
-	this->code += "this";
+	this->code += "this.";
+	if( exp.identifier ) {
+		exp.identifier->Accept( *this );
+	}
 }
 
 void CConvertVisitor::Visit(CByIndexExpression &exp)

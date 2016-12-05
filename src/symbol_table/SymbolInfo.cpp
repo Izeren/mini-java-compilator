@@ -33,6 +33,26 @@ void TypeInfo::Print( std::ofstream & out )
 	}
 }
 
+bool operator==(const TypeInfo& left, const TypeInfo& right) {
+	if ( left.isPrimitive ) {
+		if( right.isPrimitive ) {
+			return left.type == right.type;
+		} else {
+			return false;
+		}
+	} else {
+		if( right.isPrimitive ) {
+			return false;
+		} else {
+			return left.className == right.className;
+		}
+	}
+}
+
+bool operator!=(const TypeInfo& left, const TypeInfo& right) {
+	return !( left == right );
+}
+
 
 //VariableInfo:
 //-------------------------------------------------------------------------------------------------
@@ -70,6 +90,7 @@ void VariablesInfo::Print( std::ofstream & out )
 void VariablesInfo::AddVariable( std::shared_ptr<VariableInfo> variableInfo )
 {
 	variables.emplace( variableInfo->name, variableInfo );
+	variableNames.push_back( variableInfo->name );
 }
 
 
@@ -149,6 +170,7 @@ const std::string CError::FUNCTION_REDEFINITION = "Function redefined.";
 const std::string CError::VARIABLE_REDEFINITION = "Variable redefined.";
 const std::string CError::CLASS_REDEFINITION = "Class redefined.";
 const std::string CError::AST_ERROR = "AST construction error.";
+const std::string CError::IS_NOT_CALLABLE = "Object is not callable.";
 CError::CError( const std::string & _message, const PositionInfo& position )
 	:message(_message), position(position)
 {}
@@ -158,11 +180,11 @@ std::string & CError::GetMessage()
 	return message;
 }
 
-PositionInfo CError::GetPosition() const {
+PositionInfo CError::GetPosition() {
 	return position;
 }
 
-std::string CError::GetTypeErrorMessage(const TypeInfo &expected, const TypeInfo &got) const {
+std::string CError::GetTypeErrorMessage(const TypeInfo &expected, const TypeInfo &got) {
     std::string errorMessage = "";
 	errorMessage += "Type mismatch, expected: ";
 	if( expected.isPrimitive ) {
@@ -180,13 +202,23 @@ std::string CError::GetTypeErrorMessage(const TypeInfo &expected, const TypeInfo
 	return errorMessage;
 }
 
-std::string CError::GetUndeclaredErrorMessage(const ClassInfo &classInfo) const {
-    std::string errorMessage = "Class: " + classInfo.name + " is undeclared.";
+std::string CError::GetUndeclaredErrorMessage(const std::string& name) {
+    std::string errorMessage = "The object named: " + name + " is undeclared in this scope.";
 	return errorMessage;
 }
 
-std::string CError::GetHasNoMemberErrorMessage(const std::string &className, const std::string &fieldName) const {
+std::string CError::GetHasNoMemberErrorMessage(const std::string &className, const std::string &fieldName) {
     std::string errorMessage = "Class: " + className + " has no member: " + fieldName + ".";
+	return errorMessage;
+}
+
+std::string CError::GetNumberOfArgsMessage(unsigned long expected, unsigned long got) {
+	 std::string errorMessage = "";
+	errorMessage += "Wrong number of arguments, expected: ";
+    errorMessage += std::to_string( expected );
+	errorMessage += " got: ";
+    errorMessage += std::to_string( got );
+	errorMessage += ".";
 	return errorMessage;
 }
 

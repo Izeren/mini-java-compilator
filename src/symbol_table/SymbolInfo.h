@@ -30,6 +30,8 @@ public:
 	enums::TPrimitiveType type;
 	std::string className;
 };
+bool operator==(const TypeInfo& left, const TypeInfo& right);
+bool operator!=(const TypeInfo& left, const TypeInfo& right);
 
 class VariableInfo
 {
@@ -52,6 +54,8 @@ public:
 	void AddVariable( std::shared_ptr<VariableInfo> variableInfo );
 
 	std::unordered_map<std::string, std::shared_ptr<VariableInfo>> variables;
+
+    std::vector<std::string> variableNames;
 };
 
 class MethodInfo
@@ -109,15 +113,18 @@ public:
 	CError( const std::string& _message, const PositionInfo &position);
 
 	std::string& GetMessage();
-	PositionInfo GetPosition() const;
+	PositionInfo GetPosition();
 
 	static const std::string FUNCTION_REDEFINITION;
 	static const std::string VARIABLE_REDEFINITION;
 	static const std::string CLASS_REDEFINITION;
     static const std::string AST_ERROR;
-	static std::string GetTypeErrorMessage( const TypeInfo& expected, const TypeInfo& got ) const;
-    static std::string GetUndeclaredErrorMessage( const ClassInfo& classInfo ) const;
-	static std::string GetHasNoMemberErrorMessage( const std::string& className, const std::string& fieldName ) const;
+	static const std::string IS_NOT_CALLABLE;
+
+	static std::string GetTypeErrorMessage( const TypeInfo& expected, const TypeInfo& got );
+    static std::string GetNumberOfArgsMessage( unsigned long expected, unsigned long got );
+    static std::string GetUndeclaredErrorMessage( const std::string& name );
+	static std::string GetHasNoMemberErrorMessage( const std::string& className, const std::string& fieldName );
 
 private:
 	std::string message;

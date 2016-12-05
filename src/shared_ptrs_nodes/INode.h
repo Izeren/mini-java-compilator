@@ -16,4 +16,6 @@ public:
 class PositionedNode : public INode {
 public:
 	PositionInfo& position;
+	virtual void Accept(IVisitor &) = 0;
+	virtual ~PositionedNode() {}
 };

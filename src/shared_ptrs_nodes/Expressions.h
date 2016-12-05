@@ -6,7 +6,10 @@
 #include <vector>
 
 
-class IExpression : public PositionedNode {};
+class IExpression : public PositionedNode {
+public:
+	virtual void Accept(IVisitor &) = 0;
+};
 
 //CIdExp:
 //-------------------------------------------------------------------------------------------------
@@ -175,9 +178,10 @@ public:
 
 class CThisExpression : public IExpression {
 public:
-	CThisExpression();
+	CThisExpression( CIdExp *identifier );
 
 	void Accept(IVisitor &visitor) override;
+	std::unique_ptr<CIdExp> identifier;
 };
 
 //CNegativeExpression:
@@ -208,12 +212,11 @@ public:
 //-------------------------------------------------------------------------------------------------
 class CNewIdentifier : public IExpression {
 public:
-	CNewIdentifier(CIdExp* identifier, CExpList *expressionList);
+	CNewIdentifier( CIdExp* identifier );
 
 	void Accept(IVisitor &visitor) override;
 
 	std::unique_ptr<CIdExp> identifier;
-	std::unique_ptr<CExpList> expressionList;
 };
 
 

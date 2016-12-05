@@ -3,12 +3,6 @@
 #include "../nodes/statements/CPrintStm.h"
 #include "../nodes/statements/CAssignStm.h"
 
-CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table, IExpression &lastCalculated,
-										 TypeInfo& lastCalculatedType)
-		: lastCalculated(lastCalculated), lastCalculatedType(lastCalculatedType), table(table) {
-}
-
-
 //Expressions visit methods
 //---------------------------------------------------------------------------------------
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
@@ -154,19 +148,69 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
 
 void CTypeCheckerVisitor::Visit( CCallMethodExp &exp ) 
 {
-	if( exp.args && exp.classOwner && exp.methodName) {
-
+	if( exp.args && exp.methodName) {
+        std::string identifierName = currentClass->name;
+        if ( exp.classOwner ) {
+            identifierName = exp.classOwner->id->name;
+        }
+		auto classIterator = table->classes.find(identifierName);
+		if( classIterator == table->classes.end() ) {
+			errors.push_back( CError( CError::IS_NOT_CALLABLE, exp.position ) );
+			return;
+		}
+		auto methodName = exp.methodName->name;
+		auto methods = table->classes[identifierName]->methods;
+		if( methods.find( methodName ) == methods.end() ) {
+			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.position ) );
+			return;
+		}
+		auto methodInfo = methods[methodName];
+		auto expectedNumberOfArguments = methodInfo->variables->variables.size();
+        auto gotNumberOfArguments = exp.args->exps.size();
+        if( expectedNumberOfArguments != gotNumberOfArguments ) {
+			auto errorMessage = CError::GetNumberOfArgsMessage( expectedNumberOfArguments, gotNumberOfArguments );
+			errors.push_back( CError( errorMessage, exp.position) );
+			return;
+		}
+        auto argumentsInfo = methodInfo->variables;
+        for( int index = 0; index < gotNumberOfArguments; ++index ) {
+            auto argumentInfo = argumentsInfo->variables[argumentsInfo->variableNames[index]];
+            if( exp.args->exps[index] ) {
+                exp.args->exps[index]->Accept( *this );
+                auto expectedArgumentType = *( argumentInfo->type );
+                if( lastCalculatedType != expectedArgumentType ) {
+                    auto errorMessage = CError::GetTypeErrorMessage(expectedArgumentType, lastCalculatedType);
+                    errors.push_back( CError( errorMessage, exp.args->exps[index]->position ) );
+                    return;
+                }
+            }
+		}
+		lastCalculatedType = *( methodInfo->returnType );
 	} else {
 		errors.push_back( CError( CError::AST_ERROR, exp.position ) );
 	}
 }
+
 void CTypeCheckerVisitor::Visit( CExpList &exp ) 
 {
+    lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 }
+
 void CTypeCheckerVisitor::Visit( CNegativeExpression &exp ) 
 {
-
+    if( exp.expression ) {
+        exp.expression->Accept( *this );
+        if( lastCalculatedType != enums::TPrimitiveType::BOOLEAN ) {
+            auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::BOOLEAN, lastCalculatedType );
+            errors.push_back( CError( errorMessage, exp.position ) );
+            return;
+        }
+        lastCalculatedType = enums::TPrimitiveType::BOOLEAN;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position) );
+    }
 }
+
 void CTypeCheckerVisitor::Visit( CArrayExpression &exp ) 
 {
 	if ( exp.lengthExpression ) {
@@ -177,9 +221,21 @@ void CTypeCheckerVisitor::Visit( CArrayExpression &exp )
 		errors.push_back( CError( errorMessage, exp.position ) );
 	}
 }
+
 void CTypeCheckerVisitor::Visit( CThisExpression &exp ) 
 {
-
+    if( exp.identifier ) {
+        auto currentClassFields = currentClass->fields;
+        auto fieldName = exp.identifier->name;
+        if( currentClassFields->variables.find( fieldName ) == currentClassFields->variables.end() ) {
+            auto errorMessage = CError::GetHasNoMemberErrorMessage( currentClass->name, fieldName );
+            errors.push_back( CError( errorMessage, exp.position ) );
+            return;
+        }
+        lastCalculatedType = *( currentClassFields->variables[fieldName]->type );
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position) );
+    }
 }
 void CTypeCheckerVisitor::Visit( CByIndexExpression &exp ) 
 {
@@ -196,26 +252,66 @@ void CTypeCheckerVisitor::Visit( CByIndexExpression &exp )
 }
 void CTypeCheckerVisitor::Visit( CNewIdentifier &exp ) 
 {
-
+    if( exp.identifier ) {
+        if( table->classes.find(exp.identifier->name) == table->classes.end() ) {
+            auto errorMessage = CError::GetUndeclaredErrorMessage( exp.identifier->name );
+            errors.push_back( CError( errorMessage, exp.position) );
+            return;
+        }
+        lastCalculatedType = exp.identifier->name;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+    }
 }
 //Statements visit methods
 //---------------------------------------------------------------------------------------
 void CTypeCheckerVisitor::Visit( CAssignStm &stm ) 
 {
-	if( stm.leftExpression ) {
-		stm.leftExpression->Accept( *this );
-	}
-	auto leftType = lastCalculatedType.type;
-	if( stm.rightExpression ) {
-		stm.rightExpression->Accept( *this );
-	}
-	if( leftType != lastCalculatedType.type ) {
-		errors.push_back( CError( "The type of the assigned value must be the same as the type of variable", stm.position) );
-	}
+    if( stm.leftExpression && stm.rightExpression ) {
+        bool isVisible = checkVariableVisibility( stm.leftExpression->name );
+        if( !isVisible ) {
+            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.leftExpression->name );
+            errors.push_back( CError( errorMessage, stm.leftExpression->position ) );
+            return;
+        }
+        stm.leftExpression->Accept( *this );
+        auto leftType = lastCalculatedType;
+        stm.rightExpression->Accept( *this );
+        if( leftType != lastCalculatedType ) {
+	    	auto errorMessage = CError::GetTypeErrorMessage( leftType, lastCalculatedType.type );
+		    errors.push_back( CError( errorMessage, stm.position) );
+            return;
+	    }
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
 void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm ) 
 {
-
+    if( stm.idExpression && stm.offset && stm.valueExpression ) {
+        auto variableName = stm.idExpression->name;
+        bool isVisible = checkVariableVisibility( variableName );
+        if( !isVisible ) {
+            errors.push_back( CError( CError::GetUndeclaredErrorMessage( variableName ), stm.position ) );
+            return;
+        }
+        stm.offset->Accept( *this );
+        if( lastCalculatedType != enums::TPrimitiveType::INT ) {
+            auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
+            errors.push_back( CError( errorMessage, stm.offset->position) );
+            return;
+        }
+        stm.valueExpression->Accept( *this );
+        if( lastCalculatedType != enums::TPrimitiveType::INT ) {
+            auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
+            errors.push_back( CError( errorMessage, stm.valueExpression->position) );
+            return;
+        }
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position) );
+    }
 }
 void CTypeCheckerVisitor::Visit( CCompoundStm &stm ) 
 {
@@ -225,80 +321,167 @@ void CTypeCheckerVisitor::Visit( CPrintStm &stm )
 {
     if( stm.expression ) {
         stm.expression->Accept( *this );
-    }
-    if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-        errors.push_back( CError( "The type of the expression to be printed should be INT", stm.position ) );
+        if( lastCalculatedType != enums::TPrimitiveType::INT ) {
+            auto errorMessage = CError::GetTypeErrorMessage(enums::TPrimitiveType::INT, lastCalculatedType);
+            errors.push_back(CError(errorMessage, stm.position));
+        }
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
     }
 }
-void CTypeCheckerVisitor::Visit( CSimpleStm &stm ) 
-{
 
+void CTypeCheckerVisitor::Visit( CSimpleStm &stm )
+{
+    lastCalculatedType = enums::TPrimitiveType::VOID;
 }
+
 void CTypeCheckerVisitor::Visit( CIfStm &stm ) 
 {
-	if( stm.conditionExpression ) {
+	if( stm.conditionExpression && stm.positiveStatement && stm.negativeStatement ) {
 		stm.conditionExpression->Accept( *this );
 		if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
-			errors.push_back( CError( "The expression in If statement must be boolean", stm.position ) );
+			auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::BOOLEAN), lastCalculatedType.type );
+			errors.push_back( CError( errorMessage, stm.position ) );
+            return;
 		}
-	}
-	if( stm.positiveStatement ) {
-		stm.positiveStatement->Accept( *this );
-	}
-	if( stm.negativeStatement ) {
-		stm.negativeStatement->Accept( *this );
-	}
+        stm.positiveStatement->Accept( *this );
+        stm.negativeStatement->Accept( *this );
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
+
 void CTypeCheckerVisitor::Visit( CWhileStm &stm ) 
 {
-	if( stm.conditionExpression ) {
+	if( stm.conditionExpression && stm.statement ) {
 		stm.conditionExpression->Accept( *this );
 		if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
-			errors.push_back( CError( "The expression in While statement must be boolean", stm.position ) );
+			auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::BOOLEAN), lastCalculatedType.type );
+			errors.push_back( CError( errorMessage, stm.position ) );
+            return;
 		}
-	}
-	if( stm.statement ) {
-		stm.statement->Accept( *this );
+        stm.statement->Accept( *this );
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
 	}
 }
+
 //Classes visit methods
 //---------------------------------------------------------------------------------------
 void CTypeCheckerVisitor::Visit( CType &stm ) 
 {
-
+    if( stm.name ) {
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
+
 void CTypeCheckerVisitor::Visit( CField &stm ) 
 {
-
+    if( stm.id && stm.type ) {
+        bool isVisibleType = checkClassVisibility( stm.id->name );
+        if( !isVisibleType ) {
+            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.id->name );
+            errors.push_back( CError( errorMessage, stm.position ) );
+            return;
+        }
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
+
 void CTypeCheckerVisitor::Visit( CFieldList &stm ) 
 {
-
+    bool areAllFieldsBuilt = true;
+    for( auto field : stm.fields ) {
+        if( !field ) {
+            areAllFieldsBuilt = false;
+            break;
+        }
+    }
+    if( areAllFieldsBuilt ) {
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
-void CTypeCheckerVisitor::Visit( CArgument &stm ) 
-{
 
+void CTypeCheckerVisitor::Visit( CArgument &stm )  {
+    if( stm.id && stm.type ) {
+        bool isVisibleType = checkClassVisibility( stm.id->name );
+        if( !isVisibleType ) {
+            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.id->name );
+            errors.push_back( CError( errorMessage, stm.position ) );
+            return;
+        }
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
+
 void CTypeCheckerVisitor::Visit( CArgumentList &stm ) 
 {
-
+    bool areAllArgsBuilt = true;
+    for( auto argument : stm.arguments ) {
+        if( !argument ) {
+            areAllArgsBuilt = false;
+            break;
+        }
+    }
+    if( areAllArgsBuilt ) {
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
+
 void CTypeCheckerVisitor::Visit( CMethod &stm ) 
 {
 
 }
+
 void CTypeCheckerVisitor::Visit( CMethodList &stm ) 
 {
-
+    bool areAllMethods = true;
+    for( auto method : stm.methods) {
+        if( !method ) {
+            areAllMethods = false;
+            break;
+        }
+    }
+    if( areAllMethods ) {
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
+
 void CTypeCheckerVisitor::Visit( CClass &stm ) 
 {
 
 }
+
 void CTypeCheckerVisitor::Visit( CClassList &stm ) 
 {
-
+    bool areAllClassBuilt = true;
+    for( auto curClass : stm.classes ) {
+        if( !curClass ) {
+            areAllClassBuilt = false;
+            break;
+        }
+    }
+    if( areAllClassBuilt ) {
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
+
 void CTypeCheckerVisitor::Visit( CMainMethod &stm ) 
 {
 
@@ -312,10 +495,44 @@ void CTypeCheckerVisitor::Visit( CProgram &stm )
 
 }
 
-std::shared_ptr<SymbolTable> GetSymbolTable() const
-{
+CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table) : table( table ),
+ lastCalculatedType( enums::TPrimitiveType::ERROR_TYPE ), currentMethod( nullptr ), currentClass( nullptr ) {}
 
+bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableName ) {
+    if( currentClass == nullptr || currentMethod == nullptr ) {
+        return false;
+    }
+    auto methodVariables = currentMethod->variables->variables;
+    if(methodVariables.find( variableName ) != methodVariables.end() ) {
+        return true;
+    }
+    auto classVariables = currentClass->fields->variables;
+    if( classVariables.find( variableName ) != classVariables.end() ) {
+        return true;
+    }
+    return false;
 }
+
+bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName) {
+    if (currentClass == nullptr) {
+        return false;
+    }
+    auto classMethods = currentClass->methods;
+    if( classMethods.find( methodName ) == classMethods.end() ) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool CTypeCheckerVisitor::checkClassVisibility(const std::string &className) {
+    if( table->classes.find( className ) == table->classes.end() ) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 std::vector<CError> GetErrors()
 {
 

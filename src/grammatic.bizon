@@ -6,6 +6,7 @@
     #include "shared_ptrs_nodes/Expressions.h"
 	#include "shared_ptrs_nodes/Statements.h"
 	#include "shared_ptrs_nodes/Classes.h"
+	#include "symbol_table/SymbolInfo.h"
 	#include <iostream>
 
     #define YYERROR_VERBOSE 1   
@@ -309,7 +310,9 @@ Expression:
 	|
 	Expression DOT LENGTH { auto p = $$ = new CGetLengthExp( (CArrayExpression*) $1 ); SAVE_LOCATION }
 	|
-	Expression DOT Identifier LPAREN ExpressionList RPAREN { auto p = $$ = new CCallMethodExp( (CClass*) $1, $3, (CExpList*) $5) ; SAVE_LOCATION }
+	Identifier DOT Identifier LPAREN ExpressionList RPAREN { auto p = $$ = new CCallMethodExp( (CClass*) $1, $3, (CExpList*) $5) ; SAVE_LOCATION }
+	|
+	THIS DOT Identifier LPAREN ExpressionList RPAREN { auto p = $$ = new CCallMethodExp( 0, $3, (CExpList*) $5) ; SAVE_LOCATION }
 	|
 	MINUS NUM { auto p = $$ = new CNumExp( (std::string("-") + std::string($2)).c_str() ); SAVE_LOCATION }
 	|
@@ -321,11 +324,11 @@ Expression:
 	|
 	Identifier { auto p = $$ = $1; SAVE_LOCATION }
 	|
-	THIS { auto p = $$ = new CThisExpression(); SAVE_LOCATION }
+	THIS DOT Identifier { auto p = $$ = new CThisExpression( $3 ); SAVE_LOCATION }
 	|
 	NEW INT LBRACKET Expression RBRACKET { auto p = $$ = new CArrayExpression($4); SAVE_LOCATION }
 	|
-	NEW Identifier LPAREN ExpressionList RPAREN { auto p = $$ = new CNewIdentifier($2, (CExpList*)$4); SAVE_LOCATION }
+	NEW Identifier LPAREN  RPAREN { auto p = $$ = new CNewIdentifier( $2 ); SAVE_LOCATION }
 	|
 	NOT Expression { auto p = $$ = new CNegativeExpression($2); SAVE_LOCATION }
 	|

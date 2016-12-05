@@ -12,8 +12,7 @@ class CTypeCheckerVisitor : public IVisitor
 {
 public:
 
-	CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table, IExpression &lastCalculated,
-										 TypeInfo& lastCalculatedType);
+	CTypeCheckerVisitor( std::shared_ptr<SymbolTable> table );
 
 	void Visit( CIdExp &exp ) override;
 	void Visit( CIdPtrExp &exp ) override;
@@ -54,13 +53,17 @@ public:
 	void Visit( CMainClass &stm ) override;
 	void Visit( CProgram &stm ) override;
 
-	std::shared_ptr<SymbolTable> GetSymbolTable() const;
 	std::vector<CError> GetErrors();
 
 private:
 	std::shared_ptr<SymbolTable> table;
-	std::shared_ptr<FullInfo> info;
 	std::vector<CError> errors;
-	IExpression& lastCalculated;
-    TypeInfo& lastCalculatedType;
+    TypeInfo lastCalculatedType;
+    std::shared_ptr<ClassInfo> currentClass;
+    std::shared_ptr<MethodInfo> currentMethod;
+
+
+	bool checkVariableVisibility( const std::string& variableName );
+	bool checkMethodVisibility( const std::string& methodName );
+	bool checkClassVisibility( const std::string& className );
 };
