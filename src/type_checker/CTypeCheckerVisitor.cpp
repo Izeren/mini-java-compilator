@@ -402,6 +402,7 @@ void CTypeCheckerVisitor::Visit( CFieldList &stm )
             areAllFieldsBuilt = false;
             break;
         }
+        field->Accept( *this );
     }
     if( areAllFieldsBuilt ) {
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -432,6 +433,7 @@ void CTypeCheckerVisitor::Visit( CArgumentList &stm )
             areAllArgsBuilt = false;
             break;
         }
+        argument->Accept( *this );
     }
     if( areAllArgsBuilt ) {
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -442,7 +444,32 @@ void CTypeCheckerVisitor::Visit( CArgumentList &stm )
 
 void CTypeCheckerVisitor::Visit( CMethod &stm ) 
 {
-
+    if( stm.name && stm.arguments && stm.returnExp && stm.returnType && stm.statements && stm.vars ) {
+        currentMethod = table->classes[currentClass->name]->methods[stm.name->name];
+        stm.name->Accept( *this );
+        stm.arguments->Accept( *this );
+        stm.statements->Accept( *this );
+        stm.vars->Accept( *this );
+        stm.returnExp->Accept( *this );
+        TypeInfo expectedType = stm.returnType->isPrimitive ? stm.returnType->type : stm.returnType->name;
+        if( !stm.returnType->isPrimitive ) {
+            bool isVisibleClass = checkClassVisibility( stm.returnType->name->name );
+            if( !isVisibleClass ) {
+                auto errorMessage = CError::GetUndeclaredErrorMessage( stm.returnType->name->name );
+                errors.push_back( CError( errorMessage, stm.returnType->position) );
+                return;
+            }
+        }
+        if( lastCalculatedType != expectedType ) {
+            auto errorMessage = CError::GetTypeErrorMessage( expectedType, lastCalculatedType );
+			errors.push_back( CError( errorMessage, stm.returnExp->position ) );
+            return;
+        }
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+        currentMethod = nullptr;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
 
 void CTypeCheckerVisitor::Visit( CMethodList &stm ) 
@@ -453,6 +480,7 @@ void CTypeCheckerVisitor::Visit( CMethodList &stm )
             areAllMethods = false;
             break;
         }
+        method->Accept( *this );
     }
     if( areAllMethods ) {
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -463,7 +491,14 @@ void CTypeCheckerVisitor::Visit( CMethodList &stm )
 
 void CTypeCheckerVisitor::Visit( CClass &stm ) 
 {
-
+    if( stm.id && stm.fields && stm.methods ) {
+        stm.id->Accept( *this );
+        stm.fields->Accept( *this );
+        stm.methods->Accept( *this );
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
 
 void CTypeCheckerVisitor::Visit( CClassList &stm ) 
@@ -474,6 +509,7 @@ void CTypeCheckerVisitor::Visit( CClassList &stm )
             areAllClassBuilt = false;
             break;
         }
+        curClass->Accept( *this );
     }
     if( areAllClassBuilt ) {
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -488,11 +524,18 @@ void CTypeCheckerVisitor::Visit( CMainMethod &stm )
 }
 void CTypeCheckerVisitor::Visit( CMainClass &stm ) 
 {
-
+    if( stm.id ) {
+        stm.id->Accept( *this );
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
 }
 void CTypeCheckerVisitor::Visit( CProgram &stm ) 
 {
+    if( stm.mainClass ) {
 
+    }
 }
 
 CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table) : table( table ),
@@ -531,6 +574,19 @@ bool CTypeCheckerVisitor::checkClassVisibility(const std::string &className) {
     } else {
         return true;
     }
+}
+
+bool CTypeCheckerVisitor::checkCyclicInheritance(std::shared_ptr<ClassInfo> startClass,
+                                                 std::shared_ptr<ClassInfo> currentClass) {
+    if( currentClass->baseClass == "" ) {
+        return false;
+    }
+    if( currentClass->baseClass == startClass->name )
+    {
+        return true;
+    }
+    bool isD
+    checkCyclicInheritance( startClass, table->classes[currentClass->baseClass])
 }
 
 std::vector<CError> GetErrors()

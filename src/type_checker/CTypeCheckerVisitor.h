@@ -66,4 +66,5 @@ private:
 	bool checkVariableVisibility( const std::string& variableName );
 	bool checkMethodVisibility( const std::string& methodName );
 	bool checkClassVisibility( const std::string& className );
+	bool checkCyclicInheritance( std::shared_ptr<ClassInfo> startClass, std::shared_ptr<ClassInfo> currentClass );
 };
