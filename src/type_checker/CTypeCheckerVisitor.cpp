@@ -7,41 +7,52 @@
 //---------------------------------------------------------------------------------------
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
 {
+    //Ничего не делаем?
 }
 void CTypeCheckerVisitor::Visit( CIdPtrExp &exp ) 
 {
-	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT_ARRAY );
+    //Только запоминаем тип
+	lastCalculatedType = enums::TPrimitiveType::INT_ARRAY;
 }
 void CTypeCheckerVisitor::Visit( CNumExp &exp ) 
 {
-	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
+    //Только запоминаем тип
+	lastCalculatedType = enums::TPrimitiveType::INT;
 }
 void CTypeCheckerVisitor::Visit( COpExp &exp ) 
 {
+    //Посещаем левый операнд
 	if( exp.leftOperand ){
 		exp.leftOperand->Accept( *this );
 	}
+
     if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+        //Работаем только с int
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError ( errorMessage, exp.position ) );
-		lastCalculatedType = TypeInfo(enums::TPrimitiveType::ERROR_TYPE);
+		lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 		return;
 	}
+
+    //Посещаем правый операнд
 	if( exp.rightOperand ) {
 		exp.rightOperand->Accept( *this );
 	}
+
 	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+        //Работаем только с int
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position) );
-        lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 		return;
 	}
-	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
+
+	lastCalculatedType = enums::TPrimitiveType::INT;
 }
 
 void CTypeCheckerVisitor::Visit( CLogExp &exp ) 
 {
-	lastCalculatedType = TypeInfo( enums::TPrimitiveType::BOOLEAN );
+	lastCalculatedType = enums::TPrimitiveType::BOOLEAN;
 }
 
 void CTypeCheckerVisitor::Visit( CLogOpExp &exp ) 
