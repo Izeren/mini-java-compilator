@@ -26,7 +26,7 @@ void CTypeCheckerVisitor::Visit( COpExp &exp )
 		exp.leftOperand->Accept( *this );
 	}
 
-    if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+    if( lastCalculatedType != enums::TPrimitiveType::INT ) {
         //Работаем только с int
 		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError ( errorMessage, exp.position ) );
@@ -256,8 +256,8 @@ void CTypeCheckerVisitor::Visit( CByIndexExpression &exp )
 	if( exp.indexExpression ) {
 		exp.indexExpression->Accept( *this );
 	}
-	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType.type );
+	if( lastCalculatedType != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position ) );
 	}
 }
