@@ -251,8 +251,8 @@ void CNewIdentifier::Accept(IVisitor &visitor)
 //CByIndexExpression:
 //-------------------------------------------------------------------------------------------------
 
-CByIndexExpression::CByIndexExpression(CArrayExpression* arrayExpression, IExpression* indexExpression) {
-	this->arrayExpression = std::unique_ptr<CArrayExpression>(arrayExpression);
+CByIndexExpression::CByIndexExpression(IExpression* arrayExpression, IExpression* indexExpression) {
+	this->identifier= std::unique_ptr<IExpression>(arrayExpression);
 	this->indexExpression = std::unique_ptr<IExpression>(indexExpression);
 }
 
