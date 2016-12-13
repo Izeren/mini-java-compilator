@@ -87,6 +87,8 @@ public:
 	std::shared_ptr<VariableInfo> iVariable;
 	std::shared_ptr<TypeInfo> iType;
 	std::string iName;
+    
+	std::shared_ptr<VariablesInfo> definedVariables;
 };
 
 class SymbolTable
