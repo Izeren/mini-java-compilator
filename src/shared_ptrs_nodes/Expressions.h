@@ -21,6 +21,7 @@ public:
 	int *address;
 
 	std::string name;
+    bool isInstance = false;
 };
 
 //CIdPtrExp:
