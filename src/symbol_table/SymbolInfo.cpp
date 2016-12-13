@@ -177,6 +177,7 @@ const std::string CError::VARIABLE_REDEFINITION = "Variable redefined.";
 const std::string CError::CLASS_REDEFINITION = "Class redefined.";
 const std::string CError::AST_ERROR = "AST construction error.";
 const std::string CError::IS_NOT_CALLABLE = "Object is not callable.";
+const std::string CError::NOT_INITIALIZED_VARIABLE = "Variable wasn't initialized.";
 CError::CError( const std::string & _message, const PositionInfo& position )
 	:message(_message), position(position)
 {}

@@ -6,19 +6,68 @@
 
 
 
+//bool -- isLocalVariable
+std::pair<VariableInfo*, bool> CTypeCheckerVisitor::getVariableInfo(CIdExp& exp) {
+    std::pair<VariableInfo*, bool> errorResult(nullptr, false);
+
+    if (exp.isInstance) {
+        bool isLocalVariable = false;
+        VariableInfo* variableInfoPtr = nullptr;
+
+        if (!currentClass || !currentMethod) {
+            return errorResult;
+        }
+
+        auto classFieldIterator = currentClass->fields->variables.find(exp.name);
+        if (classFieldIterator != currentClass->fields->variables.end()) {
+            variableInfoPtr = classFieldIterator->second.get();
+        }
+
+        auto methodArgumentIterator = currentMethod->arguments->variables.find(exp.name);
+        if (methodArgumentIterator != currentMethod->arguments->variables.end()) {
+            variableInfoPtr = methodArgumentIterator->second.get();
+        }
+
+        auto methodVariableIterator = currentMethod->fields->variables.find(exp.name);
+        if (methodVariableIterator != currentMethod->fields->variables.end()) {
+            variableInfoPtr = methodVariableIterator->second.get();
+            isLocalVariable = true;
+        }
+
+        //success
+        return std::pair<VariableInfo*, bool>(variableInfoPtr, isLocalVariable);
+    } else {
+        return errorResult;
+    }
+}
+
 //Expressions visit methods
 //---------------------------------------------------------------------------------------
 
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
 {
-    if (cIdInitializedContext == NOT_SPECIFIED) {
-        throw std::invalid_argument("contexts isn't specified");
-        return;
+    if (exp.isInstance) {
+        std::pair<VariableInfo*, bool> variableInfo = getVariableInfo(exp);
+
+        bool isLocalVariable = variableInfo.second;
+        VariableInfo* variableInfoPtr = variableInfo.first;
+
+        if (variableInfoPtr == nullptr) {
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+            return;
+        }
+
+        if (isLocalVariable && exp.isInstance && !variableInfoPtr->isInitialized) {
+            errors.push_back( CError(CError::NOT_INITIALIZED_VARIABLE, exp.position) );
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+            return;
+        }
+
+        //success
+        lastCalculatedType = *variableInfoPtr->type;
+    } else {
+        lastCalculatedType = enums::TPrimitiveType::VOID;
     }
-
-    //TODO:do it
-
-    cIdInitializedContext = NOT_SPECIFIED;
 }
 
 void CTypeCheckerVisitor::Visit( CIdPtrExp &exp ) 
@@ -360,6 +409,19 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
 		    errors.push_back( CError( errorMessage, stm.position) );
             return;
 	    }
+
+        //success
+        std::pair<VariableInfo*, bool> variableInfo = getVariableInfo(*stm.leftExpression);
+
+        VariableInfo* variableInfoPtr = variableInfo.first;
+
+        if (variableInfoPtr == nullptr) {
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+            return;
+        } else {
+            variableInfoPtr->isInitialized = true;
+        }
+
         lastCalculatedType = enums::TPrimitiveType::VOID;
     } else {
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );

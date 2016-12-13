@@ -114,6 +114,7 @@ public:
 	static const std::string CLASS_REDEFINITION;
     static const std::string AST_ERROR;
 	static const std::string IS_NOT_CALLABLE;
+	static const std::string NOT_INITIALIZED_VARIABLE;
 
 	static std::string GetTypeErrorMessage( const TypeInfo& expected, const TypeInfo& got );
     static std::string GetNumberOfArgsMessage( unsigned long expected, unsigned long got );
