@@ -322,7 +322,7 @@ Expression:
 	|
 	FALSE { auto p = $$ = new CLogExp(false); SAVE_LOCATION }
 	|
-	Identifier { $1->isInstance = true; auto p = $$ = $1; SAVE_LOCATION }
+	Identifier { $1->isInstance = true; $$ = $1; }
 	|
 	THIS DOT Identifier { $3->isInstance = true; auto p = $$ = new CThisExpression( $3 ); SAVE_LOCATION }
 	|
