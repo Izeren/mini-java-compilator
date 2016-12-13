@@ -166,9 +166,9 @@ class CMethod;
 
 class CCallMethodExp : public IExpression {
 public: 
-	CCallMethodExp(CClass* _classOwner, CIdExp* _methodName, CExpList* _args);
+	CCallMethodExp(CIdExp* _classOwner, CIdExp* _methodName, CExpList* _args);
 	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<CClass> classOwner;
+	std::unique_ptr<CIdExp> classOwner;
 	std::unique_ptr<CIdExp> methodName;
 	std::unique_ptr<CExpList> args;
 };
