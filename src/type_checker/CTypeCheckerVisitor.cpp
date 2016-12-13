@@ -675,7 +675,8 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
 {
 	std::cout << "typechecker: method\n";
     if( stm.name && stm.arguments && stm.returnExp && stm.returnType && stm.statements && stm.vars ) {
-        currentMethod = table->classes[currentClass->name]->methods[stm.name->name];
+        currentMethod = currentClass->methods[stm.name->name];
+        std::cout << "current method was got from symbol table\n";
         stm.name->Accept( *this );
         stm.arguments->Accept( *this );
         stm.statements->Accept( *this );
@@ -696,10 +697,10 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
             return;
         }
         lastCalculatedType = enums::TPrimitiveType::VOID;
-        currentMethod = nullptr;
     } else {
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
     }
+    currentMethod = nullptr;
 }
 
 void CTypeCheckerVisitor::Visit( CMethodList &stm ) 
@@ -725,6 +726,7 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
 {
 	std::cout << "typechecker: class\n";
     if( stm.id && stm.fields && stm.methods ) {
+        currentClass = table->classes[stm.id->name];
         stm.id->Accept( *this );
         stm.fields->Accept( *this );
         stm.methods->Accept( *this );
@@ -732,6 +734,7 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
     } else {
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
     }
+    currentClass = nullptr;
 }
 
 void CTypeCheckerVisitor::Visit( CClassList &stm ) 
@@ -756,6 +759,7 @@ void CTypeCheckerVisitor::Visit( CClassList &stm )
 void CTypeCheckerVisitor::Visit( CMainMethod &stm ) 
 {
 	std::cout << "typechecker: mainmethod\n";
+//    currentMethod = currentClass->methods[stm.]
     if( stm.vars ) {
         stm.vars->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -770,11 +774,13 @@ void CTypeCheckerVisitor::Visit( CMainClass &stm )
 {
 	std::cout << "typechecker: mainclass\n";
     if( stm.id ) {
+        currentClass = table->classes[stm.id->name];
         stm.id->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
     } else {
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
     }
+    currentClass = nullptr;
 }
 
 void CTypeCheckerVisitor::Visit( CProgram &stm ) 
