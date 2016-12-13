@@ -1,8 +1,8 @@
 #include "CTypeCheckerVisitor.h"
 #include "../symbol_table/SymbolInfo.h"
-#include "../nodes/statements/CPrintStm.h"
-#include "../nodes/statements/CAssignStm.h"
-#include "../nodes/statements/CCompoundStm.h"
+#include "../shared_ptrs_nodes/Statements.h"
+#include "../shared_ptrs_nodes/Expressions.h"
+#include "../shared_ptrs_nodes/Classes.h"
 #include <exception>
 
 
@@ -617,7 +617,8 @@ void CTypeCheckerVisitor::Visit( CField &stm )
 void CTypeCheckerVisitor::Visit( CFieldList &stm ) 
 {
     bool areAllFieldsBuilt = true;
-    for( auto field : stm.fields ) {
+    for (int index = 0; index < stm.fields.size(); ++index) {
+        auto field = stm.fields[index].get();
         if( !field ) {
             areAllFieldsBuilt = false;
             break;
@@ -648,7 +649,8 @@ void CTypeCheckerVisitor::Visit( CArgument &stm )  {
 void CTypeCheckerVisitor::Visit( CArgumentList &stm ) 
 {
     bool areAllArgsBuilt = true;
-    for( auto argument : stm.arguments ) {
+    for (int index = 0; index < stm.arguments.size(); ++index) {
+        auto argument = stm.arguments[index].get();
         if( !argument ) {
             areAllArgsBuilt = false;
             break;
@@ -671,7 +673,7 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
         stm.statements->Accept( *this );
         stm.vars->Accept( *this );
         stm.returnExp->Accept( *this );
-        TypeInfo expectedType = stm.returnType->isPrimitive ? stm.returnType->type : stm.returnType->name;
+        TypeInfo expectedType = stm.returnType->isPrimitive ? TypeInfo(stm.returnType->type) : TypeInfo(stm.returnType->name->name);
         if( !stm.returnType->isPrimitive ) {
             bool isVisibleClass = checkClassVisibility( stm.returnType->name->name );
             if( !isVisibleClass ) {
@@ -680,6 +682,7 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
                 return;
             }
         }
+        //TODO: lastCalculatedType is not defined
         if( lastCalculatedType != expectedType ) {
             auto errorMessage = CError::GetTypeErrorMessage( expectedType, lastCalculatedType );
 			errors.push_back( CError( errorMessage, stm.returnExp->position ) );
@@ -695,7 +698,8 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
 void CTypeCheckerVisitor::Visit( CMethodList &stm ) 
 {
     bool areAllMethods = true;
-    for( auto method : stm.methods) {
+    for (int index = 0; index < stm.methods.size(); ++index) {
+        auto method = stm.methods[index].get();
         if( !method ) {
             areAllMethods = false;
             break;
@@ -724,7 +728,8 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
 void CTypeCheckerVisitor::Visit( CClassList &stm ) 
 {
     bool areAllClassBuilt = true;
-    for( auto curClass : stm.classes ) {
+    for (int index = 0; index < stm.classes.size(); ++index) {
+        auto curClass = stm.classes[index].get();
         if( !curClass ) {
             areAllClassBuilt = false;
             break;

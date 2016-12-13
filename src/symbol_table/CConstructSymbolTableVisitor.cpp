@@ -137,8 +137,8 @@ void CConstructSymbolTableVisitor::Visit( CThisExpression &exp )
 
 void CConstructSymbolTableVisitor::Visit( CByIndexExpression &exp )
 {
-	if( exp.arrayExpression ) {
-		exp.arrayExpression->Accept( *this );
+	if( exp.identifier ) {
+		exp.identifier->Accept( *this );
 	}
 	if( exp.indexExpression ) {
 		exp.indexExpression->Accept( *this );

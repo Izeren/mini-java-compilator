@@ -202,7 +202,7 @@ void CPrintVisitor::Visit(CThisExpression &exp)
 
 void CPrintVisitor::Visit(CByIndexExpression &exp)
 {
-	std::vector<INode*> children = { exp.arrayExpression.get(), exp.indexExpression.get() };
+	std::vector<INode*> children = { exp.identifier.get(), exp.indexExpression.get() };
 	ChildrenAnswers answers = VisitChildren(children);
 	AddChildrenAnswers(answers);
 	AddLabel("ElementByIndex");
