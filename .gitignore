@@ -4,7 +4,10 @@
 *.txt
 src/bison.cpp
 src/bison.hpp
+src/lex.cpp
+src/lex.h
 *.jpg
 *.java
 *.gif
-
+.idea/*
+*.xml

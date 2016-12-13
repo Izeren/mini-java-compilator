@@ -6,7 +6,6 @@
     #include "shared_ptrs_nodes/Expressions.h"
 	#include "shared_ptrs_nodes/Statements.h"
 	#include "shared_ptrs_nodes/Classes.h"
-	#include "symbol_table/SymbolInfo.h"
 	#include <iostream>
 
     #define YYERROR_VERBOSE 1   

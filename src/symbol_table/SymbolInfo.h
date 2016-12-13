@@ -7,17 +7,6 @@
 #include "../Utils.h"
 #include "../shared_ptrs_nodes/Classes.h"
 
-
-class PositionInfo
-{
-public:
-	int firstLine;
-	int lastLine;
-	int firstColumn;
-	int lastColumn;
-	std::string GetStringPosition() const;
-};
-
 class TypeInfo
 {
 public:
@@ -68,7 +57,8 @@ public:
 	std::string name;	
 	bool isPublic;
 	std::shared_ptr<TypeInfo> returnType;
-	std::shared_ptr<VariablesInfo> variables;
+	std::shared_ptr<VariablesInfo> arguments;
+	std::shared_ptr<VariablesInfo> fields;
 };
 
 class ClassInfo 
@@ -111,6 +101,9 @@ class CError
 {
 public:
 	CError( const std::string& _message, const PositionInfo &position);
+
+	CError( const std::string& _message);
+
 
 	std::string& GetMessage();
 	PositionInfo GetPosition();

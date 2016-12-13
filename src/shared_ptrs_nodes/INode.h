@@ -5,7 +5,16 @@
 #include "../shared_ptrs_visitors/IVisitor.h"
 
 const std::string BAD_ID("Error_name");
-class PositionInfo;
+
+class PositionInfo
+{
+public:
+	int firstLine;
+	int lastLine;
+	int firstColumn;
+	int lastColumn;
+	std::string GetStringPosition() const;
+};
 
 class INode {
 public:
@@ -15,7 +24,7 @@ public:
 
 class PositionedNode : public INode {
 public:
-	PositionInfo& position;
+	PositionInfo position;
 	virtual void Accept(IVisitor &) = 0;
 	virtual ~PositionedNode() {}
 };
