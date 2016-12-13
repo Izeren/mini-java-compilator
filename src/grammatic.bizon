@@ -225,8 +225,7 @@ VarDeclarationList:
 	}
 	|
 	VarDeclarationList VarDeclaration {
-		auto p = $$ = $1; $1->Add( $2 ); 
-		SAVE_LOCATION
+		$$ = $1; $1->Add( $2 );
 	}
 	;
 
