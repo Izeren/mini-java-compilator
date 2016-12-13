@@ -24,7 +24,9 @@ std::map<enums::TPrimitiveType, std::string> CType::typeNames = {
 	{enums::TPrimitiveType::INT, "int"},
 	{enums::TPrimitiveType::BOOLEAN, "boolean"},
 	{enums::TPrimitiveType::INT_ARRAY, "int[]"},
-	{enums::TPrimitiveType::STRING_ARRAY, "String[]"}
+	{enums::TPrimitiveType::STRING_ARRAY, "String[]"},
+    {enums::TPrimitiveType::VOID, "void"},
+    {enums::TPrimitiveType::ERROR_TYPE, "error"}
 };
 
 std::string CType::toString() const {
