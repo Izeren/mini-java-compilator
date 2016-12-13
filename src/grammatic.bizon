@@ -206,8 +206,7 @@ MethodDeclarationList:
 	}
 	|
 	MethodDeclarationList MethodDeclaration { 
-		auto p = $$ = $1; $1->Add($2); 
-		SAVE_LOCATION
+		$$ = $1; $1->Add($2);
 	}
 	;
 
@@ -260,7 +259,7 @@ Type:
 NonEmptyArgumentList:
 	Argument { auto p = $$ = new CArgumentList($1); SAVE_LOCATION }
 	|
-	NonEmptyArgumentList COMMA Argument { auto p = $$ = $1; $1->Add($3); SAVE_LOCATION }
+	NonEmptyArgumentList COMMA Argument { $$ = $1; $1->Add($3); }
 	;
 
 ArgumentList:
