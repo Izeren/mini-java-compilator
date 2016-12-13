@@ -15,7 +15,7 @@ flex:
 bison:
 	bison -v -W -Wconflicts-rr -d -o src/bison.cpp src/grammatic.bizon
 
-$(BUILD_DIR)/main_symboltable.bin: $(addprefix $(BUILD_DIR)/, main_symboltable.o flex.o bison.o expressions.o statements.o classes.o symbolinfo.o print_visitor.o convert_visitor.o construct_symboltable_visitor.o nodes.o)
+$(BUILD_DIR)/main_symboltable.bin: $(addprefix $(BUILD_DIR)/, main_symboltable.o flex.o bison.o expressions.o statements.o classes.o symbolinfo.o print_visitor.o convert_visitor.o construct_symboltable_visitor.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
 $(BUILD_DIR)/main_symboltable.o: $(SRC_DIR)/main_symboltable.cpp
@@ -25,9 +25,6 @@ $(BUILD_DIR)/flex.o: $(SRC_DIR)/lex.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 $(BUILD_DIR)/bison.o: $(SRC_DIR)/bison.cpp
-	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
-
-$(BUILD_DIR)/nodes.o: $(NODES_DIR)/INode.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 $(BUILD_DIR)/expressions.o: $(NODES_DIR)/Expressions.cpp
