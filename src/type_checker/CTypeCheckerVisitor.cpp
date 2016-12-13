@@ -293,23 +293,33 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
 
 void CTypeCheckerVisitor::Visit( CCallMethodExp &exp ) 
 {
-	if( exp.args && exp.methodName) {
+	if( exp.args && exp.methodName ) {
         std::string identifierName = currentClass->name;
+        bool isThis = true;
         if ( exp.classOwner ) {
-            identifierName = exp.classOwner->id->name;
+            exp.classOwner->Accept( *this );
+            if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
+                return;
+            }
+            identifierName = lastCalculatedType.className;
+            isThis = false;
+            if( lastCalculatedType.isPrimitive ) {
+                errors.push_back( CError( CError::IS_NOT_CALLABLE, exp.position ) );
+                lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+                return;
+            }
         }
-		auto classIterator = table->classes.find(identifierName);
-		if( classIterator == table->classes.end() ) {
+		if( !checkClassVisibility( identifierName ) ) {
 			errors.push_back( CError( CError::IS_NOT_CALLABLE, exp.position ) );
 			return;
 		}
 		auto methodName = exp.methodName->name;
-		auto methods = table->classes[identifierName]->methods;
-		if( methods.find( methodName ) == methods.end() ) {
+        auto classInfo = table->classes[identifierName];
+		if( !checkMethodVisibility( methodName, classInfo, isThis ) ) {
 			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.position ) );
 			return;
 		}
-		auto methodInfo = methods[methodName];
+		auto methodInfo = classInfo->methods[methodName];
 		auto expectedNumberOfArguments = methodInfo->arguments->variables.size();
         auto gotNumberOfArguments = exp.args->exps.size();
         if( expectedNumberOfArguments != gotNumberOfArguments ) {
@@ -784,12 +794,22 @@ bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableNa
     return classVariables.find(variableName ) != classVariables.end();
 }
 
-bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName) {
+bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName, std::shared_ptr<ClassInfo> clazz, bool isThis ) {
+    //if we call the method using this, clazz should be equal nullptr, this way, current class will be checked
+    if ( clazz == nullptr ) {
+        clazz = currentClass;
+    }
     if (currentClass == nullptr) {
         return false;
     }
     auto classMethods = currentClass->methods;
-    return classMethods.find(methodName ) != classMethods.end();
+    bool isMethodExist = classMethods.find( methodName ) != classMethods.end();
+    if( !isMethodExist ) {
+        return false;
+    } else {
+        std::shared_ptr<MethodInfo> methodInfo = classMethods[methodName];
+        return methodInfo->isPublic;
+    }
 }
 
 bool CTypeCheckerVisitor::checkClassVisibility(const std::string &className) {

@@ -67,7 +67,7 @@ private:
     std::pair<VariableInfo*, bool> getVariableInfo(CIdExp& exp);
 
 	bool checkVariableVisibility( const std::string& variableName );
-	bool checkMethodVisibility( const std::string& methodName );
+	bool checkMethodVisibility( const std::string& methodName, std::shared_ptr<ClassInfo> clazz, bool isThis );
 	bool checkClassVisibility( const std::string& className );
 	bool checkCyclicInheritance( std::shared_ptr<ClassInfo> startClass, std::shared_ptr<ClassInfo> currentClass );
 };
