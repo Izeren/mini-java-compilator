@@ -4,6 +4,7 @@ SOURSE_DIR=resource
 VISITORS_DIR=$(SRC_DIR)/shared_ptrs_visitors
 NODES_DIR=$(SRC_DIR)/shared_ptrs_nodes
 SYMBOLTABLE_DIR=$(SRC_DIR)/symbol_table
+TYPE_CHECKER_DIR=$(SRC_DIR)/type_checker
 CFLAGS=-std=c++11
 LFLAGS=-lstdc++
 CC=g++
@@ -15,10 +16,10 @@ flex:
 bison:
 	bison -v -W -Wconflicts-rr -d -o src/bison.cpp src/grammatic.bizon
 
-$(BUILD_DIR)/main_symboltable.bin: $(addprefix $(BUILD_DIR)/, main_symboltable.o flex.o bison.o expressions.o statements.o classes.o symbolinfo.o position_info.o print_visitor.o convert_visitor.o construct_symboltable_visitor.o)
+$(BUILD_DIR)/main_symboltable.bin: $(addprefix $(BUILD_DIR)/, main_symboltable.o flex.o bison.o expressions.o statements.o classes.o symbolinfo.o position_info.o print_visitor.o convert_visitor.o construct_symboltable_visitor.o type_checker_visitor.o)
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
-$(BUILD_DIR)/main_symboltable.o: $(SRC_DIR)/main_symboltable.cpp
+$(BUILD_DIR)/main_symboltable.o: $(SRC_DIR)/main_typechecker.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 $(BUILD_DIR)/flex.o: $(SRC_DIR)/lex.cpp
@@ -49,6 +50,9 @@ $(BUILD_DIR)/convert_visitor.o: $(VISITORS_DIR)/CConvertVisitor.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 $(BUILD_DIR)/construct_symboltable_visitor.o: $(SYMBOLTABLE_DIR)/CConstructSymbolTableVisitor.cpp
+	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
+    
+$(BUILD_DIR)/type_checker_visitor.o: $(TYPE_CHECKER_DIR)/CTypeCheckerVisitor.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@ -lfl
 
 clean:

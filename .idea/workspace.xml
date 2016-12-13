@@ -12,6 +12,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5c0e41fd-bf0d-4f1f-a46b-950cc21d9d41" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/makefiles/Makefile_typechecker" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main_typechecker.cpp" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/symbol_table/PositionInfo.cpp" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/symbol_table/PositionInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/makefiles/Makefile_symboltable" afterPath="$PROJECT_DIR$/makefiles/Makefile_symboltable" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resource/Factorial.java" afterPath="$PROJECT_DIR$/resource/Factorial.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/grammatic.bizon" afterPath="$PROJECT_DIR$/src/grammatic.bizon" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main_symboltable.cpp" afterPath="$PROJECT_DIR$/src/main_symboltable.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.cpp" afterPath="$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.h" afterPath="$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared_ptrs_nodes/INode.h" afterPath="$PROJECT_DIR$/src/shared_ptrs_nodes/INode.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/symbol_table/CConstructSymbolTableVisitor.cpp" afterPath="$PROJECT_DIR$/src/symbol_table/CConstructSymbolTableVisitor.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/symbol_table/SymbolInfo.cpp" afterPath="$PROJECT_DIR$/src/symbol_table/SymbolInfo.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/symbol_table/SymbolInfo.h" afterPath="$PROJECT_DIR$/src/symbol_table/SymbolInfo.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.cpp" afterPath="$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.cpp" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,21 +45,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="grammatic.bizon" pinned="false" current-in-tab="false">
+      <file leaf-file-name="grammatic.bizon" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/grammatic.bizon">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-612">
-              <caret line="259" column="8" lean-forward="false" selection-start-line="259" selection-start-column="8" selection-end-line="259" selection-end-column="8" />
+            <state relative-caret-position="377">
+              <caret line="354" column="0" lean-forward="true" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CTypeCheckerVisitor.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CTypeCheckerVisitor.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9864">
-              <caret line="548" column="38" lean-forward="false" selection-start-line="548" selection-start-column="38" selection-end-line="548" selection-end-column="38" />
+            <state relative-caret-position="705">
+              <caret line="437" column="86" lean-forward="false" selection-start-line="437" selection-start-column="86" selection-end-line="437" selection-end-column="86" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -55,23 +70,22 @@
       <file leaf-file-name="CTypeCheckerVisitor.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="802">
-              <caret line="68" column="112" lean-forward="false" selection-start-line="68" selection-start-column="112" selection-end-line="68" selection-end-column="112" />
+            <state relative-caret-position="376">
+              <caret line="63" column="24" lean-forward="true" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
               <folding>
                 <element signature="e#14#59#0" expanded="true" />
+                <marker date="1481660363853" expanded="true" signature="316:2515" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Expressions.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.h">
+      <file leaf-file-name="Statements.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Statements.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3852">
-              <caret line="214" column="4" lean-forward="false" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="4" />
-              <folding>
-                <element signature="e#14#32#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="135">
+              <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -79,10 +93,32 @@
       <file leaf-file-name="Expressions.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4320">
-              <caret line="240" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
+            <state relative-caret-position="240">
+              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
+                <marker date="1481661267650" expanded="true" signature="279:341" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="382:408" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="584:633" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="724:750" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="903:936" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="978:1004" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="1374:1400" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="1504:1667" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="1855:1886" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="1928:1954" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="2278:2304" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="2421:2584" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="3017:3043" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="3158:3321" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="3497:3566" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="3614:3640" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="3815:3870" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="3919:3945" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="4128:4225" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="4273:4299" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="6807:6910" ph="{...}" />
+                <marker date="1481661267650" expanded="true" signature="6963:6989" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -91,46 +127,9 @@
       <file leaf-file-name="INode.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/INode.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="17" column="26" lean-forward="false" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+            <state relative-caret-position="90">
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SymbolInfo.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/symbol_table/SymbolInfo.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1530">
-              <caret line="85" column="25" lean-forward="false" selection-start-line="85" selection-start-column="25" selection-end-line="85" selection-end-column="25" />
-              <folding>
-                <element signature="e#14#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Utils.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Utils.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" column="80" lean-forward="false" selection-start-line="6" selection-start-column="80" selection-end-line="6" selection-end-column="80" />
-              <folding>
-                <marker date="1480955347726" expanded="true" signature="30:277" ph="{...}" />
-                <marker date="1480955347726" expanded="true" signature="215:274" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CConvertVisitor.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/shared_ptrs_visitors/CConvertVisitor.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2628">
-              <caret line="146" column="20" lean-forward="false" selection-start-line="146" selection-start-column="20" selection-end-line="146" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -138,16 +137,47 @@
       <file leaf-file-name="SymbolInfo.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/symbol_table/SymbolInfo.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2412">
-              <caret line="134" column="38" lean-forward="false" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
+            <state relative-caret-position="421">
+              <caret line="165" column="70" lean-forward="true" selection-start-line="165" selection-start-column="70" selection-end-line="165" selection-end-column="70" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
+                <marker date="1481661267654" expanded="true" signature="49:158" ph="//..." />
+                <marker date="1481661267654" expanded="true" signature="400:490" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="553:796" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="859:890" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="893:1008" ph="//..." />
+                <marker date="1481661267654" expanded="true" signature="1181:1335" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="1338:1454" ph="//..." />
+                <marker date="1481661267654" expanded="true" signature="1540:1748" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="1828:1935" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="1938:2051" ph="//..." />
+                <marker date="1481661267654" expanded="true" signature="2275:2726" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="2729:2841" ph="//..." />
+                <marker date="1481661267654" expanded="true" signature="2981:3034" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="3080:3424" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="3427:3541" ph="//..." />
+                <marker date="1481661267654" expanded="true" signature="3610:3661" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="3709:3827" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="3830:3939" ph="//..." />
+                <marker date="1481661267654" expanded="true" signature="4625:4645" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="4682:4703" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="4792:5196" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="5269:5388" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="5497:5615" ph="{...}" />
+                <marker date="1481661267654" expanded="true" signature="5703:5959" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>Identifier</find>
+      <find>Ident</find>
+      <find>Assig</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -158,15 +188,15 @@
         <option value="$PROJECT_DIR$/src/symbol_table/CConstructSymbolTableVisitor.cpp" />
         <option value="$PROJECT_DIR$/src/symbol_table/CConstructSymbolTableVisitor.h" />
         <option value="$PROJECT_DIR$/src/shared_ptrs_nodes/INode.h" />
-        <option value="$PROJECT_DIR$/src/grammatic.bizon" />
+        <option value="$PROJECT_DIR$/src/shared_ptrs_visitors/CConvertVisitor.cpp" />
+        <option value="$PROJECT_DIR$/src/Utils.h" />
         <option value="$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.h" />
         <option value="$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.cpp" />
-        <option value="$PROJECT_DIR$/src/shared_ptrs_visitors/CConvertVisitor.cpp" />
-        <option value="$PROJECT_DIR$/src/symbol_table/SymbolInfo.cpp" />
         <option value="$PROJECT_DIR$/src/symbol_table/SymbolInfo.h" />
-        <option value="$PROJECT_DIR$/src/Utils.h" />
+        <option value="$PROJECT_DIR$/src/symbol_table/SymbolInfo.cpp" />
         <option value="$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.h" />
         <option value="$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.cpp" />
+        <option value="$PROJECT_DIR$/src/grammatic.bizon" />
       </list>
     </option>
   </component>
@@ -178,10 +208,10 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="y" value="25" />
-    <option name="width" value="1922" />
-    <option name="height" value="1055" />
+    <option name="x" value="65" />
+    <option name="y" value="24" />
+    <option name="width" value="1301" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -552,20 +582,20 @@
       <workItem from="1480888321294" duration="4058000" />
       <workItem from="1480930869621" duration="31086000" />
       <workItem from="1481304126956" duration="1521000" />
+      <workItem from="1481649681256" duration="11299000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36665000" />
+    <option name="totallyTimeSpent" value="47964000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="25" width="1922" height="1055" extended-state="6" />
-    <editor active="false" />
+    <frame x="65" y="24" width="1301" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18177083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18153365" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="LuaJ" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -577,10 +607,31 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="LuaJ" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3291536" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18153365" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="LuaJ" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3291536" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
@@ -595,6 +646,147 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/grammatic.bizon">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3885">
+          <caret line="259" column="8" lean-forward="false" selection-start-line="259" selection-start-column="8" selection-end-line="259" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="68" column="34" lean-forward="true" selection-start-line="68" selection-start-column="34" selection-end-line="68" selection-end-column="34" />
+          <folding>
+            <element signature="e#14#59#0" expanded="true" />
+            <marker date="1481660363853" expanded="true" signature="316:2515" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3210">
+          <caret line="214" column="4" lean-forward="false" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="4" />
+          <folding>
+            <element signature="e#14#32#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3600">
+          <caret line="240" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+            <marker date="1481661267650" expanded="true" signature="279:341" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="382:408" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="584:633" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="724:750" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="903:936" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="978:1004" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1374:1400" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1504:1667" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1855:1886" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1928:1954" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="2278:2304" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="2421:2584" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3017:3043" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3158:3321" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3497:3566" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3614:3640" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3815:3870" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3919:3945" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="4128:4225" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="4273:4299" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="6807:6910" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="6963:6989" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/INode.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/symbol_table/SymbolInfo.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1275">
+          <caret line="85" column="25" lean-forward="false" selection-start-line="85" selection-start-column="25" selection-end-line="85" selection-end-column="25" />
+          <folding>
+            <element signature="e#14#31#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Utils.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="80" lean-forward="false" selection-start-line="6" selection-start-column="80" selection-end-line="6" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_visitors/CConvertVisitor.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2190">
+          <caret line="146" column="20" lean-forward="false" selection-start-line="146" selection-start-column="20" selection-end-line="146" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#28#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/symbol_table/SymbolInfo.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2010">
+          <caret line="134" column="1" lean-forward="true" selection-start-line="134" selection-start-column="1" selection-end-line="134" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <marker date="1481661267654" expanded="true" signature="49:158" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="400:490" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="553:796" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="859:890" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="893:1008" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="1181:1335" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1338:1454" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="1540:1748" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1828:1935" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1938:2051" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="2275:2726" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="2729:2841" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="2981:3034" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3080:3424" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3427:3541" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="3610:3661" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3709:3827" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3830:3939" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="4625:4645" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="4682:4703" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="4792:5196" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5269:5388" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5497:5615" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5703:5959" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/grammatic.bizon">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4662">
@@ -619,6 +811,7 @@
           <caret line="68" column="112" lean-forward="false" selection-start-line="68" selection-start-column="112" selection-end-line="68" selection-end-column="112" />
           <folding>
             <element signature="e#14#59#0" expanded="true" />
+            <marker date="1481660363853" expanded="true" signature="316:2515" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -628,7 +821,7 @@
         <state relative-caret-position="3852">
           <caret line="214" column="4" lean-forward="false" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="4" />
           <folding>
-            <element signature="e#14#32#0" expanded="true" />
+            <element signature="e#14#32#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -639,6 +832,28 @@
           <caret line="240" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
+            <marker date="1481661267650" expanded="true" signature="279:341" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="382:408" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="584:633" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="724:750" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="903:936" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="978:1004" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1374:1400" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1504:1667" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1855:1886" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1928:1954" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="2278:2304" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="2421:2584" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3017:3043" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3158:3321" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3497:3566" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3614:3640" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3815:3870" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3919:3945" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="4128:4225" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="4273:4299" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="6807:6910" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="6963:6989" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -656,7 +871,7 @@
         <state relative-caret-position="1530">
           <caret line="85" column="25" lean-forward="false" selection-start-line="85" selection-start-column="25" selection-end-line="85" selection-end-column="25" />
           <folding>
-            <element signature="e#14#31#0" expanded="true" />
+            <element signature="e#14#31#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -665,10 +880,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="6" column="80" lean-forward="false" selection-start-line="6" selection-start-column="80" selection-end-line="6" selection-end-column="80" />
-          <folding>
-            <marker date="1480955347726" expanded="true" signature="30:277" ph="{...}" />
-            <marker date="1480955347726" expanded="true" signature="215:274" ph="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -677,7 +889,7 @@
         <state relative-caret-position="2628">
           <caret line="146" column="20" lean-forward="false" selection-start-line="146" selection-start-column="20" selection-end-line="146" selection-end-column="20" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#28#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -688,6 +900,30 @@
           <caret line="134" column="38" lean-forward="true" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <marker date="1481661267654" expanded="true" signature="49:158" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="400:490" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="553:796" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="859:890" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="893:1008" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="1181:1335" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1338:1454" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="1540:1748" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1828:1935" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1938:2051" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="2275:2726" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="2729:2841" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="2981:3034" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3080:3424" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3427:3541" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="3610:3661" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3709:3827" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3830:3939" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="4625:4645" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="4682:4703" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="4792:5196" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5269:5388" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5497:5615" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5703:5959" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -716,6 +952,7 @@
           <caret line="57" column="36" lean-forward="true" selection-start-line="57" selection-start-column="36" selection-end-line="57" selection-end-column="36" />
           <folding>
             <element signature="e#14#59#0" expanded="true" />
+            <marker date="1481660363853" expanded="true" signature="316:2515" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -733,7 +970,7 @@
         <state relative-caret-position="1998">
           <caret line="111" column="37" lean-forward="false" selection-start-line="111" selection-start-column="37" selection-end-line="111" selection-end-column="37" />
           <folding>
-            <element signature="e#14#31#0" expanded="true" />
+            <element signature="e#14#31#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -744,6 +981,30 @@
           <caret line="161" column="20" lean-forward="false" selection-start-line="161" selection-start-column="20" selection-end-line="161" selection-end-column="20" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <marker date="1481661267654" expanded="true" signature="49:158" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="400:490" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="553:796" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="859:890" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="893:1008" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="1181:1335" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1338:1454" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="1540:1748" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1828:1935" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1938:2051" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="2275:2726" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="2729:2841" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="2981:3034" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3080:3424" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3427:3541" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="3610:3661" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3709:3827" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3830:3939" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="4625:4645" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="4682:4703" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="4792:5196" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5269:5388" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5497:5615" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5703:5959" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -753,7 +1014,7 @@
         <state relative-caret-position="1026">
           <caret line="57" column="49" lean-forward="false" selection-start-line="57" selection-start-column="49" selection-end-line="57" selection-end-column="49" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#28#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -762,10 +1023,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="6" column="43" lean-forward="false" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
-          <folding>
-            <marker date="1480955347726" expanded="true" signature="30:277" ph="{...}" />
-            <marker date="1480955347726" expanded="true" signature="215:274" ph="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -814,14 +1072,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Statements.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="60" column="30" lean-forward="false" selection-start-line="60" selection-start-column="30" selection-end-line="60" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Classes.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1912">
@@ -837,100 +1087,152 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/INode.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="17" column="26" lean-forward="false" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4320">
-          <caret line="240" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3852">
-          <caret line="214" column="4" lean-forward="false" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="4" />
+        <state relative-caret-position="205">
+          <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
           <folding>
-            <element signature="e#14#32#0" expanded="true" />
+            <element signature="e#14#32#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/shared_ptrs_visitors/CConvertVisitor.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2628">
+        <state relative-caret-position="586">
           <caret line="146" column="20" lean-forward="false" selection-start-line="146" selection-start-column="20" selection-end-line="146" selection-end-column="20" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#28#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Utils.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="80" lean-forward="false" selection-start-line="6" selection-start-column="80" selection-end-line="6" selection-end-column="80" />
-          <folding>
-            <marker date="1480955347726" expanded="true" signature="30:277" ph="{...}" />
-            <marker date="1480955347726" expanded="true" signature="215:274" ph="{...}" />
-          </folding>
+        <state relative-caret-position="90">
+          <caret line="6" column="9" lean-forward="false" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/symbol_table/SymbolInfo.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2412">
-          <caret line="134" column="38" lean-forward="false" selection-start-line="134" selection-start-column="38" selection-end-line="134" selection-end-column="38" />
+        <state relative-caret-position="421">
+          <caret line="165" column="70" lean-forward="true" selection-start-line="165" selection-start-column="70" selection-end-line="165" selection-end-column="70" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <marker date="1481661267654" expanded="true" signature="49:158" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="400:490" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="553:796" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="859:890" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="893:1008" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="1181:1335" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1338:1454" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="1540:1748" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1828:1935" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="1938:2051" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="2275:2726" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="2729:2841" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="2981:3034" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3080:3424" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3427:3541" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="3610:3661" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3709:3827" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="3830:3939" ph="//..." />
+            <marker date="1481661267654" expanded="true" signature="4625:4645" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="4682:4703" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="4792:5196" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5269:5388" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5497:5615" ph="{...}" />
+            <marker date="1481661267654" expanded="true" signature="5703:5959" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Statements.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/Expressions.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+            <marker date="1481661267650" expanded="true" signature="279:341" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="382:408" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="584:633" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="724:750" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="903:936" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="978:1004" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1374:1400" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1504:1667" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1855:1886" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="1928:1954" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="2278:2304" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="2421:2584" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3017:3043" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3158:3321" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3497:3566" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3614:3640" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3815:3870" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="3919:3945" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="4128:4225" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="4273:4299" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="6807:6910" ph="{...}" />
+            <marker date="1481661267650" expanded="true" signature="6963:6989" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/symbol_table/SymbolInfo.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="85" column="25" lean-forward="false" selection-start-line="85" selection-start-column="25" selection-end-line="85" selection-end-column="25" />
+        <state relative-caret-position="205">
+          <caret line="50" column="6" lean-forward="false" selection-start-line="50" selection-start-column="6" selection-end-line="50" selection-end-column="6" />
           <folding>
-            <element signature="e#14#31#0" expanded="true" />
+            <element signature="e#14#31#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammatic.bizon">
+    <entry file="file://$PROJECT_DIR$/src/shared_ptrs_nodes/INode.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-612">
-          <caret line="259" column="8" lean-forward="false" selection-start-line="259" selection-start-column="8" selection-end-line="259" selection-end-column="8" />
+        <state relative-caret-position="90">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="802">
-          <caret line="68" column="112" lean-forward="false" selection-start-line="68" selection-start-column="112" selection-end-line="68" selection-end-column="112" />
+        <state relative-caret-position="376">
+          <caret line="63" column="24" lean-forward="true" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
           <folding>
             <element signature="e#14#59#0" expanded="true" />
+            <marker date="1481660363853" expanded="true" signature="316:2515" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/type_checker/CTypeCheckerVisitor.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9864">
-          <caret line="548" column="38" lean-forward="false" selection-start-line="548" selection-start-column="38" selection-end-line="548" selection-end-column="38" />
+        <state relative-caret-position="705">
+          <caret line="437" column="86" lean-forward="false" selection-start-line="437" selection-start-column="86" selection-end-line="437" selection-end-column="86" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/grammatic.bizon">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="354" column="0" lean-forward="true" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

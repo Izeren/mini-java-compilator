@@ -167,9 +167,9 @@ class CMethod;
 
 class CCallMethodExp : public IExpression {
 public: 
-	CCallMethodExp(CClass* _classOwner, CIdExp* _methodName, CExpList* _args);
+	CCallMethodExp(CIdExp* _classOwner, CIdExp* _methodName, CExpList* _args);
 	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<CClass> classOwner;
+	std::unique_ptr<CIdExp> classOwner;
 	std::unique_ptr<CIdExp> methodName;
 	std::unique_ptr<CExpList> args;
 };
@@ -233,8 +233,8 @@ public:
 
 class CByIndexExpression : public IExpression {
 public:
-	CByIndexExpression(CArrayExpression* arrayExpression, IExpression* indexExpression);
+	CByIndexExpression(IExpression* arrayExpression, IExpression* indexExpression);
 	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<CArrayExpression> arrayExpression;
+	std::unique_ptr<IExpression> identifier;
 	std::unique_ptr<IExpression> indexExpression;
 };

@@ -6,6 +6,7 @@
 #include <fstream>
 #include "../Utils.h"
 #include "../shared_ptrs_nodes/Classes.h"
+#include "PositionInfo.h"
 
 class TypeInfo
 {

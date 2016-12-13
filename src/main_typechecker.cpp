@@ -9,6 +9,7 @@
 #include "shared_ptrs_visitors/CPrintVisitor.h"
 #include "shared_ptrs_visitors/CConvertVisitor.h"
 #include "symbol_table/CConstructSymbolTableVisitor.h"
+#include "type_checker/CTypeCheckerVisitor.h"
 #include <string>
 #include <fstream>
 #include <iostream>

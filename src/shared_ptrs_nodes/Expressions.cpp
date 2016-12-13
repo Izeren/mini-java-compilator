@@ -169,9 +169,9 @@ void CGetFieldExp::Accept (IVisitor& visitor)
 //CCallMethodExp:
 //-------------------------------------------------------------------------------------------------
 
-CCallMethodExp::CCallMethodExp(CClass* _classOwner, CIdExp* _methodName, CExpList* _args)
+CCallMethodExp::CCallMethodExp(CIdExp* _classOwner, CIdExp* _methodName, CExpList* _args)
 {
-	classOwner = std::unique_ptr<CClass>(_classOwner);
+	classOwner = std::unique_ptr<CIdExp>(_classOwner);
 	methodName = std::unique_ptr<CIdExp>(_methodName);
 	args = std::unique_ptr<CExpList>(_args);
 }
@@ -251,8 +251,8 @@ void CNewIdentifier::Accept(IVisitor &visitor)
 //CByIndexExpression:
 //-------------------------------------------------------------------------------------------------
 
-CByIndexExpression::CByIndexExpression(CArrayExpression* arrayExpression, IExpression* indexExpression) {
-	this->arrayExpression = std::unique_ptr<CArrayExpression>(arrayExpression);
+CByIndexExpression::CByIndexExpression(IExpression* arrayExpression, IExpression* indexExpression) {
+	this->identifier= std::unique_ptr<IExpression>(arrayExpression);
 	this->indexExpression = std::unique_ptr<IExpression>(indexExpression);
 }
 
