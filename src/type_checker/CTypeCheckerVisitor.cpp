@@ -730,7 +730,14 @@ void CTypeCheckerVisitor::Visit( CClassList &stm )
 
 void CTypeCheckerVisitor::Visit( CMainMethod &stm ) 
 {
-
+    if( stm.vars ) {
+        stm.vars->Accept( *this );
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    }
+    if( stm.statements ) {
+        stm.vars->Accept( *this );
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    }
 }
 
 void CTypeCheckerVisitor::Visit( CMainClass &stm ) 
@@ -746,7 +753,14 @@ void CTypeCheckerVisitor::Visit( CMainClass &stm )
 void CTypeCheckerVisitor::Visit( CProgram &stm ) 
 {
     if( stm.mainClass ) {
-
+        stm.mainClass->Accept( *this );
+        lastCalculatedType = enums::TPrimitiveType::VOID;
+    } else {
+        errors.push_back( CError( CError::AST_ERROR, stm.mainClass->position ) );
+    }
+    if( stm.classList ) {
+        stm.classList->Accept( *this );
+        lastCalculatedType = enums::TPrimitiveType::VOID;
     }
 }
 

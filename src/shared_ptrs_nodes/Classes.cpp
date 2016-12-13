@@ -155,8 +155,8 @@ CClassList::CClassList() {
 	classes = std::vector<std::unique_ptr<CClass> >();
 }
 
-void CClassList::Add(CClass* _class) {
-	classes.push_back(std::unique_ptr<CClass>(_class));
+void CClassList::Add(CClass* cClass) {
+	classes.push_back(std::unique_ptr<CClass>(cClass));
 }
 
 void CClassList::Accept(IVisitor &visitor) {
