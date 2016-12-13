@@ -31,6 +31,7 @@ public:
 
 	std::string name;
 	std::shared_ptr<TypeInfo> type;
+    bool isInitialized;
 };
 
 class VariablesInfo
