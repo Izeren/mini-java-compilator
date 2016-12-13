@@ -263,6 +263,9 @@ void CConstructSymbolTableVisitor::Visit( CFieldList &stm )
                 if( info->iVariables->variables.find( info->iVariable->name ) != info->iVariables->variables.end() ) {
 					errors.push_back( CError( CError::VARIABLE_REDEFINITION, stm.fields[index]->position ) );
 				}
+                if( info->definedVariables->variables.find( info->iVariable->name ) != info->definedVariables->variables.end() ) {
+					errors.push_back( CError( CError::VARIABLE_REDEFINITION, stm.fields[index]->position ) );
+				}
 				info->iVariables->AddVariable( info->iVariable );
 			}
 		}
@@ -316,6 +319,7 @@ void CConstructSymbolTableVisitor::Visit( CMethod &stm )
 		stm.arguments->Accept( *this );
 	}
     info->iMethod->arguments = info->iVariables;
+    info->definedVariables = info->iVariables;
     info->iVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 	if( stm.vars ) {
 		stm.vars->Accept( *this );
@@ -363,6 +367,7 @@ void CConstructSymbolTableVisitor::Visit( CClass &stm )
 	}
 
 	info->iVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
+    info->definedVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 	if( stm.fields ) {
 		stm.fields->Accept( *this );
 	}
@@ -408,6 +413,7 @@ void CConstructSymbolTableVisitor::Visit( CMainMethod &stm )
 	info->iVariables->AddVariable( info->iVariable );
 	info->iMethod->arguments = info->iVariables;
 
+    info->definedVariables = info->iVariables;
     info->iVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 	if( stm.vars ) {
 		stm.vars->Accept( *this );
