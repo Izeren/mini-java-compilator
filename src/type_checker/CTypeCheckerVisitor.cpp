@@ -48,6 +48,8 @@ std::pair<VariableInfo*, bool> CTypeCheckerVisitor::getVariableInfo(CIdExp& exp)
 
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
 {
+    std::cout << "typechecker: cidexp\n";
+
     if (exp.isInstance) {
         std::pair<VariableInfo*, bool> variableInfo = getVariableInfo(exp);
 
@@ -81,12 +83,14 @@ void CTypeCheckerVisitor::Visit( CIdPtrExp &exp )
 
 void CTypeCheckerVisitor::Visit( CNumExp &exp ) 
 {
+    std::cout << "typechecker: cnumexp\n";
     //Только запоминаем тип
 	lastCalculatedType = enums::TPrimitiveType::INT;
 }
 
 void CTypeCheckerVisitor::Visit( COpExp &exp ) 
 {
+    std::cout << "typechecker: copexp\n";
     //Посещаем левый операнд
 	if( exp.leftOperand ){
 		exp.leftOperand->Accept( *this );
@@ -132,12 +136,15 @@ void CTypeCheckerVisitor::Visit( COpExp &exp )
 
 void CTypeCheckerVisitor::Visit( CLogExp &exp ) 
 {
-	lastCalculatedType = enums::TPrimitiveType::BOOLEAN;
+    std::cout << "typechecker: clogexp\n";
+    lastCalculatedType = enums::TPrimitiveType::BOOLEAN;
 }
 
 void CTypeCheckerVisitor::Visit( CLogOpExp &exp ) 
 {
-	if( exp.leftOperand ) {
+    std::cout << "typechecker: clogopexp\n";
+
+    if( exp.leftOperand ) {
 		exp.leftOperand->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -177,7 +184,9 @@ void CTypeCheckerVisitor::Visit( CLogOpExp &exp )
 
 void CTypeCheckerVisitor::Visit( CCompExp &exp ) 
 {
-	if( exp.leftOperand ) {
+    std::cout << "typechecker: CCompExp\n";
+
+    if( exp.leftOperand ) {
 		exp.leftOperand->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -218,7 +227,9 @@ void CTypeCheckerVisitor::Visit( CCompExp &exp )
 
 void CTypeCheckerVisitor::Visit( CUnarMinusExp &exp ) 
 {
-	if( exp.rightOperand ) {
+    std::cout << "typechecker: CUnarMinusExp\n";
+
+    if( exp.rightOperand ) {
 		exp.rightOperand->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -241,7 +252,9 @@ void CTypeCheckerVisitor::Visit( CUnarMinusExp &exp )
 
 void CTypeCheckerVisitor::Visit( CGetLengthExp &exp ) 
 {
-	if( exp.array ) {
+    std::cout << "typechecker: CGetLengthExp\n";
+
+    if( exp.array ) {
 		exp.array->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -264,7 +277,9 @@ void CTypeCheckerVisitor::Visit( CGetLengthExp &exp )
 //В грамматике нет такого варианта и у нас тут хрень какая-то
 void CTypeCheckerVisitor::Visit( CGetFieldExp &exp ) 
 {
-	if( exp.classOwner && exp.field ) {
+    std::cout << "typechecker: CGetFieldExp\n";
+
+    if( exp.classOwner && exp.field ) {
 		std::string ownerName = exp.classOwner->id->name;
 		std::string fieldName = exp.field->id->name;
 		auto ownerIterator = table->classes.find(ownerName);
@@ -294,7 +309,9 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
 
 void CTypeCheckerVisitor::Visit( CCallMethodExp &exp ) 
 {
-	if( exp.args && exp.methodName ) {
+    std::cout << "typechecker: CCallMethodExp\n";
+
+    if( exp.args && exp.methodName ) {
         std::string identifierName = currentClass->name;
         bool isThis = true;
         if ( exp.classOwner ) {
@@ -350,11 +367,15 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 
 void CTypeCheckerVisitor::Visit( CExpList &exp ) 
 {
+    std::cout << "typechecker: CExpList\n";
+
     lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 }
 
 void CTypeCheckerVisitor::Visit( CNegativeExpression &exp ) 
 {
+    std::cout << "typechecker: CNegativeExpression\n";
+
     if( exp.expression ) {
         exp.expression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
@@ -374,7 +395,9 @@ void CTypeCheckerVisitor::Visit( CNegativeExpression &exp )
 
 void CTypeCheckerVisitor::Visit( CArrayExpression &exp ) 
 {
-	if ( exp.lengthExpression ) {
+    std::cout << "typechecker: CArrayExpression\n";
+
+    if ( exp.lengthExpression ) {
 		exp.lengthExpression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -388,6 +411,8 @@ void CTypeCheckerVisitor::Visit( CArrayExpression &exp )
 
 void CTypeCheckerVisitor::Visit( CThisExpression &exp ) 
 {
+    std::cout << "typechecker: CThisExpression\n";
+
     if( exp.identifier ) {
         auto currentClassFields = currentClass->fields;
         auto fieldName = exp.identifier->name;
@@ -404,7 +429,9 @@ void CTypeCheckerVisitor::Visit( CThisExpression &exp )
 
 void CTypeCheckerVisitor::Visit( CByIndexExpression &exp ) 
 {
-	if( exp.identifier) {
+    std::cout << "typechecker: CByIndexExpression\n";
+
+    if( exp.identifier) {
 		exp.identifier->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -424,6 +451,8 @@ void CTypeCheckerVisitor::Visit( CByIndexExpression &exp )
 
 void CTypeCheckerVisitor::Visit( CNewIdentifier &exp ) 
 {
+    std::cout << "typechecker: CNewIdentifier\n";
+
     if( exp.identifier ) {
         if( table->classes.find(exp.identifier->name) == table->classes.end() ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( exp.identifier->name );
@@ -443,6 +472,8 @@ void CTypeCheckerVisitor::Visit( CNewIdentifier &exp )
 
 void CTypeCheckerVisitor::Visit( CAssignStm &stm ) 
 {
+    std::cout << "typechecker: CAssignStm\n";
+
     if( stm.leftExpression && stm.rightExpression ) {
         bool isVisible = checkVariableVisibility( stm.leftExpression->name );
         if( !isVisible ) {
@@ -485,6 +516,8 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
 
 void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm ) 
 {
+    std::cout << "typechecker: CAssignSubscriptStm\n";
+
     if( stm.idExpression && stm.offset && stm.valueExpression ) {
         auto variableName = stm.idExpression->name;
         bool isVisible = checkVariableVisibility( variableName );
@@ -518,6 +551,8 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
 
 void CTypeCheckerVisitor::Visit( CCompoundStm &stm ) 
 {
+    std::cout << "typechecker: CCompoundStm\n";
+
     if( stm.leftStatement and stm.rightStatement ) {
         stm.leftStatement->Accept( *this );
         stm.rightStatement->Accept( *this );
@@ -528,6 +563,8 @@ void CTypeCheckerVisitor::Visit( CCompoundStm &stm )
 
 void CTypeCheckerVisitor::Visit( CPrintStm &stm ) 
 {
+    std::cout << "typechecker: CPrintStm\n";
+
     if( stm.expression ) {
         stm.expression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
@@ -544,12 +581,16 @@ void CTypeCheckerVisitor::Visit( CPrintStm &stm )
 
 void CTypeCheckerVisitor::Visit( CSimpleStm &stm )
 {
+    std::cout << "typechecker: CSimpleStm\n";
+
     lastCalculatedType = enums::TPrimitiveType::VOID;
 }
 
 void CTypeCheckerVisitor::Visit( CIfStm &stm ) 
 {
-	if( stm.conditionExpression && stm.positiveStatement && stm.negativeStatement ) {
+    std::cout << "typechecker: CIfStm\n";
+
+    if( stm.conditionExpression && stm.positiveStatement && stm.negativeStatement ) {
 		stm.conditionExpression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -569,7 +610,9 @@ void CTypeCheckerVisitor::Visit( CIfStm &stm )
 
 void CTypeCheckerVisitor::Visit( CWhileStm &stm ) 
 {
-	if( stm.conditionExpression && stm.statement ) {
+    std::cout << "typechecker: CWhileStm\n";
+
+    if( stm.conditionExpression && stm.statement ) {
 		stm.conditionExpression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -585,7 +628,6 @@ void CTypeCheckerVisitor::Visit( CWhileStm &stm )
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
 	}
 }
-
 
 
 //Classes visit methods
