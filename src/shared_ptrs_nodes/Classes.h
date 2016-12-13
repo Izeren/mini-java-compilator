@@ -135,7 +135,7 @@ public:
 class CClassList : public IWrapper {
 public:
     CClassList();
-	void Add(CClass* _cclass);
+	void Add(CClass* cClass);
 	void Accept(IVisitor &visitor) override;
 
     std::vector<std::unique_ptr<CClass> > classes;
