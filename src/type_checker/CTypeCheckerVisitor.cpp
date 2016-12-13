@@ -641,6 +641,9 @@ void CTypeCheckerVisitor::Visit( CArgument &stm )
 	std::cout << "typechecker: arg\n";
     if( stm.id && stm.type ) {
         bool isVisibleType = checkClassVisibility( stm.id->name );
+        if( stm.type->isPrimitive ) {
+            isVisibleType = true;
+        }
         if( !isVisibleType ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.id->name );
             errors.push_back( CError( errorMessage, stm.position ) );
