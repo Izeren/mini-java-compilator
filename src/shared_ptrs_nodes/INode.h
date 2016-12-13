@@ -3,18 +3,9 @@
 #include <memory>
 #include <string>
 #include "../shared_ptrs_visitors/IVisitor.h"
+#include "../symbol_table/PositionInfo.h"
 
 const std::string BAD_ID("Error_name");
-
-class PositionInfo
-{
-public:
-	int firstLine;
-	int lastLine;
-	int firstColumn;
-	int lastColumn;
-	std::string GetStringPosition() const;
-};
 
 class INode {
 public:
