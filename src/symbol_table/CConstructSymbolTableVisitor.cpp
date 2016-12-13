@@ -127,9 +127,9 @@ void CConstructSymbolTableVisitor::Visit( CNewIdentifier &exp )
 	if( exp.identifier ) {
 		exp.identifier->Accept( *this );
 	}
-	if( exp.expressionList ) {
-		exp.expressionList->Accept( *this );
-	}
+//	if( exp.expressionList ) {
+//		exp.expressionList->Accept( *this );
+//	}
 }
 
 void CConstructSymbolTableVisitor::Visit( CThisExpression &exp )
