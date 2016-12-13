@@ -21,6 +21,7 @@ void CTypeCheckerVisitor::Visit( CIdExp &exp )
     cIdInitializedContext = NOT_SPECIFIED;
 }
 
+//unused class for now
 void CTypeCheckerVisitor::Visit( CIdPtrExp &exp ) 
 {
     //Только запоминаем тип
@@ -244,7 +245,7 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 		}
         auto argumentsInfo = methodInfo->arguments;
         for( int index = 0; index < gotNumberOfArguments; ++index ) {
-            auto argumentInfo = argumentsInfo->arguments[argumentsInfo->variableNames[index]];
+            auto argumentInfo = argumentsInfo->variables[argumentsInfo->variableNames[index]];
             if( exp.args->exps[index] ) {
                 exp.args->exps[index]->Accept( *this );
                 auto expectedArgumentType = *( argumentInfo->type );
@@ -624,8 +625,7 @@ void CTypeCheckerVisitor::Visit( CProgram &stm )
     }
 }
 
-
-
+//Constructor for type checker.
 CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table) : table( table ),
  lastCalculatedType( enums::TPrimitiveType::ERROR_TYPE ), currentMethod( nullptr ), currentClass( nullptr ) {}
 
@@ -637,15 +637,12 @@ bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableNa
     if(methodVariables.find( variableName ) != methodVariables.end() ) {
         return true;
     }
-    auto methodVariables = currentMethod->fields->variables;
+    auto methodFields = currentMethod->fields->variables;
     if(methodVariables.find( variableName ) != methodVariables.end() ) {
         return true;
     }
     auto classVariables = currentClass->fields->variables;
-    if( classVariables.find( variableName ) != classVariables.end() ) {
-        return true;
-    }
-    return false;
+    return classVariables.find(variableName ) != classVariables.end();
 }
 
 bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName) {
@@ -653,19 +650,11 @@ bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName) {
         return false;
     }
     auto classMethods = currentClass->methods;
-    if( classMethods.find( methodName ) == classMethods.end() ) {
-        return false;
-    } else {
-        return true;
-    }
+    return classMethods.find(methodName ) != classMethods.end();
 }
 
 bool CTypeCheckerVisitor::checkClassVisibility(const std::string &className) {
-    if( table->classes.find( className ) == table->classes.end() ) {
-        return false;
-    } else {
-        return true;
-    }
+    return table->classes.find(className ) != table->classes.end();
 }
 
 bool CTypeCheckerVisitor::checkCyclicInheritance(std::shared_ptr<ClassInfo> startClass,
@@ -677,11 +666,10 @@ bool CTypeCheckerVisitor::checkCyclicInheritance(std::shared_ptr<ClassInfo> star
     {
         return true;
     }
-    bool isD
-    checkCyclicInheritance( startClass, table->classes[currentClass->baseClass])
+    return checkCyclicInheritance( startClass, table->classes[currentClass->baseClass]);
 }
 
-std::vector<CError> GetErrors()
+std::vector<CError> CTypeCheckerVisitor::GetErrors()
 {
-
+    return errors;
 }

@@ -169,9 +169,9 @@ void CGetFieldExp::Accept (IVisitor& visitor)
 //CCallMethodExp:
 //-------------------------------------------------------------------------------------------------
 
-CCallMethodExp::CCallMethodExp(CClass* _classOwner, CIdExp* _methodName, CExpList* _args)
+CCallMethodExp::CCallMethodExp(CIdExp* _classOwner, CIdExp* _methodName, CExpList* _args)
 {
-	classOwner = std::unique_ptr<CClass>(_classOwner);
+	classOwner = std::unique_ptr<CIdExp>(_classOwner);
 	methodName = std::unique_ptr<CIdExp>(_methodName);
 	args = std::unique_ptr<CExpList>(_args);
 }
