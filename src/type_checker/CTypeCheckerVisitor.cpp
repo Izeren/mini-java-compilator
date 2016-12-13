@@ -1,8 +1,8 @@
 #include "CTypeCheckerVisitor.h"
 #include "../symbol_table/SymbolInfo.h"
-#include "../nodes/statements/CPrintStm.h"
-#include "../nodes/statements/CAssignStm.h"
-#include "../nodes/statements/CCompoundStm.h"
+#include "../shared_ptrs_nodes/Statements.h"
+#include "../shared_ptrs_nodes/Expressions.h"
+#include "../shared_ptrs_nodes/Classes.h"
 #include <exception>
 
 
@@ -296,7 +296,7 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 	if( exp.args && exp.methodName) {
         std::string identifierName = currentClass->name;
         if ( exp.classOwner ) {
-            identifierName = exp.classOwner->id->name;
+            identifierName = exp.classOwner->name;
         }
 		auto classIterator = table->classes.find(identifierName);
 		if( classIterator == table->classes.end() ) {
