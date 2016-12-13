@@ -154,7 +154,7 @@ ClassDeclarationList:
 		SAVE_LOCATION
 	}
 	|
-	ClassDeclarationList Class { auto p = $$ = $1; $1->Add($2); }
+	ClassDeclarationList Class { $$ = $1; $1->Add($2); }
 	;
 
 Class:
@@ -336,7 +336,7 @@ Expression:
 NonEmptyExpressionList:
 	Expression { auto p = $$ = new CExpList($1); SAVE_LOCATION }
 	|
-	NonEmptyExpressionList COMMA Expression { auto p = $$ = $1; $1->Add($3); SAVE_LOCATION }
+	NonEmptyExpressionList COMMA Expression { $$ = $1; $1->Add($3); }
 	;
 
 ExpressionList:
