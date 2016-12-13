@@ -181,6 +181,10 @@ CError::CError( const std::string & _message, const PositionInfo& position )
 	:message(_message), position(position)
 {}
 
+CError::CError(const std::string &_message)
+	:message(_message), position(PositionInfo())
+{}
+
 std::string & CError::GetMessage()
 {
 	return message;
@@ -227,4 +231,5 @@ std::string CError::GetNumberOfArgsMessage(unsigned long expected, unsigned long
 	errorMessage += ".";
 	return errorMessage;
 }
+
 
