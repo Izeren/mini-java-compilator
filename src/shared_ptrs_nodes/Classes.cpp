@@ -27,6 +27,17 @@ std::map<enums::TPrimitiveType, std::string> CType::typeNames = {
 	{enums::TPrimitiveType::STRING_ARRAY, "String[]"}
 };
 
+std::string CType::toString() const {
+	if( this->isPrimitive ) {
+        return CType::typeNames[this->type];
+    } else {
+        if( this->name == nullptr ) {
+            return "";
+        } else {
+            return this->name->name;
+        }
+    }
+}
 
 //CField:
 //-------------------------------------------------------------------------------------------------

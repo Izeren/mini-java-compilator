@@ -23,6 +23,7 @@ public:
 	std::unique_ptr<CIdExp> name;
 	enums::TPrimitiveType type;
 	bool isPrimitive;
+    std::string toString() const;
 };
 
 

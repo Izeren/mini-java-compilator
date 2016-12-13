@@ -606,8 +606,11 @@ void CTypeCheckerVisitor::Visit( CField &stm )
 	std::cout << "typechecker: field\n";
     if( stm.id && stm.type ) {
         bool isVisibleType = checkClassVisibility( stm.id->name );
+        if( stm.type->isPrimitive ) {
+            isVisibleType = true;
+        }
         if( !isVisibleType ) {
-            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.id->name );
+            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.type->toString() );
             errors.push_back( CError( errorMessage, stm.position ) );
             return;
         }
