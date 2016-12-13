@@ -682,7 +682,6 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
                 return;
             }
         }
-        //TODO: lastCalculatedType is not defined
         if( lastCalculatedType != expectedType ) {
             auto errorMessage = CError::GetTypeErrorMessage( expectedType, lastCalculatedType );
 			errors.push_back( CError( errorMessage, stm.returnExp->position ) );
