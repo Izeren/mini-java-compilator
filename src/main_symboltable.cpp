@@ -64,7 +64,7 @@ int main( int argc, char **argv ) {
 			out.close();
             
 //            CPrintVisitor visitor = CPrintVisitor();
-//            CConvertVisitor visitor = CConvertVisitor();
+////            CConvertVisitor visitor = CConvertVisitor();
 //            program->Accept(visitor);
 //            std::string result = visitor.GetResult();
 //            std::ofstream out(std::to_string(i) + "res.java", std::fstream::out);
