@@ -261,7 +261,7 @@ void CConstructSymbolTableVisitor::Visit( CFieldList &stm )
 				info->iVariable = nullptr;
 				stm.fields[index].get()->Accept( *this );
                 if( info->iVariables->variables.find( info->iVariable->name ) != info->iVariables->variables.end() ) {
-					errors.push_back( CError( CError::VARIABLE_REDEFINITION ) );
+					errors.push_back( CError( CError::VARIABLE_REDEFINITION, stm.fields[index]->position ) );
 				}
 				info->iVariables->AddVariable( info->iVariable );
 			}
@@ -292,7 +292,7 @@ void CConstructSymbolTableVisitor::Visit( CArgumentList &stm )
 				info->iVariable = nullptr;
 				stm.arguments[index].get()->Accept( *this );
 				if( info->iVariables->variables.find( info->iVariable->name ) != info->iVariables->variables.end() ) {
-					errors.push_back( CError( CError::VARIABLE_REDEFINITION ) );
+					errors.push_back( CError( CError::VARIABLE_REDEFINITION, stm.arguments[index]->position ) );
 				}
 				info->iVariables->AddVariable( info->iVariable );
 			}
@@ -339,7 +339,7 @@ void CConstructSymbolTableVisitor::Visit( CMethodList &stm )
 				info->iMethod = nullptr;
 				stm.methods[index].get()->Accept( *this );
 				if( info->iClass->methods.find( info->iMethod->name ) != info->iClass->methods.end() ) {
-					errors.push_back( CError( CError::FUNCTION_REDEFINITION ) );
+					errors.push_back( CError( CError::FUNCTION_REDEFINITION, stm.methods[index]->position ) );
 				}
 				info->iClass->AddMethod( info->iMethod );
 			}
@@ -382,7 +382,7 @@ void CConstructSymbolTableVisitor::Visit( CClassList &stm )
 				info->iClass = nullptr;
 				stm.classes[index].get()->Accept( *this );
 				if( table->classes.find( info->iClass->name ) != table->classes.end() ) {
-					errors.push_back( CError( CError::CLASS_REDEFINITION ) );
+					errors.push_back( CError( CError::CLASS_REDEFINITION, stm.classes[index]->position ) );
 				}
 				table->AddClass( info->iClass );
 			}

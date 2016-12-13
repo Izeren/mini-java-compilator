@@ -5,6 +5,7 @@
 
 //PositionInfo
 //-------------------------------------------------------------------------------------------------
+
 std::string PositionInfo::GetStringPosition() const {
 	std::string result = "\"";
 	result += firstLine + " ";
