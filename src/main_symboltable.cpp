@@ -62,8 +62,7 @@ int main( int argc, char **argv ) {
             visitor.GetSymbolTable()->Print(out);
             std::vector<CError> errors = visitor.GetErrors();
             for (auto error: errors) {
-                out << error.GetPosition().GetStringPosition();
-                out << error.GetMessage() << "\n";
+                out << error.GetPosition().GetStringPosition() << " " << error.GetMessage() << "\n";
             }
 //			out << result;
 			out.close();

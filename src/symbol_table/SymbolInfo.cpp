@@ -3,20 +3,6 @@
 #include "SymbolInfo.h"
 
 
-//PositionInfo
-//-------------------------------------------------------------------------------------------------
-
-std::string PositionInfo::GetStringPosition() const {
-	std::string result = "\"";
-	result += firstLine + " ";
-	result += firstColumn + " ";
-	result += lastLine + " ";
-	result += lastColumn;
-	result += "\"";
-	return result;
-}
-
-
 //TypeInfo:
 //-------------------------------------------------------------------------------------------------
 
