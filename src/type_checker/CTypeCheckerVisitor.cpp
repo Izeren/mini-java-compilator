@@ -58,11 +58,12 @@ void CTypeCheckerVisitor::Visit( CIdExp &exp )
 
         if (variableInfoPtr == nullptr) {
             lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+            errors.push_back(CError(CError::GetUndeclaredVariableErrorMessage(exp.name), exp.position));
             return;
         }
 
         if (isLocalVariable && exp.isInstance && !variableInfoPtr->isInitialized) {
-            errors.push_back( CError(CError::NOT_INITIALIZED_VARIABLE, exp.position) );
+            errors.push_back( CError(CError::GetNotInitializedVariableErrorMessage(exp.name), exp.position) );
             lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
             return;
         }
