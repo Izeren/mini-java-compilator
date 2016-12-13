@@ -451,9 +451,9 @@ void CConstructSymbolTableVisitor::Visit( CProgram &stm )
 }
 
 
-SymbolTable* CConstructSymbolTableVisitor::GetSymbolTable()
+std::shared_ptr<SymbolTable> CConstructSymbolTableVisitor::GetSymbolTable()
 {
-	return table.get();
+	return table;
 }
 
 std::vector<CError> CConstructSymbolTableVisitor::GetErrors()

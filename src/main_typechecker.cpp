@@ -49,22 +49,28 @@ int main( int argc, char **argv ) {
 			std::cout << "Point 7\n";
 			std::unique_ptr<CProgram> program = std::unique_ptr<CProgram>(cProgram);
 			std::cout << "Point 8\n";
-//            CPrintVisitor visitor = CPrintVisitor();
-//            CConvertVisitor visitor = CConvertVisitor();
-			CConstructSymbolTableVisitor visitor = CConstructSymbolTableVisitor();
+			CConstructSymbolTableVisitor symbol_table_visitor = CConstructSymbolTableVisitor();
 			std::cout << "Point 9\n";
 			std::cout << program.get() << "\n";
             std::cout << "Point 10\n";
-			program->Accept(visitor);
+			program->Accept(symbol_table_visitor);
 			std::cout << "Point 11\n";
-//			std::string result = visitor.GetResult();
+            CTypeCheckerVisitor type_checker_visitor = CTypeCheckerVisitor(symbol_table_visitor.GetSymbolTable());
 			std::cout << "Point 12\n";
+			program->Accept(type_checker_visitor);
+			std::cout << "Point 13\n";
 			std::ofstream out(std::to_string(i) + "res.java", std::fstream::out);
-            visitor.GetSymbolTable()->Print(out);
-            std::vector<CError> errors = visitor.GetErrors();
-            for (auto error: errors) {
+            symbol_table_visitor.GetSymbolTable()->Print(out);
+            std::vector<CError> symbol_table_errors = symbol_table_visitor.GetErrors();
+            for (auto error: symbol_table_errors) {
                 out << error.GetPosition().GetStringPosition() << " " << error.GetMessage() << "\n";
             }
+			std::cout << "Point 14\n";
+            std::vector<CError> type_checker_errors = type_checker_visitor.GetErrors();
+            for (auto error: type_checker_errors) {
+                out << error.GetPosition().GetStringPosition() << " " << error.GetMessage() << "\n";
+            }
+			std::cout << "Point 15\n";
 //			out << result;
 			out.close();
 		}

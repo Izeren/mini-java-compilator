@@ -55,7 +55,7 @@ public:
 	void Visit( CMainClass &stm ) override;
 	void Visit( CProgram &stm ) override;
 
-	SymbolTable* GetSymbolTable();
+	std::shared_ptr<SymbolTable> GetSymbolTable();
 	std::vector<CError> GetErrors();
 
 private:
