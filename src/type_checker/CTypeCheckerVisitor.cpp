@@ -4,6 +4,7 @@
 #include "../shared_ptrs_nodes/Expressions.h"
 #include "../shared_ptrs_nodes/Classes.h"
 #include <exception>
+#include <iostream>
 
 
 
@@ -592,6 +593,7 @@ void CTypeCheckerVisitor::Visit( CWhileStm &stm )
 
 void CTypeCheckerVisitor::Visit( CType &stm ) 
 {
+	std::cout << "typechecker: type\n";
     if( stm.name ) {
         lastCalculatedType = enums::TPrimitiveType::VOID;
     } else {
@@ -601,6 +603,7 @@ void CTypeCheckerVisitor::Visit( CType &stm )
 
 void CTypeCheckerVisitor::Visit( CField &stm ) 
 {
+	std::cout << "typechecker: field\n";
     if( stm.id && stm.type ) {
         bool isVisibleType = checkClassVisibility( stm.id->name );
         if( !isVisibleType ) {
@@ -616,6 +619,7 @@ void CTypeCheckerVisitor::Visit( CField &stm )
 
 void CTypeCheckerVisitor::Visit( CFieldList &stm ) 
 {
+	std::cout << "typechecker: fieldlist\n";
     bool areAllFieldsBuilt = true;
     for (int index = 0; index < stm.fields.size(); ++index) {
         auto field = stm.fields[index].get();
@@ -632,7 +636,9 @@ void CTypeCheckerVisitor::Visit( CFieldList &stm )
     }
 }
 
-void CTypeCheckerVisitor::Visit( CArgument &stm )  {
+void CTypeCheckerVisitor::Visit( CArgument &stm )  
+{
+	std::cout << "typechecker: arg\n";
     if( stm.id && stm.type ) {
         bool isVisibleType = checkClassVisibility( stm.id->name );
         if( !isVisibleType ) {
@@ -648,6 +654,7 @@ void CTypeCheckerVisitor::Visit( CArgument &stm )  {
 
 void CTypeCheckerVisitor::Visit( CArgumentList &stm ) 
 {
+	std::cout << "typechecker: arglist\n";
     bool areAllArgsBuilt = true;
     for (int index = 0; index < stm.arguments.size(); ++index) {
         auto argument = stm.arguments[index].get();
@@ -666,6 +673,7 @@ void CTypeCheckerVisitor::Visit( CArgumentList &stm )
 
 void CTypeCheckerVisitor::Visit( CMethod &stm ) 
 {
+	std::cout << "typechecker: method\n";
     if( stm.name && stm.arguments && stm.returnExp && stm.returnType && stm.statements && stm.vars ) {
         currentMethod = table->classes[currentClass->name]->methods[stm.name->name];
         stm.name->Accept( *this );
@@ -696,6 +704,7 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
 
 void CTypeCheckerVisitor::Visit( CMethodList &stm ) 
 {
+	std::cout << "typechecker: methodlist\n";
     bool areAllMethods = true;
     for (int index = 0; index < stm.methods.size(); ++index) {
         auto method = stm.methods[index].get();
@@ -714,6 +723,7 @@ void CTypeCheckerVisitor::Visit( CMethodList &stm )
 
 void CTypeCheckerVisitor::Visit( CClass &stm ) 
 {
+	std::cout << "typechecker: class\n";
     if( stm.id && stm.fields && stm.methods ) {
         stm.id->Accept( *this );
         stm.fields->Accept( *this );
@@ -726,6 +736,7 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
 
 void CTypeCheckerVisitor::Visit( CClassList &stm ) 
 {
+	std::cout << "typechecker: classlist\n";
     bool areAllClassBuilt = true;
     for (int index = 0; index < stm.classes.size(); ++index) {
         auto curClass = stm.classes[index].get();
@@ -744,6 +755,7 @@ void CTypeCheckerVisitor::Visit( CClassList &stm )
 
 void CTypeCheckerVisitor::Visit( CMainMethod &stm ) 
 {
+	std::cout << "typechecker: mainmethod\n";
     if( stm.vars ) {
         stm.vars->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -756,6 +768,7 @@ void CTypeCheckerVisitor::Visit( CMainMethod &stm )
 
 void CTypeCheckerVisitor::Visit( CMainClass &stm ) 
 {
+	std::cout << "typechecker: mainclass\n";
     if( stm.id ) {
         stm.id->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -766,6 +779,7 @@ void CTypeCheckerVisitor::Visit( CMainClass &stm )
 
 void CTypeCheckerVisitor::Visit( CProgram &stm ) 
 {
+    std::cout << "typechecker: program\n";
     if( stm.mainClass ) {
         stm.mainClass->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
