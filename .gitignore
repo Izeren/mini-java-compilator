@@ -8,3 +8,4 @@ src/bison.hpp
 *.java
 *.gif
 .idea/*
+*.xml
