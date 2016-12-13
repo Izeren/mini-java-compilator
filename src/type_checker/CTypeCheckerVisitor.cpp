@@ -3,19 +3,25 @@
 #include "../nodes/statements/CPrintStm.h"
 #include "../nodes/statements/CAssignStm.h"
 
+
+
 //Expressions visit methods
 //---------------------------------------------------------------------------------------
+
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
 {
 }
+
 void CTypeCheckerVisitor::Visit( CIdPtrExp &exp ) 
 {
 	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT_ARRAY );
 }
+
 void CTypeCheckerVisitor::Visit( CNumExp &exp ) 
 {
 	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
 }
+
 void CTypeCheckerVisitor::Visit( COpExp &exp ) 
 {
 	if( exp.leftOperand ){
@@ -103,6 +109,7 @@ void CTypeCheckerVisitor::Visit( CUnarMinusExp &exp )
 	}
 	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
 }
+
 void CTypeCheckerVisitor::Visit( CGetLengthExp &exp ) 
 {
 	if( exp.array ) {
@@ -165,16 +172,16 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 			return;
 		}
 		auto methodInfo = methods[methodName];
-		auto expectedNumberOfArguments = methodInfo->variables->variables.size();
+		auto expectedNumberOfArguments = methodInfo->arguments->variables.size();
         auto gotNumberOfArguments = exp.args->exps.size();
         if( expectedNumberOfArguments != gotNumberOfArguments ) {
 			auto errorMessage = CError::GetNumberOfArgsMessage( expectedNumberOfArguments, gotNumberOfArguments );
 			errors.push_back( CError( errorMessage, exp.position) );
 			return;
 		}
-        auto argumentsInfo = methodInfo->variables;
+        auto argumentsInfo = methodInfo->arguments;
         for( int index = 0; index < gotNumberOfArguments; ++index ) {
-            auto argumentInfo = argumentsInfo->variables[argumentsInfo->variableNames[index]];
+            auto argumentInfo = argumentsInfo->arguments[argumentsInfo->variableNames[index]];
             if( exp.args->exps[index] ) {
                 exp.args->exps[index]->Accept( *this );
                 auto expectedArgumentType = *( argumentInfo->type );
@@ -237,6 +244,7 @@ void CTypeCheckerVisitor::Visit( CThisExpression &exp )
         errors.push_back( CError( CError::AST_ERROR, exp.position) );
     }
 }
+
 void CTypeCheckerVisitor::Visit( CByIndexExpression &exp ) 
 {
 	if( exp.arrayExpression ) {
@@ -250,6 +258,7 @@ void CTypeCheckerVisitor::Visit( CByIndexExpression &exp )
 		errors.push_back( CError( errorMessage, exp.position ) );
 	}
 }
+
 void CTypeCheckerVisitor::Visit( CNewIdentifier &exp ) 
 {
     if( exp.identifier ) {
@@ -263,8 +272,12 @@ void CTypeCheckerVisitor::Visit( CNewIdentifier &exp )
         errors.push_back( CError( CError::AST_ERROR, exp.position ) );
     }
 }
+
+
+
 //Statements visit methods
 //---------------------------------------------------------------------------------------
+
 void CTypeCheckerVisitor::Visit( CAssignStm &stm ) 
 {
     if( stm.leftExpression && stm.rightExpression ) {
@@ -287,6 +300,7 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
     }
 }
+
 void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm ) 
 {
     if( stm.idExpression && stm.offset && stm.valueExpression ) {
@@ -313,10 +327,12 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
         errors.push_back( CError( CError::AST_ERROR, stm.position) );
     }
 }
+
 void CTypeCheckerVisitor::Visit( CCompoundStm &stm ) 
 {
 
 }
+
 void CTypeCheckerVisitor::Visit( CPrintStm &stm ) 
 {
     if( stm.expression ) {
@@ -368,8 +384,11 @@ void CTypeCheckerVisitor::Visit( CWhileStm &stm )
 	}
 }
 
+
+
 //Classes visit methods
 //---------------------------------------------------------------------------------------
+
 void CTypeCheckerVisitor::Visit( CType &stm ) 
 {
     if( stm.name ) {
@@ -522,6 +541,7 @@ void CTypeCheckerVisitor::Visit( CMainMethod &stm )
 {
 
 }
+
 void CTypeCheckerVisitor::Visit( CMainClass &stm ) 
 {
     if( stm.id ) {
@@ -531,12 +551,15 @@ void CTypeCheckerVisitor::Visit( CMainClass &stm )
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
     }
 }
+
 void CTypeCheckerVisitor::Visit( CProgram &stm ) 
 {
     if( stm.mainClass ) {
 
     }
 }
+
+
 
 CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table) : table( table ),
  lastCalculatedType( enums::TPrimitiveType::ERROR_TYPE ), currentMethod( nullptr ), currentClass( nullptr ) {}
@@ -545,7 +568,11 @@ bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableNa
     if( currentClass == nullptr || currentMethod == nullptr ) {
         return false;
     }
-    auto methodVariables = currentMethod->variables->variables;
+    auto methodVariables = currentMethod->arguments->variables;
+    if(methodVariables.find( variableName ) != methodVariables.end() ) {
+        return true;
+    }
+    auto methodVariables = currentMethod->fields->variables;
     if(methodVariables.find( variableName ) != methodVariables.end() ) {
         return true;
     }

@@ -315,10 +315,12 @@ void CConstructSymbolTableVisitor::Visit( CMethod &stm )
 	if( stm.arguments ) {
 		stm.arguments->Accept( *this );
 	}
+    info->iMethod->arguments = info->iVariables;
+    info->iVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 	if( stm.vars ) {
 		stm.vars->Accept( *this );
 	}
-	info->iMethod->variables = info->iVariables;
+	info->iMethod->fields = info->iVariables;
 
 	if( stm.statements ) {
 		stm.statements->Accept( *this );
@@ -404,11 +406,14 @@ void CConstructSymbolTableVisitor::Visit( CMainMethod &stm )
 	}
 	info->iVariable = std::shared_ptr<VariableInfo>( new VariableInfo( info->iName, info->iType ) );
 	info->iVariables->AddVariable( info->iVariable );
-	info->iMethod->variables = info->iVariables;
+	info->iMethod->arguments = info->iVariables;
 
+    info->iVariables = std::shared_ptr<VariablesInfo>( new VariablesInfo() );
 	if( stm.vars ) {
 		stm.vars->Accept( *this );
 	}
+	info->iMethod->fields = info->iVariables;
+    
 	if( stm.statements ) {
 		stm.statements->Accept( *this );
 	}

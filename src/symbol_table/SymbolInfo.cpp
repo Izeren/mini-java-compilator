@@ -2,6 +2,7 @@
 
 #include "SymbolInfo.h"
 
+
 //PositionInfo
 //-------------------------------------------------------------------------------------------------
 std::string PositionInfo::GetStringPosition() const {
@@ -13,6 +14,8 @@ std::string PositionInfo::GetStringPosition() const {
 	result += "\"";
 	return result;
 }
+
+
 //TypeInfo:
 //-------------------------------------------------------------------------------------------------
 
@@ -110,8 +113,11 @@ void MethodInfo::Print( std::ofstream& out )
 		out << "\n";
 	}
 	out << "\t" << "\t" << "isPublic: " << isPublic << " " << "\n";
-	out << "\t" << "\t" << "variables: {" << "\n";
-	variables->Print( out );
+	out << "\t" << "\t" << "arguments: {" << "\n";
+	arguments->Print( out );
+	out << "\t" << "\t" << "} " << "\n";
+	out << "\t" << "\t" << "fields: {" << "\n";
+	fields->Print( out );
 	out << "\t" << "\t" << "} " << "\n";
 }
 

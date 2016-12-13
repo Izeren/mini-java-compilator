@@ -68,7 +68,8 @@ public:
 	std::string name;	
 	bool isPublic;
 	std::shared_ptr<TypeInfo> returnType;
-	std::shared_ptr<VariablesInfo> variables;
+	std::shared_ptr<VariablesInfo> arguments;
+	std::shared_ptr<VariablesInfo> fields;
 };
 
 class ClassInfo 
