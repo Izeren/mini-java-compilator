@@ -482,6 +482,7 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
             errors.push_back( CError( errorMessage, stm.leftExpression->position ) );
             return;
         }
+
         stm.leftExpression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -554,11 +555,14 @@ void CTypeCheckerVisitor::Visit( CCompoundStm &stm )
 {
     std::cout << "typechecker: CCompoundStm\n";
 
-    if( stm.leftStatement and stm.rightStatement ) {
+    if( stm.leftStatement) {
         stm.leftStatement->Accept( *this );
-        stm.rightStatement->Accept( *this );
     } else {
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
+
+    if( stm.rightStatement ) {
+        stm.rightStatement->Accept( *this );
     }
 }
 
@@ -814,7 +818,7 @@ void CTypeCheckerVisitor::Visit( CMainMethod &stm )
         lastCalculatedType = enums::TPrimitiveType::VOID;
     }
     if( stm.statements ) {
-        stm.vars->Accept( *this );
+        stm.statements->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
     }
 }
@@ -825,6 +829,7 @@ void CTypeCheckerVisitor::Visit( CMainClass &stm )
     if( stm.id ) {
         currentClass = table->classes[stm.id->name];
         stm.id->Accept( *this );
+        stm.mainMethod->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
     } else {
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
