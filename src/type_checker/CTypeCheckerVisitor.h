@@ -62,6 +62,14 @@ private:
     std::shared_ptr<ClassInfo> currentClass;
     std::shared_ptr<MethodInfo> currentMethod;
 
+	enum {
+		//проверить, что оно было иницилизировано
+		CHECK_INITIALIZED,
+		//пофиг на то было или не было иницилизировано
+		INITIALIZED_NOT_NECESSARY,
+		//ошибка, если не указано
+		NOT_SPECIFIED
+	} cIdInitializedContext;
 
 	bool checkVariableVisibility( const std::string& variableName );
 	bool checkMethodVisibility( const std::string& methodName );

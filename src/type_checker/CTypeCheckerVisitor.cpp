@@ -2,12 +2,20 @@
 #include "../symbol_table/SymbolInfo.h"
 #include "../nodes/statements/CPrintStm.h"
 #include "../nodes/statements/CAssignStm.h"
+#include <exception>
 
 //Expressions visit methods
 //---------------------------------------------------------------------------------------
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
 {
-    //Ничего не делаем?
+    if (cIdInitializedContext == NOT_SPECIFIED) {
+        throw std::invalid_argument("contexts isn't specified");
+        return;
+    }
+
+    //TODO:do it
+
+    cIdInitializedContext = NOT_SPECIFIED;
 }
 void CTypeCheckerVisitor::Visit( CIdPtrExp &exp ) 
 {
@@ -24,7 +32,11 @@ void CTypeCheckerVisitor::Visit( COpExp &exp )
     //Посещаем левый операнд
 	if( exp.leftOperand ){
 		exp.leftOperand->Accept( *this );
-	}
+	} else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
+    }
 
     if( lastCalculatedType != enums::TPrimitiveType::INT ) {
         //Работаем только с int
@@ -37,9 +49,13 @@ void CTypeCheckerVisitor::Visit( COpExp &exp )
     //Посещаем правый операнд
 	if( exp.rightOperand ) {
 		exp.rightOperand->Accept( *this );
-	}
+	} else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
+    }
 
-	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
+	if( lastCalculatedType != enums::TPrimitiveType::INT ) {
         //Работаем только с int
 		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position) );
@@ -59,75 +75,111 @@ void CTypeCheckerVisitor::Visit( CLogOpExp &exp )
 {
 	if( exp.leftOperand ) {
 		exp.leftOperand->Accept( *this );
-	}
-	if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::BOOLEAN ), lastCalculatedType );
+	} else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
+    }
+
+	if( lastCalculatedType != enums::TPrimitiveType::BOOLEAN ) {
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::BOOLEAN, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position ) );
-		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 		return;
 	}
+
 	if( exp.rightOperand ) {
 		exp.rightOperand->Accept( *this );
-	}
-	if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::BOOLEAN ), lastCalculatedType );
+	} else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
+    }
+
+	if( lastCalculatedType != enums::TPrimitiveType::BOOLEAN ) {
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::BOOLEAN, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position));
-		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 		return;
 	}
-	lastCalculatedType = TypeInfo( enums::TPrimitiveType::BOOLEAN );
+	lastCalculatedType = enums::TPrimitiveType::BOOLEAN;
 }
 
 void CTypeCheckerVisitor::Visit( CCompExp &exp ) 
 {
 	if( exp.leftOperand ) {
 		exp.leftOperand->Accept( *this );
-	}
-	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+	} else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
+    }
+
+	if( lastCalculatedType != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position ) );
-		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 		return;
 	}
+
 	if( exp.rightOperand ) {
 		exp.rightOperand->Accept( *this );
-	}
-	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+	} else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
+    }
+
+	if( lastCalculatedType != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position ) );
-		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 		return;
 	}
-	lastCalculatedType = TypeInfo( enums::TPrimitiveType::BOOLEAN );
+
+	lastCalculatedType = enums::TPrimitiveType::BOOLEAN;
 }
 
 void CTypeCheckerVisitor::Visit( CUnarMinusExp &exp ) 
 {
 	if( exp.rightOperand ) {
 		exp.rightOperand->Accept( *this );
-	}
-	if( lastCalculatedType.type != enums::TPrimitiveType::INT ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT ), lastCalculatedType );
+	} else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
+    }
+
+	if( lastCalculatedType != enums::TPrimitiveType::INT ) {
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position ) );
-		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 		return;
 	}
-	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
+
+	lastCalculatedType = enums::TPrimitiveType::INT;
 }
+
 void CTypeCheckerVisitor::Visit( CGetLengthExp &exp ) 
 {
 	if( exp.array ) {
 		exp.array->Accept( *this );
-	}
-	if( lastCalculatedType.type != enums::TPrimitiveType::INT_ARRAY ) {
-		auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::INT_ARRAY ), lastCalculatedType );
+	} else {
+        errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
+    }
+
+	if( lastCalculatedType != enums::TPrimitiveType::INT_ARRAY ) {
+		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT_ARRAY, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position ) );
-		lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
+		lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 		return;
 	}
-	lastCalculatedType = TypeInfo( enums::TPrimitiveType::INT );
+	lastCalculatedType = enums::TPrimitiveType::INT;
 }
 
+//В грамматике нет такого варианта и у нас тут хрень какая-то
 void CTypeCheckerVisitor::Visit( CGetFieldExp &exp ) 
 {
 	if( exp.classOwner && exp.field ) {
@@ -154,6 +206,7 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
 		lastCalculatedType = *(fieldInfo->type);
 	} else {
 		errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 	}
 }
 
@@ -199,7 +252,8 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 		lastCalculatedType = *( methodInfo->returnType );
 	} else {
 		errors.push_back( CError( CError::AST_ERROR, exp.position ) );
-	}
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+    }
 }
 
 void CTypeCheckerVisitor::Visit( CExpList &exp ) 
@@ -219,6 +273,7 @@ void CTypeCheckerVisitor::Visit( CNegativeExpression &exp )
         lastCalculatedType = enums::TPrimitiveType::BOOLEAN;
     } else {
         errors.push_back( CError( CError::AST_ERROR, exp.position) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
     }
 }
 
