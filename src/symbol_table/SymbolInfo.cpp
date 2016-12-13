@@ -164,7 +164,6 @@ const std::string CError::VARIABLE_REDEFINITION = "Variable redefined.";
 const std::string CError::CLASS_REDEFINITION = "Class redefined.";
 const std::string CError::AST_ERROR = "AST construction error.";
 const std::string CError::IS_NOT_CALLABLE = "Object is not callable.";
-const std::string CError::NOT_INITIALIZED_VARIABLE = "Variable wasn't initialized.";
 CError::CError( const std::string & _message, const PositionInfo& position )
 	:message(_message), position(position)
 {}
@@ -208,6 +207,14 @@ std::string CError::GetUndeclaredErrorMessage(const std::string& name) {
 std::string CError::GetHasNoMemberErrorMessage(const std::string &className, const std::string &fieldName) {
     std::string errorMessage = "Class: " + className + " has no member: " + fieldName + ".";
 	return errorMessage;
+}
+
+std::string CError::GetUndeclaredVariableErrorMessage( const std::string& variableName) {
+    return  "Variable " + variableName + " undeclared.";
+}
+
+std::string CError::GetNotInitializedVariableErrorMessage( const std::string& variableName) {
+    return "Variable " + variableName + " not initialized but has been used.";
 }
 
 std::string CError::GetNumberOfArgsMessage(unsigned long expected, unsigned long got) {
