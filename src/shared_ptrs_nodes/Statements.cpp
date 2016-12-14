@@ -1,5 +1,7 @@
 #include "Statements.h"
 
+#include <iostream>
+
 //CAssignStm:
 //-------------------------------------------------------------------------------------------------
 
@@ -64,6 +66,8 @@ CPrintStm::CPrintStm() : CPrintStm(NULL) {}
 
 CPrintStm::CPrintStm(IExpression* expression) {
 	this->expression = std::unique_ptr<IExpression>(expression);
+    position = expression->position;
+    std::cout << "PRINTLN POSITION" << position.GetStringPosition() << "\n";
 }
 
 void CPrintStm::Accept(IVisitor &visitor) {

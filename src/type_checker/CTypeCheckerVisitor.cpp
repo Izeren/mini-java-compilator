@@ -319,7 +319,7 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
         auto fieldIterator = variablesInfo->variables.find(fieldName);
         if( fieldIterator == variablesInfo->variables.end() ) {
             auto errorMessage = CError::GetHasNoMemberErrorMessage( ownerName, fieldName );
-            errors.push_back( CError( errorMessage, exp.position ) );
+            errors.push_back( CError( errorMessage, exp.field->position ) );
             lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
             return;
         }
@@ -327,7 +327,7 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
 		auto fieldInfo = variablesInfo->variables[fieldName];
 		lastCalculatedType = *(fieldInfo->type);
 	} else {
-		errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+		errors.push_back( CError( CError::AST_ERROR, exp.field->position ) );
         lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 	}
 }
@@ -355,8 +355,9 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 
 		auto methodName = exp.methodName->name;
         auto classInfo = table->classes[identifierName];
+        std::cout << methodName << " " << classInfo->name << " " << isThis << "\n";
 		if( !checkMethodVisibility( methodName, classInfo, isThis ) ) {
-			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.position ) );
+			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.methodName->position ) );
 			return;
 		}
 		auto methodInfo = classInfo->methods[methodName];
@@ -497,7 +498,7 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
     std::cout << "typechecker: CAssignStm\n";
 
     if( stm.leftExpression && stm.rightExpression ) {
-        bool isVisible = checkVariableVisibility( stm.leftExpression->name );
+        bool isVisible = checkVariableVisibility( stm.leftExpression->name, currentClass, currentMethod );
         if( !isVisible ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.leftExpression->name );
             errors.push_back( CError( errorMessage, stm.leftExpression->position ) );
@@ -542,7 +543,7 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
 
     if( stm.idExpression && stm.offset && stm.valueExpression ) {
         auto variableName = stm.idExpression->name;
-        bool isVisible = checkVariableVisibility( variableName );
+        bool isVisible = checkVariableVisibility( variableName, currentClass, currentMethod );
         if( !isVisible ) {
             errors.push_back( CError( CError::GetUndeclaredErrorMessage( variableName ), stm.position ) );
             return;
@@ -794,6 +795,11 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
 	std::cout << "typechecker: class\n";
     if( stm.id && stm.fields && stm.methods ) {
         currentClass = table->classes[stm.id->name];
+        bool isGoodInherited = checkCyclicInheritance( currentClass, currentClass );
+        if( !isGoodInherited ) {
+            errors.push_back( CError( CError::CYCLIC_INHERITANCE, stm.parentClass->position ) );
+            return;
+        }
         stm.id->Accept( *this );
         stm.fields->Accept( *this );
         stm.methods->Accept( *this );
@@ -870,38 +876,48 @@ void CTypeCheckerVisitor::Visit( CProgram &stm )
 CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table) : table( table ),
  lastCalculatedType( enums::TPrimitiveType::ERROR_TYPE ), currentMethod( nullptr ), currentClass( nullptr ) {}
 
-bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableName ) {
-    if( currentClass == nullptr || currentMethod == nullptr ) {
-        return false;
+bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableName, std::shared_ptr<ClassInfo> classInfo,
+std::shared_ptr<MethodInfo> methodInfo ) {
+    //Nullptr for method info means that we try to find the variable in fields of base classes.
+    if( methodInfo ) {
+        auto methodVariables = methodInfo->arguments->variables;
+        if (methodVariables.find(variableName) != methodVariables.end()) {
+            return true;
+        }
+        auto methodFields = methodInfo->fields->variables;
+        if (methodFields.find(variableName) != methodFields.end()) {
+            return true;
+        }
     }
-
-    auto methodVariables = currentMethod->arguments->variables;
-    if(methodVariables.find( variableName ) != methodVariables.end() ) {
+    auto classVariables = classInfo->fields->variables;
+    if( classVariables.find( variableName ) != classVariables.end() ) {
+        if ( currentClass->baseClass != "" ) {
+            return checkVariableVisibility( variableName, table->classes[classInfo->baseClass], nullptr );
+        } else {
+            return false;
+        }
+    } else {
         return true;
     }
-    auto methodFields = currentMethod->fields->variables;
-    if(methodFields.find( variableName ) != methodFields.end() ) {
-        return true;
-    }
-    auto classVariables = currentClass->fields->variables;
-    return classVariables.find(variableName ) != classVariables.end();
 }
 
 bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName, std::shared_ptr<ClassInfo> clazz, bool isThis ) {
     //if we call the method using this, clazz should be equal nullptr, this way, current class will be checked
-    if ( clazz == nullptr ) {
-        clazz = currentClass;
-    }
-    if (currentClass == nullptr) {
-        return false;
-    }
-    auto classMethods = currentClass->methods;
+    auto classMethods = clazz->methods;
     bool isMethodExist = classMethods.find( methodName ) != classMethods.end();
     if( !isMethodExist ) {
-        return false;
+        if ( clazz->baseClass != "" ) {
+            return checkMethodVisibility( methodName, table->classes[clazz->baseClass], isThis );
+        } else {
+            return false;
+        }
     } else {
         std::shared_ptr<MethodInfo> methodInfo = classMethods[methodName];
-        return methodInfo->isPublic;
+        if( !isThis) {
+            return methodInfo->isPublic;
+        } else {
+            return true;
+        }
     }
 }
 
