@@ -1,7 +1,7 @@
+cmake-build-debug/*
 *.o
 *.bin
 *.png
-*.txt
 src/bison.cpp
 src/bison.hpp
 src/lex.cpp

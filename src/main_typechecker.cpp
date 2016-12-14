@@ -73,7 +73,7 @@ int main( int argc, char **argv ) {
 
     std::cout << "argc = "<< argc << "\n";
 	if( argc == 1 ) {
-        std::string tests_dir = "tests/type_checker/";
+        std::string tests_dir = "../tests/type_checker/";
         std::string testfiles_dir = "testfiles/";
         std::string results_dir = "results/";
         
