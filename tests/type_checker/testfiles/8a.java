@@ -30,6 +30,10 @@ class A {
 		c = 1 % b;
 		c = 1 % 0;
 
+		c = 1 + true;
+		c = true + 1;
+		c = getInt() + getInt();
+
 		return 0;
 	}
 }
