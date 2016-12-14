@@ -651,7 +651,7 @@ void CTypeCheckerVisitor::Visit( CField &stm )
 {
 	std::cout << "typechecker: field\n";
     if( stm.id && stm.type ) {
-        bool isVisibleType = checkClassVisibility( stm.id->name );
+        bool isVisibleType = checkClassVisibility( stm.type->name->name );
         if( stm.type->isPrimitive ) {
             isVisibleType = true;
         }
@@ -689,7 +689,7 @@ void CTypeCheckerVisitor::Visit( CArgument &stm )
 {
 	std::cout << "typechecker: arg\n";
     if( stm.id && stm.type ) {
-        bool isVisibleType = checkClassVisibility( stm.id->name );
+        bool isVisibleType = checkClassVisibility( stm.type->name->name );
         if( stm.type->isPrimitive ) {
             isVisibleType = true;
         }
