@@ -1,4 +1,5 @@
 cmake-build-debug/*
+tests/type_checker/results/*
 *.o
 *.bin
 *.png
