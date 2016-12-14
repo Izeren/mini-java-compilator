@@ -70,4 +70,5 @@ private:
 	bool checkMethodVisibility( const std::string& methodName, std::shared_ptr<ClassInfo> clazz, bool isThis );
 	bool checkTypeExisting(const CType &className);
 	bool checkCyclicInheritance( std::shared_ptr<ClassInfo> startClass, std::shared_ptr<ClassInfo> currentClass );
+	std::vector<std::unordered_map<std::string, std::shared_ptr<VariableInfo>>*> getSuperFields();
 };

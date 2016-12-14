@@ -8,6 +8,21 @@
 
 
 
+std::vector<std::unordered_map<std::string, std::shared_ptr<VariableInfo>>*> CTypeCheckerVisitor::getSuperFields() {
+    std::vector<std::unordered_map<std::string, std::shared_ptr<VariableInfo>>*> superFields;
+
+    std::string super = currentClass->baseClass;
+    while (super != "") {
+        ClassInfo* superClass = table->classes[super].get();
+        std::unordered_map<std::string, std::shared_ptr<VariableInfo>>* fields = &superClass->fields->variables;
+        superFields.push_back(fields);
+
+        super = superClass->baseClass;
+    }
+
+    return superFields;
+};
+
 //bool -- isLocalVariable
 std::pair<VariableInfo*, bool> CTypeCheckerVisitor::getVariableInfo(CIdExp& exp) {
     std::pair<VariableInfo*, bool> errorResult(nullptr, false);
@@ -23,6 +38,15 @@ std::pair<VariableInfo*, bool> CTypeCheckerVisitor::getVariableInfo(CIdExp& exp)
         auto classFieldIterator = currentClass->fields->variables.find(exp.name);
         if (classFieldIterator != currentClass->fields->variables.end()) {
             variableInfoPtr = classFieldIterator->second.get();
+        } else {
+            auto superFields = getSuperFields();
+            for (int i = 0; i < superFields.size(); ++i) {
+                auto it = superFields[i]->find(exp.name);
+                if (it != superFields[i]->end()) {
+                    variableInfoPtr = it->second.get();
+                    break;
+                }
+            }
         }
 
         auto methodArgumentIterator = currentMethod->arguments->variables.find(exp.name);
