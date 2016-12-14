@@ -47,6 +47,7 @@ std::string CType::toString() const {
 CField::CField(CType* _type, CIdExp* _id) {
 	type = std::unique_ptr<CType>(_type);
 	id = std::unique_ptr<CIdExp>(_id);
+    position = _id->position;
 }
 CField::CField() : CField(NULL, NULL) {};
 
@@ -77,6 +78,7 @@ void CFieldList::Accept(IVisitor &visitor) {
 CArgument::CArgument(CType *_type, CIdExp *_id) {
 	type = std::unique_ptr<CType>(_type);
 	id = std::unique_ptr<CIdExp>(_id);
+    position = _id->position;
 }
 
 CArgument::CArgument() {}
@@ -119,6 +121,7 @@ CMethod::CMethod(CType* _returnType, IExpression* _returnExp, CIdExp* _name, CAr
 	statements = std::unique_ptr<CCompoundStm>(_statements);
 	vars = std::unique_ptr<CFieldList>(_vars);
 	isPublic = _isPublic;
+    position = _name->position;
 }
 
 CMethod::CMethod() : CMethod(NULL, NULL, NULL) {};
@@ -152,6 +155,7 @@ CClass::CClass(CIdExp* _id, CIdExp* _parentClass, CFieldList* _fields, CMethodLi
 	parentClass = std::unique_ptr<CIdExp>(_parentClass);
 	fields = std::unique_ptr<CFieldList>(_fields);
 	methods = std::unique_ptr<CMethodList>(_methods);
+    position = _id->position;
 }
 
 CClass::CClass() : CClass(NULL) {};
