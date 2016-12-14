@@ -19,7 +19,7 @@ std::pair<VariableInfo*, bool> CTypeCheckerVisitor::getVariableInfo(CIdExp& exp)
         if (!currentClass || !currentMethod) {
             return errorResult;
         }
-
+        
         auto classFieldIterator = currentClass->fields->variables.find(exp.name);
         if (classFieldIterator != currentClass->fields->variables.end()) {
             variableInfoPtr = classFieldIterator->second.get();
@@ -29,13 +29,20 @@ std::pair<VariableInfo*, bool> CTypeCheckerVisitor::getVariableInfo(CIdExp& exp)
         if (methodArgumentIterator != currentMethod->arguments->variables.end()) {
             variableInfoPtr = methodArgumentIterator->second.get();
         }
-
+        
+        std::cout << "FINDING...\n";
+        std::ofstream out("2res.java", std::fstream::out);
+//        currentMethod->fields->Print(out);
+//        out.close();
         auto methodVariableIterator = currentMethod->fields->variables.find(exp.name);
         if (methodVariableIterator != currentMethod->fields->variables.end()) {
+            std::cout << "FOUND!\n";
             variableInfoPtr = methodVariableIterator->second.get();
             isLocalVariable = true;
         }
 
+        variableInfoPtr->Print(out);
+        out.close();
         //success
         return std::pair<VariableInfo*, bool>(variableInfoPtr, isLocalVariable);
     } else {
@@ -48,7 +55,7 @@ std::pair<VariableInfo*, bool> CTypeCheckerVisitor::getVariableInfo(CIdExp& exp)
 
 void CTypeCheckerVisitor::Visit( CIdExp &exp ) 
 {
-    std::cout << "typechecker: cidexp\n";
+    std::cout << "typechecker: cidexp " << exp.name << " " << "\n";
 
     if (exp.isInstance) {
         std::pair<VariableInfo*, bool> variableInfo = getVariableInfo(exp);
@@ -69,7 +76,7 @@ void CTypeCheckerVisitor::Visit( CIdExp &exp )
         }
 
         //success
-        lastCalculatedType = *variableInfoPtr->type;
+        lastCalculatedType = variableInfoPtr->type;
     } else {
         lastCalculatedType = enums::TPrimitiveType::VOID;
     }
@@ -730,7 +737,9 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
         stm.arguments->Accept( *this );
         stm.statements->Accept( *this );
         stm.vars->Accept( *this );
+        std::cout << "now ->\n";
         stm.returnExp->Accept( *this );
+        std::cout << "<- \n";
         TypeInfo expectedType = stm.returnType->isPrimitive ? TypeInfo(stm.returnType->type) : TypeInfo(stm.returnType->name->name);
         if( !stm.returnType->isPrimitive ) {
             bool isVisibleClass = checkClassVisibility( stm.returnType->name->name );
