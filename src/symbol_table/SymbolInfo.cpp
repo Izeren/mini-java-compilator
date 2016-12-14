@@ -201,7 +201,7 @@ std::string CError::GetTypeErrorMessage(const TypeInfo &expected, const TypeInfo
 }
 
 std::string CError::GetUndeclaredErrorMessage(const std::string& name) {
-    std::string errorMessage = "The object named: " + name + " is undeclared in this scope.";
+    std::string errorMessage = name + " is undeclared in this scope.";
 	return errorMessage;
 }
 

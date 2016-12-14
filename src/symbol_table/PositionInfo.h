@@ -10,4 +10,5 @@ public:
 	int firstColumn;
 	int lastColumn;
 	std::string GetStringPosition() const;
+	PositionInfo operator + ( const PositionInfo& right ) const;
 };

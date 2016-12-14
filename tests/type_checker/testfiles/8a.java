@@ -33,8 +33,8 @@ class A {
 		c = 1 % b;
 		c = 1 % 0;
 
-		c = 1 + true;
-		c = true + 1;
+		c = 1 + true; //bad
+		c = true + 1; //bad
 		c = clazz.getInt() + clazz.getInt();
 
 		return 0;

@@ -301,7 +301,7 @@ Expression:
 	|
 	THIS DOT Identifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( 0, $3, (CExpList*) $5) ;  }
 	|
-	MINUS NUM { $$ = new CNumExp( (std::string("-") + std::string($2)).c_str() );  }
+	MINUS Expression { $$ = new CUnarMinusExp( $2 ); }
 	|
 	NUM { auto p = $$ = new CNumExp($1); SAVE_LOCATION }
 	|

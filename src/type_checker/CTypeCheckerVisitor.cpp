@@ -432,7 +432,10 @@ void CTypeCheckerVisitor::Visit( CArrayExpression &exp )
 	if( lastCalculatedType != enums::TPrimitiveType::INT ) {
 		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
 	}
+    lastCalculatedType = enums::TPrimitiveType::INT_ARRAY;
 }
 
 void CTypeCheckerVisitor::Visit( CThisExpression &exp ) 
@@ -472,7 +475,10 @@ void CTypeCheckerVisitor::Visit( CByIndexExpression &exp )
 	if( lastCalculatedType != enums::TPrimitiveType::INT ) {
 		auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
 		errors.push_back( CError( errorMessage, exp.position ) );
+        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+        return;
 	}
+    lastCalculatedType = enums::TPrimitiveType::INT;
 }
 
 void CTypeCheckerVisitor::Visit( CNewIdentifier &exp ) 
@@ -505,6 +511,7 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
         if( !isVisible ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.leftExpression->name );
             errors.push_back( CError( errorMessage, stm.leftExpression->position ) );
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
             return;
         }
 
@@ -531,6 +538,7 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
         if( leftType != lastCalculatedType ) {
 	    	auto errorMessage = CError::GetTypeErrorMessage( leftType, lastCalculatedType );
 		    errors.push_back( CError( errorMessage, stm.leftExpression->position ) );
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
             return;
 	    }
 
@@ -549,6 +557,7 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
         bool isVisible = checkVariableVisibility( variableName, currentClass, currentMethod );
         if( !isVisible ) {
             errors.push_back( CError( CError::GetUndeclaredErrorMessage( variableName ), stm.position ) );
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
             return;
         }
         stm.offset->Accept( *this );
@@ -558,6 +567,7 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
         if( lastCalculatedType != enums::TPrimitiveType::INT ) {
             auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
             errors.push_back( CError( errorMessage, stm.offset->position) );
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
             return;
         }
         stm.valueExpression->Accept( *this );
@@ -567,6 +577,7 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
         if( lastCalculatedType != enums::TPrimitiveType::INT ) {
             auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
             errors.push_back( CError( errorMessage, stm.valueExpression->position) );
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
             return;
         }
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -623,8 +634,8 @@ void CTypeCheckerVisitor::Visit( CIfStm &stm )
             return;
         }
 		if( lastCalculatedType.type != enums::TPrimitiveType::BOOLEAN ) {
-			auto errorMessage = CError::GetTypeErrorMessage( TypeInfo( enums::TPrimitiveType::BOOLEAN), lastCalculatedType.type );
-			errors.push_back( CError( errorMessage, stm.position ) );
+			auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::BOOLEAN, lastCalculatedType );
+			errors.push_back( CError( errorMessage, stm.conditionExpression->position ) );
             return;
 		}
         stm.positiveStatement->Accept( *this );
@@ -677,7 +688,7 @@ void CTypeCheckerVisitor::Visit( CField &stm )
         bool isVisibleType = checkTypeExisting(*stm.type);
         if( !isVisibleType ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.type->toString() );
-            errors.push_back( CError( errorMessage, stm.position ) );
+            errors.push_back( CError( errorMessage, stm.type->position ) );
             return;
         }
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -711,8 +722,8 @@ void CTypeCheckerVisitor::Visit( CArgument &stm )
     if( stm.id && stm.type ) {
         bool isVisibleType = checkTypeExisting(*stm.type);
         if( !isVisibleType ) {
-            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.id->name );
-            errors.push_back( CError( errorMessage, stm.position ) );
+            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.type->toString() );
+            errors.push_back( CError( errorMessage, stm.type->position ) );
             return;
         }
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -760,6 +771,9 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
             return;
         }
 
+        if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
+            return;
+        }
         if( lastCalculatedType != expectedType ) {
             auto errorMessage = CError::GetTypeErrorMessage( expectedType, lastCalculatedType );
 			errors.push_back( CError( errorMessage, stm.returnExp->position ) );

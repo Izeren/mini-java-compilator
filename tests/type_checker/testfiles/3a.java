@@ -1,8 +1,9 @@
 class Factorial {
     public static void main(String[] a){
         Fac fac;
+        int ret;
         fac = new Fac();	
-        fac.ComputeFac(10);
+        ret = fac.ComputeFac(10);
     }
 }
 

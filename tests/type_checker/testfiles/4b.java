@@ -6,15 +6,19 @@ class Factorial {
 
 class Fac {
 
-    public void ComputeFac(int num){
+    public int ComputeFac(int num){
+        return 0;
     }
     
-    public void ComputeFac2(Fac fac){
+    public int ComputeFac2(Fac fac){
+        return 0;
     }
     
-    public void ComputeFac3(Fac2 fac){ //bad
+    public int ComputeFac3(Fac2 fac){ //bad
+        return 0;
     }
     
-    public void ComputeFac4(int a, Fac2 fac, boolean b){ //bad
+    public int ComputeFac4(int a, Fac2 fac, boolean b){ //bad
+        return 0;
     }
 }

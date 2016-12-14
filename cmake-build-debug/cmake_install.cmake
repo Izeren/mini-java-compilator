@@ -1,4 +1,4 @@
-# Install script for directory: /home/ivan/compilation/mini-java-compilator
+# Install script for directory: /home/izeren/Documents/mipt/mini-java-compilator
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ivan/compilation/mini-java-compilator/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/izeren/Documents/mipt/mini-java-compilator/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

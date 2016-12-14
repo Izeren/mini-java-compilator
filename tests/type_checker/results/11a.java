@@ -21,7 +21,6 @@ class: {
 }
 class: {
 	name: Fac
-	base: Fac
 	fields: {
 	} 
 	method: {
@@ -42,4 +41,4 @@ class: {
 		} 
 	} 
 }
-"(9,19) : (9,22)" There is cyclic inheritance.
+"(13,16) : (13,20)" Variable num2 not initialized but has been used.

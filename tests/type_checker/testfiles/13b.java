@@ -1,20 +1,22 @@
 class Factorial {
-    public static void main(String[] a){
+    public static void main(String[] args){
         Fac fac;
+        int a;
         fac = new Fac();	
-        
-        fac.ComputeFac(); 
-        fac.ComputeFac2(); //bad
+        a = fac.ComputeFac(); 
+        a = fac.ComputeFac2(); //bad
     }
 }
 
 class Fac {
 
-    public void ComputeFac(){
+    public int ComputeFac(){
         Fac fac;
+        int a;
         fac = new Fac();	
         
-        fac.ComputeFac(); 
-        fac.ComputeFac2(); //bad
+        a = fac.ComputeFac(); 
+        a = fac.ComputeFac2(); //bad
+        return 0;
     }
 }

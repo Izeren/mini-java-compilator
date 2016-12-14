@@ -62,7 +62,8 @@ COpExp::COpExp(
 	IExpression* rightOperand,
 	enums::TOperation operation
 ) {
-	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
+    this->position = leftOperand->position + rightOperand->position;
+    this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
 	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
 	this->operation = operation;
 }
@@ -98,6 +99,7 @@ CLogOpExp::CLogOpExp(
 	IExpression* rightOperand,
 	enums::TLogicalOperation operation
 ) {
+    this->position = leftOperand->position + rightOperand->position;
 	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
 	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
 	this->operation = operation;
@@ -123,7 +125,8 @@ CCompExp::CCompExp(
 	IExpression* rightOperand,
 	enums::TCompareOperation operation
 ) {
-	this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
+    this->position = leftOperand->position + rightOperand->position;
+    this->leftOperand = std::unique_ptr<IExpression>(leftOperand);
 	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
 	this->operation = operation;
 }
@@ -132,6 +135,7 @@ CCompExp::CCompExp(
 //CUnarMinusExp:
 //-------------------------------------------------------------------------------------------------
 CUnarMinusExp::CUnarMinusExp(IExpression* rightOperand) {
+    this->position = rightOperand->position;
 	this->rightOperand = std::unique_ptr<IExpression>(rightOperand);
 }
 
@@ -144,6 +148,7 @@ void CUnarMinusExp::Accept(IVisitor &visitor) {
 
 CGetLengthExp::CGetLengthExp(CArrayExpression* _array)
 {
+    position = _array->position;
 	array = std::unique_ptr<CArrayExpression>(_array);
 }
 
@@ -157,6 +162,7 @@ void CGetLengthExp::Accept (IVisitor& visitor)
 
 CGetFieldExp::CGetFieldExp(CClass* _classOwner, CField* _field)
 {
+    this->position = _classOwner->position + _field->position;
 	classOwner = std::unique_ptr<CClass>(_classOwner);
 	field = std::unique_ptr<CField>(_field);
 }
@@ -171,6 +177,7 @@ void CGetFieldExp::Accept (IVisitor& visitor)
 
 CCallMethodExp::CCallMethodExp(CIdExp* _classOwner, CIdExp* _methodName, CExpList* _args)
 {
+    this->position = _methodName->position;
 	classOwner = std::unique_ptr<CIdExp>(_classOwner);
 	methodName = std::unique_ptr<CIdExp>(_methodName);
 	args = std::unique_ptr<CExpList>(_args);
@@ -189,12 +196,14 @@ CExpList::CExpList() {
 }
 
 CExpList::CExpList(IExpression* _exp) {
-	exps = std::vector<std::unique_ptr<IExpression> >();
-	exps.push_back(std::unique_ptr<IExpression>(_exp));
+	this->exps = std::vector<std::unique_ptr<IExpression> >();
+	this->exps.push_back(std::unique_ptr<IExpression>(_exp));
+    this->position = _exp->position;
 }
 
 void CExpList::Add(IExpression* _exp) {
 	exps.push_back(std::unique_ptr<IExpression>(_exp));
+    this->position = this->position + _exp->position;
 }
 
 void CExpList::Accept(IVisitor &visitor) {
@@ -209,6 +218,7 @@ void CThisExpression::Accept(IVisitor &visitor) {
 }
 
 CThisExpression::CThisExpression(CIdExp *identifier) {
+    position = identifier->position;
 	this->identifier = std::unique_ptr<CIdExp>( identifier );
 }
 
@@ -216,6 +226,7 @@ CThisExpression::CThisExpression(CIdExp *identifier) {
 //-------------------------------------------------------------------------------------------------
 
 CNegativeExpression::CNegativeExpression(IExpression* expression) {
+    this->position = expression->position;
 	this->expression = std::unique_ptr<IExpression>(expression);
 }
 
@@ -227,6 +238,7 @@ void CNegativeExpression::Accept(IVisitor &visitor) {
 //-------------------------------------------------------------------------------------------------
 
 CArrayExpression::CArrayExpression(IExpression* lengthExpression) {
+    this->position = lengthExpression->position;
 	this->lengthExpression = std::unique_ptr<IExpression>(lengthExpression);
 }
 
@@ -240,6 +252,7 @@ void CArrayExpression::Accept(IVisitor &visitor) {
 CNewIdentifier::CNewIdentifier( CIdExp* identifier )
 {
 	this->identifier = std::unique_ptr<CIdExp>(identifier);
+	this->position = identifier->position;
 }
 
 void CNewIdentifier::Accept(IVisitor &visitor)
@@ -252,6 +265,7 @@ void CNewIdentifier::Accept(IVisitor &visitor)
 //-------------------------------------------------------------------------------------------------
 
 CByIndexExpression::CByIndexExpression(IExpression* arrayExpression, IExpression* indexExpression) {
+    this->position = arrayExpression->position;
 	this->identifier= std::unique_ptr<IExpression>(arrayExpression);
 	this->indexExpression = std::unique_ptr<IExpression>(indexExpression);
 }

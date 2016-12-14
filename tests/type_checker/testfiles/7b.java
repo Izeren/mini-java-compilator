@@ -1,5 +1,5 @@
 class Factorial {
-    public static void main(String[] a){
+    public static void main(String[] args){
         int a;
         int b;
         boolean c;
@@ -16,7 +16,7 @@ class Factorial {
         a = fac1; //bad
         fac2 = fac1; 
         fac1 = c; //bad
-        a = fac1.ComputeFac();
+        a = fac1.ComputeFac(5);
     }
 }
 
@@ -39,7 +39,7 @@ class Fac {
         a = fac1; //bad
         fac2 = fac1; 
         fac1 = c; //bad
-        a = fac1.ComputeFac();
+        a = fac1.ComputeFac(5);
         
         return 5;
     }

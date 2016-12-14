@@ -10,6 +10,8 @@ class Main {
 
 class Summator {
     public int sum(int a, int b) {
+        int c;
+        c = this.subtract(a, b);
         return a + b;
     }
     

@@ -6,6 +6,7 @@
 
 CType::CType(CIdExp* _name) {
 	name = std::unique_ptr<CIdExp>(_name);
+    position = _name->position;
 	isPrimitive = false;
 }
 

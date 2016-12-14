@@ -25,7 +25,6 @@ class: {
 }
 class: {
 	name: Fac
-	base: Fac
 	fields: {
 	} 
 	method: {
@@ -44,4 +43,3 @@ class: {
 }
 "(7,28) : (7,32)" Type mismatch, expected: int got: boolean.
 "(9,28) : (9,29)" Type mismatch, expected: int got: boolean.
-"(13,19) : (13,22)" There is cyclic inheritance.

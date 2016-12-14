@@ -63,7 +63,7 @@ Grammar
    41           | Expression DOT LENGTH
    42           | Identifier DOT Identifier LPAREN ExpressionList RPAREN
    43           | THIS DOT Identifier LPAREN ExpressionList RPAREN
-   44           | MINUS NUM
+   44           | MINUS Expression
    45           | NUM
    46           | TRUE
    47           | FALSE
@@ -106,7 +106,7 @@ FALSE (273) 47
 WHILE (274) 28
 IF (275) 27
 ELSE (276) 27
-NUM (277) 44 45
+NUM (277) 45
 ID (278) 58
 LPAREN (279) 3 8 9 27 28 29 42 43 51 53
 RPAREN (280) 3 8 9 27 28 29 42 43 51 53
@@ -168,7 +168,7 @@ Statement (60)
 Expression (61)
     on left: 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
     50 51 52 53, on right: 8 9 27 28 29 30 31 32 33 34 35 36 37 38
-    39 40 41 50 52 53 54 55
+    39 40 41 44 50 52 53 54 55
 NonEmptyExpressionList (62)
     on left: 54 55, on right: 55 57
 ExpressionList (63)
@@ -1115,9 +1115,20 @@ State 92
 
 State 93
 
-   44 Expression: MINUS . NUM
+   44 Expression: MINUS . Expression
 
-    NUM  shift, and go to state 108
+    NEW     shift, and go to state 87
+    THIS    shift, and go to state 88
+    TRUE    shift, and go to state 89
+    FALSE   shift, and go to state 90
+    NUM     shift, and go to state 91
+    ID      shift, and go to state 4
+    LPAREN  shift, and go to state 92
+    MINUS   shift, and go to state 93
+    NOT     shift, and go to state 94
+
+    Expression  go to state 108
+    Identifier  go to state 96
 
 
 State 94
@@ -1398,7 +1409,22 @@ State 107
 
 State 108
 
-   44 Expression: MINUS NUM .
+   32 Expression: Expression . PLUS Expression
+   33           | Expression . MINUS Expression
+   34           | Expression . TIMES Expression
+   35           | Expression . AND Expression
+   36           | Expression . OR Expression
+   37           | Expression . LESS Expression
+   38           | Expression . GREATER Expression
+   39           | Expression . MOD Expression
+   40           | Expression . LBRACKET Expression RBRACKET
+   41           | Expression . DOT LENGTH
+   44           | MINUS Expression .
+
+    AND      shift, and go to state 113
+    OR       shift, and go to state 114
+    LESS     shift, and go to state 119
+    GREATER  shift, and go to state 120
 
     $default  reduce using rule 44 (Expression)
 

@@ -16,9 +16,10 @@ class A {
 
         array = new int[b];
 
-        array = new int[c];
+        array = new int[c]; //bad
 
         array = new int[(1 + 2) * b];
 
         return 0;
 	}
+}

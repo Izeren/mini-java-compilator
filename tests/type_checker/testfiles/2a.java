@@ -3,7 +3,7 @@ class Main {
     	A a;
     	B b;
     	Main m;
-    	C c;
+        C c;
     }
 }
 

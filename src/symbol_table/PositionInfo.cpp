@@ -12,3 +12,13 @@ std::string PositionInfo::GetStringPosition() const {
 	result += ")\"";
 	return result;
 }
+
+PositionInfo PositionInfo::operator+(const PositionInfo &right) const {
+    PositionInfo newPosition;
+    newPosition.firstColumn = this->firstColumn;
+    newPosition.firstLine = this->firstLine;
+    newPosition.lastColumn = right.lastColumn;
+    newPosition.lastLine = right.lastLine;
+    return newPosition;
+}
+

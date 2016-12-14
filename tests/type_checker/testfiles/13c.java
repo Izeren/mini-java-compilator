@@ -1,22 +1,26 @@
 class Factorial {
     public static void main(String[] a){
         Fac fac;
+        int ret;
         fac = new Fac();	
         
-        fac.ComputeFac(); 
+        ret = fac.ComputeFac(); 
+        ret = fac.ComputeFac(1, true, true);
     }
 }
 
 class Fac {
 
-    public void ComputeFac(int a, boolean b){
+    public int ComputeFac(int a, boolean b){
         Fac fac;
+        int v;
         fac = new Fac();	
-        fac.ComputeFac(5, true); 
-        fac.ComputeFac(a, b); 
-        fac.ComputeFac(a, 5); //bad
-        fac.ComputeFac(false, false); //bad
-        fac.ComputeFac(5 + 2, false); 
-        fac.ComputeFac(5 + 2, 1 + 3); 
+        v = fac.ComputeFac(5, true); 
+        v = fac.ComputeFac(a, b); 
+        v = fac.ComputeFac(a, 5); //bad
+        v = fac.ComputeFac(false, false); //bad
+        v = fac.ComputeFac(5 + 2, false); 
+        v = fac.ComputeFac(5 + 2, 1 + 3); //bad
+        return 0;
     }
 }

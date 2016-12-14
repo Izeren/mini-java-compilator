@@ -21,8 +21,54 @@ class: {
 }
 class: {
 	name: Fac
-	base: Fac
 	fields: {
+	} 
+	method: {
+		name: ComputeFac3 
+		returnType: int
+		isPublic: 1 
+		arguments: {
+			variable: {
+				name: fac
+				type: Fac2
+			} 
+		} 
+		fields: {
+		} 
+	} 
+	method: {
+		name: ComputeFac4 
+		returnType: int
+		isPublic: 1 
+		arguments: {
+			variable: {
+				name: b
+				type: boolean
+			} 
+			variable: {
+				name: fac
+				type: Fac2
+			} 
+			variable: {
+				name: a
+				type: int
+			} 
+		} 
+		fields: {
+		} 
+	} 
+	method: {
+		name: ComputeFac2 
+		returnType: int
+		isPublic: 1 
+		arguments: {
+			variable: {
+				name: fac
+				type: Fac
+			} 
+		} 
+		fields: {
+		} 
 	} 
 	method: {
 		name: ComputeFac 
@@ -38,5 +84,6 @@ class: {
 		} 
 	} 
 }
-"(3,14) : (3,17)" The object named: Fac2 is undeclared in this scope.
-"(7,19) : (7,22)" There is cyclic inheritance.
+"(3,9) : (3,13)" Fac2 is undeclared in this scope.
+"(17,28) : (17,32)" Fac2 is undeclared in this scope.
+"(21,35) : (21,39)" Fac2 is undeclared in this scope.

@@ -11,6 +11,7 @@ CAssignStm::CAssignStm(
 	CIdExp* leftExpression,
 	IExpression* rightExpression
 ) {
+	this->position = leftExpression->position + rightExpression->position;
 	this->leftExpression = std::unique_ptr<CIdExp>(leftExpression);
 	this->rightExpression = std::unique_ptr<IExpression>(rightExpression);
 }
@@ -31,6 +32,7 @@ CAssignSubscriptStm::CAssignSubscriptStm(
 	CNumExp* offset,
 	IExpression* valueExpression
 ) {
+	this->position = idExpression->position + valueExpression->position;
 	this->idExpression = std::unique_ptr<CIdExp>(idExpression);
 	this->offset = std::unique_ptr<CNumExp>(offset);
 	this->valueExpression = std::unique_ptr<IExpression>(valueExpression);
@@ -67,7 +69,6 @@ CPrintStm::CPrintStm() : CPrintStm(NULL) {}
 CPrintStm::CPrintStm(IExpression* expression) {
 	this->expression = std::unique_ptr<IExpression>(expression);
     position = expression->position;
-    std::cout << "PRINTLN POSITION" << position.GetStringPosition() << "\n";
 }
 
 void CPrintStm::Accept(IVisitor &visitor) {
@@ -99,6 +100,7 @@ CIfStm::CIfStm(
 	IStatement* positiveStatement,
 	IStatement* negativeStatement
 ) {
+    this->position = conditionExpression->position + negativeStatement->position;
 	this->conditionExpression = std::unique_ptr<IExpression>(conditionExpression);
 	this->positiveStatement = std::unique_ptr<IStatement>(positiveStatement);
 	this->negativeStatement = std::unique_ptr<IStatement>(negativeStatement);
@@ -119,6 +121,7 @@ CWhileStm::CWhileStm(
 	IExpression* conditionExpression,
 	IStatement* statement
 ) {
+	this->position = conditionExpression->position;
 	this->conditionExpression = std::unique_ptr<IExpression>(conditionExpression);
 	this->statement = std::unique_ptr<IStatement>(statement);
 }
