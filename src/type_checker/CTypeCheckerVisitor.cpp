@@ -770,12 +770,12 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
 {
 	std::cout << "typechecker: class\n";
     if( stm.id && stm.fields && stm.methods ) {
+        currentClass = table->classes[stm.id->name];
         bool isGoodInherited = checkCyclicInheritance( currentClass, currentClass );
         if( !isGoodInherited ) {
             errors.push_back( CError( CError::CYCLIC_INHERITANCE, stm.parentClass->position ) );
             return;
         }
-        currentClass = table->classes[stm.id->name];
         stm.id->Accept( *this );
         stm.fields->Accept( *this );
         stm.methods->Accept( *this );
@@ -882,7 +882,11 @@ bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName, s
     auto classMethods = clazz->methods;
     bool isMethodExist = classMethods.find( methodName ) != classMethods.end();
     if( !isMethodExist ) {
-        return false;
+        if ( clazz->baseClass != "" ) {
+            return checkMethodVisibility( methodName, table->classes[clazz->baseClass], isThis );
+        } else {
+            return false;
+        }
     } else {
         std::shared_ptr<MethodInfo> methodInfo = classMethods[methodName];
         if( !isThis) {
