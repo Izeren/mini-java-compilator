@@ -331,6 +331,7 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 
 		auto methodName = exp.methodName->name;
         auto classInfo = table->classes[identifierName];
+        std::cout << methodName << " " << classInfo->name << " " << isThis << "\n";
 		if( !checkMethodVisibility( methodName, classInfo, isThis ) ) {
 			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.methodName->position ) );
 			return;
@@ -865,19 +866,17 @@ bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableNa
 
 bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName, std::shared_ptr<ClassInfo> clazz, bool isThis ) {
     //if we call the method using this, clazz should be equal nullptr, this way, current class will be checked
-    if ( clazz == nullptr ) {
-        clazz = currentClass;
-    }
-    if (currentClass == nullptr) {
-        return false;
-    }
-    auto classMethods = currentClass->methods;
+    auto classMethods = clazz->methods;
     bool isMethodExist = classMethods.find( methodName ) != classMethods.end();
     if( !isMethodExist ) {
         return false;
     } else {
         std::shared_ptr<MethodInfo> methodInfo = classMethods[methodName];
-        return methodInfo->isPublic;
+        if( !isThis) {
+            return methodInfo->isPublic;
+        } else {
+            return true;
+        }
     }
 }
 
