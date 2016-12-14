@@ -6,7 +6,7 @@ class Factorial {
     fac = new Fac();	
     System.out.println(fac.ComputeFac(10));
 //    b = true;
-    System.out.println(2);
+    System.out.println(true);
     }
 }
 
