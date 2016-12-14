@@ -7,12 +7,12 @@ class Main {
 
 class A {
 	A a;
-	Main main;
+	Main m;
 	B b;
 }
 
 class B {
 	B b;
-	Main main;
+	Main m;
 	A a;
 }
