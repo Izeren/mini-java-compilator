@@ -869,6 +869,8 @@ std::shared_ptr<MethodInfo> methodInfo ) {
     if( classVariables.find( variableName ) != classVariables.end() ) {
         if ( currentClass->baseClass != "" ) {
             return checkVariableVisibility( variableName, table->classes[classInfo->baseClass], nullptr );
+        } else {
+            return false;
         }
     } else {
         return true;
