@@ -796,6 +796,7 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
     if( stm.id && stm.fields && stm.methods ) {
         currentClass = table->classes[stm.id->name];
         bool isGoodInherited = checkCyclicInheritance( currentClass, currentClass );
+        std::cout << "Cyclic inheritance was checked for class: " << currentClass->name << "\n";
         if( !isGoodInherited ) {
             errors.push_back( CError( CError::CYCLIC_INHERITANCE, stm.parentClass->position ) );
             return;
