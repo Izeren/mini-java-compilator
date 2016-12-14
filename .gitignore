@@ -8,6 +8,5 @@ src/lex.cpp
 src/lex.h
 *.jpg
 *.gif
-*.java
 .idea/*
 *.xml
