@@ -1,15 +1,18 @@
 class Factorial {
     public static void main(String[] a){
         Fac fac;
-        fac = new Fac();
-        System.out.println(fac.ComputeFac(10));
+        fac = new Fac();	
+        fac.ComputeFac(10);
     }
 }
 
 class Fac {
 
     public int ComputeFac(int num){
-        int num2;
-        return num2;
+        return 5;
+    }
+    
+    public int ComputeFac(int num){
+        return 5;
     }
 }
