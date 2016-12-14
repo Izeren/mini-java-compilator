@@ -303,11 +303,11 @@ Expression:
 	|
 	MINUS NUM { $$ = new CNumExp( (std::string("-") + std::string($2)).c_str() );  }
 	|
-	NUM { $$ = new CNumExp($1);  }
+	NUM { auto p = $$ = new CNumExp($1); SAVE_LOCATION }
 	|
-	TRUE { $$ = new CLogExp(true);  }
+	TRUE { auto p = $$ = new CLogExp(true); SAVE_LOCATION }
 	|
-	FALSE { $$ = new CLogExp(false);  }
+	FALSE { auto p = $$ = new CLogExp(false); SAVE_LOCATION }
 	|
 	Identifier { $1->isInstance = true; $$ = $1; }
 	|
