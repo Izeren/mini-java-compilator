@@ -39,3 +39,7 @@ class: {
 	fields: {
 	} 
 }
+"(6,17) : (6,18)" There is cyclic inheritance.
+"(9,17) : (9,18)" There is cyclic inheritance.
+"(13,17) : (13,18)" There is cyclic inheritance.
+"(17,17) : (17,18)" There is cyclic inheritance.

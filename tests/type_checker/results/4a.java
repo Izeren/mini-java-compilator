@@ -48,4 +48,4 @@ class: {
 }
 "(13,13) : (13,16)" Variable redefined.
 "(3,13) : (3,14)" Variable redefined.
-"(12,16) : (12,26)" AST construction error.
+"(10,19) : (10,22)" There is cyclic inheritance.

@@ -44,4 +44,4 @@ class: {
 }
 "(7,28) : (7,32)" Type mismatch, expected: int got: boolean.
 "(9,28) : (9,29)" Type mismatch, expected: int got: boolean.
-"(15,16) : (15,26)" AST construction error.
+"(13,19) : (13,22)" There is cyclic inheritance.

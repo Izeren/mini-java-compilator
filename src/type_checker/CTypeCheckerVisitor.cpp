@@ -526,8 +526,8 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
             return;
         }
         if( leftType != lastCalculatedType ) {
-	    	auto errorMessage = CError::GetTypeErrorMessage( leftType, lastCalculatedType.type );
-		    errors.push_back( CError( errorMessage, stm.position) );
+	    	auto errorMessage = CError::GetTypeErrorMessage( leftType, lastCalculatedType );
+		    errors.push_back( CError( errorMessage, stm.leftExpression->position ) );
             return;
 	    }
 
@@ -578,8 +578,6 @@ void CTypeCheckerVisitor::Visit( CCompoundStm &stm )
 
     if( stm.leftStatement) {
         stm.leftStatement->Accept( *this );
-    } else {
-        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
     }
 
     if( stm.rightStatement ) {
