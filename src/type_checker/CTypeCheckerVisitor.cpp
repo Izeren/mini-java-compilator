@@ -483,6 +483,17 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
             return;
         }
 
+        std::pair<VariableInfo*, bool> variableInfo = getVariableInfo(*stm.leftExpression);
+
+        VariableInfo* variableInfoPtr = variableInfo.first;
+
+        if (variableInfoPtr == nullptr) {
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+            return;
+        } else {
+            variableInfoPtr->isInitialized = true;
+        }
+
         stm.leftExpression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -497,18 +508,6 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
 		    errors.push_back( CError( errorMessage, stm.position) );
             return;
 	    }
-
-        //success
-        std::pair<VariableInfo*, bool> variableInfo = getVariableInfo(*stm.leftExpression);
-
-        VariableInfo* variableInfoPtr = variableInfo.first;
-
-        if (variableInfoPtr == nullptr) {
-            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
-            return;
-        } else {
-            variableInfoPtr->isInitialized = true;
-        }
 
         lastCalculatedType = enums::TPrimitiveType::VOID;
     } else {
@@ -809,10 +808,10 @@ void CTypeCheckerVisitor::Visit( CClassList &stm )
     }
 }
 
-void CTypeCheckerVisitor::Visit( CMainMethod &stm ) 
+void CTypeCheckerVisitor::Visit( CMainMethod &stm )
 {
 	std::cout << "typechecker: mainmethod\n";
-//    currentMethod = currentClass->methods[stm.]
+    currentMethod = currentClass->methods["main"];
     if( stm.vars ) {
         stm.vars->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
@@ -860,12 +859,13 @@ bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableNa
     if( currentClass == nullptr || currentMethod == nullptr ) {
         return false;
     }
+
     auto methodVariables = currentMethod->arguments->variables;
     if(methodVariables.find( variableName ) != methodVariables.end() ) {
         return true;
     }
     auto methodFields = currentMethod->fields->variables;
-    if(methodVariables.find( variableName ) != methodVariables.end() ) {
+    if(methodFields.find( variableName ) != methodFields.end() ) {
         return true;
     }
     auto classVariables = currentClass->fields->variables;
