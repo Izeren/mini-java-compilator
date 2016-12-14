@@ -328,10 +328,7 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
                 return;
             }
         }
-		if( !checkClassVisibility( identifierName ) ) {
-			errors.push_back( CError( CError::IS_NOT_CALLABLE, exp.position ) );
-			return;
-		}
+
 		auto methodName = exp.methodName->name;
         auto classInfo = table->classes[identifierName];
 		if( !checkMethodVisibility( methodName, classInfo, isThis ) ) {
@@ -651,10 +648,7 @@ void CTypeCheckerVisitor::Visit( CField &stm )
 {
 	std::cout << "typechecker: field\n";
     if( stm.id && stm.type ) {
-        bool isVisibleType = checkClassVisibility( stm.type->name->name );
-        if( stm.type->isPrimitive ) {
-            isVisibleType = true;
-        }
+        bool isVisibleType = checkTypeExisting(*stm.type);
         if( !isVisibleType ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.type->toString() );
             errors.push_back( CError( errorMessage, stm.position ) );
@@ -689,10 +683,7 @@ void CTypeCheckerVisitor::Visit( CArgument &stm )
 {
 	std::cout << "typechecker: arg\n";
     if( stm.id && stm.type ) {
-        bool isVisibleType = checkClassVisibility( stm.type->name->name );
-        if( stm.type->isPrimitive ) {
-            isVisibleType = true;
-        }
+        bool isVisibleType = checkTypeExisting(*stm.type);
         if( !isVisibleType ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.id->name );
             errors.push_back( CError( errorMessage, stm.position ) );
@@ -735,14 +726,14 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
         stm.vars->Accept( *this );
         stm.returnExp->Accept( *this );
         TypeInfo expectedType = stm.returnType->isPrimitive ? TypeInfo(stm.returnType->type) : TypeInfo(stm.returnType->name->name);
-        if( !stm.returnType->isPrimitive ) {
-            bool isVisibleClass = checkClassVisibility( stm.returnType->name->name );
-            if( !isVisibleClass ) {
-                auto errorMessage = CError::GetUndeclaredErrorMessage( stm.returnType->name->name );
-                errors.push_back( CError( errorMessage, stm.returnType->position) );
-                return;
-            }
+
+        bool isVisibleClass = checkTypeExisting(*stm.returnType);
+        if( !isVisibleClass ) {
+            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.returnType->name->name );
+            errors.push_back( CError( errorMessage, stm.returnType->position) );
+            return;
         }
+
         if( lastCalculatedType != expectedType ) {
             auto errorMessage = CError::GetTypeErrorMessage( expectedType, lastCalculatedType );
 			errors.push_back( CError( errorMessage, stm.returnExp->position ) );
@@ -890,8 +881,12 @@ bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName, s
     }
 }
 
-bool CTypeCheckerVisitor::checkClassVisibility(const std::string &className) {
-    return table->classes.find(className ) != table->classes.end();
+bool CTypeCheckerVisitor::checkTypeExisting(const CType &type) {
+    if (type.isPrimitive) {
+        return true;
+    } else {
+        return table->classes.find(type.name->name ) != table->classes.end();
+    }
 }
 
 bool CTypeCheckerVisitor::checkCyclicInheritance(std::shared_ptr<ClassInfo> startClass,
