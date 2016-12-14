@@ -15,7 +15,7 @@
 
 extern int line_number, column_number;
 
-int main( int argc, char **argv ) {
+int main( int argc, char **argv ) { 
 
 	CProgram *cProgram;
 	if( argc == 0 ) {
