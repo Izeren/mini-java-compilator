@@ -295,7 +295,7 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
         auto fieldIterator = variablesInfo->variables.find(fieldName);
         if( fieldIterator == variablesInfo->variables.end() ) {
             auto errorMessage = CError::GetHasNoMemberErrorMessage( ownerName, fieldName );
-            errors.push_back( CError( errorMessage, exp.position ) );
+            errors.push_back( CError( errorMessage, exp.field->position ) );
             lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
             return;
         }
@@ -303,7 +303,7 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
 		auto fieldInfo = variablesInfo->variables[fieldName];
 		lastCalculatedType = *(fieldInfo->type);
 	} else {
-		errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+		errors.push_back( CError( CError::AST_ERROR, exp.field->position ) );
         lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 	}
 }
@@ -335,7 +335,7 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 		auto methodName = exp.methodName->name;
         auto classInfo = table->classes[identifierName];
 		if( !checkMethodVisibility( methodName, classInfo, isThis ) ) {
-			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.position ) );
+			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.methodName->position ) );
 			return;
 		}
 		auto methodInfo = classInfo->methods[methodName];
