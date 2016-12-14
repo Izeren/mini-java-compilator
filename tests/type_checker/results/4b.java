@@ -39,4 +39,4 @@ class: {
 	} 
 }
 "(3,14) : (3,17)" The object named: Fac2 is undeclared in this scope.
-"(9,16) : (9,26)" AST construction error.
+"(7,19) : (7,22)" There is cyclic inheritance.

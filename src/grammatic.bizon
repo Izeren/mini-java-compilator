@@ -257,7 +257,7 @@ ArgumentList:
 	;
 
 StatementList:
-	%empty {$$ = nullptr; }
+	%empty {$$ = new CCompoundStm( 0, 0 ); }
 	|
 	Statement StatementList { $$ = new CCompoundStm($1, $2);  }
 	;

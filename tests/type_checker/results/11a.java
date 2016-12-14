@@ -42,4 +42,4 @@ class: {
 		} 
 	} 
 }
-"(11,16) : (11,26)" AST construction error.
+"(9,19) : (9,22)" There is cyclic inheritance.

@@ -578,8 +578,6 @@ void CTypeCheckerVisitor::Visit( CCompoundStm &stm )
 
     if( stm.leftStatement) {
         stm.leftStatement->Accept( *this );
-    } else {
-        errors.push_back( CError( CError::AST_ERROR, stm.position ) );
     }
 
     if( stm.rightStatement ) {
