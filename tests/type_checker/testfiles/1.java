@@ -2,10 +2,10 @@ class Factorial {
     public static void main(String[] a){
     Fac fac;
     Fac2 c;
-//    bool b;
+    bool b;
     fac = new Fac();	
     System.out.println(fac.ComputeFac(10));
-//    b = true;
+    b = true;
     System.out.println(true);
     }
 }
