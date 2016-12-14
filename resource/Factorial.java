@@ -1,4 +1,4 @@
-class Factorial{
+class Factorial {
     public static void main(String[] a){
     Fac fac;
     Fac2 c;
@@ -10,7 +10,7 @@ class Factorial{
     }
 }
 
-class Fac {
+class Fac extends Fac {
 
     public int ComputeFac(int num){
     int num2;
