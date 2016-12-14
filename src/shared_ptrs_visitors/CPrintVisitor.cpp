@@ -194,6 +194,15 @@ void CPrintVisitor::Visit(CArrayExpression &exp)
 	++lastVisited;	
 }
 
+void CPrintVisitor::Visit(CNewIdentifier &exp)
+{
+	std::vector<INode*> children = { exp.identifier.get() };
+	ChildrenAnswers answers = VisitChildren(children);
+	AddChildrenAnswers(answers);
+	AddLabel("NewIdentifier");
+	++lastVisited;	
+}
+
 void CPrintVisitor::Visit(CThisExpression &exp)
 {
 	AddLabel("This");

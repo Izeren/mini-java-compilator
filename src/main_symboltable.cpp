@@ -48,15 +48,12 @@ int main( int argc, char **argv ) {
 			std::cout << "Point 7\n";
 			std::unique_ptr<CProgram> program = std::unique_ptr<CProgram>(cProgram);
 			std::cout << "Point 8\n";
-//            CPrintVisitor visitor = CPrintVisitor();
-//            CConvertVisitor visitor = CConvertVisitor();
 			CConstructSymbolTableVisitor visitor = CConstructSymbolTableVisitor();
 			std::cout << "Point 9\n";
 			std::cout << program.get() << "\n";
             std::cout << "Point 10\n";
 			program->Accept(visitor);
 			std::cout << "Point 11\n";
-//			std::string result = visitor.GetResult();
 			std::cout << "Point 12\n";
 			std::ofstream out(std::to_string(i) + "res.java", std::fstream::out);
             visitor.GetSymbolTable()->Print(out);
@@ -64,8 +61,15 @@ int main( int argc, char **argv ) {
             for (auto error: errors) {
                 out << error.GetPosition().GetStringPosition() << " " << error.GetMessage() << "\n";
             }
-//			out << result;
 			out.close();
+            
+//            CPrintVisitor visitor = CPrintVisitor();
+////            CConvertVisitor visitor = CConvertVisitor();
+//            program->Accept(visitor);
+//            std::string result = visitor.GetResult();
+//            std::ofstream out(std::to_string(i) + "res.java", std::fstream::out);
+//            out << result;
+//            out.close();
 		}
 	}
 	return 0;

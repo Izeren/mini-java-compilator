@@ -154,7 +154,7 @@ ClassDeclarationList:
 		SAVE_LOCATION
 	}
 	|
-	ClassDeclarationList Class { auto p = $$ = $1; $1->Add($2); }
+	ClassDeclarationList Class { $$ = $1; $1->Add($2); }
 	;
 
 Class:
@@ -206,8 +206,7 @@ MethodDeclarationList:
 	}
 	|
 	MethodDeclarationList MethodDeclaration { 
-		auto p = $$ = $1; $1->Add($2); 
-		SAVE_LOCATION
+		$$ = $1; $1->Add($2);
 	}
 	;
 
@@ -226,8 +225,7 @@ VarDeclarationList:
 	}
 	|
 	VarDeclarationList VarDeclaration {
-		auto p = $$ = $1; $1->Add( $2 ); 
-		SAVE_LOCATION
+		$$ = $1; $1->Add( $2 );
 	}
 	;
 
@@ -260,7 +258,7 @@ Type:
 NonEmptyArgumentList:
 	Argument { auto p = $$ = new CArgumentList($1); SAVE_LOCATION }
 	|
-	NonEmptyArgumentList COMMA Argument { auto p = $$ = $1; $1->Add($3); SAVE_LOCATION }
+	NonEmptyArgumentList COMMA Argument { $$ = $1; $1->Add($3); }
 	;
 
 ArgumentList:
@@ -322,7 +320,7 @@ Expression:
 	|
 	FALSE { auto p = $$ = new CLogExp(false); SAVE_LOCATION }
 	|
-	Identifier { $1->isInstance = true; auto p = $$ = $1; SAVE_LOCATION }
+	Identifier { $1->isInstance = true; $$ = $1; }
 	|
 	THIS DOT Identifier { $3->isInstance = true; auto p = $$ = new CThisExpression( $3 ); SAVE_LOCATION }
 	|
@@ -338,7 +336,7 @@ Expression:
 NonEmptyExpressionList:
 	Expression { auto p = $$ = new CExpList($1); SAVE_LOCATION }
 	|
-	NonEmptyExpressionList COMMA Expression { auto p = $$ = $1; $1->Add($3); SAVE_LOCATION }
+	NonEmptyExpressionList COMMA Expression { $$ = $1; $1->Add($3); }
 	;
 
 ExpressionList:
