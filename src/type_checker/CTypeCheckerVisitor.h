@@ -66,7 +66,8 @@ private:
     //bool -- isLocalVariable
     std::pair<VariableInfo*, bool> getVariableInfo(CIdExp& exp);
 
-	bool checkVariableVisibility( const std::string& variableName );
+	bool checkVariableVisibility( const std::string& variableName, std::shared_ptr<ClassInfo> classInfo,
+std::shared_ptr<MethodInfo> methodInfo );
 	bool checkMethodVisibility( const std::string& methodName, std::shared_ptr<ClassInfo> clazz, bool isThis );
 	bool checkTypeExisting(const CType &className);
 	bool checkCyclicInheritance( std::shared_ptr<ClassInfo> startClass, std::shared_ptr<ClassInfo> currentClass );

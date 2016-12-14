@@ -474,7 +474,7 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
     std::cout << "typechecker: CAssignStm\n";
 
     if( stm.leftExpression && stm.rightExpression ) {
-        bool isVisible = checkVariableVisibility( stm.leftExpression->name );
+        bool isVisible = checkVariableVisibility( stm.leftExpression->name, currentClass, currentMethod );
         if( !isVisible ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.leftExpression->name );
             errors.push_back( CError( errorMessage, stm.leftExpression->position ) );
@@ -519,7 +519,7 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
 
     if( stm.idExpression && stm.offset && stm.valueExpression ) {
         auto variableName = stm.idExpression->name;
-        bool isVisible = checkVariableVisibility( variableName );
+        bool isVisible = checkVariableVisibility( variableName, currentClass, currentMethod );
         if( !isVisible ) {
             errors.push_back( CError( CError::GetUndeclaredErrorMessage( variableName ), stm.position ) );
             return;
@@ -770,6 +770,11 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
 {
 	std::cout << "typechecker: class\n";
     if( stm.id && stm.fields && stm.methods ) {
+        bool isGoodInherited = checkCyclicInheritance( currentClass, currentClass );
+        if( !isGoodInherited ) {
+            errors.push_back( CError( CError::CYCLIC_INHERITANCE, stm.parentClass->position ) );
+            return;
+        }
         currentClass = table->classes[stm.id->name];
         stm.id->Accept( *this );
         stm.fields->Accept( *this );
@@ -847,21 +852,27 @@ void CTypeCheckerVisitor::Visit( CProgram &stm )
 CTypeCheckerVisitor::CTypeCheckerVisitor(std::shared_ptr<SymbolTable> table) : table( table ),
  lastCalculatedType( enums::TPrimitiveType::ERROR_TYPE ), currentMethod( nullptr ), currentClass( nullptr ) {}
 
-bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableName ) {
-    if( currentClass == nullptr || currentMethod == nullptr ) {
-        return false;
+bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableName, std::shared_ptr<ClassInfo> classInfo,
+std::shared_ptr<MethodInfo> methodInfo ) {
+    //Nullptr for method info means that we try to find the variable in fields of base classes.
+    if( methodInfo ) {
+        auto methodVariables = methodInfo->arguments->variables;
+        if (methodVariables.find(variableName) != methodVariables.end()) {
+            return true;
+        }
+        auto methodFields = methodInfo->fields->variables;
+        if (methodFields.find(variableName) != methodFields.end()) {
+            return true;
+        }
     }
-
-    auto methodVariables = currentMethod->arguments->variables;
-    if(methodVariables.find( variableName ) != methodVariables.end() ) {
+    auto classVariables = classInfo->fields->variables;
+    if( classVariables.find( variableName ) != classVariables.end() ) {
+        if ( currentClass->baseClass != "" ) {
+            return checkVariableVisibility( variableName, table->classes[classInfo->baseClass], nullptr );
+        }
+    } else {
         return true;
     }
-    auto methodFields = currentMethod->fields->variables;
-    if(methodFields.find( variableName ) != methodFields.end() ) {
-        return true;
-    }
-    auto classVariables = currentClass->fields->variables;
-    return classVariables.find(variableName ) != classVariables.end();
 }
 
 bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName, std::shared_ptr<ClassInfo> clazz, bool isThis ) {
