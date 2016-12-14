@@ -358,6 +358,7 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
         std::cout << methodName << " " << classInfo->name << " " << isThis << "\n";
 		if( !checkMethodVisibility( methodName, classInfo, isThis ) ) {
 			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.methodName->position ) );
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 			return;
 		}
 		auto methodInfo = classInfo->methods[methodName];
@@ -366,6 +367,7 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
         if( expectedNumberOfArguments != gotNumberOfArguments ) {
 			auto errorMessage = CError::GetNumberOfArgsMessage( expectedNumberOfArguments, gotNumberOfArguments );
 			errors.push_back( CError( errorMessage, exp.position) );
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 			return;
 		}
         auto argumentsInfo = methodInfo->arguments;
@@ -377,6 +379,7 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
                 if( lastCalculatedType != expectedArgumentType ) {
                     auto errorMessage = CError::GetTypeErrorMessage(expectedArgumentType, lastCalculatedType);
                     errors.push_back( CError( errorMessage, exp.args->exps[index]->position ) );
+                    lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
                     return;
                 }
             }
