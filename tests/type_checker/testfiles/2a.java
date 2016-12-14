@@ -2,6 +2,8 @@ class Main {
     public static void main(String[] args){
     	A a;
     	B b;
+    	Main m;
+    	C c;
     }
 }
 
