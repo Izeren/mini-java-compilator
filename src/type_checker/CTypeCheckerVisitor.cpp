@@ -295,7 +295,7 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
         auto fieldIterator = variablesInfo->variables.find(fieldName);
         if( fieldIterator == variablesInfo->variables.end() ) {
             auto errorMessage = CError::GetHasNoMemberErrorMessage( ownerName, fieldName );
-            errors.push_back( CError( errorMessage, exp.position ) );
+            errors.push_back( CError( errorMessage, exp.field->position ) );
             lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
             return;
         }
@@ -303,7 +303,7 @@ void CTypeCheckerVisitor::Visit( CGetFieldExp &exp )
 		auto fieldInfo = variablesInfo->variables[fieldName];
 		lastCalculatedType = *(fieldInfo->type);
 	} else {
-		errors.push_back( CError( CError::AST_ERROR, exp.position ) );
+		errors.push_back( CError( CError::AST_ERROR, exp.field->position ) );
         lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
 	}
 }
@@ -328,14 +328,12 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
                 return;
             }
         }
-		if( !checkClassVisibility( identifierName ) ) {
-			errors.push_back( CError( CError::IS_NOT_CALLABLE, exp.position ) );
-			return;
-		}
+
 		auto methodName = exp.methodName->name;
         auto classInfo = table->classes[identifierName];
+        std::cout << methodName << " " << classInfo->name << " " << isThis << "\n";
 		if( !checkMethodVisibility( methodName, classInfo, isThis ) ) {
-			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.position ) );
+			errors.push_back( CError( CError::GetHasNoMemberErrorMessage( identifierName, methodName ), exp.methodName->position ) );
 			return;
 		}
 		auto methodInfo = classInfo->methods[methodName];
@@ -482,6 +480,18 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
             errors.push_back( CError( errorMessage, stm.leftExpression->position ) );
             return;
         }
+
+        std::pair<VariableInfo*, bool> variableInfo = getVariableInfo(*stm.leftExpression);
+
+        VariableInfo* variableInfoPtr = variableInfo.first;
+
+        if (variableInfoPtr == nullptr) {
+            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
+            return;
+        } else {
+            variableInfoPtr->isInitialized = true;
+        }
+
         stm.leftExpression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
@@ -496,18 +506,6 @@ void CTypeCheckerVisitor::Visit( CAssignStm &stm )
 		    errors.push_back( CError( errorMessage, stm.position) );
             return;
 	    }
-
-        //success
-        std::pair<VariableInfo*, bool> variableInfo = getVariableInfo(*stm.leftExpression);
-
-        VariableInfo* variableInfoPtr = variableInfo.first;
-
-        if (variableInfoPtr == nullptr) {
-            lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
-            return;
-        } else {
-            variableInfoPtr->isInitialized = true;
-        }
 
         lastCalculatedType = enums::TPrimitiveType::VOID;
     } else {
@@ -554,11 +552,14 @@ void CTypeCheckerVisitor::Visit( CCompoundStm &stm )
 {
     std::cout << "typechecker: CCompoundStm\n";
 
-    if( stm.leftStatement and stm.rightStatement ) {
+    if( stm.leftStatement) {
         stm.leftStatement->Accept( *this );
-        stm.rightStatement->Accept( *this );
     } else {
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
+    }
+
+    if( stm.rightStatement ) {
+        stm.rightStatement->Accept( *this );
     }
 }
 
@@ -648,10 +649,7 @@ void CTypeCheckerVisitor::Visit( CField &stm )
 {
 	std::cout << "typechecker: field\n";
     if( stm.id && stm.type ) {
-        bool isVisibleType = checkClassVisibility( stm.id->name );
-        if( stm.type->isPrimitive ) {
-            isVisibleType = true;
-        }
+        bool isVisibleType = checkTypeExisting(*stm.type);
         if( !isVisibleType ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.type->toString() );
             errors.push_back( CError( errorMessage, stm.position ) );
@@ -686,10 +684,7 @@ void CTypeCheckerVisitor::Visit( CArgument &stm )
 {
 	std::cout << "typechecker: arg\n";
     if( stm.id && stm.type ) {
-        bool isVisibleType = checkClassVisibility( stm.id->name );
-        if( stm.type->isPrimitive ) {
-            isVisibleType = true;
-        }
+        bool isVisibleType = checkTypeExisting(*stm.type);
         if( !isVisibleType ) {
             auto errorMessage = CError::GetUndeclaredErrorMessage( stm.id->name );
             errors.push_back( CError( errorMessage, stm.position ) );
@@ -732,14 +727,14 @@ void CTypeCheckerVisitor::Visit( CMethod &stm )
         stm.vars->Accept( *this );
         stm.returnExp->Accept( *this );
         TypeInfo expectedType = stm.returnType->isPrimitive ? TypeInfo(stm.returnType->type) : TypeInfo(stm.returnType->name->name);
-        if( !stm.returnType->isPrimitive ) {
-            bool isVisibleClass = checkClassVisibility( stm.returnType->name->name );
-            if( !isVisibleClass ) {
-                auto errorMessage = CError::GetUndeclaredErrorMessage( stm.returnType->name->name );
-                errors.push_back( CError( errorMessage, stm.returnType->position) );
-                return;
-            }
+
+        bool isVisibleClass = checkTypeExisting(*stm.returnType);
+        if( !isVisibleClass ) {
+            auto errorMessage = CError::GetUndeclaredErrorMessage( stm.returnType->name->name );
+            errors.push_back( CError( errorMessage, stm.returnType->position) );
+            return;
         }
+
         if( lastCalculatedType != expectedType ) {
             auto errorMessage = CError::GetTypeErrorMessage( expectedType, lastCalculatedType );
 			errors.push_back( CError( errorMessage, stm.returnExp->position ) );
@@ -805,16 +800,16 @@ void CTypeCheckerVisitor::Visit( CClassList &stm )
     }
 }
 
-void CTypeCheckerVisitor::Visit( CMainMethod &stm ) 
+void CTypeCheckerVisitor::Visit( CMainMethod &stm )
 {
 	std::cout << "typechecker: mainmethod\n";
-//    currentMethod = currentClass->methods[stm.]
+    currentMethod = currentClass->methods["main"];
     if( stm.vars ) {
         stm.vars->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
     }
     if( stm.statements ) {
-        stm.vars->Accept( *this );
+        stm.statements->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
     }
 }
@@ -825,6 +820,7 @@ void CTypeCheckerVisitor::Visit( CMainClass &stm )
     if( stm.id ) {
         currentClass = table->classes[stm.id->name];
         stm.id->Accept( *this );
+        stm.mainMethod->Accept( *this );
         lastCalculatedType = enums::TPrimitiveType::VOID;
     } else {
         errors.push_back( CError( CError::AST_ERROR, stm.position ) );
@@ -855,12 +851,13 @@ bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableNa
     if( currentClass == nullptr || currentMethod == nullptr ) {
         return false;
     }
+
     auto methodVariables = currentMethod->arguments->variables;
     if(methodVariables.find( variableName ) != methodVariables.end() ) {
         return true;
     }
     auto methodFields = currentMethod->fields->variables;
-    if(methodVariables.find( variableName ) != methodVariables.end() ) {
+    if(methodFields.find( variableName ) != methodFields.end() ) {
         return true;
     }
     auto classVariables = currentClass->fields->variables;
@@ -869,24 +866,26 @@ bool CTypeCheckerVisitor::checkVariableVisibility( const std::string& variableNa
 
 bool CTypeCheckerVisitor::checkMethodVisibility(const std::string &methodName, std::shared_ptr<ClassInfo> clazz, bool isThis ) {
     //if we call the method using this, clazz should be equal nullptr, this way, current class will be checked
-    if ( clazz == nullptr ) {
-        clazz = currentClass;
-    }
-    if (currentClass == nullptr) {
-        return false;
-    }
-    auto classMethods = currentClass->methods;
+    auto classMethods = clazz->methods;
     bool isMethodExist = classMethods.find( methodName ) != classMethods.end();
     if( !isMethodExist ) {
         return false;
     } else {
         std::shared_ptr<MethodInfo> methodInfo = classMethods[methodName];
-        return methodInfo->isPublic;
+        if( !isThis) {
+            return methodInfo->isPublic;
+        } else {
+            return true;
+        }
     }
 }
 
-bool CTypeCheckerVisitor::checkClassVisibility(const std::string &className) {
-    return table->classes.find(className ) != table->classes.end();
+bool CTypeCheckerVisitor::checkTypeExisting(const CType &type) {
+    if (type.isPrimitive) {
+        return true;
+    } else {
+        return table->classes.find(type.name->name ) != table->classes.end();
+    }
 }
 
 bool CTypeCheckerVisitor::checkCyclicInheritance(std::shared_ptr<ClassInfo> startClass,
