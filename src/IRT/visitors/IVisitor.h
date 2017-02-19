@@ -2,10 +2,10 @@
 
 namespace IRT {
 
-class IVisitor {
-public:
+    class IVisitor {
+    public:
 
-    virtual ~IVisitor() {};
-};
+        virtual ~IVisitor() {};
+    };
 
 }

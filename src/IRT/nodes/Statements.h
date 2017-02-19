@@ -4,18 +4,23 @@
 
 namespace IRT {
 
-class CStatement : public INode {
-    // inherited
-};
+    class CStatement : public INode {
+        // inherited
+    };
 
-enum class TLogicOperator : char {
-    EQUALS,
-    NOT_EQUALS,
-    LESS,
-    GREATER,
-    LESS_EQUAL,
-    GREATER_EQUAL,
+    enum class TLogicOperator : char {
+        EQUALS,
+        NOT_EQUALS,
+        LESS,
+        GREATER,
+        LESS_OR_EQUAL,
+        GREATER_OR_EQUAL,
+        ULT, // ???
+        ULE, // ???
+        UGT, // ???
+        UGE // ???
+    };
 
-};
+
 
 }
