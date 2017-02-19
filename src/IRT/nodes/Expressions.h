@@ -14,7 +14,34 @@ namespace  IRT {
 
     class CExpression : public IExpression {
     public:
-        void Accept( IVisitor* visitor ) const override;
+        virtual void Accept( IVisitor& visitor ) const = 0;
     };
+
+    class CEseqExpression : public CExpression {
+
+    };
+    class CBinopExpression : public  CExpression {
+
+    };
+    class CConstExpression : public CExpression {
+
+    };
+    class CTempExpression : public CExpression {
+
+    };
+    class CNameExpression : public CExpression {
+
+    };
+    class CCallExpression : public CExpression{
+
+    };
+    class CMemExpression : public CExpression {
+
+    };
+    class CExpressionList : CExpression {
+
+    };
+
+
 
 }
