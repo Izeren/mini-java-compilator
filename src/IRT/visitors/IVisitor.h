@@ -22,22 +22,22 @@ namespace IRT {
     class IVisitor {
     public:
         //Expressions visit methods
-        virtual ~IVisitor( CEseqExpression &expression ) = 0;
-        virtual ~IVisitor( CBinopExpression &expression ) = 0;
-        virtual ~IVisitor( CConstExpression &expression ) = 0;
-        virtual ~IVisitor( CTempExpression &expression ) = 0;
-        virtual ~IVisitor( CNameExpression &expression ) = 0;
-        virtual ~IVisitor( CCallExpression &expression ) = 0;
-        virtual ~IVisitor( CMemExpression &expression ) = 0;
-        virtual ~IVisitor( CExpressionList &expression ) = 0;
+        virtual Visit( CEseqExpression &expression ) = 0;
+        virtual Visit( CBinopExpression &expression ) = 0;
+        virtual Visit( CConstExpression &expression ) = 0;
+        virtual Visit( CTempExpression &expression ) = 0;
+        virtual Visit( CNameExpression &expression ) = 0;
+        virtual Visit( CCallExpression &expression ) = 0;
+        virtual Visit( CMemExpression &expression ) = 0;
+        virtual Visit( CExpressionList &expression ) = 0;
 
         //Statement visit methods
-        virtual ~IVisitor( CMoveStatement &statement ) = 0;
-        virtual ~IVisitor( CExpStatement &statement ) = 0;
-        virtual ~IVisitor( CLabelStatement &statement ) = 0;
-        virtual ~IVisitor( CJumpStatement &statement ) = 0;
-        virtual ~IVisitor( CSequenceStatement &statement ) = 0;
-        virtual ~IVisitor( CStatementList &statement ) = 0;
+        virtual Visit( CMoveStatement &statement ) = 0;
+        virtual Visit( CExpStatement &statement ) = 0;
+        virtual Visit( CLabelStatement &statement ) = 0;
+        virtual Visit( CJumpStatement &statement ) = 0;
+        virtual Visit( CSequenceStatement &statement ) = 0;
+        virtual Visit( CStatementList &statement ) = 0;
 
         virtual ~IVisitor() {};
 
