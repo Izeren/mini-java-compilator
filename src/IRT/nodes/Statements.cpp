@@ -71,6 +71,10 @@ CLabel CJumpConditionalStatement::FalseLabel( ) const {
     return labelFalse;
 }
 
+void CJumpConditionalStatement::Accept( IVisitor &visitor ) {
+    visitor.Visit( this );
+}
+
 // ********************************************************************************
 
 CSeqStatement::CSeqStatement( std::unique_ptr<const CStatement> _left, std::unique_ptr<const CStatement> _right )
@@ -90,8 +94,32 @@ void CSeqStatement::Accept( IVisitor &visitor ) {
 
 // ********************************************************************************
 
-CLabelStatement::CLabelStatement( CLabel _label ) : label(_label) { }
+CLabelStatement::CLabelStatement( CLabel _label ) : label( _label ) { }
 
 CLabel CLabelStatement::Label( ) const {
     return label;
+}
+
+void CLabelStatement::Accept( IVisitor &visitor ) {
+    visitor.Visit( this );
+}
+
+// ********************************************************************************
+
+CStatementList::CStatementList( ) { }
+
+CStatementList::CStatementList( std::unique_ptr<const CStatement> statement ) {
+    Add( statement );
+}
+
+void CStatementList::Add( std::unique_ptr<const CStatement> &statement ) {
+    statements.push_back( std::move( statement ));
+}
+
+const std::vector <std::unique_ptr<const CStatement>> &CStatementList::Statements( ) const {
+    return statements;
+}
+
+void CStatementList::Accept( IVisitor &visitor ) {
+    visitor.Visit( this );
 }
