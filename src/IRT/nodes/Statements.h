@@ -7,12 +7,12 @@ namespace IRT {
 
     class IStatement : public INode {
     public:
-        virtual void Accept( IVisitor& visitor ) override;
+        virtual void Accept( IVisitor &visitor ) override;
     };
 
     class CStatement : public IStatement {
     public:
-        virtual void Accept( IVisitor& visitor ) override;
+        virtual void Accept( IVisitor &visitor ) override;
     };
 
 
@@ -29,7 +29,7 @@ namespace IRT {
 
         const CExpression *Source( ) const;
 
-        virtual void Accept( IVisitor& visitor ) override;
+        virtual void Accept( IVisitor &visitor ) override;
 
     private:
         std::unique_ptr<const CExpression> target;
@@ -45,7 +45,7 @@ namespace IRT {
 
         const CExpression *Expression( ) const;
 
-        virtual void Accept( IVisitor& visitor ) override;
+        virtual void Accept( IVisitor &visitor ) override;
 
     private:
         std::unique_ptr<const CExpression> expression;
@@ -60,7 +60,7 @@ namespace IRT {
 
         CLabel Target( ) const;
 
-        virtual void Accept( IVisitor& visitor ) override;
+        virtual void Accept( IVisitor &visitor ) override;
 
     private:
         CLabel target;
@@ -85,7 +85,7 @@ namespace IRT {
 
         TLogicOperator Operation( );
 
-        virtual void Accept( IVisitor& visitor ) override;
+        virtual void Accept( IVisitor &visitor ) override;
 
     private:
         std::unique_ptr<const CExpression> leftOperand;
@@ -106,7 +106,7 @@ namespace IRT {
 
         const CStatement *RightStatement( ) const;
 
-        virtual void Accept( IVisitor& visitor ) override;
+        virtual void Accept( IVisitor &visitor ) override;
 
     private:
         std::unique_ptr<const CStatement> leftStatement;
@@ -122,11 +122,28 @@ namespace IRT {
 
         CLabel Label( ) const;
 
-        virtual void Accept( IVisitor& visitor ) override;
+        virtual void Accept( IVisitor &visitor ) override;
 
     private:
         CLabel label;
     };
 
+// ********************************************************************************
+
+    class CStatementList : public INode {
+    public:
+        CStatementList( );
+
+        CStatementList( std::unique_ptr<const CStatement> statement );
+
+        void Add( std::unique_ptr<const CStatement> &statement );
+
+        const std::vector <std::unique_ptr<const CStatement>> &Statements( ) const;
+
+        void Accept( IVisitor *visitor ) const override;
+
+    private:
+        std::vector <std::unique_ptr<const CStatement>> statements;
+    };
 
 }
