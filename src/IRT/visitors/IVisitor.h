@@ -1,24 +1,24 @@
 #pragma once
-
-// Expression Nodes of the IRT
-class CEseqExpression;
-class CBinopExpression;
-class CConstExpression;
-class CTempExpression;
-class CNameExpression;
-class CCallExpression;
-class CMemExpression;
-class CExpressionList;
-
-// Statement Nodes of the IRT
-class CMoveStatement;
-class CExpStatement;
-class CLabelStatement;
-class CJumpStatement;
-class CSequenceStatement;
-class CStatementList;
-
 namespace IRT {
+
+    // Expression Nodes of the IRT
+    class CEseqExpression;
+    class CBinopExpression;
+    class CConstExpression;
+    class CTempExpression;
+    class CNameExpression;
+    class CCallExpression;
+    class CMemExpression;
+    class CExpressionList;
+
+    // Statement Nodes of the IRT
+    class CMoveStatement;
+    class CExpStatement;
+    class CLabelStatement;
+    class CJumpStatement;
+    class CSequenceStatement;
+    class CStatementList;
+
     class IVisitor {
     public:
         //Expressions visit methods
