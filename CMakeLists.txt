@@ -15,6 +15,8 @@ set(SOURCE_FILES
     src/bison.cpp
     src/lex.cpp
     src/main_typechecker.cpp
+    src/IRT/utils/Label.h
+    src/IRT/utils/Temporary.h
     src/symbol_table/PositionInfo.cpp src/IRT/nodes/Statements.cpp src/IRT/nodes/Expressions.h src/IRT/nodes/Expressions.cpp src/IRT/utils/enums.h)
 
 add_executable(mini_java_compilator ${SOURCE_FILES})
