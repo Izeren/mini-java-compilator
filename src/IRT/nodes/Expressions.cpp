@@ -36,7 +36,7 @@ IRT::CBinopExpression::CBinopExpression( std::unique_ptr<const IRT::CExpression>
                                          IRT::enums::TOperationType operation ) : leftOperand( std::move( leftOperand )),
                                                                                  rightOperand(
                                                                                          std::move( rightOperand )),
-                                                                                 type( operation ) {}
+                                                                                 operation( operation ) {}
 
 const IRT::CExpression *IRT::CBinopExpression::getLeftOperand() const {
     return leftOperand.get();

@@ -7,8 +7,8 @@
 #include <bits/unique_ptr.h>
 #include "INode.h"
 #include "../utils/enums.h"
-#include "../utils/CLabel.h"
-#include "../utils/CTemp.h"
+#include "../utils/Label.h"
+#include "../utils/Temporary.h"
 #include "Statements.h"
 #include <vector>
 
