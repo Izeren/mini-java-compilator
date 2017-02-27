@@ -11,11 +11,11 @@ IRT::CEseqExpression::~CEseqExpression() {
 
 }
 
-const CStatement *IRT::CEseqExpression::getStatement() const {
+const IRT::CStatement *IRT::CEseqExpression::getStatement() const {
     return statement.get();
 }
 
-const CExpression *IRT::CEseqExpression::getExpression() const {
+const IRT::CExpression *IRT::CEseqExpression::getExpression() const {
     return expression.get();
 }
 
@@ -31,12 +31,12 @@ IRT::CBinopExpression::~CBinopExpression() {
 
 }
 
-IRT::CBinopExpression::CBinopExpression( std::unique_ptr<const IRT::CExpression> leftOperand,
-                                         std::unique_ptr<const IRT::CExpression> rightOperand,
-                                         IRT::enums::TOperationType operation ) : leftOperand( std::move( leftOperand )),
+IRT::CBinopExpression::CBinopExpression( std::unique_ptr<const IRT::CExpression> _leftOperand,
+                                         std::unique_ptr<const IRT::CExpression> _rightOperand,
+                                         IRT::enums::TOperationType _operation ) : leftOperand( std::move( _leftOperand )),
                                                                                  rightOperand(
-                                                                                         std::move( rightOperand )),
-                                                                                 operation( operation ) {}
+                                                                                         std::move( _rightOperand )),
+                                                                                 operation( _operation ) {}
 
 const IRT::CExpression *IRT::CBinopExpression::getLeftOperand() const {
     return leftOperand.get();
@@ -58,7 +58,7 @@ IRT::CConstExpression::~CConstExpression() {
 
 }
 
-IRT::CConstExpression::CConstExpression( int value ) : value( value ) {}
+IRT::CConstExpression::CConstExpression( int _value ) : value( _value ) {}
 
 int IRT::CConstExpression::getValue() const {
     return value;
@@ -72,9 +72,9 @@ IRT::CTempExpression::~CTempExpression() {
 
 }
 
-IRT::CTempExpression::CTempExpression( const CTemp &temprorary ) : temprorary( temprorary ) {}
+IRT::CTempExpression::CTempExpression( const IRT::CTemp &_temprorary ) : temprorary( _temprorary ) {}
 
-const CTemp &IRT::CTempExpression::getTemprorary() const {
+const IRT::CTemp &IRT::CTempExpression::getTemprorary() const {
     return temprorary;
 }
 
@@ -86,9 +86,9 @@ IRT::CNameExpression::~CNameExpression() {
 
 }
 
-IRT::CNameExpression::CNameExpression( const CLabel &label ) : label( label ) {}
+IRT::CNameExpression::CNameExpression( const IRT::CLabel &_label ) : label( _label ) {}
 
-const CLabel &IRT::CNameExpression::getLabel() const {
+const IRT::CLabel &IRT::CNameExpression::getLabel() const {
     return label;
 }
 
@@ -108,9 +108,9 @@ const IRT::CExpressionList *IRT::CCallExpression::getArgumetns() const {
     return argumetns.get();
 }
 
-IRT::CCallExpression::CCallExpression(  std::unique_ptr<const IRT::CExpression> function,
-                                        std::unique_ptr<const IRT::CExpressionList> argumetns ) : function(
-        std::move(function )), argumetns( std::move(argumetns )) {}
+IRT::CCallExpression::CCallExpression(  std::unique_ptr<const IRT::CExpression> _function,
+                                        std::unique_ptr<const IRT::CExpressionList> _argumetns ) : function(
+        std::move(_function )), argumetns( std::move(_argumetns )) {}
 
 void IRT::CMemExpression::Accept( IRT::IVisitor &visitor ) {
     visitor.Visit( *this );
@@ -120,7 +120,7 @@ IRT::CMemExpression::~CMemExpression() {
 
 }
 
-IRT::CMemExpression::CMemExpression(  std::unique_ptr<const IRT::CExpression> address ) : address( std::move(address )) {}
+IRT::CMemExpression::CMemExpression(  std::unique_ptr<const IRT::CExpression> _address ) : address( std::move(_address )) {}
 
 const IRT::CExpression *IRT::CMemExpression::getAddress() const {
     return address.get();
@@ -138,18 +138,18 @@ const std::vector<std::unique_ptr<const IRT::CExpression>> &IRT::CExpressionList
     return expressions;
 }
 
-IRT::CExpressionList::CExpressionList( const IRT::CExpression *expression ) {
-    Add( expression );
+IRT::CExpressionList::CExpressionList( const IRT::CExpression *_expression ) {
+    Add( _expression );
 }
 
-IRT::CExpressionList::CExpressionList( std::unique_ptr<const IRT::CExpression> expression ) {
-    Add( std::move( expression ));
+IRT::CExpressionList::CExpressionList( std::unique_ptr<const IRT::CExpression> _expression ) {
+    Add( std::move( _expression ));
 }
 
-void IRT::CExpressionList::Add( const IRT::CExpression *expression ) {
-    expressions.emplace_back( expression );
+void IRT::CExpressionList::Add( const IRT::CExpression *_expression ) {
+    expressions.emplace_back( _expression );
 }
 
-void IRT::CExpressionList::Add( std::unique_ptr<const IRT::CExpression> expression ) {
-    expressions.push_back( std::move( expression ));
+void IRT::CExpressionList::Add( std::unique_ptr<const IRT::CExpression> _expression ) {
+    expressions.push_back( std::move( _expression ));
 }

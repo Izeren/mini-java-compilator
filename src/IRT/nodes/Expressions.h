@@ -34,8 +34,8 @@ namespace IRT {
     public:
         const CStatement *getStatement() const;
 
-        CEseqExpression( std::unique_ptr<const CStatement> statement,
-                         std::unique_ptr<const CExpression> expression );
+        CEseqExpression( std::unique_ptr<const CStatement> _statement,
+                         std::unique_ptr<const CExpression> _expression );
 
         const CExpression *getExpression() const;
 
@@ -53,8 +53,8 @@ namespace IRT {
     public:
         virtual void Accept( IVisitor &visitor ) override;
 
-        CBinopExpression(  std::unique_ptr<const CExpression> leftOperand,
-                           std::unique_ptr<const CExpression> rightOperand, enums::TOperationType operation );
+        CBinopExpression(  std::unique_ptr<const CExpression> _leftOperand,
+                           std::unique_ptr<const CExpression> _rightOperand, enums::TOperationType _operation );
 
         const CExpression *getLeftOperand() const;
 
@@ -76,7 +76,7 @@ namespace IRT {
     public:
         int getValue() const;
 
-        CConstExpression( int value );
+        CConstExpression( int _value );
 
         virtual void Accept( IVisitor &visitor ) override;
 
@@ -93,7 +93,7 @@ namespace IRT {
 
         const CTemp &getTemprorary() const;
 
-        CTempExpression( const CTemp &temprorary );
+        CTempExpression( const CTemp &_temprorary );
 
         virtual ~CTempExpression();
 
@@ -108,7 +108,7 @@ namespace IRT {
 
         const CLabel &getLabel() const;
 
-        CNameExpression( const CLabel &label );
+        CNameExpression( const CLabel &_label );
 
         virtual ~CNameExpression();
 
@@ -119,8 +119,8 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CCallExpression : public CExpression {
     public:
-        CCallExpression(  std::unique_ptr<const CExpression> function,
-                          std::unique_ptr<const CExpressionList> argumetns );
+        CCallExpression(  std::unique_ptr<const CExpression> _function,
+                          std::unique_ptr<const CExpressionList> _argumetns );
 
         const CExpression *getFunction() const;
 
@@ -138,7 +138,7 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CMemExpression : public CExpression {
     public:
-        CMemExpression(  std::unique_ptr<const CExpression> address );
+        CMemExpression(  std::unique_ptr<const CExpression> _address );
 
         const CExpression *getAddress() const;
 
@@ -155,13 +155,13 @@ namespace IRT {
     public:
         CExpressionList() = default;
 
-        CExpressionList( const CExpression *expression );
+        CExpressionList( const CExpression *_expression );
 
-        CExpressionList( std::unique_ptr<const CExpression> expression );
+        CExpressionList( std::unique_ptr<const CExpression> _expression );
 
-        void Add( const CExpression *expression );
+        void Add( const CExpression *_expression );
 
-        void Add( std::unique_ptr<const CExpression> expression );
+        void Add( std::unique_ptr<const CExpression> _expression );
 
         const std::vector<std::unique_ptr<const CExpression>> &getExpressions() const;
 
