@@ -9,10 +9,11 @@
 #include "../utils/enums.h"
 #include "../utils/Label.h"
 #include "../utils/Temporary.h"
-#include "Statements.h"
 #include <vector>
 
+
 namespace IRT {
+    class CStatement;
 //------------------------------------------------------------------------------------------
     class IExpression : public INode {
     public:

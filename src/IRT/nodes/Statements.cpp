@@ -1,5 +1,6 @@
 #include <vector>
 #include "Statements.h"
+#include "Expressions.h"
 
 using namespace IRT;
 
