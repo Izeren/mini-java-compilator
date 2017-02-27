@@ -3,8 +3,7 @@
 //
 #pragma  once
 
-#include <zconf.h>
-#include <bits/unique_ptr.h>
+#include <memory>
 #include "INode.h"
 #include "../utils/enums.h"
 #include "../utils/Label.h"
