@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include "INode.h"
 #include "../utils/Label.h"
 #include "../utils/enums.h"

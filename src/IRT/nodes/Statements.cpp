@@ -1,7 +1,5 @@
 #include <vector>
 #include "Statements.h"
-#include "../utils/Label.h"
-#include "../utils/enums.h"
 
 using namespace IRT;
 
@@ -77,6 +75,10 @@ CLabel CJumpConditionalStatement::FalseLabel( ) const {
 
 void CJumpConditionalStatement::Accept( IVisitor &visitor ) {
     visitor.Visit( *this );
+}
+
+TLogicOperator CJumpConditionalStatement::Operation( ) {
+    return operation;
 }
 
 // ********************************************************************************
