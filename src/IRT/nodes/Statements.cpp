@@ -1,4 +1,7 @@
+#include <vector>
 #include "Statements.h"
+#include "../utils/Label.h"
+#include "../utils/enums.h"
 
 using namespace IRT;
 
@@ -17,7 +20,7 @@ const CExpression *CMoveStatement::Source( ) const {
 }
 
 void CMoveStatement::Accept( IVisitor &visitor ) {
-    visitor.Visit( this );
+    visitor.Visit( *this );
 }
 
 // ********************************************************************************
@@ -30,7 +33,7 @@ const CExpression *CExpStatement::Expression( ) const {
 }
 
 void CExpStatement::Accept( IVisitor &visitor ) {
-    visitor.Visit( this );
+    visitor.Visit( *this );
 }
 
 // ********************************************************************************
@@ -41,8 +44,8 @@ CLabel CJumpStatement::Target( ) const {
     return target;
 }
 
-void CLabelStatement::Accept( IVisitor &visitor ) {
-    visitor.Visit( this );
+void CJumpStatement::Accept( IVisitor &visitor ) {
+    visitor.Visit( *this );
 }
 
 // ********************************************************************************
@@ -57,11 +60,11 @@ CJumpConditionalStatement::CJumpConditionalStatement( TLogicOperator _operation,
           labelTrue( _labelTrue ), labelFalse( _labelFalse ) { }
 
 const CExpression *CJumpConditionalStatement::LeftOperand( ) const {
-    return leftOperand;
+    return leftOperand.get();
 }
 
 const CExpression *CJumpConditionalStatement::RightOperand( ) const {
-    return rightOperand;
+    return rightOperand.get();
 }
 
 CLabel CJumpConditionalStatement::TrueLabel( ) const {
@@ -73,7 +76,7 @@ CLabel CJumpConditionalStatement::FalseLabel( ) const {
 }
 
 void CJumpConditionalStatement::Accept( IVisitor &visitor ) {
-    visitor.Visit( this );
+    visitor.Visit( *this );
 }
 
 // ********************************************************************************
@@ -82,15 +85,15 @@ CSeqStatement::CSeqStatement( std::unique_ptr<const CStatement> _left, std::uniq
         : leftStatement( std::move( _left )), rightStatement( std::move( _right )) { }
 
 const CStatement *CSeqStatement::LeftStatement( ) const {
-    return leftStatement;
+    return leftStatement.get();
 }
 
 const CStatement *CSeqStatement::RightStatement( ) const {
-    return rightStatement;
+    return rightStatement.get();
 }
 
 void CSeqStatement::Accept( IVisitor &visitor ) {
-    visitor.Visit( this );
+    visitor.Visit( *this );
 }
 
 // ********************************************************************************
@@ -102,7 +105,7 @@ CLabel CLabelStatement::Label( ) const {
 }
 
 void CLabelStatement::Accept( IVisitor &visitor ) {
-    visitor.Visit( this );
+    visitor.Visit( *this );
 }
 
 // ********************************************************************************
@@ -122,5 +125,5 @@ const std::vector <std::unique_ptr<const CStatement>> &CStatementList::Statement
 }
 
 void CStatementList::Accept( IVisitor &visitor ) {
-    visitor.Visit( this );
+    visitor.Visit( *this );
 }

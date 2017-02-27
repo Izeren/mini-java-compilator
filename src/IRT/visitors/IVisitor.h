@@ -16,7 +16,8 @@ namespace IRT {
     class CExpStatement;
     class CLabelStatement;
     class CJumpStatement;
-    class CSequenceStatement;
+    class CJumpConditionalStatement;
+    class CSeqStatement;
     class CStatementList;
 
     class IVisitor {
@@ -36,7 +37,8 @@ namespace IRT {
         virtual void Visit( CExpStatement &statement ) = 0;
         virtual void Visit( CLabelStatement &statement ) = 0;
         virtual void Visit( CJumpStatement &statement ) = 0;
-        virtual void Visit( CSequenceStatement &statement ) = 0;
+        virtual void Visit( CJumpConditionalStatement &statement ) = 0;
+        virtual void Visit( CSeqStatement &statement ) = 0;
         virtual void Visit( CStatementList &statement ) = 0;
 
         virtual ~IVisitor() {};

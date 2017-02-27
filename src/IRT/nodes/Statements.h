@@ -2,19 +2,14 @@
 
 #include <memory>
 #include "INode.h"
+#include "../utils/Label.h"
+#include "../utils/enums.h"
 
 namespace IRT {
 
-    class IStatement : public INode {
-    public:
-        virtual void Accept( IVisitor &visitor ) override;
-    };
+    class IStatement : public INode { };
 
-    class CStatement : public IStatement {
-    public:
-        virtual void Accept( IVisitor &visitor ) override;
-    };
-
+    class CStatement : public IStatement { };
 
     class CExpression;
 
@@ -140,7 +135,7 @@ namespace IRT {
 
         const std::vector <std::unique_ptr<const CStatement>> &Statements( ) const;
 
-        void Accept( IVisitor *visitor ) const override;
+        virtual void Accept( IVisitor &visitor ) override;
 
     private:
         std::vector <std::unique_ptr<const CStatement>> statements;
