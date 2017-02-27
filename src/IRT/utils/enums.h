@@ -13,19 +13,18 @@ namespace IRT {
             AND,
             OR
         };
+
+        enum class TLogicOperator : char {
+            EQUALS,
+            NOT_EQUALS,
+            LESS,
+            GREATER,
+            LESS_OR_EQUAL,
+            GREATER_OR_EQUAL,
+            ULT, // ???
+            ULE, // ???
+            UGT, // ???
+            UGE // ???
+        };
     }
-
-    enum class TLogicOperator : char {
-        EQUALS,
-        NOT_EQUALS,
-        LESS,
-        GREATER,
-        LESS_OR_EQUAL,
-        GREATER_OR_EQUAL,
-        ULT, // ???
-        ULE, // ???
-        UGT, // ???
-        UGE // ???
-    };
-
 }
