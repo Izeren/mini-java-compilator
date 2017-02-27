@@ -8,9 +8,11 @@
 
 namespace IRT {
 
-    class IStatement : public INode { };
+    class IStatement : public INode {
+    };
 
-    class CStatement : public IStatement { };
+    class CStatement : public IStatement {
+    };
 
     class CExpression;
 
@@ -130,16 +132,16 @@ namespace IRT {
     public:
         CStatementList( );
 
-        CStatementList( std::unique_ptr<const CStatement> statement );
+        CStatementList( std::unique_ptr<const CStatement> &statement );
 
         void Add( std::unique_ptr<const CStatement> &statement );
 
-        const std::vector <std::unique_ptr<const CStatement>> &Statements( ) const;
+        const std::vector<std::unique_ptr<const CStatement>> &Statements( ) const;
 
         virtual void Accept( IVisitor &visitor ) override;
 
     private:
-        std::vector <std::unique_ptr<const CStatement>> statements;
+        std::vector<std::unique_ptr<const CStatement>> statements;
     };
 
 }

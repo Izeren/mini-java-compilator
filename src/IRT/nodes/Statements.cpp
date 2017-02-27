@@ -58,11 +58,11 @@ CJumpConditionalStatement::CJumpConditionalStatement( TLogicOperator _operation,
           labelTrue( _labelTrue ), labelFalse( _labelFalse ) { }
 
 const CExpression *CJumpConditionalStatement::LeftOperand( ) const {
-    return leftOperand.get();
+    return leftOperand.get( );
 }
 
 const CExpression *CJumpConditionalStatement::RightOperand( ) const {
-    return rightOperand.get();
+    return rightOperand.get( );
 }
 
 CLabel CJumpConditionalStatement::TrueLabel( ) const {
@@ -87,11 +87,11 @@ CSeqStatement::CSeqStatement( std::unique_ptr<const CStatement> _left, std::uniq
         : leftStatement( std::move( _left )), rightStatement( std::move( _right )) { }
 
 const CStatement *CSeqStatement::LeftStatement( ) const {
-    return leftStatement.get();
+    return leftStatement.get( );
 }
 
 const CStatement *CSeqStatement::RightStatement( ) const {
-    return rightStatement.get();
+    return rightStatement.get( );
 }
 
 void CSeqStatement::Accept( IVisitor &visitor ) {
@@ -114,15 +114,15 @@ void CLabelStatement::Accept( IVisitor &visitor ) {
 
 CStatementList::CStatementList( ) { }
 
-CStatementList::CStatementList( std::unique_ptr<const CStatement> statement ) {
-    Add( std::move( statement ));
+CStatementList::CStatementList( std::unique_ptr<const CStatement> &statement ) {
+    Add( statement );
 }
 
 void CStatementList::Add( std::unique_ptr<const CStatement> &statement ) {
     statements.push_back( std::move( statement ));
 }
 
-const std::vector <std::unique_ptr<const CStatement>> &CStatementList::Statements( ) const {
+const std::vector<std::unique_ptr<const CStatement>> &CStatementList::Statements( ) const {
     return statements;
 }
 
