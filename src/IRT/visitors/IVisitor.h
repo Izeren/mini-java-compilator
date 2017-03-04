@@ -1,7 +1,6 @@
 #pragma once
 namespace IRT {
 
-    // Expression Nodes of the IRT
     class CEseqExpression;
     class CBinopExpression;
     class CConstExpression;
@@ -11,7 +10,6 @@ namespace IRT {
     class CMemExpression;
     class CExpressionList;
 
-    // Statement Nodes of the IRT
     class CMoveStatement;
     class CExpStatement;
     class CLabelStatement;
@@ -22,7 +20,6 @@ namespace IRT {
 
     class IVisitor {
     public:
-        //Expressions visit methods
         virtual void Visit( CEseqExpression &expression ) = 0;
         virtual void Visit( CBinopExpression &expression ) = 0;
         virtual void Visit( CConstExpression &expression ) = 0;
@@ -32,7 +29,6 @@ namespace IRT {
         virtual void Visit( CMemExpression &expression ) = 0;
         virtual void Visit( CExpressionList &expression ) = 0;
 
-        //Statement visit methods
         virtual void Visit( CMoveStatement &statement ) = 0;
         virtual void Visit( CExpStatement &statement ) = 0;
         virtual void Visit( CLabelStatement &statement ) = 0;
