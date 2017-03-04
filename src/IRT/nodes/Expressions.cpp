@@ -4,7 +4,7 @@
 #include "Expressions.h"
 #include "Statements.h"
 
-void IRT::CEseqExpression::Accept( IVisitor &visitor ) {
+void IRT::CEseqExpression::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -24,7 +24,7 @@ IRT::CEseqExpression::CEseqExpression( std::unique_ptr<const IRT::CStatement> _s
                                        std::unique_ptr<const IRT::CExpression> _expression ) : statement(
         std::move( _statement )), expression( std::move( _expression )) {}
 
-void IRT::CBinopExpression::Accept( IVisitor &visitor ) {
+void IRT::CBinopExpression::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -51,7 +51,7 @@ IRT::enums::TOperationType IRT::CBinopExpression::getOperation() const {
     return operation;
 }
 
-void IRT::CConstExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CConstExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -65,7 +65,7 @@ int IRT::CConstExpression::getValue() const {
     return value;
 }
 
-void IRT::CTempExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CTempExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -79,7 +79,7 @@ const IRT::CTemp &IRT::CTempExpression::getTemprorary() const {
     return temprorary;
 }
 
-void IRT::CNameExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CNameExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -93,7 +93,7 @@ const IRT::CLabel &IRT::CNameExpression::getLabel() const {
     return label;
 }
 
-void IRT::CCallExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CCallExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -113,7 +113,7 @@ IRT::CCallExpression::CCallExpression(  std::unique_ptr<const IRT::CExpression> 
                                         std::unique_ptr<const IRT::CExpressionList> _argumetns ) : function(
         std::move(_function )), argumetns( std::move(_argumetns )) {}
 
-void IRT::CMemExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CMemExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -127,7 +127,7 @@ const IRT::CExpression *IRT::CMemExpression::getAddress() const {
     return address.get();
 }
 
-void IRT::CExpressionList::Accept( IRT::IVisitor &visitor ) {
+void IRT::CExpressionList::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 

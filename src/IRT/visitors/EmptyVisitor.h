@@ -23,24 +23,22 @@ namespace IRT {
 
     class EmptyVisitor : public IVisitor {
     public:
-        virtual void Visit( CEseqExpression &expression ) override;
-        virtual void Visit( CBinopExpression &expression ) override;
-        virtual void Visit( CConstExpression &expression ) override;
-        virtual void Visit( CTempExpression &expression ) override;
-        virtual void Visit( CNameExpression &expression ) override;
-        virtual void Visit( CCallExpression &expression ) override;
-        virtual void Visit( CMemExpression &expression ) override;
-        virtual void Visit( CExpressionList &expression ) override;
+        virtual void Visit( const CEseqExpression &expression )  override;
+        virtual void Visit( const CBinopExpression &expression )  override;
+        virtual void Visit( const CConstExpression &expression )  override;
+        virtual void Visit( const CTempExpression &expression )  override;
+        virtual void Visit( const CNameExpression &expression )  override;
+        virtual void Visit( const CCallExpression &expression )  override;
+        virtual void Visit( const CMemExpression &expression )  override;
+        virtual void Visit( const CExpressionList &expression )  override;
 
-        virtual void Visit( CMoveStatement &statement ) override;
-        virtual void Visit( CExpStatement &statement ) override;
-        virtual void Visit( CLabelStatement &statement ) override;
-        virtual void Visit( CJumpStatement &statement ) override;
-        virtual void Visit( CJumpConditionalStatement &statement ) override;
-        virtual void Visit( CSeqStatement &statement ) override;
-        virtual void Visit( CStatementList &statement ) override;
-
-        virtual ~IVisitor() {};
+        virtual void Visit( const CMoveStatement &statement )  override;
+        virtual void Visit( const CExpStatement &statement )  override;
+        virtual void Visit( const CLabelStatement &statement )  override;
+        virtual void Visit( const CJumpStatement &statement ) override;
+        virtual void Visit( const CJumpConditionalStatement &statement )  override;
+        virtual void Visit( const CSeqStatement &statement )  override;
+        virtual void Visit( const CStatementList &statement )  override;
 
     };
 

@@ -18,7 +18,7 @@ const CExpression *CMoveStatement::Source() const {
     return source.get();
 }
 
-void CMoveStatement::Accept( IVisitor &visitor ) {
+void CMoveStatement::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -31,7 +31,7 @@ const CExpression *CExpStatement::Expression() const {
     return expression.get();
 }
 
-void CExpStatement::Accept( IVisitor &visitor ) {
+void CExpStatement::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -43,7 +43,7 @@ CLabel CJumpStatement::Target() const {
     return target;
 }
 
-void CJumpStatement::Accept( IVisitor &visitor ) {
+void CJumpStatement::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -74,11 +74,11 @@ const CLabelStatement *CJumpConditionalStatement::FalseLabel() const {
     return labelFalse.get();
 }
 
-void CJumpConditionalStatement::Accept( IVisitor &visitor ) {
+void CJumpConditionalStatement::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
-TLogicOperator CJumpConditionalStatement::Operation() {
+TLogicOperator CJumpConditionalStatement::Operation() const {
     return operation;
 }
 
@@ -95,7 +95,7 @@ const CStatement *CSeqStatement::RightStatement() const {
     return rightStatement.get();
 }
 
-void CSeqStatement::Accept( IVisitor &visitor ) {
+void CSeqStatement::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -107,7 +107,7 @@ CLabel CLabelStatement::Label() const {
     return label;
 }
 
-void CLabelStatement::Accept( IVisitor &visitor ) {
+void CLabelStatement::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -127,6 +127,6 @@ const std::vector<std::unique_ptr<const CStatement>> &CStatementList::Statements
     return statements;
 }
 
-void CStatementList::Accept( IVisitor &visitor ) {
+void CStatementList::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }

@@ -29,7 +29,7 @@ namespace IRT {
 
         const CExpression *Source() const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
     private:
         std::unique_ptr<const CExpression> target;
@@ -45,7 +45,7 @@ namespace IRT {
 
         const CExpression *Expression() const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
     private:
         std::unique_ptr<const CExpression> expression;
@@ -60,7 +60,7 @@ namespace IRT {
 
         CLabel Target() const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
     private:
         CLabel target;
@@ -84,9 +84,9 @@ namespace IRT {
 
         const CLabelStatement *FalseLabel() const;
 
-        TLogicOperator Operation();
+        TLogicOperator Operation() const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
     private:
         std::unique_ptr<const CExpression> leftOperand;
@@ -107,7 +107,7 @@ namespace IRT {
 
         const CStatement *RightStatement() const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
     private:
         std::unique_ptr<const CStatement> leftStatement;
@@ -123,7 +123,7 @@ namespace IRT {
 
         CLabel Label() const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
     private:
         CLabel label;
@@ -141,7 +141,7 @@ namespace IRT {
 
         const std::vector<std::unique_ptr<const CStatement>> &Statements() const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
     private:
         std::vector<std::unique_ptr<const CStatement>> statements;

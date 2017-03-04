@@ -8,6 +8,6 @@ CTemp::CTemp( ) : name( "Temp" + std::to_string( counter++ )) { }
 
 CTemp::CTemp( std::string _name ) : name( _name ) { }
 
-std::string CTemp::ToString( ) {
+std::string CTemp::ToString( ) const {
     return name;
 }

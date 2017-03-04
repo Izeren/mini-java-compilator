@@ -20,22 +20,22 @@ namespace IRT {
 
     class IVisitor {
     public:
-        virtual void Visit( CEseqExpression &expression ) = 0;
-        virtual void Visit( CBinopExpression &expression ) = 0;
-        virtual void Visit( CConstExpression &expression ) = 0;
-        virtual void Visit( CTempExpression &expression ) = 0;
-        virtual void Visit( CNameExpression &expression ) = 0;
-        virtual void Visit( CCallExpression &expression ) = 0;
-        virtual void Visit( CMemExpression &expression ) = 0;
-        virtual void Visit( CExpressionList &expression ) = 0;
+        virtual void Visit( const CEseqExpression &expression ) = 0;
+        virtual void Visit( const CBinopExpression &expression ) = 0;
+        virtual void Visit( const CConstExpression &expression ) = 0;
+        virtual void Visit( const CTempExpression &expression ) = 0;
+        virtual void Visit( const CNameExpression &expression ) = 0;
+        virtual void Visit( const CCallExpression &expression ) = 0;
+        virtual void Visit( const CMemExpression &expression ) = 0;
+        virtual void Visit( const CExpressionList &expression ) = 0;
 
-        virtual void Visit( CMoveStatement &statement ) = 0;
-        virtual void Visit( CExpStatement &statement ) = 0;
-        virtual void Visit( CLabelStatement &statement ) = 0;
-        virtual void Visit( CJumpStatement &statement ) = 0;
-        virtual void Visit( CJumpConditionalStatement &statement ) = 0;
-        virtual void Visit( CSeqStatement &statement ) = 0;
-        virtual void Visit( CStatementList &statement ) = 0;
+        virtual void Visit( const CMoveStatement &statement ) = 0;
+        virtual void Visit( const CExpStatement &statement ) = 0;
+        virtual void Visit( const CLabelStatement &statement ) = 0;
+        virtual void Visit( const CJumpStatement &statement ) = 0;
+        virtual void Visit( const CJumpConditionalStatement &statement ) = 0;
+        virtual void Visit( const CSeqStatement &statement ) = 0;
+        virtual void Visit( const CStatementList &statement ) = 0;
 
         virtual ~IVisitor() {};
 
