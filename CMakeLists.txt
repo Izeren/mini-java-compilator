@@ -23,6 +23,6 @@ set(SOURCE_FILES
         src/IRT/nodes/Expressions.cpp
         src/IRT/utils/enums.h
         src/IRT/utils/SubtreeWrapper.cpp
-        src/IRT/utils/SubtreeWrapper.h)
+        src/IRT/utils/SubtreeWrapper.h src/IRT/visitors/CBuildVisitor.cpp src/IRT/visitors/CBuildVisitor.h)
 
 add_executable(mini_java_compilator ${SOURCE_FILES})

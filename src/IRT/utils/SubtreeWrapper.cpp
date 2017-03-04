@@ -84,7 +84,7 @@ namespace IRT {
     }
 
     std::unique_ptr<const CStatement> CConditionalWrapper::ToStatement() {
-        /* TODO; */
+        /* will be done later */
     }
 
     std::unique_ptr<const CStatement>
@@ -134,6 +134,6 @@ namespace IRT {
     }
 
     std::unique_ptr<const CStatement> CNegateConditionalWrapper::ToConditional( CLabel labelTrue, CLabel labelFalse ) {
-        return std::move( wrapper->ToConditional( labelFalse, labelTrue )); // reversed order of arguments
+        return std::move( wrapper->ToConditional( labelFalse, labelTrue )); // need to swap true and false labels
     }
 };
