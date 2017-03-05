@@ -192,7 +192,7 @@ std::unique_ptr<const IRT::CExpressionList> IRT::CExpressionList::Copy( ) const 
 
     for ( int i = 0; i < expressions.size( ); ++i ) {
         std::unique_ptr<const CExpression> copy = expressions[ i ].get( )->Copy( );
-        newList->Add( copy );
+        newList->Add( std::move( copy ));
     }
     return std::move( std::unique_ptr<const CExpressionList>( newList ));
 }
