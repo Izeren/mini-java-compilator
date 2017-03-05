@@ -4,7 +4,7 @@
 #include "Expressions.h"
 #include "Statements.h"
 
-void IRT::CEseqExpression::Accept( IVisitor &visitor ) {
+void IRT::CEseqExpression::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -29,7 +29,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CEseqExpression::Copy( ) const {
             std::unique_ptr<const IRT::CExpression>( new CEseqExpression( statement->Copy( ), expression->Copy( ))));
 }
 
-void IRT::CBinopExpression::Accept( IVisitor &visitor ) {
+void IRT::CBinopExpression::Accept( IVisitor &visitor ) const{
     visitor.Visit( *this );
 }
 
@@ -61,7 +61,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CBinopExpression::Copy( ) const {
             new CBinopExpression( leftOperand->Copy( ), rightOperand->Copy( ), operation )));
 }
 
-void IRT::CConstExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CConstExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -79,7 +79,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CConstExpression::Copy( ) const {
     return std::move( std::unique_ptr<const IRT::CExpression>( new CConstExpression( value )));
 }
 
-void IRT::CTempExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CTempExpression::Accept( IRT::IVisitor &visitor ) const{
     visitor.Visit( *this );
 }
 
@@ -97,7 +97,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CTempExpression::Copy( ) const {
     return std::move( std::unique_ptr<const IRT::CExpression>( new CTempExpression( temprorary )));
 }
 
-void IRT::CNameExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CNameExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -115,7 +115,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CNameExpression::Copy( ) const {
     return std::move( std::unique_ptr<const IRT::CExpression>( new CNameExpression( label )));
 }
 
-void IRT::CCallExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CCallExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -140,7 +140,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CCallExpression::Copy( ) const {
             std::unique_ptr<const IRT::CExpression>( new CCallExpression( function->Copy( ), arguments->Copy( ))));
 }
 
-void IRT::CMemExpression::Accept( IRT::IVisitor &visitor ) {
+void IRT::CMemExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -159,7 +159,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CMemExpression::Copy( ) const {
     return std::move( std::unique_ptr<const IRT::CExpression>( new CMemExpression( address->Copy( ))));
 }
 
-void IRT::CExpressionList::Accept( IRT::IVisitor &visitor ) {
+void IRT::CExpressionList::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 

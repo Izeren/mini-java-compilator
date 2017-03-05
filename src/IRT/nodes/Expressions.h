@@ -19,7 +19,7 @@ namespace IRT {
     public:
         virtual ~IExpression( ) { };
 
-        virtual void Accept( IVisitor &visitor ) = 0;
+        virtual void Accept( IVisitor &visitor ) const = 0;
     };
 
 //------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ namespace IRT {
     public:
         virtual ~CExpression( ) { };
 
-        virtual void Accept( IVisitor &visitor ) = 0;
+        virtual void Accept( IVisitor &visitor ) const = 0;
 
         virtual std::unique_ptr<const CExpression> Copy( ) const = 0;
 
@@ -44,7 +44,7 @@ namespace IRT {
 
         const CExpression *getExpression( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         virtual ~CEseqExpression( );
 
@@ -60,7 +60,7 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CBinopExpression : public CExpression {
     public:
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         CBinopExpression( std::unique_ptr<const CExpression> _leftOperand,
                           std::unique_ptr<const CExpression> _rightOperand, enums::TOperationType _operation );
@@ -91,7 +91,7 @@ namespace IRT {
 
         CConstExpression( int _value );
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         virtual ~CConstExpression( );
 
@@ -106,7 +106,7 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CTempExpression : public CExpression {
     public:
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         const CTemp &getTemprorary( ) const;
 
@@ -125,7 +125,7 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CNameExpression : public CExpression {
     public:
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         const CLabel &getLabel( ) const;
 
@@ -151,7 +151,7 @@ namespace IRT {
 
         const CExpressionList *getArgumetns( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         virtual ~CCallExpression( );
 
@@ -171,7 +171,7 @@ namespace IRT {
 
         const CExpression *getAddress( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         virtual ~CMemExpression( );
 
@@ -198,7 +198,7 @@ namespace IRT {
 
         const std::vector<std::unique_ptr<const CExpression>> &getExpressions( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         virtual ~CExpressionList( );
 

@@ -34,7 +34,7 @@ namespace IRT {
 
         const CExpression *Source( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
@@ -54,7 +54,7 @@ namespace IRT {
 
         const CExpression *Expression( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
@@ -73,7 +73,7 @@ namespace IRT {
 
         CLabel Target( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
@@ -101,9 +101,9 @@ namespace IRT {
 
         const CLabelStatement *FalseLabel( ) const;
 
-        TLogicOperator Operation( );
+        TLogicOperator Operation() const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
@@ -128,7 +128,7 @@ namespace IRT {
 
         const CStatement *RightStatement( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
@@ -148,7 +148,7 @@ namespace IRT {
 
         CLabel Label( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
@@ -170,7 +170,7 @@ namespace IRT {
 
         const std::vector<std::unique_ptr<const CStatement>> &Statements( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 

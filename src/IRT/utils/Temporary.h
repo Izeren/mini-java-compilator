@@ -10,7 +10,7 @@ namespace IRT {
 
         CTemp( std::string _name );
 
-        std::string ToString( );
+        std::string ToString( ) const;
 
     private:
         std::string name;
