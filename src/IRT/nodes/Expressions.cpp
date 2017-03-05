@@ -29,7 +29,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CEseqExpression::Copy( ) const {
             std::unique_ptr<const IRT::CExpression>( new CEseqExpression( statement->Copy( ), expression->Copy( ))));
 }
 
-void IRT::CBinopExpression::Accept( IVisitor &visitor ) const{
+void IRT::CBinopExpression::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -79,7 +79,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CConstExpression::Copy( ) const {
     return std::move( std::unique_ptr<const IRT::CExpression>( new CConstExpression( value )));
 }
 
-void IRT::CTempExpression::Accept( IRT::IVisitor &visitor ) const{
+void IRT::CTempExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
@@ -127,13 +127,13 @@ const IRT::CExpression *IRT::CCallExpression::getFunction( ) const {
     return function.get( );
 }
 
-const IRT::CExpressionList *IRT::CCallExpression::getArgumetns( ) const {
+const IRT::CExpressionList *IRT::CCallExpression::getArguments( ) const {
     return arguments.get( );
 }
 
 IRT::CCallExpression::CCallExpression( std::unique_ptr<const IRT::CExpression> _function,
-                                       std::unique_ptr<const IRT::CExpressionList> _argumetns ) : function(
-        std::move( _function )), arguments( std::move( _argumetns )) { }
+                                       std::unique_ptr<const IRT::CExpressionList> arguments ) : function(
+        std::move( _function )), arguments( std::move( arguments )) { }
 
 std::unique_ptr<const IRT::CExpression> IRT::CCallExpression::Copy( ) const {
     return std::move(
@@ -187,10 +187,12 @@ void IRT::CExpressionList::Add( std::unique_ptr<const IRT::CExpression> _express
     expressions.push_back( std::move( _expression ));
 }
 
-std::unique_ptr<const IRT::CExpression> IRT::CExpressionList::Copy( ) const {
+std::unique_ptr<const IRT::CExpressionList> IRT::CExpressionList::Copy( ) const {
     CExpressionList *newList = new CExpressionList( );
-    for ( auto it : expressions ) {
-        newList->Add( std::move( it->Copy( )));
+
+    for ( int i = 0; i < expressions.size( ); ++i ) {
+        std::unique_ptr<const CExpression> copy = expressions[ i ].get( )->Copy( );
+        newList->Add( copy );
     }
-    return std::move( std::unique_ptr<const CExpression>( newList ));
+    return std::move( std::unique_ptr<const CExpressionList>( newList ));
 }

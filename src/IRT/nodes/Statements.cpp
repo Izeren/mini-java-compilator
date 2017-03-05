@@ -90,16 +90,17 @@ void CJumpConditionalStatement::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
-TLogicOperator CJumpConditionalStatement::Operation() const {
+TLogicOperator CJumpConditionalStatement::Operation( ) const {
     return operation;
 }
 
 std::unique_ptr<const CStatement> CJumpConditionalStatement::Copy( ) const {
     return std::move( std::unique_ptr<const CStatement>(
-            new CJumpConditionalStatement( operation, leftOperand->Copy( ),
+            new CJumpConditionalStatement( operation,
+                                           leftOperand->Copy( ),
                                            rightOperand->Copy( ),
-                                           std::unique_ptr( labelTrue->Copy( )),
-                                           std::unique_ptr( labelFalse->Copy( )))));
+                                           labelTrue->CastCopy( ),
+                                           labelFalse->CastCopy( ))));
 }
 
 // ********************************************************************************
@@ -140,6 +141,10 @@ std::unique_ptr<const CStatement> CLabelStatement::Copy( ) const {
     return std::move( std::unique_ptr<const CStatement>( new CLabelStatement( label )));
 }
 
+std::unique_ptr<const CLabelStatement> CLabelStatement::CastCopy( ) const {
+    return std::move( std::unique_ptr<const CLabelStatement>( new CLabelStatement( label )));
+}
+
 // ********************************************************************************
 
 CStatementList::CStatementList( ) { }
@@ -160,10 +165,11 @@ void CStatementList::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
-std::unique_ptr<const CStatement> CStatementList::Copy( ) const {
+std::unique_ptr<const CStatementList> CStatementList::Copy( ) const {
     CStatementList *newList = new CStatementList( );
-    for ( auto it :statements ) {
-        newList->Add( std::move( it->Copy( )));
+    for ( int i = 0; i < statements.size( ); ++i ) {
+        std::unique_ptr<const CStatement> copy = statements[ i ].get( )->Copy( );
+        newList->Add( copy );
     }
-    return std::move( std::unique_ptr<const CStatement>( newList ));
+    return std::move( std::unique_ptr<const CStatementList>( newList ));
 }

@@ -101,7 +101,7 @@ namespace IRT {
 
         const CLabelStatement *FalseLabel( ) const;
 
-        TLogicOperator Operation() const;
+        TLogicOperator Operation( ) const;
 
         virtual void Accept( IVisitor &visitor ) const override;
 
@@ -152,6 +152,8 @@ namespace IRT {
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
+        std::unique_ptr<const CLabelStatement> CastCopy( ) const;
+
         std::unique_ptr<const CStatement> Canonicalize( ) const override;
 
     private:
@@ -160,7 +162,7 @@ namespace IRT {
 
 // ********************************************************************************
 
-    class CStatementList : public CStatement {
+    class CStatementList : public IStatement {
     public:
         CStatementList( );
 
@@ -172,9 +174,9 @@ namespace IRT {
 
         virtual void Accept( IVisitor &visitor ) const override;
 
-        std::unique_ptr<const CStatement> Copy( ) const override;
+        std::unique_ptr<const CStatementList> Copy( ) const;
 
-        std::unique_ptr<const CStatement> Canonicalize( ) const override;
+        std::unique_ptr<const CStatementList> Canonicalize( ) const;
 
     private:
         std::vector<std::unique_ptr<const CStatement>> statements;

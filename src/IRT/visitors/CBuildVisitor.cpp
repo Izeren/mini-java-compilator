@@ -155,7 +155,7 @@ std::unique_ptr<const MethodToIRTMap> CBuildVisitor::GetMethodFromIrtMap() {
 }
 
 IRT::enums::TOperationType CBuildVisitor::operatorAst2Irt( enums::TOperation type ) const {
-    return MOD;
+    return IRT::enums::TOperationType::MOD;
 }
 
 void CBuildVisitor::updateSubtreeWrapper( IRT::ISubtreeWrapper *wrapper ) {

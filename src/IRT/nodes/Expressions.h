@@ -145,11 +145,11 @@ namespace IRT {
     class CCallExpression : public CExpression {
     public:
         CCallExpression( std::unique_ptr<const CExpression> _function,
-                         std::unique_ptr<const CExpressionList> _argumetns );
+                         std::unique_ptr<const CExpressionList> arguments );
 
         const CExpression *getFunction( ) const;
 
-        const CExpressionList *getArgumetns( ) const;
+        const CExpressionList *getArguments( ) const;
 
         virtual void Accept( IVisitor &visitor ) const override;
 
@@ -184,7 +184,7 @@ namespace IRT {
     };
 
 //------------------------------------------------------------------------------------------
-    class CExpressionList : CExpression {
+    class CExpressionList : IExpression {
     public:
         CExpressionList( ) = default;
 
@@ -202,9 +202,9 @@ namespace IRT {
 
         virtual ~CExpressionList( );
 
-        std::unique_ptr<const CExpression> Copy( ) const override;
+        std::unique_ptr<const CExpressionList> Copy( ) const;
 
-        std::unique_ptr<const CExpression> Canonicalize( ) const override;
+        std::unique_ptr<const CExpressionList> Canonicalize( ) const;
 
     private:
         std::vector<std::unique_ptr<const CExpression>> expressions;
