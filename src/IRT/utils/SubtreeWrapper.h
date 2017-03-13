@@ -26,7 +26,7 @@ namespace IRT {
                 : expression( _expression ) {}
         explicit CExpressionWrapper( std::unique_ptr<const CExpression> _expression )
                 : expression( std::move( _expression ) ) {}
-        virtual ~CExpressionWrapper() = default;
+        virtual ~CExpressionWrapper() {};
 
         virtual std::unique_ptr<const CExpression> ToExpression() override;
         virtual std::unique_ptr<const CStatement> ToStatement() override;

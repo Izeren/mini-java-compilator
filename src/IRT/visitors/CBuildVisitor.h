@@ -71,6 +71,8 @@ private:
 
     IRT::enums::TOperationType operatorAst2Irt( enums::TOperation type ) const;
 
+    IRT::enums::TOperationType logOperatorAst2Irt( enums::TLogicalOperation type ) const;
+
     void updateSubtreeWrapper( IRT::ISubtreeWrapper *wrapper );
 
     void updateSubtreeWrapper( std::unique_ptr<IRT::ISubtreeWrapper> wrapper );
