@@ -319,6 +319,7 @@ void CBuildVisitor::updateSubtreeWrapper( IRT::ISubtreeWrapper *_wrapper ) {
 
 void CBuildVisitor::updateSubtreeWrapper( std::unique_ptr<IRT::ISubtreeWrapper> _wrapper ) {
     wrapper = std::move( _wrapper );
+    return IRT::enums::TOperationType::MOD;
 }
 
 std::string CBuildVisitor::GetMethodFullName( const std::string &className, const std::string &methodName ) {

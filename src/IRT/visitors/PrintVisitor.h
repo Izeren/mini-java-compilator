@@ -1,28 +1,27 @@
 #pragma once
 
 #include "IVisitor.h"
+#include "../nodes/INode.h"
+#include "../nodes/Expressions.h"
+#include "../nodes/Statements.h"
+
+#include <string>
+#include <vector>
 
 namespace IRT {
 
-    class CEseqExpression;
-    class CBinopExpression;
-    class CConstExpression;
-    class CTempExpression;
-    class CNameExpression;
-    class CCallExpression;
-    class CMemExpression;
-    class CExpressionList;
+    struct ChildrenAnswers {
+        void PushBack( std::string description, int id );
 
-    class CMoveStatement;
-    class CExpStatement;
-    class CLabelStatement;
-    class CJumpStatement;
-    class CJumpConditionalStatement;
-    class CSeqStatement;
-    class CStatementList;
+        std::vector<std::string> descriptions;
+        std::vector<int> ids;
+    };
 
-    class EmptyVisitor : public IVisitor {
+    class PrintVisitor : public IVisitor {
     public:
+
+        PrintVisitor( );
+
         virtual void Visit( const CEseqExpression &expression ) override;
 
         virtual void Visit( const CBinopExpression &expression ) override;
@@ -53,6 +52,25 @@ namespace IRT {
 
         virtual void Visit( const CStatementList &statement ) override;
 
+        std::string GetResult( );
+
+    private:
+        ChildrenAnswers VisitChildren( std::vector<const INode *> children );
+
+        void AddChildrenDescriptions( ChildrenAnswers answers );
+
+        void AddChildrenIds( ChildrenAnswers answers );
+
+        void AddChildrenAnswers( ChildrenAnswers answers );
+
+        std::string ConstructLabel( std::string label, int id );
+
+        void AddLabel( std::string label );
+
+        void AddArrow( int child_id );
+
+        int lastVisited;
+        std::string description;
     };
 
 }

@@ -13,35 +13,44 @@
 
 namespace IRT {
     class CStatement;
+
 //------------------------------------------------------------------------------------------
     class IExpression : public INode {
     public:
-        virtual ~IExpression() {};
+        virtual ~IExpression( ) { };
 
-        virtual void Accept( IVisitor &visitor ) = 0;
+        virtual void Accept( IVisitor &visitor ) const = 0;
     };
 
 //------------------------------------------------------------------------------------------
     class CExpression : public IExpression {
     public:
-        virtual ~CExpression() {};
+        virtual ~CExpression( ) { };
 
-        virtual void Accept( IVisitor &visitor ) = 0;
+        virtual void Accept( IVisitor &visitor ) const = 0;
+
+        virtual std::unique_ptr<const CExpression> Copy( ) const = 0;
+
+        virtual std::unique_ptr<const CExpression> Canonicalize( ) const = 0;
     };
 
 //------------------------------------------------------------------------------------------
     class CEseqExpression : public CExpression {
     public:
-        const CStatement *getStatement() const;
+        const CStatement *getStatement( ) const;
 
         CEseqExpression( std::unique_ptr<const CStatement> _statement,
                          std::unique_ptr<const CExpression> _expression );
 
-        const CExpression *getExpression() const;
+        const CExpression *getExpression( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
-        virtual ~CEseqExpression();
+        virtual ~CEseqExpression( );
+
+        std::unique_ptr<const CExpression> Copy( ) const override;
+
+        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CStatement> statement;
@@ -51,18 +60,22 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CBinopExpression : public CExpression {
     public:
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
-        CBinopExpression(  std::unique_ptr<const CExpression> _leftOperand,
-                           std::unique_ptr<const CExpression> _rightOperand, enums::TOperationType _operation );
+        CBinopExpression( std::unique_ptr<const CExpression> _leftOperand,
+                          std::unique_ptr<const CExpression> _rightOperand, enums::TOperationType _operation );
 
-        const CExpression *getLeftOperand() const;
+        const CExpression *getLeftOperand( ) const;
 
-        const CExpression *getRightOperand() const;
+        const CExpression *getRightOperand( ) const;
 
-        enums::TOperationType getOperation() const;
+        enums::TOperationType getOperation( ) const;
 
-        virtual ~CBinopExpression();
+        virtual ~CBinopExpression( );
+
+        std::unique_ptr<const CExpression> Copy( ) const override;
+
+        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> leftOperand;
@@ -74,13 +87,17 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CConstExpression : public CExpression {
     public:
-        int getValue() const;
+        int getValue( ) const;
 
         CConstExpression( int _value );
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
-        virtual ~CConstExpression();
+        virtual ~CConstExpression( );
+
+        std::unique_ptr<const CExpression> Copy( ) const override;
+
+        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         int value;
@@ -89,13 +106,17 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CTempExpression : public CExpression {
     public:
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
-        const CTemp &getTemprorary() const;
+        const CTemp &getTemprorary( ) const;
 
         CTempExpression( const CTemp &_temprorary );
 
-        virtual ~CTempExpression();
+        virtual ~CTempExpression( );
+
+        std::unique_ptr<const CExpression> Copy( ) const override;
+
+        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         CTemp temprorary;
@@ -104,13 +125,17 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CNameExpression : public CExpression {
     public:
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
-        const CLabel &getLabel() const;
+        const CLabel &getLabel( ) const;
 
         CNameExpression( const CLabel &_label );
 
-        virtual ~CNameExpression();
+        virtual ~CNameExpression( );
+
+        std::unique_ptr<const CExpression> Copy( ) const override;
+
+        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         CLabel label;
@@ -119,41 +144,49 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CCallExpression : public CExpression {
     public:
-        CCallExpression(  std::unique_ptr<const CExpression> _function,
-                          std::unique_ptr<const CExpressionList> _argumetns );
+        CCallExpression( std::unique_ptr<const CExpression> _function,
+                         std::unique_ptr<const CExpressionList> arguments );
 
-        const CExpression *getFunction() const;
+        const CExpression *getFunction( ) const;
 
-        const CExpressionList *getArgumetns() const;
+        const CExpressionList *getArguments( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
-        virtual ~CCallExpression();
+        virtual ~CCallExpression( );
+
+        std::unique_ptr<const CExpression> Copy( ) const override;
+
+        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> function;
-        std::unique_ptr<const CExpressionList> argumetns;
+        std::unique_ptr<const CExpressionList> arguments;
     };
 
 //------------------------------------------------------------------------------------------
     class CMemExpression : public CExpression {
     public:
-        CMemExpression(  std::unique_ptr<const CExpression> _address );
+        CMemExpression( std::unique_ptr<const CExpression> _address );
 
-        const CExpression *getAddress() const;
+        const CExpression *getAddress( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
-        virtual ~CMemExpression();
+        virtual ~CMemExpression( );
+
+        std::unique_ptr<const CExpression> Copy( ) const override;
+
+        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> address;
     };
 
 //------------------------------------------------------------------------------------------
-    class CExpressionList : CExpression {
+    class CExpressionList : IExpression {
     public:
-        CExpressionList() = default;
+        CExpressionList( ) = default;
 
         CExpressionList( const CExpression *_expression );
 
@@ -163,11 +196,15 @@ namespace IRT {
 
         void Add( std::unique_ptr<const CExpression> _expression );
 
-        const std::vector<std::unique_ptr<const CExpression>> &getExpressions() const;
+        const std::vector<std::unique_ptr<const CExpression>> &getExpressions( ) const;
 
-        virtual void Accept( IVisitor &visitor ) override;
+        virtual void Accept( IVisitor &visitor ) const override;
 
-        virtual ~CExpressionList();
+        virtual ~CExpressionList( );
+
+        std::unique_ptr<const CExpressionList> Copy( ) const;
+
+        std::unique_ptr<const CExpressionList> Canonicalize( ) const;
 
     private:
         std::vector<std::unique_ptr<const CExpression>> expressions;
