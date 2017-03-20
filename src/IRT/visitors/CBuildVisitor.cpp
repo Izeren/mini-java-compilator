@@ -106,22 +106,49 @@ void CBuildVisitor::Visit( CUnarMinusExp &expression ) {
     ));
 }
 
-//void CBuildVisitor::Visit( CGetLengthExp &expression ) {
-//    expression.array->Accept( *this );
-//    std::unique_ptr<const IRT::CExpression> targetExpression = std::move( wrapper->ToExpression() );
-//
-//    updateSubtreeWrapper( new IRT::CExpressionWrapper(
-//            std::move( targetExpression )
-//    ) );
-//}
+void CBuildVisitor::Visit( CGetLengthExp &expression ) {
+    expression.array->lengthExpression->Accept( *this );
+    std::unique_ptr<const IRT::CExpression> targetExpression = std::move( wrapper->ToExpression() );
+
+    updateSubtreeWrapper( new IRT::CExpressionWrapper(
+            std::move( targetExpression )
+    ) );
+
+}
 
 //void CBuildVisitor::Visit( CGetFieldExp &exp ) {
 //
 //}
 //
-//void CBuildVisitor::Visit( CCallMethodExp &exp ) {
-//
-//}
+void CBuildVisitor::Visit( CCallMethodExp &expression ) {
+
+    expression.classOwner->Accept( *this );
+    std::string methodCaller = nameOfMethodParentClass;
+
+    IRT::CExpressionList* expressionListIrt = new IRT::CExpressionList();
+    std::vector< std::unique_ptr<IExpression> > &arguments = expression.args->exps;
+    for ( auto it = arguments.begin(); it != arguments.end(); ++it ) {
+        ( *it )->Accept( *this );
+        expressionListIrt->Add( std::move( wrapper->ToExpression() ) );
+    }
+
+    updateSubtreeWrapper( new IRT::CExpressionWrapper(
+            new IRT::CCallExpression(
+                    new IRT::CNameExpression(
+                            IRT::CLabel( GetMethodFullName( methodCaller, expression.methodName->name ) )
+                    ),
+                    expressionListIrt
+            )
+    ) );
+
+    std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes[methodCaller];
+    std::shared_ptr<const MethodInfo> methodDefinition = symbolTable->SearchClassHierarchyForMethod( expression->MethodId()->Name(), classDefinition );
+    CType type = methodDefinition->returnType->type;
+    if ( type.Type() == TTypeIdentifier::ClassId ) {
+        nameOfMethodParentClass = type.name->name;
+    }
+
+}
 //
 //void CBuildVisitor::Visit( CExpList &exp ) {
 //
