@@ -116,10 +116,10 @@ void CBuildVisitor::Visit( CGetLengthExp &expression ) {
 
 }
 
-//void CBuildVisitor::Visit( CGetFieldExp &exp ) {
-//
-//}
-//
+void CBuildVisitor::Visit( CGetFieldExp &exp ) {
+
+}
+
 void CBuildVisitor::Visit( CCallMethodExp &expression ) {
 
     expression.classOwner->Accept( *this );
