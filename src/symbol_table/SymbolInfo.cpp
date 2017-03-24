@@ -155,14 +155,15 @@ void SymbolTable::Print( std::ofstream& out )
 	}
 }
 
-std::shared_ptr<MethodInfo> SymbolTable::FindMehodDefinition(std::string methodName, std::shared_ptr<ClassInfo> callerInfo) {
+std::shared_ptr<MethodInfo> SymbolTable::FindMethodDefinition(std::string methodName,
+															  std::shared_ptr<ClassInfo> callerInfo) const {
 	auto it = callerInfo->methods.find(methodName);
 	if (it == callerInfo->methods.end()) {
         std::string upperClass = callerInfo->baseClass;
         if (upperClass == ""){
             return NULL;
         } else {
-            return FindMehodDefinition(methodName, classes[upperClass]);
+            return FindMethodDefinition(methodName, classes[upperClass]);
         }
     } else {
         return it->second;
@@ -222,7 +223,7 @@ std::string CError::GetUndeclaredErrorMessage(const std::string& name) {
 std::string CError::GetHasNoMemberErrorMessage(const std::string &className, const std::string &fieldName) {
     std::string errorMessage = "Class: " + className + " has no member: " + fieldName + ".";
 	return errorMessage;
-}u
+}
 
 std::string CError::GetUndeclaredVariableErrorMessage( const std::string& variableName) {
     return  "Variable " + variableName + " undeclared.";

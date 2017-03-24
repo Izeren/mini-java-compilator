@@ -117,6 +117,13 @@ void CBuildVisitor::Visit( CGetLengthExp &expression ) {
 }
 
 void CBuildVisitor::Visit( CGetFieldExp &exp ) {
+    const IRT::IAddress *address = currentFrame->GetAddress(exp.field->id->name);
+    if (address) {
+        nameOfMethodParentClass = exp.classOwner->id->name;
+        updateSubtreeWrapper(new IRT::CExpressionWrapper(
+                std::move(address->ToExpression())
+        ));
+    }
 
 }
 
@@ -141,10 +148,11 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
             )
     ) );
 
-    std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes[methodCaller];
-    std::shared_ptr<const MethodInfo> methodDefinition = symbolTable->FindMehodDefinition( expression->MethodId()->Name(), classDefinition );
+    std::shared_ptr<ClassInfo> classDefinition = symbolTable->classes[methodCaller];
+    std::shared_ptr<MethodInfo> methodDefinition = symbolTable->FindMethodDefinition(expression.methodName->name,
+                                                                                     classDefinition );
     CType type = methodDefinition->returnType->type;
-    if ( type.Type() == TTypeIdentifier::ClassId ) {
+    if ( !type.isPrimitive ) {
         nameOfMethodParentClass = type.name->name;
     }
 

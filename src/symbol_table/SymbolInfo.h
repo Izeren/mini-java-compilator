@@ -100,7 +100,8 @@ public:
 
 	std::unordered_map<std::string, std::shared_ptr<ClassInfo>> classes;
 
-    std::shared_ptr<MethodInfo> FindMehodDefinition( std::string methodName, std::shared_ptr<ClassInfo> callerInfo);
+    std::shared_ptr<MethodInfo> FindMethodDefinition( std::string methodName,
+													  std::shared_ptr<ClassInfo> callerInfo) const;
 };
 
 class CError
