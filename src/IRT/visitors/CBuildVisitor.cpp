@@ -142,7 +142,7 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
     ) );
 
     std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes[methodCaller];
-    std::shared_ptr<const MethodInfo> methodDefinition = symbolTable->SearchClassHierarchyForMethod( expression->MethodId()->Name(), classDefinition );
+    std::shared_ptr<const MethodInfo> methodDefinition = symbolTable->FindMehodDefinition( expression->MethodId()->Name(), classDefinition );
     CType type = methodDefinition->returnType->type;
     if ( type.Type() == TTypeIdentifier::ClassId ) {
         nameOfMethodParentClass = type.name->name;

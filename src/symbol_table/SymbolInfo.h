@@ -56,7 +56,7 @@ public:
 
 	void Print( std::ofstream& out );
 
-	std::string name;	
+	std::string name;
 	bool isPublic;
 	std::shared_ptr<TypeInfo> returnType;
 	std::shared_ptr<VariablesInfo> arguments;
@@ -99,6 +99,8 @@ public:
 	void Print( std::ofstream& out );
 
 	std::unordered_map<std::string, std::shared_ptr<ClassInfo>> classes;
+
+    std::shared_ptr<MethodInfo> FindMehodDefinition( std::string methodName, std::shared_ptr<ClassInfo> callerInfo);
 };
 
 class CError
