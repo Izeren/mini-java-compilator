@@ -14,7 +14,6 @@ namespace IRT {
 
     class ISubtreeWrapper {
     public:
-        virtual ~ISubtreeWrapper() = default;
         virtual std::unique_ptr<const CExpression> ToExpression() = 0;
         virtual std::unique_ptr<const CStatement> ToStatement() = 0;
         virtual std::unique_ptr<const CStatement> ToConditional( CLabel labelTrue, CLabel labelFalse ) = 0;
@@ -40,7 +39,6 @@ namespace IRT {
         explicit CStatementWrapper( const CStatement* _statement )
                 : statement( _statement ) {}
         explicit CStatementWrapper( std::unique_ptr<const CStatement> _statement ) : statement( std::move( _statement ) ) {}
-        virtual ~CStatementWrapper() = default;
 
         virtual std::unique_ptr<const CExpression> ToExpression() override;
         virtual std::unique_ptr<const CStatement> ToStatement() override;
@@ -51,8 +49,6 @@ namespace IRT {
 
     class CConditionalWrapper : public ISubtreeWrapper {
     public:
-        CConditionalWrapper() = default;
-        virtual ~CConditionalWrapper() = default;
 
         virtual std::unique_ptr<const CExpression> ToExpression() override;
         virtual std::unique_ptr<const CStatement> ToStatement() override;
