@@ -6,19 +6,13 @@
 #include "CBuildVisitor.h"
 #include "../../bison.hpp"
 #include <list>
+#include <set>
 
 void CBuildVisitor::Visit( CIdExp &expression ) {
     const IRT::IAddress *address = currentFrame->GetAddress( expression.name );
     if( address ) {
         std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes[currentFrame->GetClassName()];
         auto varInfoIt = classDefinition->fields->variables.find( expression.name );
-
-        if( varInfoIt != classDefinition->fields->variables.end()) {
-            auto type = varInfoIt->second->type;
-            if( !type->isPrimitive ) {
-                nameOfMethodParentClass = type->className;
-            }
-        }
 
         updateSubtreeWrapper( new IRT::CExpressionWrapper(
                 std::move( address->ToExpression())
@@ -119,7 +113,6 @@ void CBuildVisitor::Visit( CGetLengthExp &expression ) {
 void CBuildVisitor::Visit( CGetFieldExp &exp ) {
     const IRT::IAddress *address = currentFrame->GetAddress( exp.field->id->name );
     if( address ) {
-        nameOfMethodParentClass = exp.classOwner->id->name;
         updateSubtreeWrapper( new IRT::CExpressionWrapper(
                 std::move( address->ToExpression())
         ));
@@ -129,31 +122,26 @@ void CBuildVisitor::Visit( CGetFieldExp &exp ) {
 
 void CBuildVisitor::Visit( CCallMethodExp &expression ) {
 
-    std::string methodCaller = nameOfMethodParentClass;
-
     IRT::CExpressionList *expressionListIrt = new IRT::CExpressionList();
     std::vector<std::unique_ptr<IExpression> > &arguments = expression.args->exps;
     for( auto it = arguments.begin(); it != arguments.end(); ++it ) {
         (*it)->Accept( *this );
         expressionListIrt->Add( std::move( wrapper->ToExpression()));
     }
-
+    std::string callerName;
+    if( expression.classOwner ) {
+        callerName = expression.classOwner->name;
+    } else {
+        callerName = currentClassName;
+    }
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             new IRT::CCallExpression(
                     new IRT::CNameExpression(
-                            IRT::CLabel( GetMethodFullName( methodCaller, expression.methodName->name ))
+                            IRT::CLabel( GetMethodFullName( callerName, expression.methodName->name ))
                     ),
                     expressionListIrt
             )
     ));
-
-    std::shared_ptr<ClassInfo> classDefinition = symbolTable->classes[methodCaller];
-    std::shared_ptr<MethodInfo> methodDefinition = symbolTable->FindMethodDefinition( expression.methodName->name,
-                                                                                      classDefinition );
-    CType type = methodDefinition->returnType->type;
-    if( !type.isPrimitive ) {
-        nameOfMethodParentClass = type.name->name;
-    }
 
 }
 
@@ -200,7 +188,6 @@ void CBuildVisitor::Visit( CThisExpression &exp ) {
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             std::move( currentFrame->GetThisAddress()->ToExpression())
     ));
-    nameOfMethodParentClass = currentClassName;
 }
 
 void CBuildVisitor::Visit( CByIndexExpression &expression ) {
@@ -252,7 +239,6 @@ void CBuildVisitor::Visit( CNewIdentifier &expression ) {
             ))
     ));
 
-    nameOfMethodParentClass = expression.identifier->name;
 }
 
 void CBuildVisitor::Visit( CAssignStm &statement ) {
@@ -309,83 +295,268 @@ void CBuildVisitor::Visit( CAssignSubscriptStm &statement ) {
 
 void CBuildVisitor::Visit( CCompoundStm &statement ) {
     if( statement.leftStatement == NULL ) {
-        updateSubtreeWrapper( new IRT::CSeqStatement(
-                new IRT::CLabelStatement( IRT::CLabel( "Fake" )),
-                new IRT::CLabelStatement( IRT::CLabel( "Fake" ))
-        ));
+        updateSubtreeWrapper( NULL );
     } else {
         statement.leftStatement->Accept( *this );
-        std::unique_ptr<const IRT::CStatement> leftStatement = std::move( wrapper->ToStatement());
+        auto leftStatement = std::move( wrapper );
         statement.rightStatement->Accept( *this );
-        std::unique_ptr<const IRT::CStatement> rightStatement = std::move( wrapper->ToStatement());
-        updateSubtreeWrapper( new IRT::CSeqStatement( leftStatement, rightStatement ));
+
+        if( wrapper ) {
+            std::unique_ptr<const IRT::CStatement> rightStatement = std::move( wrapper->ToStatement());
+            updateSubtreeWrapper( new IRT::CSeqStatement( std::move( leftStatement->ToStatement()), rightStatement ));
+        } else {
+            updateSubtreeWrapper( leftStatement );
+        }
     }
 }
 
+
+void CBuildVisitor::Visit( CPrintStm &statement ) {
+    statement.expression->Accept( *this );
+
+    updateSubtreeWrapper( new IRT::CExpressionWrapper(
+            std::move( currentFrame->ExternalCall(
+                    "print",
+                    std::move( std::unique_ptr<const IRT::CExpressionList>(
+                            new IRT::CExpressionList( std::move( wrapper->ToExpression()))
+                    ))
+            ))
+    ));
+}
+
+void CBuildVisitor::Visit( CSimpleStm &statement ) {
+//    Old dummy class (not used)
+    assert( false );
+}
+
+void CBuildVisitor::Visit( CIfStm &statement ) {
+    statement.conditionExpression->Accept( *this );
+    std::unique_ptr<IRT::ISubtreeWrapper> wrapperCondition = std::move( wrapper );
+    statement.positiveStatement->Accept( *this );
+    std::unique_ptr<IRT::ISubtreeWrapper> wrapperTargetPositive = std::move( wrapper );
+    statement.negativeStatement->Accept( *this );
+    std::unique_ptr<IRT::ISubtreeWrapper> wrapperTargetNegative = std::move( wrapper );
+
+    IRT::CLabel labelTrue;
+    IRT::CLabel labelFalse;
+    IRT::CLabel labelJoin;
+
+    IRT::CLabel *resultLabelTrue = &labelJoin;
+    IRT::CLabel *resultLabelFalse = &labelJoin;
+
+    std::unique_ptr<const IRT::CStatement> suffix( new IRT::CLabelStatement( labelJoin ));
+    if( wrapperTargetNegative ) {
+        resultLabelFalse = &labelFalse;
+
+        suffix = std::move( std::unique_ptr<const IRT::CStatement>(
+                new IRT::CSeqStatement(
+                        new IRT::CLabelStatement( labelFalse ),
+                        new IRT::CSeqStatement(
+                                std::move( wrapperTargetNegative->ToStatement()),
+                                std::move( suffix )
+                        )
+                )
+        ));
+        if( wrapperTargetPositive ) {
+            suffix = std::move( std::unique_ptr<const IRT::CStatement>(
+                    new IRT::CSeqStatement(
+                            std::move( std::unique_ptr<const IRT::CStatement>(
+                                    new IRT::CJumpStatement( labelJoin )
+                            )),
+                            std::move( suffix )
+                    )
+            ));
+        }
+    }
+
+    if( wrapperTargetPositive ) {
+        resultLabelTrue = &labelTrue;
+
+        suffix = std::move( std::unique_ptr<const IRT::CStatement>(
+                new IRT::CSeqStatement(
+                        new IRT::CLabelStatement( labelTrue ),
+                        new IRT::CSeqStatement(
+                                std::move( wrapperTargetPositive->ToStatement()),
+                                std::move( suffix )
+                        )
+                )
+        ));
+    }
+
+    updateSubtreeWrapper( new IRT::CStatementWrapper(
+            new IRT::CSeqStatement(
+                    std::move( wrapperCondition->ToConditional( *resultLabelTrue, *resultLabelFalse )),
+                    std::move( suffix )
+            )
+    ));
+}
+
+
+void CBuildVisitor::Visit( CWhileStm &statement ) {
+
+    statement.conditionExpression->Accept( *this );
+    std::unique_ptr<IRT::ISubtreeWrapper> wrapperCondition = std::move( wrapper );
+    statement.statement->Accept( *this );
+    std::unique_ptr<IRT::ISubtreeWrapper> wrapperBody = std::move( wrapper );
+
+    IRT::CLabel labelLoop;
+    IRT::CLabel labelBody;
+    IRT::CLabel labelDone;
+
+    std::unique_ptr<const IRT::CStatement> suffix(
+            new IRT::CSeqStatement(
+                    new IRT::CJumpStatement( labelLoop ),
+                    new IRT::CLabelStatement( labelDone )
+            )
+    );
+    if( wrapperBody ) {
+        suffix = std::move( std::unique_ptr<const IRT::CStatement>(
+                new IRT::CSeqStatement(
+                        std::move( wrapperBody->ToStatement()),
+                        std::move( suffix )
+                )
+        ));
+    }
+
+    updateSubtreeWrapper( new IRT::CStatementWrapper(
+            new IRT::CSeqStatement(
+                    new IRT::CLabelStatement( labelLoop ),
+                    new IRT::CSeqStatement(
+                            std::move( wrapperCondition->ToConditional( labelBody, labelDone )),
+                            std::move( std::unique_ptr<const IRT::CStatement>(
+                                    new IRT::CSeqStatement(
+                                            std::move( std::unique_ptr<const IRT::CStatement>(
+                                                    new IRT::CLabelStatement( labelBody )
+                                            )),
+                                            std::move( suffix )
+                                    )
+                            ))
+                    )
+            )
+    ));
+
+}
+
+void CBuildVisitor::Visit( CType &stm ) {
+//    Should never be called
+    assert( false );
+}
+
+void CBuildVisitor::Visit( CField &statement ) {
+//    Should never be called
+    assert( false );
+}
+
+void CBuildVisitor::Visit( CFieldList &stm ) {
+//    Should never be called
+    assert( false );
+}
+
+void CBuildVisitor::Visit( CArgument &stm ) {
+//    Should never be called
+    assert( false );
+}
+
 //
-//void CBuildVisitor::Visit( CPrintStm &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CSimpleStm &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CIfStm &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CWhileStm &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CType &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CField &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CFieldList &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CArgument &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CArgumentList &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CMethod &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CMethodList &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CClass &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CClassList &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CMainMethod &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CMainClass &stm ) {
-//
-//}
-//
-//void CBuildVisitor::Visit( CProgram &stm ) {
-//
-//}
+void CBuildVisitor::Visit( CArgumentList &stm ) {
+//    Should never be called
+    assert( false );
+}
+
+void CBuildVisitor::Visit( CMethod &statement ) {
+
+    buildNewFrame( &statement );
+    std::string methodFullName = GetMethodFullName( currentFrame->GetClassName(), currentFrame->GetMethodName());
+
+    statement.statements->Accept( *this );
+    std::unique_ptr<IRT::ISubtreeWrapper> statementListWrapper = std::move( wrapper );
+
+    statement.returnExp->Accept( *this );
+    std::unique_ptr<const IRT::CExpression> expressionReturn = std::move( wrapper->ToExpression());
+
+    if( statementListWrapper ) {
+        updateSubtreeWrapper( new IRT::CStatementWrapper(
+                new IRT::CSeqStatement(
+                        new IRT::CLabelStatement( IRT::CLabel( methodFullName )),
+                        new IRT::CSeqStatement(
+                                std::move( statementListWrapper->ToStatement()),
+                                std::move( std::unique_ptr<const IRT::CStatement>(
+                                        new IRT::CMoveStatement(
+                                                std::move( currentFrame->GetReturnValueAddress()->ToExpression()),
+                                                std::move( expressionReturn )
+                                        )
+                                ))
+                        )
+                )
+        ));
+    } else {
+        updateSubtreeWrapper( new IRT::CStatementWrapper(
+                new IRT::CSeqStatement(
+                        new IRT::CLabelStatement( IRT::CLabel( methodFullName )),
+                        new IRT::CMoveStatement(
+                                std::move( currentFrame->GetReturnValueAddress()->ToExpression()),
+                                std::move( expressionReturn )
+                        )
+                )
+        ));
+    }
+}
+
+void CBuildVisitor::Visit( CMethodList &stm ) {
+//    Should never be called
+    assert( false );
+}
+
+void CBuildVisitor::Visit( CClass &statement ) {
+    currentClassName = statement.id->name;
+    auto methodDeclarations = statement.methods->methods;
+    for( auto it = methodDeclarations.begin(); it != methodDeclarations.end(); ++it ) {
+        (*it)->Accept( *this );
+    }
+}
+
+void CBuildVisitor::Visit( CClassList &stm ) {
+//    Should never be called
+    assert( false );
+}
+
+void CBuildVisitor::Visit( CMainMethod &stm ) {
+//    Should never be called
+    assert( false );
+}
+
+void CBuildVisitor::Visit( CMainClass &statement ) {
+    buildNewFrame( &statement );
+    std::string methodFullName = GetMethodFullName( currentFrame->GetClassName(), currentFrame->GetMethodName() );
+
+    statement.mainMethod->statements->Accept( *this );
+    std::unique_ptr<IRT::ISubtreeWrapper> statementListWrapper = std::move( wrapper );
+    if ( statementListWrapper ) {
+        updateSubtreeWrapper( new IRT::CStatementWrapper(
+                new IRT::CSeqStatement(
+                        std::move( std::unique_ptr<const IRT::CStatement>(
+                                new IRT::CLabelStatement( IRT::CLabel( methodFullName ) )
+                        ) ),
+                        std::move( statementListWrapper->ToStatement() )
+                )
+        ) );
+    } else {
+        // empty function
+        updateSubtreeWrapper( new IRT::CStatementWrapper(
+                new IRT::CLabelStatement( IRT::CLabel( methodFullName ) )
+        ) );
+    }
+
+    treesOfMethods->emplace( methodFullName, std::move( wrapper->ToStatement() ) );
+}
+
+void CBuildVisitor::Visit( CProgram &statement ) {
+    statement.mainClass->Accept( *this );
+    auto classDeclarations = statement.classList->classes;
+    for( auto it = classDeclarations.begin(); it != classDeclarations.end(); ++it ) {
+        (*it)->Accept( *this );
+    }
+}
 
 std::unique_ptr<const MethodToIRTMap> CBuildVisitor::GetMethodFromIrtMap() {
     return std::unique_ptr<const MethodToIRTMap>();
