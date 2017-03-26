@@ -155,21 +155,6 @@ void SymbolTable::Print( std::ofstream& out )
 	}
 }
 
-std::shared_ptr<MethodInfo> SymbolTable::FindMethodDefinition(std::string methodName,
-															  std::shared_ptr<ClassInfo> callerInfo) const {
-	auto it = callerInfo->methods.find(methodName);
-	if (it == callerInfo->methods.end()) {
-        std::string upperClass = callerInfo->baseClass;
-        if (upperClass == ""){
-            return NULL;
-        } else {
-            return FindMethodDefinition(methodName, classes[upperClass]);
-        }
-    } else {
-        return it->second;
-    }
-}
-
 
 //CError:
 //-------------------------------------------------------------------------------------------------
