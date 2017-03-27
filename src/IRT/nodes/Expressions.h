@@ -31,7 +31,7 @@ namespace IRT {
 
         virtual std::unique_ptr<const CExpression> Copy( ) const = 0;
 
-        virtual std::unique_ptr<const CExpression> Canonicalize( ) const = 0;
+//        virtual std::unique_ptr<const CExpression> Canonicalize( ) const = 0;
     };
 
 //------------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ namespace IRT {
 
         std::unique_ptr<const CExpression> Copy( ) const override;
 
-        std::unique_ptr<const CExpression> Canonicalize( ) const override;
+//        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CStatement> statement;
@@ -75,7 +75,7 @@ namespace IRT {
 
         std::unique_ptr<const CExpression> Copy( ) const override;
 
-        std::unique_ptr<const CExpression> Canonicalize( ) const override;
+//        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> leftOperand;
@@ -97,7 +97,7 @@ namespace IRT {
 
         std::unique_ptr<const CExpression> Copy( ) const override;
 
-        std::unique_ptr<const CExpression> Canonicalize( ) const override;
+//        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         int value;
@@ -116,7 +116,7 @@ namespace IRT {
 
         std::unique_ptr<const CExpression> Copy( ) const override;
 
-        std::unique_ptr<const CExpression> Canonicalize( ) const override;
+//        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         CTemp temprorary;
@@ -135,7 +135,7 @@ namespace IRT {
 
         std::unique_ptr<const CExpression> Copy( ) const override;
 
-        std::unique_ptr<const CExpression> Canonicalize( ) const override;
+//        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         CLabel label;
@@ -157,7 +157,7 @@ namespace IRT {
 
         std::unique_ptr<const CExpression> Copy( ) const override;
 
-        std::unique_ptr<const CExpression> Canonicalize( ) const override;
+//        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> function;
@@ -177,7 +177,7 @@ namespace IRT {
 
         std::unique_ptr<const CExpression> Copy( ) const override;
 
-        std::unique_ptr<const CExpression> Canonicalize( ) const override;
+//        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> address;
@@ -186,9 +186,8 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CExpressionList : IExpression {
     public:
-        CExpressionList( ) = default;
 
-        CExpressionList( const CExpression *_expression );
+        CExpressionList( const CExpression *_expression = 0 );
 
         CExpressionList( std::unique_ptr<const CExpression> _expression );
 
@@ -204,7 +203,7 @@ namespace IRT {
 
         std::unique_ptr<const CExpressionList> Copy( ) const;
 
-        std::unique_ptr<const CExpressionList> Canonicalize( ) const;
+//        std::unique_ptr<const CExpressionList> Canonicalize( ) const;
 
     private:
         std::vector<std::unique_ptr<const CExpression>> expressions;

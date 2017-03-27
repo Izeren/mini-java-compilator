@@ -15,7 +15,7 @@ set(SOURCE_FILES
         src/bison.cpp
         src/lex.cpp
         src/IRT/utils/Frame.cpp
-        src/main_typechecker.cpp
+#        src/main_typechecker.cpp
         src/IRT/utils/Label.cpp
         src/IRT/utils/Temporary.cpp
         src/symbol_table/PositionInfo.cpp
@@ -24,7 +24,13 @@ set(SOURCE_FILES
         src/IRT/nodes/Expressions.cpp
         src/IRT/utils/enums.h
         src/IRT/utils/SubtreeWrapper.cpp
-        src/IRT/visitors/CBuildVisitor.cpp src/IRT/visitors/CBuildVisitor.h
-        src/IRT/utils/SubtreeWrapper.h src/IRT/visitors/EmptyVisitor.cpp src/IRT/visitors/EmptyVisitor.h src/IRT/visitors/PrintVisitor.cpp src/IRT/visitors/PrintVisitor.h)
+        src/IRT/visitors/CBuildVisitor.cpp
+        src/IRT/visitors/CBuildVisitor.h
+        src/IRT/utils/SubtreeWrapper.h
+        src/IRT/visitors/EmptyVisitor.cpp
+        src/IRT/visitors/EmptyVisitor.h
+        src/IRT/visitors/PrintVisitor.cpp
+        src/IRT/visitors/PrintVisitor.h
+        src/IRT_builder_main.cpp)
 
 add_executable(mini_java_compilator ${SOURCE_FILES})

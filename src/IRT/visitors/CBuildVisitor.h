@@ -65,7 +65,7 @@ public:
 	void Visit( CMainClass &stm ) override;
 	void Visit( CProgram &stm ) override;
 
-	std::unique_ptr<const MethodToIRTMap> GetMethodFromIrtMap();
+	std::shared_ptr<const MethodToIRTMap> GetMethodFromIrtMap();
 
 private:
 
@@ -95,6 +95,6 @@ private:
     FramesMap frames;
     IRT::CFrame *currentFrame;
 
-    std::unique_ptr<MethodToIRTMap> treesOfMethods;
+    std::shared_ptr<MethodToIRTMap> treesOfMethods;
 };
 

@@ -810,6 +810,7 @@ void CTypeCheckerVisitor::Visit( CClass &stm )
 	std::cout << "typechecker: class\n";
     if( stm.id && stm.fields && stm.methods ) {
         currentClass = table->classes[stm.id->name];
+        std::cout << "Before cyclic check\n";
         bool isBadInherited = checkCyclicInheritance( currentClass, currentClass );
         std::cout << "Cyclic inheritance was checked for class: " << currentClass->name << "\n";
         if( isBadInherited ) {
@@ -830,13 +831,15 @@ void CTypeCheckerVisitor::Visit( CClassList &stm )
 {
 	std::cout << "typechecker: classlist\n";
     bool areAllClassBuilt = true;
-    for (int index = 0; index < stm.classes.size(); ++index) {
-        auto curClass = stm.classes[index].get();
-        if( !curClass ) {
+    for (int index = 0; index < stm.classes.size(); ++index) {;
+        if( !stm.classes[index]) {
             areAllClassBuilt = false;
             break;
         }
-        curClass->Accept( *this );
+        std::cout << "Accepting of class: \n";
+        std::cout << stm.classes[index]->id->name;
+        std::cout << "\nLet's begin\n";
+        stm.classes[index]->Accept( *this );
     }
     if( areAllClassBuilt ) {
         lastCalculatedType = enums::TPrimitiveType::VOID;

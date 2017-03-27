@@ -153,7 +153,7 @@ void IRT::PrintVisitor::Visit( const IRT::CStatementList &statement ) {
 }
 
 std::string IRT::PrintVisitor::GetResult( ) {
-    return std::__cxx11::string( );
+    return description;
 }
 
 IRT::PrintVisitor::PrintVisitor( ) {

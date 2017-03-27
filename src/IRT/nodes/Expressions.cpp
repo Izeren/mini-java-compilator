@@ -172,7 +172,9 @@ const std::vector<std::unique_ptr<const IRT::CExpression>> &IRT::CExpressionList
 }
 
 IRT::CExpressionList::CExpressionList( const IRT::CExpression *_expression ) {
-    Add( _expression );
+    if ( _expression ) {
+        Add( _expression );
+    }
 }
 
 IRT::CExpressionList::CExpressionList( std::unique_ptr<const IRT::CExpression> _expression ) {

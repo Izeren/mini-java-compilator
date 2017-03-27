@@ -27,7 +27,7 @@ int main( int argc, char **argv ) {
 			line_number = 1;
 			column_number = 1;
 			buffer << argv[i];
-			std::cout << std::endl << "Processing: " << buffer.str() << std::endl;
+//			std::cout << std::endl << "Processing: " << buffer.str() << std::endl;
 			yyin = fopen( buffer.str().c_str(), "r" );
 			buffer << "-out.txt";
 			yyrestart( yyin );

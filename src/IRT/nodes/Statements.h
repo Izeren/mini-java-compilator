@@ -18,7 +18,7 @@ namespace IRT {
 
         virtual std::unique_ptr<const CStatement> Copy( ) const = 0;
 
-        virtual std::unique_ptr<const CStatement> Canonicalize( ) const = 0;
+//        virtual std::unique_ptr<const CStatement> Canonicalize( ) const = 0;
     };
 
     class CExpression;
@@ -38,7 +38,7 @@ namespace IRT {
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
-        std::unique_ptr<const CStatement> Canonicalize( ) const override;
+//        std::unique_ptr<const CStatement> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> target;
@@ -58,7 +58,7 @@ namespace IRT {
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
-        std::unique_ptr<const CStatement> Canonicalize( ) const override;
+//        std::unique_ptr<const CStatement> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> expression;
@@ -77,7 +77,7 @@ namespace IRT {
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
-        std::unique_ptr<const CStatement> Canonicalize( ) const override;
+//        std::unique_ptr<const CStatement> Canonicalize( ) const override;
 
     private:
         CLabel target;
@@ -107,7 +107,7 @@ namespace IRT {
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
-        std::unique_ptr<const CStatement> Canonicalize( ) const override;
+//        std::unique_ptr<const CStatement> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CExpression> leftOperand;
@@ -132,7 +132,7 @@ namespace IRT {
 
         std::unique_ptr<const CStatement> Copy( ) const override;
 
-        std::unique_ptr<const CStatement> Canonicalize( ) const override;
+//        std::unique_ptr<const CStatement> Canonicalize( ) const override;
 
     private:
         std::unique_ptr<const CStatement> leftStatement;
@@ -154,7 +154,7 @@ namespace IRT {
 
         std::unique_ptr<const CLabelStatement> CastCopy( ) const;
 
-        std::unique_ptr<const CStatement> Canonicalize( ) const override;
+//        std::unique_ptr<const CStatement> Canonicalize( ) const override;
 
     private:
         CLabel label;
@@ -176,7 +176,7 @@ namespace IRT {
 
         std::unique_ptr<const CStatementList> Copy( ) const;
 
-        std::unique_ptr<const CStatementList> Canonicalize( ) const;
+//        std::unique_ptr<const CStatementList> Canonicalize( ) const;
 
     private:
         std::vector<std::unique_ptr<const CStatement>> statements;
