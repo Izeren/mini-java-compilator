@@ -84,7 +84,7 @@ namespace IRT {
     }
 
     std::unique_ptr<const CStatement> CConditionalWrapper::ToStatement() {
-        /* will be done later */
+        assert(false);
     }
 
     std::unique_ptr<const CStatement>

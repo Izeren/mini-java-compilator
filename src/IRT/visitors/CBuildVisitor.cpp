@@ -8,6 +8,7 @@
 #include "../../symbol_table/CConstructSymbolTableVisitor.h"
 #include <list>
 #include <set>
+#include "../utils/symbol_table_utils.h"
 
 void CBuildVisitor::Visit( CIdExp &expression ) {
     std::cout << "IRT builder: CIdExp\n";
@@ -243,8 +244,7 @@ void CBuildVisitor::Visit( CByIndexExpression &expression ) {
 
 void CBuildVisitor::Visit( CNewIdentifier &expression ) {
     std::cout << "IRT builder: CNewIdentifier\n";
-    std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes.at( expression.identifier->name );
-    int fieldCount = static_cast<int>(classDefinition->fields->variableNames.size());
+    int fieldCount = getFieldCountWithSuper(symbolTable, expression.identifier->name);
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             std::move( currentFrame->ExternalCall(

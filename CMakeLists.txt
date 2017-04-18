@@ -31,6 +31,6 @@ set(SOURCE_FILES
         src/IRT/visitors/EmptyVisitor.h
         src/IRT/visitors/PrintVisitor.cpp
         src/IRT/visitors/PrintVisitor.h
-        src/IRT_builder_main.cpp)
+        src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp)
 
 add_executable(mini_java_compilator ${SOURCE_FILES})
