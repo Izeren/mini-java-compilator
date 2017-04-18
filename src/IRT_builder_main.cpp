@@ -36,6 +36,8 @@ CProgram* parseCodeWithLex(const std::string& testfile_name) {
     yyrestart( yyin );
     yyparse( &cProgram );
     fclose( yyin );
+
+    return cProgram;
 }
 
 struct SymbolTableRes {
@@ -69,7 +71,7 @@ void writeErrors(const std::string& description, const std::vector<CError>& erro
     }
 }
 
-void make_test( std::string testfile_name, std::string result_name ) {
+void make_test( const std::string& filename, const std::string& testfile_name, const std::string& result_name ) {
     std::cout << "\n\n\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
     std::cout << "in make_test, testfile_name: " << testfile_name << " result_name: " << result_name << "\n";
 
@@ -95,7 +97,13 @@ void make_test( std::string testfile_name, std::string result_name ) {
     program->Accept( iRTVisitor );
     std::shared_ptr<const MethodToIRTMap> trees = iRTVisitor.GetMethodFromIrtMap();
     for ( auto it = trees->begin(); it != trees->end(); ++it) {
-        std::cout << it->first << "\n";
+        IRT::PrintVisitor printVisitor;
+        it->second->Accept(printVisitor);
+        printVisitor.GetResult();
+
+        std::ofstream out("../tests/IRT_builder/dots/" + filename + "_" + it->first + ".dot", std::fstream::out);
+        out << printVisitor.GetResult();
+        out.close();
     }
 }
 
@@ -119,17 +127,18 @@ int main( int argc, char **argv ) {
             std::string filename = entry->d_name;
             std::string java_extension = ".java";
             if ( filename.rfind( java_extension ) == filename.length( ) - java_extension.length( )) {
-                make_test( tests_dir + testfiles_dir + filename, tests_dir + results_dir + filename );
+                make_test( filename, tests_dir + testfiles_dir + filename, tests_dir + results_dir + filename );
             }
         };
 
         closedir( dir );
 
-    } else {
-        for ( size_t i = 1; i < argc; i++ ) {
-            std::string filename = argv[ i ];
-            make_test( filename, std::to_string( i ) + "res.java" );
-        }
     }
+//    else {
+//        for ( size_t i = 1; i < argc; i++ ) {
+//            std::string filename = argv[ i ];
+//            make_test( filename, filename, std::to_string( i ) + "res.java" );
+//        }
+//    }
     return 0;
 }
