@@ -27,52 +27,76 @@
 
 extern int line_number, column_number;
 
-void make_test( std::string testfile_name, std::string result_name ) {
-    std::cout << "in make_test, testfile_name: " << testfile_name << " result_name: " << result_name << "\n";
+CProgram* parseCodeWithLex(const std::string& testfile_name) {
     CProgram *cProgram;
-    std::stringstream buffer;
     line_number = 1;
     column_number = 1;
-    buffer << testfile_name;
-    std::cout << std::endl << "Processing: " << buffer.str( ) << std::endl;
+    std::cout << std::endl << "Processing: " << testfile_name << std::endl;
     yyin = fopen( testfile_name.c_str( ), "r" );
-    buffer << "-out.txt";
     yyrestart( yyin );
-//    std::cout << cProgram << "\n";
     yyparse( &cProgram );
-//    std::cout << cProgram << "\n";
     fclose( yyin );
+}
 
-    buffer.str( "" );
-    std::unique_ptr<CProgram> program = std::unique_ptr<CProgram>( cProgram );
+struct SymbolTableRes {
+    std::shared_ptr<SymbolTable> symbolTable;
+    std::vector<CError> errors;
+};
+
+SymbolTableRes constructSymbolTable(CProgram* program) {
     CConstructSymbolTableVisitor symbol_table_visitor = CConstructSymbolTableVisitor( );
-//    std::cout << program.get( ) << "\n";
     program->Accept( symbol_table_visitor );
-    CTypeCheckerVisitor type_checker_visitor = CTypeCheckerVisitor( symbol_table_visitor.GetSymbolTable( ));
+
+    SymbolTableRes res;
+    res.symbolTable = symbol_table_visitor.GetSymbolTable();
+    res.errors = symbol_table_visitor.GetErrors();
+
+    return res;
+}
+
+std::vector<CError> runTypeChecker(CProgram* program, std::shared_ptr<SymbolTable> symbolTable) {
+    CTypeCheckerVisitor type_checker_visitor = CTypeCheckerVisitor( symbolTable );
     program->Accept( type_checker_visitor );
-    std::ofstream out( result_name, std::fstream::out );
-//    symbol_table_visitor.GetSymbolTable( )->Print( out );
-    std::vector<CError> symbol_table_errors = symbol_table_visitor.GetErrors( );
-    std::vector<CError> type_checker_errors = type_checker_visitor.GetErrors( );
-    std::cout << "total number of errors: " << symbol_table_errors.size( ) + type_checker_errors.size( ) << "\n";
-    if ( symbol_table_errors.size( ) + type_checker_errors.size( ) == 0 ) {
-        std::cout << "building IRTrees\n";
-        CBuildVisitor iRTVisitor = CBuildVisitor( symbol_table_visitor.GetSymbolTable( ).get( ));
-        program->Accept( iRTVisitor );
-        std::shared_ptr<const MethodToIRTMap> trees = iRTVisitor.GetMethodFromIrtMap();
-        for ( auto it = trees->begin(); it != trees->end(); ++it) {
-            out << "parsed tree\n";
-        }
+
+    return type_checker_visitor.GetErrors();
+}
+
+void writeErrors(const std::string& description, const std::vector<CError>& errors) {
+    std::cout << description << "\n";
+
+    for (auto error : errors) {
+        std::cout << error.GetPosition( ).GetStringPosition( ) << " " << error.GetMessage( ) << "\n";
     }
-// else {
-//        for ( auto error: symbol_table_errors ) {
-//            out << error.GetPosition( ).GetStringPosition( ) << " " << error.GetMessage( ) << "\n";
-//        }
-//        for ( auto error: type_checker_errors ) {
-//            out << error.GetPosition( ).GetStringPosition( ) << " " << error.GetMessage( ) << "\n";
-//        }
-//    }
-    out.close( );
+}
+
+void make_test( std::string testfile_name, std::string result_name ) {
+    std::cout << "\n\n\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
+    std::cout << "in make_test, testfile_name: " << testfile_name << " result_name: " << result_name << "\n";
+
+    // LEX
+    std::unique_ptr<CProgram> program = std::unique_ptr<CProgram>( parseCodeWithLex(testfile_name) );
+
+    // SYMBOL TABLE
+    SymbolTableRes symbolTableRes = constructSymbolTable(program.get());
+    if (symbolTableRes.errors.size() != 0) {
+        writeErrors("Symbol table errors:", symbolTableRes.errors);
+        return;
+    }
+
+    // TYPE CHECKER START
+    std::vector<CError> typeCheckerErrors = runTypeChecker(program.get(), symbolTableRes.symbolTable);
+    if (typeCheckerErrors.size() != 0) {
+        writeErrors("Type checker errors:", typeCheckerErrors);
+        return;
+    }
+
+    std::cout << "building IRTrees\n";
+    CBuildVisitor iRTVisitor = CBuildVisitor( symbolTableRes.symbolTable.get( ));
+    program->Accept( iRTVisitor );
+    std::shared_ptr<const MethodToIRTMap> trees = iRTVisitor.GetMethodFromIrtMap();
+    for ( auto it = trees->begin(); it != trees->end(); ++it) {
+        std::cout << it->first << "\n";
+    }
 }
 
 int main( int argc, char **argv ) {
@@ -109,4 +133,3 @@ int main( int argc, char **argv ) {
     }
     return 0;
 }
-
