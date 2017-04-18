@@ -20,7 +20,7 @@ void IRT::PrintVisitor::Visit( const IRT::CBinopExpression &expression ) {
     answers.PushBack( operationDescription, operationId );
 
     AddChildrenAnswers( answers );
-    AddLabel( "CompExp" );
+    AddLabel( "BinopExp" );
     ++lastVisited;
 }
 
@@ -153,7 +153,7 @@ void IRT::PrintVisitor::Visit( const IRT::CStatementList &statement ) {
 }
 
 std::string IRT::PrintVisitor::GetResult( ) {
-    return description;
+    return "digraph G{\ngraph[ordering=\"out\"];\n" + description + "}\n";
 }
 
 IRT::PrintVisitor::PrintVisitor( ) {

@@ -142,6 +142,7 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
     }
     std::string callerName;
     if( expression.classOwner ) {
+        // TODO!!!
         callerName = expression.classOwner->name;
     } else {
         callerName = currentClassName;
@@ -540,6 +541,8 @@ void CBuildVisitor::Visit( CMethod &statement ) {
                 )))
         ));
     }
+
+    treesOfMethods->emplace( methodFullName, std::move( wrapper->ToStatement()));
 }
 
 void CBuildVisitor::Visit( CMethodList &stm ) {
