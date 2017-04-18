@@ -169,7 +169,7 @@ class CCallMethodExp : public IExpression {
 public: 
 	CCallMethodExp(CIdExp* _classOwner, CIdExp* _methodName, CExpList* _args);
 	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<CIdExp> classOwner;
+	std::unique_ptr<CIdExp> objectName;
 	std::unique_ptr<CIdExp> methodName;
 	std::unique_ptr<CExpList> args;
 };

@@ -85,8 +85,8 @@ void CConstructSymbolTableVisitor::Visit( CGetFieldExp &exp )
 
 void CConstructSymbolTableVisitor::Visit( CCallMethodExp &exp )
 {
-	if( exp.classOwner ) {
-		exp.classOwner->Accept( *this );
+	if( exp.objectName ) {
+		exp.objectName->Accept( *this );
 	}
 	if( exp.methodName ) {
 		exp.methodName->Accept( *this );

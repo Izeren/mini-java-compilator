@@ -92,6 +92,9 @@ private:
     const SymbolTable *symbolTable;
 
     std::string currentClassName;
+
+	std::string currentMethod;
+
     FramesMap frames;
     IRT::CFrame *currentFrame;
 

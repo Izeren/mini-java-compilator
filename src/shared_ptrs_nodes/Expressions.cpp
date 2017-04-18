@@ -173,7 +173,7 @@ void CGetFieldExp::Accept( IVisitor &visitor ) {
 
 CCallMethodExp::CCallMethodExp( CIdExp *_classOwner, CIdExp *_methodName, CExpList *_args ) {
     this->position = _methodName->position;
-    classOwner = std::unique_ptr<CIdExp>( _classOwner );
+    objectName = std::unique_ptr<CIdExp>( _classOwner );
     methodName = std::unique_ptr<CIdExp>( _methodName );
     args = std::unique_ptr<CExpList>( _args );
 }

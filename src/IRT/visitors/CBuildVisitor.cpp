@@ -141,17 +141,21 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
         (*it)->Accept( *this );
         expressionListIrt->Add( std::move( wrapper->ToExpression()));
     }
-    std::string callerName;
-    if( expression.classOwner ) {
-        // TODO!!!
-        callerName = expression.classOwner->name;
+    std::string methodOwnerClassName;
+    if( expression.objectName ) {
+        methodOwnerClassName = getMethodClassNameByObject(symbolTable,
+                                                          currentClassName,
+                                                          currentMethod,
+                                                          expression.objectName->name);
     } else {
-        callerName = currentClassName;
+        assert(false);
+//        methodOwnerClassName = currentClassName;
     }
+
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             new IRT::CCallExpression(
                     std::unique_ptr<const IRT::CExpression>( new IRT::CNameExpression(
-                            IRT::CLabel( GetMethodFullName( callerName, expression.methodName->name ))
+                            IRT::CLabel( GetMethodFullName( methodOwnerClassName, expression.methodName->name ))
                     )),
                     std::unique_ptr<const IRT::CExpressionList>( expressionListIrt ))
     ));
@@ -504,6 +508,7 @@ void CBuildVisitor::Visit( CArgumentList &stm ) {
 void CBuildVisitor::Visit( CMethod &statement ) {
 
     std::cout << "IRT builder: CMethodStm\n";
+    currentMethod = statement.name->name;
     buildNewFrame( &statement );
     std::string methodFullName = GetMethodFullName( currentFrame->GetClassName(), currentFrame->GetMethodName());
 
@@ -571,6 +576,7 @@ void CBuildVisitor::Visit( CMainMethod &stm ) {
 
 void CBuildVisitor::Visit( CMainClass &statement ) {
     std::cout << "IRT builder: CMainClass\n";
+    currentMethod = MAIN_NAME;
     currentClassName = statement.id->name;
     buildNewFrame( &statement );
     std::string methodFullName = GetMethodFullName( currentFrame->GetClassName(), currentFrame->GetMethodName());

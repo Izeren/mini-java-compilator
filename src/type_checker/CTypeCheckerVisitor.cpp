@@ -339,8 +339,8 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
     if( exp.args && exp.methodName ) {
         std::string identifierName = currentClass->name;
         bool isThis = true;
-        if ( exp.classOwner ) {
-            exp.classOwner->Accept( *this );
+        if ( exp.objectName ) {
+            exp.objectName->Accept( *this );
             if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
                 return;
             }
