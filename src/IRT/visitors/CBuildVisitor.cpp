@@ -5,21 +5,22 @@
 #include "../../shared_ptrs_nodes/Expressions.h"
 #include "CBuildVisitor.h"
 #include "../../bison.hpp"
+#include "../../symbol_table/CConstructSymbolTableVisitor.h"
 #include <list>
 #include <set>
 
 void CBuildVisitor::Visit( CIdExp &expression ) {
     std::cout << "IRT builder: CIdExp\n";
     const IRT::IAddress *address = currentFrame->GetAddress( expression.name );
-    if( address ) {
-        std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes.at( currentFrame->GetClassName());
-        auto varInfoIt = classDefinition->fields->variables.find( expression.name );
 
-        updateSubtreeWrapper( new IRT::CExpressionWrapper(
-                std::move( address->ToExpression())
-        ));
+    assert(address != NULL);
 
-    }
+    std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes.at( currentFrame->GetClassName());
+    auto varInfoIt = classDefinition->fields->variables.find( expression.name );
+
+    updateSubtreeWrapper( new IRT::CExpressionWrapper(
+            std::move( address->ToExpression())
+    ));
 }
 
 void CBuildVisitor::Visit( CIdPtrExp &exp ) {
@@ -567,6 +568,7 @@ void CBuildVisitor::Visit( CMainMethod &stm ) {
 
 void CBuildVisitor::Visit( CMainClass &statement ) {
     std::cout << "IRT builder: CMainClass\n";
+    currentClassName = statement.id->name;
     buildNewFrame( &statement );
     std::string methodFullName = GetMethodFullName( currentFrame->GetClassName(), currentFrame->GetMethodName());
 
@@ -693,6 +695,10 @@ void CBuildVisitor::buildNewFrame( const CMethod *declaration ) {
 
 void CBuildVisitor::buildNewFrame( const CMainClass *mainClass ) {
     std::list<std::string> emptySet;
+    std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes.at( currentClassName );
+    std::shared_ptr<const MethodInfo> methodDefinition = classDefinition->methods.at( MAIN_NAME );
+    auto localNames = methodDefinition->fields->variableNames;
+
     buildNewFrame( mainClass->id->name, "main", emptySet.end(), emptySet.end(),
-                   emptySet.end(), emptySet.end(), emptySet.end(), emptySet.end());
+                   localNames.begin(), localNames.end(), emptySet.end(), emptySet.end());
 }
