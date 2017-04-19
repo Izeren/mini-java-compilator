@@ -76,20 +76,6 @@ void CPrintStm::Accept(IVisitor &visitor) {
 }
 
 
-//CSimpleStm:
-//-------------------------------------------------------------------------------------------------
-
-CSimpleStm::CSimpleStm() : CSimpleStm(NULL) {}
-
-CSimpleStm::CSimpleStm(IStatement* statement) {
-	this->statement = std::unique_ptr<IStatement>(statement);
-}
-
-void CSimpleStm::Accept(IVisitor &visitor) {
-	visitor.Visit(*this);
-}
-
-
 //CIfStm:
 //-------------------------------------------------------------------------------------------------
 

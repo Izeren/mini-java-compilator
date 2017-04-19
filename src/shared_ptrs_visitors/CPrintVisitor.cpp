@@ -250,13 +250,6 @@ void CPrintVisitor::Visit(CPrintStm &stm) {
 	++lastVisited;
 }
 
-void CPrintVisitor::Visit(CSimpleStm &stm) {
-	std::vector<INode*> children = { stm.statement.get() };
-	AddChildrenAnswers(VisitChildren(children));
-	AddLabel("CompoundStm");
-	++lastVisited;
-}
-
 void CPrintVisitor::Visit(CIfStm &stm) {
 	std::vector<INode*> children = { 
 		stm.conditionExpression.get(), 

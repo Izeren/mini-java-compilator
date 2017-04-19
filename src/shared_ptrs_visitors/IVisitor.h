@@ -22,7 +22,6 @@ class CAssignStm;
 class CAssignSubscriptStm;
 class CCompoundStm;
 class CPrintStm;
-class CSimpleStm;
 class CIfStm;
 class CWhileStm;
 
@@ -63,7 +62,6 @@ public:
 	virtual void Visit(CAssignSubscriptStm &stm) = 0;
 	virtual void Visit(CCompoundStm &stm) = 0;
 	virtual void Visit(CPrintStm &stm) = 0;
-	virtual void Visit(CSimpleStm &stm) = 0;
 	virtual void Visit(CIfStm &stm) = 0;
 	virtual void Visit(CWhileStm &stm) = 0;
 

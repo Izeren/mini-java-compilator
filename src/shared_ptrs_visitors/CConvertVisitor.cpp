@@ -222,13 +222,6 @@ void CConvertVisitor::Visit(CPrintStm &stm) {
 
 }
 
-void CConvertVisitor::Visit(CSimpleStm &stm) {
-	if (stm.statement) {
-		stm.statement->Accept(*this);
-		this->code += ";\n";
-	}
-}
-
 void CConvertVisitor::Visit(CIfStm &stm) {
 	this->code += "if (";
 	if (stm.conditionExpression) {

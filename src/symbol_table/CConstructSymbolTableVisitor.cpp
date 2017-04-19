@@ -191,13 +191,6 @@ void CConstructSymbolTableVisitor::Visit( CPrintStm &stm )
 
 }
 
-void CConstructSymbolTableVisitor::Visit( CSimpleStm &stm )
-{
-	if( stm.statement ) {
-		stm.statement->Accept( *this );
-	}
-}
-
 void CConstructSymbolTableVisitor::Visit( CIfStm &stm )
 {
 	if( stm.conditionExpression ) {

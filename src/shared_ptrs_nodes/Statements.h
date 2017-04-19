@@ -62,19 +62,6 @@ public:
 };
 
 
-//CSimpleStm:
-//-------------------------------------------------------------------------------------------------
-
-class CSimpleStm : public IStatement {
-public:
-	CSimpleStm();
-	CSimpleStm(IStatement* statement);
-	void Accept(IVisitor &visitor) override;
-
-	std::unique_ptr<IStatement> statement;
-};
-
-
 //CIfStm:
 //-------------------------------------------------------------------------------------------------
 

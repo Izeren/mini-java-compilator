@@ -34,7 +34,6 @@ public:
 	void Visit(CAssignSubscriptStm &stm) override;
 	void Visit(CCompoundStm &stm) override;
 	void Visit(CPrintStm &stm) override;
-	void Visit(CSimpleStm &stm) override;
 	void Visit(CIfStm &stm) override;
 	void Visit(CWhileStm &stm) override;
 

@@ -364,11 +364,6 @@ void CBuildVisitor::Visit( CPrintStm &statement ) {
     ));
 }
 
-void CBuildVisitor::Visit( CSimpleStm &statement ) {
-//    Old dummy class (not used)
-    assert( false );
-}
-
 void CBuildVisitor::Visit( CIfStm &statement ) {
     std::cout << "IRT builder: CIfStm\n";
     statement.conditionExpression->Accept( *this );

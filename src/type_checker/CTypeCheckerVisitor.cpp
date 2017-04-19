@@ -617,14 +617,7 @@ void CTypeCheckerVisitor::Visit( CPrintStm &stm )
     }
 }
 
-void CTypeCheckerVisitor::Visit( CSimpleStm &stm )
-{
-    std::cout << "typechecker: CSimpleStm\n";
-
-    lastCalculatedType = enums::TPrimitiveType::VOID;
-}
-
-void CTypeCheckerVisitor::Visit( CIfStm &stm ) 
+void CTypeCheckerVisitor::Visit( CIfStm &stm )
 {
     std::cout << "typechecker: CIfStm\n";
 
