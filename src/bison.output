@@ -1,4 +1,4 @@
-State 96 conflicts: 1 shift/reduce
+State 88 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -61,7 +61,7 @@ Grammar
    39           | Expression MOD Expression
    40           | Expression LBRACKET Expression RBRACKET
    41           | Expression DOT LENGTH
-   42           | Identifier DOT Identifier LPAREN ExpressionList RPAREN
+   42           | Expression DOT Identifier LPAREN ExpressionList RPAREN
    43           | THIS DOT Identifier LPAREN ExpressionList RPAREN
    44           | MINUS Expression
    45           | NUM
@@ -73,14 +73,15 @@ Grammar
    51           | NEW Identifier LPAREN RPAREN
    52           | NOT Expression
    53           | LPAREN Expression RPAREN
+   54           | THIS
 
-   54 NonEmptyExpressionList: Expression
-   55                       | NonEmptyExpressionList COMMA Expression
+   55 NonEmptyExpressionList: Expression
+   56                       | NonEmptyExpressionList COMMA Expression
 
-   56 ExpressionList: %empty
-   57               | NonEmptyExpressionList
+   57 ExpressionList: %empty
+   58               | NonEmptyExpressionList
 
-   58 Identifier: ID
+   59 Identifier: ID
 
 
 Terminals, with rules where they appear
@@ -90,7 +91,7 @@ error (256)
 NEW (258) 50 51
 CLASS (259) 2 6 7
 EXTENDS (260) 7
-THIS (261) 43 49
+THIS (261) 43 49 54
 RETURN (262) 8 9
 PUBLIC (263) 3 8
 PRIVATE (264) 9
@@ -107,14 +108,14 @@ WHILE (274) 28
 IF (275) 27
 ELSE (276) 27
 NUM (277) 45
-ID (278) 58
+ID (278) 59
 LPAREN (279) 3 8 9 27 28 29 42 43 51 53
 RPAREN (280) 3 8 9 27 28 29 42 43 51 53
 LBRACKET (281) 3 31 40 50
 RBRACKET (282) 3 31 40 50
 LBRACE (283) 2 3 6 7 8 9 26
 RBRACE (284) 2 3 6 7 8 9 26
-COMMA (285) 21 55
+COMMA (285) 21 56
 DOT (286) 41 42 43 49
 SEMI (287) 8 9 12 29 30 31
 AND (288) 35
@@ -167,14 +168,14 @@ Statement (60)
     on left: 26 27 28 29 30 31, on right: 25 27 28
 Expression (61)
     on left: 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
-    50 51 52 53, on right: 8 9 27 28 29 30 31 32 33 34 35 36 37 38
-    39 40 41 44 50 52 53 54 55
+    50 51 52 53 54, on right: 8 9 27 28 29 30 31 32 33 34 35 36 37
+    38 39 40 41 42 44 50 52 53 55 56
 NonEmptyExpressionList (62)
-    on left: 54 55, on right: 55 57
+    on left: 55 56, on right: 56 58
 ExpressionList (63)
-    on left: 56 57, on right: 42 43
+    on left: 57 58, on right: 42 43
 Identifier (64)
-    on left: 58, on right: 2 3 6 7 8 9 12 15 19 30 31 42 43 48 49 51
+    on left: 59, on right: 2 3 6 7 8 9 12 15 19 30 31 42 43 48 49 51
 
 
 State 0
@@ -214,9 +215,9 @@ State 3
 
 State 4
 
-   58 Identifier: ID .
+   59 Identifier: ID .
 
-    $default  reduce using rule 58 (Identifier)
+    $default  reduce using rule 59 (Identifier)
 
 
 State 5
@@ -1070,8 +1071,12 @@ State 88
 
    43 Expression: THIS . DOT Identifier LPAREN ExpressionList RPAREN
    49           | THIS . DOT Identifier
+   54           | THIS .
 
     DOT  shift, and go to state 106
+
+    DOT       [reduce using rule 54 (Expression)]
+    $default  reduce using rule 54 (Expression)
 
 
 State 89
@@ -1162,6 +1167,7 @@ State 95
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     RPAREN    shift, and go to state 110
     LBRACKET  shift, and go to state 111
@@ -1178,12 +1184,8 @@ State 95
 
 State 96
 
-   42 Expression: Identifier . DOT Identifier LPAREN ExpressionList RPAREN
-   48           | Identifier .
+   48 Expression: Identifier .
 
-    DOT  shift, and go to state 121
-
-    DOT       [reduce using rule 48 (Expression)]
     $default  reduce using rule 48 (Expression)
 
 
@@ -1200,8 +1202,9 @@ State 97
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
-    RPAREN    shift, and go to state 122
+    RPAREN    shift, and go to state 121
     LBRACKET  shift, and go to state 111
     DOT       shift, and go to state 112
     AND       shift, and go to state 113
@@ -1227,8 +1230,9 @@ State 98
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
-    RPAREN    shift, and go to state 123
+    RPAREN    shift, and go to state 122
     LBRACKET  shift, and go to state 111
     DOT       shift, and go to state 112
     AND       shift, and go to state 113
@@ -1261,9 +1265,10 @@ State 100
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     LBRACKET  shift, and go to state 111
-    RBRACKET  shift, and go to state 124
+    RBRACKET  shift, and go to state 123
     DOT       shift, and go to state 112
     AND       shift, and go to state 113
     OR        shift, and go to state 114
@@ -1288,10 +1293,11 @@ State 101
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     LBRACKET  shift, and go to state 111
     DOT       shift, and go to state 112
-    SEMI      shift, and go to state 125
+    SEMI      shift, and go to state 124
     AND       shift, and go to state 113
     OR        shift, and go to state 114
     PLUS      shift, and go to state 115
@@ -1315,10 +1321,11 @@ State 102
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     LBRACKET  shift, and go to state 111
     DOT       shift, and go to state 112
-    SEMI      shift, and go to state 126
+    SEMI      shift, and go to state 125
     AND       shift, and go to state 113
     OR        shift, and go to state 114
     PLUS      shift, and go to state 115
@@ -1342,10 +1349,11 @@ State 103
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     LBRACKET  shift, and go to state 111
     DOT       shift, and go to state 112
-    SEMI      shift, and go to state 127
+    SEMI      shift, and go to state 126
     AND       shift, and go to state 113
     OR        shift, and go to state 114
     PLUS      shift, and go to state 115
@@ -1360,14 +1368,14 @@ State 104
 
    50 Expression: NEW INT . LBRACKET Expression RBRACKET
 
-    LBRACKET  shift, and go to state 128
+    LBRACKET  shift, and go to state 127
 
 
 State 105
 
    51 Expression: NEW Identifier . LPAREN RPAREN
 
-    LPAREN  shift, and go to state 129
+    LPAREN  shift, and go to state 128
 
 
 State 106
@@ -1377,7 +1385,7 @@ State 106
 
     ID  shift, and go to state 4
 
-    Identifier  go to state 130
+    Identifier  go to state 129
 
 
 State 107
@@ -1392,9 +1400,10 @@ State 107
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
    53           | LPAREN Expression . RPAREN
 
-    RPAREN    shift, and go to state 131
+    RPAREN    shift, and go to state 130
     LBRACKET  shift, and go to state 111
     DOT       shift, and go to state 112
     AND       shift, and go to state 113
@@ -1419,6 +1428,7 @@ State 108
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
    44           | MINUS Expression .
 
     AND      shift, and go to state 113
@@ -1441,6 +1451,7 @@ State 109
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
    52           | NOT Expression .
 
     AND      shift, and go to state 113
@@ -1459,7 +1470,7 @@ State 110
 
    29 Statement: PRINTLN LPAREN Expression RPAREN . SEMI
 
-    SEMI  shift, and go to state 132
+    SEMI  shift, and go to state 131
 
 
 State 111
@@ -1476,15 +1487,19 @@ State 111
     MINUS   shift, and go to state 93
     NOT     shift, and go to state 94
 
-    Expression  go to state 133
+    Expression  go to state 132
     Identifier  go to state 96
 
 
 State 112
 
    41 Expression: Expression DOT . LENGTH
+   42           | Expression DOT . Identifier LPAREN ExpressionList RPAREN
 
-    LENGTH  shift, and go to state 134
+    LENGTH  shift, and go to state 133
+    ID      shift, and go to state 4
+
+    Identifier  go to state 134
 
 
 State 113
@@ -1633,16 +1648,21 @@ State 120
 
 State 121
 
-   42 Expression: Identifier DOT . Identifier LPAREN ExpressionList RPAREN
+   28 Statement: WHILE LPAREN Expression RPAREN . Statement
 
-    ID  shift, and go to state 4
+    PRINTLN  shift, and go to state 67
+    WHILE    shift, and go to state 68
+    IF       shift, and go to state 69
+    ID       shift, and go to state 4
+    LBRACE   shift, and go to state 70
 
-    Identifier  go to state 143
+    Statement   go to state 143
+    Identifier  go to state 80
 
 
 State 122
 
-   28 Statement: WHILE LPAREN Expression RPAREN . Statement
+   27 Statement: IF LPAREN Expression RPAREN . Statement ELSE Statement
 
     PRINTLN  shift, and go to state 67
     WHILE    shift, and go to state 68
@@ -1656,47 +1676,33 @@ State 122
 
 State 123
 
-   27 Statement: IF LPAREN Expression RPAREN . Statement ELSE Statement
+   31 Statement: Identifier LBRACKET Expression RBRACKET . ASSIGN Expression SEMI
 
-    PRINTLN  shift, and go to state 67
-    WHILE    shift, and go to state 68
-    IF       shift, and go to state 69
-    ID       shift, and go to state 4
-    LBRACE   shift, and go to state 70
-
-    Statement   go to state 145
-    Identifier  go to state 80
+    ASSIGN  shift, and go to state 145
 
 
 State 124
-
-   31 Statement: Identifier LBRACKET Expression RBRACKET . ASSIGN Expression SEMI
-
-    ASSIGN  shift, and go to state 146
-
-
-State 125
 
    30 Statement: Identifier ASSIGN Expression SEMI .
 
     $default  reduce using rule 30 (Statement)
 
 
-State 126
+State 125
 
     8 MethodDeclaration: PUBLIC Type Identifier LPAREN ArgumentList RPAREN LBRACE VarDeclarationList StatementList RETURN Expression SEMI . RBRACE
+
+    RBRACE  shift, and go to state 146
+
+
+State 126
+
+    9 MethodDeclaration: PRIVATE Type Identifier LPAREN ArgumentList RPAREN LBRACE VarDeclarationList StatementList RETURN Expression SEMI . RBRACE
 
     RBRACE  shift, and go to state 147
 
 
 State 127
-
-    9 MethodDeclaration: PRIVATE Type Identifier LPAREN ArgumentList RPAREN LBRACE VarDeclarationList StatementList RETURN Expression SEMI . RBRACE
-
-    RBRACE  shift, and go to state 148
-
-
-State 128
 
    50 Expression: NEW INT LBRACKET . Expression RBRACKET
 
@@ -1710,42 +1716,42 @@ State 128
     MINUS   shift, and go to state 93
     NOT     shift, and go to state 94
 
-    Expression  go to state 149
+    Expression  go to state 148
     Identifier  go to state 96
+
+
+State 128
+
+   51 Expression: NEW Identifier LPAREN . RPAREN
+
+    RPAREN  shift, and go to state 149
 
 
 State 129
 
-   51 Expression: NEW Identifier LPAREN . RPAREN
-
-    RPAREN  shift, and go to state 150
-
-
-State 130
-
    43 Expression: THIS DOT Identifier . LPAREN ExpressionList RPAREN
    49           | THIS DOT Identifier .
 
-    LPAREN  shift, and go to state 151
+    LPAREN  shift, and go to state 150
 
     $default  reduce using rule 49 (Expression)
 
 
-State 131
+State 130
 
    53 Expression: LPAREN Expression RPAREN .
 
     $default  reduce using rule 53 (Expression)
 
 
-State 132
+State 131
 
    29 Statement: PRINTLN LPAREN Expression RPAREN SEMI .
 
     $default  reduce using rule 29 (Statement)
 
 
-State 133
+State 132
 
    32 Expression: Expression . PLUS Expression
    33           | Expression . MINUS Expression
@@ -1758,9 +1764,10 @@ State 133
    40           | Expression . LBRACKET Expression RBRACKET
    40           | Expression LBRACKET Expression . RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     LBRACKET  shift, and go to state 111
-    RBRACKET  shift, and go to state 152
+    RBRACKET  shift, and go to state 151
     DOT       shift, and go to state 112
     AND       shift, and go to state 113
     OR        shift, and go to state 114
@@ -1772,11 +1779,18 @@ State 133
     GREATER   shift, and go to state 120
 
 
-State 134
+State 133
 
    41 Expression: Expression DOT LENGTH .
 
     $default  reduce using rule 41 (Expression)
+
+
+State 134
+
+   42 Expression: Expression DOT Identifier . LPAREN ExpressionList RPAREN
+
+    LPAREN  shift, and go to state 152
 
 
 State 135
@@ -1792,6 +1806,7 @@ State 135
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     OR  shift, and go to state 114
 
@@ -1811,6 +1826,7 @@ State 136
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     $default  reduce using rule 36 (Expression)
 
@@ -1828,6 +1844,7 @@ State 137
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     AND      shift, and go to state 113
     OR       shift, and go to state 114
@@ -1850,6 +1867,7 @@ State 138
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     AND      shift, and go to state 113
     OR       shift, and go to state 114
@@ -1872,6 +1890,7 @@ State 139
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     AND      shift, and go to state 113
     OR       shift, and go to state 114
@@ -1896,6 +1915,7 @@ State 140
    39           | Expression MOD Expression .
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     AND      shift, and go to state 113
     OR       shift, and go to state 114
@@ -1920,6 +1940,7 @@ State 141
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     AND  shift, and go to state 113
     OR   shift, and go to state 114
@@ -1940,6 +1961,7 @@ State 142
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     AND  shift, and go to state 113
     OR   shift, and go to state 114
@@ -1949,26 +1971,19 @@ State 142
 
 State 143
 
-   42 Expression: Identifier DOT Identifier . LPAREN ExpressionList RPAREN
-
-    LPAREN  shift, and go to state 153
-
-
-State 144
-
    28 Statement: WHILE LPAREN Expression RPAREN Statement .
 
     $default  reduce using rule 28 (Statement)
 
 
-State 145
+State 144
 
    27 Statement: IF LPAREN Expression RPAREN Statement . ELSE Statement
 
-    ELSE  shift, and go to state 154
+    ELSE  shift, and go to state 153
 
 
-State 146
+State 145
 
    31 Statement: Identifier LBRACKET Expression RBRACKET ASSIGN . Expression SEMI
 
@@ -1982,25 +1997,25 @@ State 146
     MINUS   shift, and go to state 93
     NOT     shift, and go to state 94
 
-    Expression  go to state 155
+    Expression  go to state 154
     Identifier  go to state 96
 
 
-State 147
+State 146
 
     8 MethodDeclaration: PUBLIC Type Identifier LPAREN ArgumentList RPAREN LBRACE VarDeclarationList StatementList RETURN Expression SEMI RBRACE .
 
     $default  reduce using rule 8 (MethodDeclaration)
 
 
-State 148
+State 147
 
     9 MethodDeclaration: PRIVATE Type Identifier LPAREN ArgumentList RPAREN LBRACE VarDeclarationList StatementList RETURN Expression SEMI RBRACE .
 
     $default  reduce using rule 9 (MethodDeclaration)
 
 
-State 149
+State 148
 
    32 Expression: Expression . PLUS Expression
    33           | Expression . MINUS Expression
@@ -2012,10 +2027,11 @@ State 149
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
    50           | NEW INT LBRACKET Expression . RBRACKET
 
     LBRACKET  shift, and go to state 111
-    RBRACKET  shift, and go to state 156
+    RBRACKET  shift, and go to state 155
     DOT       shift, and go to state 112
     AND       shift, and go to state 113
     OR        shift, and go to state 114
@@ -2027,14 +2043,14 @@ State 149
     GREATER   shift, and go to state 120
 
 
-State 150
+State 149
 
    51 Expression: NEW Identifier LPAREN RPAREN .
 
     $default  reduce using rule 51 (Expression)
 
 
-State 151
+State 150
 
    43 Expression: THIS DOT Identifier LPAREN . ExpressionList RPAREN
 
@@ -2048,24 +2064,24 @@ State 151
     MINUS   shift, and go to state 93
     NOT     shift, and go to state 94
 
-    $default  reduce using rule 56 (ExpressionList)
+    $default  reduce using rule 57 (ExpressionList)
 
-    Expression              go to state 157
-    NonEmptyExpressionList  go to state 158
-    ExpressionList          go to state 159
+    Expression              go to state 156
+    NonEmptyExpressionList  go to state 157
+    ExpressionList          go to state 158
     Identifier              go to state 96
 
 
-State 152
+State 151
 
    40 Expression: Expression LBRACKET Expression RBRACKET .
 
     $default  reduce using rule 40 (Expression)
 
 
-State 153
+State 152
 
-   42 Expression: Identifier DOT Identifier LPAREN . ExpressionList RPAREN
+   42 Expression: Expression DOT Identifier LPAREN . ExpressionList RPAREN
 
     NEW     shift, and go to state 87
     THIS    shift, and go to state 88
@@ -2077,15 +2093,15 @@ State 153
     MINUS   shift, and go to state 93
     NOT     shift, and go to state 94
 
-    $default  reduce using rule 56 (ExpressionList)
+    $default  reduce using rule 57 (ExpressionList)
 
-    Expression              go to state 157
-    NonEmptyExpressionList  go to state 158
-    ExpressionList          go to state 160
+    Expression              go to state 156
+    NonEmptyExpressionList  go to state 157
+    ExpressionList          go to state 159
     Identifier              go to state 96
 
 
-State 154
+State 153
 
    27 Statement: IF LPAREN Expression RPAREN Statement ELSE . Statement
 
@@ -2095,11 +2111,11 @@ State 154
     ID       shift, and go to state 4
     LBRACE   shift, and go to state 70
 
-    Statement   go to state 161
+    Statement   go to state 160
     Identifier  go to state 80
 
 
-State 155
+State 154
 
    31 Statement: Identifier LBRACKET Expression RBRACKET ASSIGN Expression . SEMI
    32 Expression: Expression . PLUS Expression
@@ -2112,10 +2128,11 @@ State 155
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
 
     LBRACKET  shift, and go to state 111
     DOT       shift, and go to state 112
-    SEMI      shift, and go to state 162
+    SEMI      shift, and go to state 161
     AND       shift, and go to state 113
     OR        shift, and go to state 114
     PLUS      shift, and go to state 115
@@ -2126,14 +2143,14 @@ State 155
     GREATER   shift, and go to state 120
 
 
-State 156
+State 155
 
    50 Expression: NEW INT LBRACKET Expression RBRACKET .
 
     $default  reduce using rule 50 (Expression)
 
 
-State 157
+State 156
 
    32 Expression: Expression . PLUS Expression
    33           | Expression . MINUS Expression
@@ -2145,105 +2162,8 @@ State 157
    39           | Expression . MOD Expression
    40           | Expression . LBRACKET Expression RBRACKET
    41           | Expression . DOT LENGTH
-   54 NonEmptyExpressionList: Expression .
-
-    LBRACKET  shift, and go to state 111
-    DOT       shift, and go to state 112
-    AND       shift, and go to state 113
-    OR        shift, and go to state 114
-    PLUS      shift, and go to state 115
-    MINUS     shift, and go to state 116
-    TIMES     shift, and go to state 117
-    MOD       shift, and go to state 118
-    LESS      shift, and go to state 119
-    GREATER   shift, and go to state 120
-
-    $default  reduce using rule 54 (NonEmptyExpressionList)
-
-
-State 158
-
-   55 NonEmptyExpressionList: NonEmptyExpressionList . COMMA Expression
-   57 ExpressionList: NonEmptyExpressionList .
-
-    COMMA  shift, and go to state 163
-
-    $default  reduce using rule 57 (ExpressionList)
-
-
-State 159
-
-   43 Expression: THIS DOT Identifier LPAREN ExpressionList . RPAREN
-
-    RPAREN  shift, and go to state 164
-
-
-State 160
-
-   42 Expression: Identifier DOT Identifier LPAREN ExpressionList . RPAREN
-
-    RPAREN  shift, and go to state 165
-
-
-State 161
-
-   27 Statement: IF LPAREN Expression RPAREN Statement ELSE Statement .
-
-    $default  reduce using rule 27 (Statement)
-
-
-State 162
-
-   31 Statement: Identifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI .
-
-    $default  reduce using rule 31 (Statement)
-
-
-State 163
-
-   55 NonEmptyExpressionList: NonEmptyExpressionList COMMA . Expression
-
-    NEW     shift, and go to state 87
-    THIS    shift, and go to state 88
-    TRUE    shift, and go to state 89
-    FALSE   shift, and go to state 90
-    NUM     shift, and go to state 91
-    ID      shift, and go to state 4
-    LPAREN  shift, and go to state 92
-    MINUS   shift, and go to state 93
-    NOT     shift, and go to state 94
-
-    Expression  go to state 166
-    Identifier  go to state 96
-
-
-State 164
-
-   43 Expression: THIS DOT Identifier LPAREN ExpressionList RPAREN .
-
-    $default  reduce using rule 43 (Expression)
-
-
-State 165
-
-   42 Expression: Identifier DOT Identifier LPAREN ExpressionList RPAREN .
-
-    $default  reduce using rule 42 (Expression)
-
-
-State 166
-
-   32 Expression: Expression . PLUS Expression
-   33           | Expression . MINUS Expression
-   34           | Expression . TIMES Expression
-   35           | Expression . AND Expression
-   36           | Expression . OR Expression
-   37           | Expression . LESS Expression
-   38           | Expression . GREATER Expression
-   39           | Expression . MOD Expression
-   40           | Expression . LBRACKET Expression RBRACKET
-   41           | Expression . DOT LENGTH
-   55 NonEmptyExpressionList: NonEmptyExpressionList COMMA Expression .
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
+   55 NonEmptyExpressionList: Expression .
 
     LBRACKET  shift, and go to state 111
     DOT       shift, and go to state 112
@@ -2257,3 +2177,102 @@ State 166
     GREATER   shift, and go to state 120
 
     $default  reduce using rule 55 (NonEmptyExpressionList)
+
+
+State 157
+
+   56 NonEmptyExpressionList: NonEmptyExpressionList . COMMA Expression
+   58 ExpressionList: NonEmptyExpressionList .
+
+    COMMA  shift, and go to state 162
+
+    $default  reduce using rule 58 (ExpressionList)
+
+
+State 158
+
+   43 Expression: THIS DOT Identifier LPAREN ExpressionList . RPAREN
+
+    RPAREN  shift, and go to state 163
+
+
+State 159
+
+   42 Expression: Expression DOT Identifier LPAREN ExpressionList . RPAREN
+
+    RPAREN  shift, and go to state 164
+
+
+State 160
+
+   27 Statement: IF LPAREN Expression RPAREN Statement ELSE Statement .
+
+    $default  reduce using rule 27 (Statement)
+
+
+State 161
+
+   31 Statement: Identifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI .
+
+    $default  reduce using rule 31 (Statement)
+
+
+State 162
+
+   56 NonEmptyExpressionList: NonEmptyExpressionList COMMA . Expression
+
+    NEW     shift, and go to state 87
+    THIS    shift, and go to state 88
+    TRUE    shift, and go to state 89
+    FALSE   shift, and go to state 90
+    NUM     shift, and go to state 91
+    ID      shift, and go to state 4
+    LPAREN  shift, and go to state 92
+    MINUS   shift, and go to state 93
+    NOT     shift, and go to state 94
+
+    Expression  go to state 165
+    Identifier  go to state 96
+
+
+State 163
+
+   43 Expression: THIS DOT Identifier LPAREN ExpressionList RPAREN .
+
+    $default  reduce using rule 43 (Expression)
+
+
+State 164
+
+   42 Expression: Expression DOT Identifier LPAREN ExpressionList RPAREN .
+
+    $default  reduce using rule 42 (Expression)
+
+
+State 165
+
+   32 Expression: Expression . PLUS Expression
+   33           | Expression . MINUS Expression
+   34           | Expression . TIMES Expression
+   35           | Expression . AND Expression
+   36           | Expression . OR Expression
+   37           | Expression . LESS Expression
+   38           | Expression . GREATER Expression
+   39           | Expression . MOD Expression
+   40           | Expression . LBRACKET Expression RBRACKET
+   41           | Expression . DOT LENGTH
+   42           | Expression . DOT Identifier LPAREN ExpressionList RPAREN
+   56 NonEmptyExpressionList: NonEmptyExpressionList COMMA Expression .
+
+    LBRACKET  shift, and go to state 111
+    DOT       shift, and go to state 112
+    AND       shift, and go to state 113
+    OR        shift, and go to state 114
+    PLUS      shift, and go to state 115
+    MINUS     shift, and go to state 116
+    TIMES     shift, and go to state 117
+    MOD       shift, and go to state 118
+    LESS      shift, and go to state 119
+    GREATER   shift, and go to state 120
+
+    $default  reduce using rule 56 (NonEmptyExpressionList)

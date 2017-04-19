@@ -43,6 +43,7 @@ public:
 	void Visit( CGetFieldByThisExpression &exp ) override;
 	void Visit( CByIndexExpression &exp ) override;
 	void Visit( CNewIdentifier &exp ) override;
+	virtual void Visit(CThisExpression &exp) override ;
 
 	void Visit( CAssignStm &stm ) override;
 	void Visit( CAssignSubscriptStm &stm ) override;
@@ -93,6 +94,9 @@ private:
     std::string currentClassName;
 
 	std::string currentMethod;
+
+	// obj.methodName(); obj -- expression
+	std::string methodObjectClassName;
 
     FramesMap frames;
     IRT::CFrame *currentFrame;

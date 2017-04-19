@@ -166,11 +166,20 @@ class CMethod;
 
 class CCallMethodExp : public IExpression {
 public: 
-	CCallMethodExp(CIdExp* _classOwner, CIdExp* _methodName, CExpList* _args);
+	CCallMethodExp(IExpression* _objectExpression, CIdExp* _methodName, CExpList* _args);
 	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<CIdExp> objectName;
+
+//	std::unique_ptr<CIdExp> objectName;
+	std::unique_ptr<IExpression> objectExpression;
 	std::unique_ptr<CIdExp> methodName;
 	std::unique_ptr<CExpList> args;
+};
+
+//CThisExpression
+class CThisExpression : public IExpression {
+public:
+	CThisExpression();
+	void Accept(IVisitor &visitor) override;
 };
 
 //CGetFieldByThisExpression:

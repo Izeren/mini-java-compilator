@@ -170,9 +170,9 @@ void CGetFieldExp::Accept( IVisitor &visitor ) {
 //CCallMethodExp:
 //-------------------------------------------------------------------------------------------------
 
-CCallMethodExp::CCallMethodExp( CIdExp *_classOwner, CIdExp *_methodName, CExpList *_args ) {
+CCallMethodExp::CCallMethodExp( IExpression* _objectExpression, CIdExp *_methodName, CExpList *_args ) {
     this->position = _methodName->position;
-    objectName = std::unique_ptr<CIdExp>( _classOwner );
+    objectExpression = std::unique_ptr<IExpression>(_objectExpression);
     methodName = std::unique_ptr<CIdExp>( _methodName );
     args = std::unique_ptr<CExpList>( _args );
 }
@@ -262,5 +262,16 @@ CByIndexExpression::CByIndexExpression( IExpression *arrayExpression, IExpressio
 }
 
 void CByIndexExpression::Accept( IVisitor &visitor ) {
+    visitor.Visit( *this );
+}
+
+//CThisExpression
+//-------------------------------------------------------------------------------------------------
+
+CThisExpression::CThisExpression() {
+
+}
+
+void CThisExpression::Accept(IVisitor &visitor) {
     visitor.Visit( *this );
 }

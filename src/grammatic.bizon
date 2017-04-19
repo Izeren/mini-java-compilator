@@ -297,9 +297,9 @@ Expression:
 	|
 	Expression DOT LENGTH { $$ = new CGetLengthExp( (CArrayExpression*) $1 );  }
 	|
-	Identifier DOT Identifier LPAREN ExpressionList RPAREN { $1->isInstance = true; $$ = new CCallMethodExp( $1, $3, (CExpList*) $5) ;  }
+	Expression DOT Identifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( $1, $3, (CExpList*) $5) ;  }
 	|
-	THIS DOT Identifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( 0, $3, (CExpList*) $5) ;  }
+	THIS DOT Identifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( new CThisExpression(), $3, (CExpList*) $5) ;  }
 	|
 	MINUS Expression { $$ = new CUnarMinusExp( $2 ); }
 	|
@@ -319,7 +319,9 @@ Expression:
 	|
 	NOT Expression { $$ = new CNegativeExpression($2);  }
 	|
-	LPAREN Expression RPAREN { $$ = $2; }	
+	LPAREN Expression RPAREN { $$ = $2; }
+	|
+	THIS { $$ = new CThisExpression(); }
 	;
 
 NonEmptyExpressionList:

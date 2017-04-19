@@ -5,6 +5,7 @@ namespace IRT {
     namespace maps {
         const std::map<IRT::enums::TOperationType, std::string> operationTypeToString = {
                 { IRT::enums::TOperationType::PLUS,     "PLUS" },
+                { IRT::enums::TOperationType::MINUS, "MINUS" },
                 { IRT::enums::TOperationType::MULTYPLY, "MULTIPLY" },
                 { IRT::enums::TOperationType::OR,       "OR" },
                 { IRT::enums::TOperationType::AND,      "AND" },
@@ -13,6 +14,7 @@ namespace IRT {
 
         const std::map<IRT::enums::TLogicOperator, std::string> logicOperationToString = {
                 { IRT::enums::TLogicOperator::EQUALS,           "EQUALS" },
+                { IRT::enums::TLogicOperator::NOT_EQUALS,           "NOT EQUALS" },
                 { IRT::enums::TLogicOperator::GREATER,          "GREATER" },
                 { IRT::enums::TLogicOperator::LESS,             "LESS" },
                 { IRT::enums::TLogicOperator::GREATER_OR_EQUAL, "GREATER_OR_EQUAL" },

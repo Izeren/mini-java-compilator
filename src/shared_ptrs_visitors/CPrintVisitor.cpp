@@ -159,7 +159,7 @@ void CPrintVisitor::Visit(CGetFieldExp &exp)
 
 void CPrintVisitor::Visit(CCallMethodExp &exp)
 {
-	std::vector<INode*> children = { exp.objectName.get(), exp.methodName.get(), exp.args.get() };
+	std::vector<INode*> children = { exp.objectExpression.get(), exp.methodName.get(), exp.args.get() };
 	ChildrenAnswers answers = VisitChildren(children);
 	AddChildrenAnswers(answers);
 	AddLabel("CallMethod");

@@ -339,8 +339,8 @@ void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
     if( exp.args && exp.methodName ) {
         std::string identifierName = currentClass->name;
         bool isThis = true;
-        if ( exp.objectName ) {
-            exp.objectName->Accept( *this );
+        if ( exp.objectExpression ) {
+            exp.objectExpression->Accept( *this );
             if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
                 return;
             }
@@ -855,7 +855,11 @@ void CTypeCheckerVisitor::Visit( CMainMethod &stm )
     }
 }
 
-void CTypeCheckerVisitor::Visit( CMainClass &stm ) 
+void CTypeCheckerVisitor::Visit(CThisExpression &exp) {
+    lastCalculatedType = currentClass->name;
+}
+
+void CTypeCheckerVisitor::Visit( CMainClass &stm )
 {
 	std::cout << "typechecker: mainclass\n";
     if( stm.id ) {
@@ -869,7 +873,7 @@ void CTypeCheckerVisitor::Visit( CMainClass &stm )
     currentClass = nullptr;
 }
 
-void CTypeCheckerVisitor::Visit( CProgram &stm ) 
+void CTypeCheckerVisitor::Visit( CProgram &stm )
 {
     std::cout << "typechecker: program\n";
     if( stm.mainClass ) {

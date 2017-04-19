@@ -17,6 +17,7 @@ class CArrayExpression;
 class CGetFieldByThisExpression;
 class CByIndexExpression;
 class CNewIdentifier;
+class CThisExpression;
 
 class CAssignStm;
 class CAssignSubscriptStm;
@@ -57,6 +58,7 @@ public:
 	virtual void Visit(CNewIdentifier &exp) = 0;
 	virtual void Visit(CGetFieldByThisExpression &exp) = 0;
 	virtual void Visit(CByIndexExpression &exp) = 0;
+	virtual void Visit(CThisExpression &exp) = 0;
 
 	virtual void Visit(CAssignStm &stm) = 0;
 	virtual void Visit(CAssignSubscriptStm &stm) = 0;

@@ -18,29 +18,27 @@ int getFieldCountWithSuper(const SymbolTable* table, const std::string& classNam
     return fieldNumberWithSuper;
 }
 
-std::string getMethodClassNameByObject(
-        const SymbolTable* table,
-        const std::string& currentClass,
-        const std::string& currentMethod,
-        const std::string& objectName) {
+std::shared_ptr<VariableInfo>
+getVariableInfoFromLocalArgAndFields(const SymbolTable *table, const std::string& currentClassName,
+                                     const std::string &currentMethod, const std::string &varName) {
 
-    std::shared_ptr<const ClassInfo> clazz = table->classes.at(currentClass);
+    std::shared_ptr<const ClassInfo> clazz = table->classes.at(currentClassName);
     std::shared_ptr<const MethodInfo> method = clazz->methods.at(currentMethod);
 
-    auto argumentIt = method->arguments->variables.find(objectName);
+    auto argumentIt = method->arguments->variables.find(varName);
     if (argumentIt != method->arguments->variables.end()) {
-        return argumentIt->second->type->className;
+        return argumentIt->second;
     }
 
-    auto localVariableIt = method->fields->variables.find(objectName);
+    auto localVariableIt = method->fields->variables.find(varName);
     if (localVariableIt != method->fields->variables.end()) {
-        return localVariableIt->second->type->className;
+        return localVariableIt->second;
     }
 
     while (clazz != NULL) {
-        auto classFieldIt = clazz->fields->variables.find(objectName);
+        auto classFieldIt = clazz->fields->variables.find(varName);
         if (classFieldIt != clazz->fields->variables.end()) {
-            return classFieldIt->second->type->className;
+            return classFieldIt->second;
         }
 
         if (clazz->baseClass != "") {

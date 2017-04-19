@@ -85,8 +85,8 @@ void CConstructSymbolTableVisitor::Visit( CGetFieldExp &exp )
 
 void CConstructSymbolTableVisitor::Visit( CCallMethodExp &exp )
 {
-	if( exp.objectName ) {
-		exp.objectName->Accept( *this );
+	if( exp.objectExpression ) {
+		exp.objectExpression->Accept( *this );
 	}
 	if( exp.methodName ) {
 		exp.methodName->Accept( *this );
@@ -229,6 +229,10 @@ void CConstructSymbolTableVisitor::Visit( CType &stm )
 		info->iType = std::shared_ptr<TypeInfo>( new TypeInfo( info->iName ) );
 		info->iName = curName;
 	}
+}
+
+void CConstructSymbolTableVisitor::Visit(CThisExpression &exp) {
+	// do nothing ?!
 }
 
 void CConstructSymbolTableVisitor::Visit( CField &stm )
@@ -412,7 +416,7 @@ void CConstructSymbolTableVisitor::Visit( CMainMethod &stm )
 		stm.vars->Accept( *this );
 	}
 	info->iMethod->fields = info->iVariables;
-    
+
 	if( stm.statements ) {
 		stm.statements->Accept( *this );
 	}
@@ -459,3 +463,4 @@ std::vector<CError> CConstructSymbolTableVisitor::GetErrors()
 {
 	return errors;
 }
+

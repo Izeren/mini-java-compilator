@@ -5,8 +5,8 @@
 
 int getFieldCountWithSuper(const SymbolTable* table, const std::string& className);
 
-std::string getMethodClassNameByObject(
+std::shared_ptr<VariableInfo> getVariableInfoFromLocalArgAndFields(
         const SymbolTable* table,
-        const std::string& currentClass,
+        const std::string& currentClassName,
         const std::string& currentMethod,
-        const std::string& objectName);
+        const std::string& varName);

@@ -98,8 +98,8 @@ void CConvertVisitor::Visit(CGetFieldExp &exp) {
 }
 
 void CConvertVisitor::Visit(CCallMethodExp &exp) {
-	if (exp.objectName) {
-		exp.objectName->Accept(*this);
+	if (exp.objectExpression) {
+		exp.objectExpression->Accept(*this);
 	}
 	this->code += ".";
 	if (exp.methodName) {

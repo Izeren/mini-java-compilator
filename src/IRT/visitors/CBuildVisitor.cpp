@@ -16,12 +16,16 @@ void CBuildVisitor::Visit( CIdExp &expression ) {
 
     assert(address != NULL);
 
-    std::shared_ptr<const ClassInfo> classDefinition = symbolTable->classes.at( currentFrame->GetClassName());
-    auto varInfoIt = classDefinition->fields->variables.find( expression.name );
-
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             std::move( address->ToExpression())
     ));
+
+    auto varInfo = getVariableInfoFromLocalArgAndFields(symbolTable, currentClassName, currentMethod, expression.name);
+    if (varInfo->type->isPrimitive) {
+        methodObjectClassName = "";
+    } else {
+        methodObjectClassName = varInfo->type->className;
+    }
 }
 
 void CBuildVisitor::Visit( CIdPtrExp &exp ) {
@@ -34,6 +38,8 @@ void CBuildVisitor::Visit( CNumExp &expression ) {
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             new IRT::CConstExpression( expression.number )
     ));
+
+    methodObjectClassName = "";
 }
 
 void CBuildVisitor::Visit( COpExp &expression ) {
@@ -135,31 +141,34 @@ void CBuildVisitor::Visit( CGetFieldExp &exp ) {
 void CBuildVisitor::Visit( CCallMethodExp &expression ) {
 
     std::cout << "IRT builder: CCallMethod\n";
+
+    expression.objectExpression->Accept( *this );
+    std::string mineMethodObjectClassName = methodObjectClassName;
+    assert(mineMethodObjectClassName != "");
+
     IRT::CExpressionList *expressionListIrt = new IRT::CExpressionList();
     std::vector<std::unique_ptr<IExpression> > &arguments = expression.args->exps;
     for( auto it = arguments.begin(); it != arguments.end(); ++it ) {
         (*it)->Accept( *this );
         expressionListIrt->Add( std::move( wrapper->ToExpression()));
     }
-    std::string methodOwnerClassName;
-    if( expression.objectName ) {
-        methodOwnerClassName = getMethodClassNameByObject(symbolTable,
-                                                          currentClassName,
-                                                          currentMethod,
-                                                          expression.objectName->name);
-    } else {
-        assert(false);
-//        methodOwnerClassName = currentClassName;
-    }
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             new IRT::CCallExpression(
                     std::unique_ptr<const IRT::CExpression>( new IRT::CNameExpression(
-                            IRT::CLabel( GetMethodFullName( methodOwnerClassName, expression.methodName->name ))
+                            IRT::CLabel( GetMethodFullName( mineMethodObjectClassName, expression.methodName->name ))
                     )),
                     std::unique_ptr<const IRT::CExpressionList>( expressionListIrt ))
     ));
 
+    std::shared_ptr<ClassInfo> classInfo = symbolTable->classes.at(mineMethodObjectClassName);
+    auto methodInfo = classInfo->methods[expression.methodName->name];
+    auto returnTypeInfo = methodInfo->returnType;
+    if (returnTypeInfo->isPrimitive) {
+        methodObjectClassName = "";
+    } else {
+        methodObjectClassName = returnTypeInfo->className;
+    }
 }
 
 void CBuildVisitor::Visit( CExpList &exp ) {
@@ -267,6 +276,7 @@ void CBuildVisitor::Visit( CNewIdentifier &expression ) {
             ))
     ));
 
+    methodObjectClassName = expression.identifier->name;
 }
 
 void CBuildVisitor::Visit( CAssignStm &statement ) {
@@ -705,4 +715,12 @@ void CBuildVisitor::buildNewFrame( const CMainClass *mainClass ) {
 
     buildNewFrame( mainClass->id->name, "main", emptySet.end(), emptySet.end(),
                    localNames.begin(), localNames.end(), emptySet.end(), emptySet.end());
+}
+
+void CBuildVisitor::Visit(CThisExpression &exp) {
+    updateSubtreeWrapper( new IRT::CExpressionWrapper(
+            std::move( currentFrame->GetThisAddress()->ToExpression() )
+    ) );
+
+    methodObjectClassName = currentClassName;
 }
