@@ -145,9 +145,9 @@ void CUnarMinusExp::Accept( IVisitor &visitor ) {
 //CGetLengthExp:
 //-------------------------------------------------------------------------------------------------
 
-CGetLengthExp::CGetLengthExp( CArrayExpression *_array ) {
+CGetLengthExp::CGetLengthExp( IExpression *_array ) {
     position = _array->position;
-    array = std::unique_ptr<CArrayExpression>( _array );
+    arrayIdentifier = std::unique_ptr<IExpression>( _array );
 }
 
 void CGetLengthExp::Accept( IVisitor &visitor ) {

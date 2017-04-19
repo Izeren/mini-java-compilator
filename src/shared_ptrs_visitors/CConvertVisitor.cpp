@@ -81,8 +81,8 @@ void CConvertVisitor::Visit(CUnarMinusExp &exp) {
 }
 
 void CConvertVisitor::Visit(CGetLengthExp &exp) {
-	if (exp.array) {
-		exp.array->Accept(*this);
+	if (exp.arrayIdentifier) {
+		exp.arrayIdentifier->Accept(*this);
 	}
 	this->code += ".length";
 }

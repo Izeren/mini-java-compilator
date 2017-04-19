@@ -279,8 +279,8 @@ void CTypeCheckerVisitor::Visit( CGetLengthExp &exp )
 {
     std::cout << "typechecker: CGetLengthExp\n";
 
-    if( exp.array ) {
-		exp.array->Accept( *this );
+    if( exp.arrayIdentifier ) {
+		exp.arrayIdentifier->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
         }

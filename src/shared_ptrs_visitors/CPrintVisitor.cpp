@@ -141,7 +141,7 @@ void CPrintVisitor::Visit(CUnarMinusExp &exp) {
 
 void CPrintVisitor::Visit(CGetLengthExp &exp)
 {
-	std::vector<INode*> children = { exp.array.get() };
+	std::vector<INode*> children = { exp.arrayIdentifier.get() };
 	ChildrenAnswers answers = VisitChildren(children);
 	AddChildrenAnswers(answers);
 	AddLabel("Length");

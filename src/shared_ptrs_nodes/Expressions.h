@@ -233,9 +233,9 @@ public:
 //-------------------------------------------------------------------------------------------------
 class CGetLengthExp : public IExpression {
 public: 
-	CGetLengthExp(CArrayExpression* _array);
+	CGetLengthExp(IExpression* _array);
 	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<CArrayExpression> array;
+	std::unique_ptr<IExpression> arrayIdentifier;
 };
 
 

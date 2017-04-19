@@ -57,7 +57,7 @@ class BS{
 
 	aux01 = 0 ;
 	bs01 = false ;
-	//right = number.length ;
+	right = number.length ;
 	right = right - 1 ;
 	left = 0 ;
 	var_cont = true ;

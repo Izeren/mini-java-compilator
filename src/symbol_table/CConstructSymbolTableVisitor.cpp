@@ -68,8 +68,8 @@ void CConstructSymbolTableVisitor::Visit( CUnarMinusExp &exp )
 
 void CConstructSymbolTableVisitor::Visit( CGetLengthExp &exp )
 {
-	if( exp.array ) {
-		exp.array->Accept( *this );
+	if( exp.arrayIdentifier ) {
+		exp.arrayIdentifier->Accept( *this );
 	}
 }
 

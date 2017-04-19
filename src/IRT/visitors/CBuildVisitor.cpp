@@ -118,11 +118,17 @@ void CBuildVisitor::Visit( CUnarMinusExp &expression ) {
 
 void CBuildVisitor::Visit( CGetLengthExp &expression ) {
     std::cout << "IRT builder: CGetLength\n";
-    expression.array->lengthExpression->Accept( *this );
-    std::unique_ptr<const IRT::CExpression> targetExpression = std::move( wrapper->ToExpression());
+    expression.arrayIdentifier->Accept( *this );
+    std::unique_ptr<const IRT::CExpression> containerExpression = std::move( wrapper->ToExpression());
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
-            std::move( targetExpression )
+            new IRT::CMemExpression(
+                    std::move( std::unique_ptr<const IRT::CExpression>( new IRT::CBinopExpression(
+                            std::move( containerExpression ),
+                            std::move( std::unique_ptr<const IRT::CExpression>(new IRT::CConstExpression( 0 ))),
+                            IRT::enums::TOperationType::PLUS
+                                                                        )
+                    )))
     ));
 
 }

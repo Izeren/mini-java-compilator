@@ -295,7 +295,7 @@ Expression:
 	|
 	Expression LBRACKET Expression RBRACKET { $$ = new CByIndexExpression($1, $3);  }
 	|
-	Expression DOT LENGTH { $$ = new CGetLengthExp( (CArrayExpression*) $1 );  }
+	Expression DOT LENGTH { $$ = new CGetLengthExp( $1 );  }
 	|
 	Expression DOT Identifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( $1, $3, (CExpList*) $5) ;  }
 	|
