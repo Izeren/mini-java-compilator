@@ -82,7 +82,7 @@ void CTypeCheckerVisitor::Visit( CIdExp &exp )
 
         if (variableInfoPtr == nullptr) {
             lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
-            errors.push_back(CError(CError::GetUndeclaredVariableErrorMessage(exp.name), exp.position));
+            errors.push_back(CError(CError::GetUndeclaredErrorMessage(exp.name), exp.position));
             return;
         }
 

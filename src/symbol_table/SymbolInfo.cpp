@@ -210,10 +210,6 @@ std::string CError::GetHasNoMemberErrorMessage(const std::string &className, con
 	return errorMessage;
 }
 
-std::string CError::GetUndeclaredVariableErrorMessage( const std::string& variableName) {
-    return  "Variable " + variableName + " undeclared.";
-}
-
 std::string CError::GetNotInitializedVariableErrorMessage( const std::string& variableName) {
     return "Variable " + variableName + " not initialized but has been used.";
 }
