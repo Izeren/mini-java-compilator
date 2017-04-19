@@ -902,7 +902,7 @@ std::shared_ptr<MethodInfo> methodInfo ) {
         }
     }
     auto classVariables = classInfo->fields->variables;
-    if( classVariables.find( variableName ) != classVariables.end() ) {
+    if( classVariables.find( variableName ) == classVariables.end() ) {
         if ( currentClass->baseClass != "" ) {
             return checkVariableVisibility( variableName, table->classes[classInfo->baseClass], nullptr );
         } else {
