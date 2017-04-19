@@ -29,7 +29,6 @@ public:
 	void Visit( CExpList &exp ) override;
 	void Visit( CNegativeExpression &exp ) override;
 	void Visit( CNewArrayExpression &exp ) override;
-	void Visit( CGetFieldByThisExpression &exp ) override;
 	void Visit( CByIndexExpression &exp ) override;
 	void Visit( CNewIdentifier &exp ) override;
 	virtual void Visit(CThisExpression &exp) override;

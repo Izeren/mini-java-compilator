@@ -221,13 +221,6 @@ void CBuildVisitor::Visit( CNewArrayExpression &expression ) {
     ));
 }
 
-void CBuildVisitor::Visit( CGetFieldByThisExpression &exp ) {
-    std::cout << "IRT builder: CGetFieldByThisExpression\n";
-    updateSubtreeWrapper( new IRT::CExpressionWrapper(
-            std::move(currentFrame->GetClassFieldAddress(exp.fieldIdentifier->name)->ToExpression())
-    ));
-}
-
 void CBuildVisitor::Visit( CByIndexExpression &expression ) {
     std::cout << "IRT builder: CByIndexExpression\n";
     expression.identifier->Accept( *this );

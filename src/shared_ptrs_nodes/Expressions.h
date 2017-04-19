@@ -140,12 +140,11 @@ class CField;
 
 class CGetFieldExp : public IExpression {
 public: 
-	CGetFieldExp(CClass* _classOwner, CField* _field);
+	CGetFieldExp(IExpression* _objectExpression, CIdExp* _identifier);
 	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<CClass> classOwner;
-	std::unique_ptr<CField> field;
+	std::unique_ptr<IExpression> objectExpression;
+	std::unique_ptr<CIdExp> fieldIdentifier;
 };
-
 
 //CExpList:
 //-------------------------------------------------------------------------------------------------
@@ -180,17 +179,6 @@ class CThisExpression : public IExpression {
 public:
 	CThisExpression();
 	void Accept(IVisitor &visitor) override;
-};
-
-//CGetFieldByThisExpression:
-//-------------------------------------------------------------------------------------------------
-
-class CGetFieldByThisExpression : public IExpression {
-public:
-	CGetFieldByThisExpression( CIdExp *identifier );
-
-	void Accept(IVisitor &visitor) override;
-	std::unique_ptr<CIdExp> fieldIdentifier;
 };
 
 //CNegativeExpression:

@@ -438,25 +438,7 @@ void CTypeCheckerVisitor::Visit( CNewArrayExpression &exp )
     lastCalculatedType = enums::TPrimitiveType::INT_ARRAY;
 }
 
-void CTypeCheckerVisitor::Visit( CGetFieldByThisExpression &exp )
-{
-    std::cout << "typechecker: CGetFieldByThisExpression\n";
-
-    if( exp.fieldIdentifier ) {
-        auto currentClassFields = currentClass->fields;
-        auto fieldName = exp.fieldIdentifier->name;
-        if( currentClassFields->variables.find( fieldName ) == currentClassFields->variables.end() ) {
-            auto errorMessage = CError::GetHasNoMemberErrorMessage( currentClass->name, fieldName );
-            errors.push_back( CError( errorMessage, exp.position ) );
-            return;
-        }
-        lastCalculatedType = *( currentClassFields->variables[fieldName]->type );
-    } else {
-        errors.push_back( CError( CError::AST_ERROR, exp.position) );
-    }
-}
-
-void CTypeCheckerVisitor::Visit( CByIndexExpression &exp ) 
+void CTypeCheckerVisitor::Visit( CByIndexExpression &exp )
 {
     std::cout << "typechecker: CByIndexExpression\n";
 

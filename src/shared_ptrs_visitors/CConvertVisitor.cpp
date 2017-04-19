@@ -88,12 +88,12 @@ void CConvertVisitor::Visit(CGetLengthExp &exp) {
 }
 
 void CConvertVisitor::Visit(CGetFieldExp &exp) {
-	if (exp.classOwner) {
-		exp.classOwner->Accept(*this);
+	if (exp.objectExpression) {
+		exp.objectExpression->Accept(*this);
 	}
 	this->code += ".";
-	if (exp.field) {
-		exp.field->Accept(*this);
+	if (exp.fieldIdentifier) {
+		exp.fieldIdentifier->Accept(*this);
 	}
 }
 
@@ -151,13 +151,6 @@ void CConvertVisitor::Visit(CNewIdentifier &exp)
 		exp.identifier->Accept(*this);
 	} 
 	this->code += "()";
-}
-
-void CConvertVisitor::Visit(CGetFieldByThisExpression &exp) {
-	this->code += "this.";
-	if( exp.fieldIdentifier ) {
-		exp.fieldIdentifier->Accept( *this );
-	}
 }
 
 void CConvertVisitor::Visit(CByIndexExpression &exp)

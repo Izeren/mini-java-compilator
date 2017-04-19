@@ -75,11 +75,11 @@ void CConstructSymbolTableVisitor::Visit( CGetLengthExp &exp )
 
 void CConstructSymbolTableVisitor::Visit( CGetFieldExp &exp )
 {
-	if( exp.classOwner ) {
-		exp.classOwner->Accept( *this );
+	if( exp.objectExpression ) {
+		exp.objectExpression->Accept( *this );
 	}
-	if( exp.field ) {
-		exp.field->Accept( *this );
+	if( exp.fieldIdentifier ) {
+		exp.fieldIdentifier->Accept( *this );
 	}
 }
 
@@ -131,9 +131,6 @@ void CConstructSymbolTableVisitor::Visit( CNewIdentifier &exp )
 //		exp.expressionList->Accept( *this );
 //	}
 }
-
-void CConstructSymbolTableVisitor::Visit( CGetFieldByThisExpression &exp )
-{}
 
 void CConstructSymbolTableVisitor::Visit( CByIndexExpression &exp )
 {

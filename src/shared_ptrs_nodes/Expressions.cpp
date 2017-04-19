@@ -157,10 +157,10 @@ void CGetLengthExp::Accept( IVisitor &visitor ) {
 //CGetFieldExp:
 //-------------------------------------------------------------------------------------------------
 
-CGetFieldExp::CGetFieldExp( CClass *_classOwner, CField *_field ) {
-    this->position = _classOwner->position + _field->position;
-    classOwner = std::unique_ptr<CClass>( _classOwner );
-    field = std::unique_ptr<CField>( _field );
+CGetFieldExp::CGetFieldExp( IExpression* _objectExpression, CIdExp* _identifier ) {
+    this->position = _objectExpression->position + _identifier->position;
+    objectExpression = std::unique_ptr<IExpression>(_objectExpression);
+    fieldIdentifier = std::unique_ptr<CIdExp>(_identifier);
 }
 
 void CGetFieldExp::Accept( IVisitor &visitor ) {
@@ -201,18 +201,6 @@ void CExpList::Add( IExpression *_exp ) {
 
 void CExpList::Accept( IVisitor &visitor ) {
     visitor.Visit( *this );
-}
-
-//CGetFieldByThisExpression:
-//-------------------------------------------------------------------------------------------------
-
-void CGetFieldByThisExpression::Accept( IVisitor &visitor ) {
-    visitor.Visit( *this );
-}
-
-CGetFieldByThisExpression::CGetFieldByThisExpression( CIdExp *identifier ) {
-    position = identifier->position;
-    this->fieldIdentifier = std::unique_ptr<CIdExp>( identifier );
 }
 
 //CNegativeExpression:
