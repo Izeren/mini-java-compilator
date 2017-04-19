@@ -204,16 +204,16 @@ void CExpList::Accept( IVisitor &visitor ) {
     visitor.Visit( *this );
 }
 
-//CThisExpression:
+//CGetFieldByThisExpression:
 //-------------------------------------------------------------------------------------------------
 
-void CThisExpression::Accept( IVisitor &visitor ) {
+void CGetFieldByThisExpression::Accept( IVisitor &visitor ) {
     visitor.Visit( *this );
 }
 
-CThisExpression::CThisExpression( CIdExp *identifier ) {
+CGetFieldByThisExpression::CGetFieldByThisExpression( CIdExp *identifier ) {
     position = identifier->position;
-    this->identifier = std::unique_ptr<CIdExp>( identifier );
+    this->fieldIdentifier = std::unique_ptr<CIdExp>( identifier );
 }
 
 //CNegativeExpression:

@@ -174,15 +174,15 @@ public:
 	std::unique_ptr<CExpList> args;
 };
 
-//CThisExpression:
+//CGetFieldByThisExpression:
 //-------------------------------------------------------------------------------------------------
 
-class CThisExpression : public IExpression {
+class CGetFieldByThisExpression : public IExpression {
 public:
-	CThisExpression( CIdExp *identifier );
+	CGetFieldByThisExpression( CIdExp *identifier );
 
 	void Accept(IVisitor &visitor) override;
-	std::unique_ptr<CIdExp> identifier;
+	std::unique_ptr<CIdExp> fieldIdentifier;
 };
 
 //CNegativeExpression:

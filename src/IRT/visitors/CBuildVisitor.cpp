@@ -12,7 +12,7 @@
 
 void CBuildVisitor::Visit( CIdExp &expression ) {
     std::cout << "IRT builder: CIdExp\n";
-    const IRT::IAddress *address = currentFrame->GetAddress( expression.name );
+    const IRT::IAddress *address = currentFrame->GetLocalVisibilityAddress(expression.name);
 
     assert(address != NULL);
 
@@ -123,7 +123,7 @@ void CBuildVisitor::Visit( CGetLengthExp &expression ) {
 
 void CBuildVisitor::Visit( CGetFieldExp &exp ) {
     std::cout << "IRT builder: CGetFieldExp\n";
-    const IRT::IAddress *address = currentFrame->GetAddress( exp.field->id->name );
+    const IRT::IAddress *address = currentFrame->GetLocalVisibilityAddress(exp.field->id->name);
     if( address ) {
         updateSubtreeWrapper( new IRT::CExpressionWrapper(
                 std::move( address->ToExpression())
@@ -206,10 +206,10 @@ void CBuildVisitor::Visit( CArrayExpression &expression ) {
     ));
 }
 
-void CBuildVisitor::Visit( CThisExpression &exp ) {
-    std::cout << "IRT builder: CThisExpression\n";
+void CBuildVisitor::Visit( CGetFieldByThisExpression &exp ) {
+    std::cout << "IRT builder: CGetFieldByThisExpression\n";
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
-            std::move( currentFrame->GetThisAddress()->ToExpression())
+            std::move(currentFrame->GetClassFieldAddress(exp.fieldIdentifier->name)->ToExpression())
     ));
 }
 

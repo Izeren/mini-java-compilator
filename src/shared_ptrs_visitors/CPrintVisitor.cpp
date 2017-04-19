@@ -203,9 +203,9 @@ void CPrintVisitor::Visit(CNewIdentifier &exp)
 	++lastVisited;	
 }
 
-void CPrintVisitor::Visit(CThisExpression &exp)
+void CPrintVisitor::Visit(CGetFieldByThisExpression &exp)
 {
-	AddLabel("This");
+	AddLabel("GetFieldByThis");
 	++lastVisited;
 }
 

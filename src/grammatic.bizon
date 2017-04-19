@@ -311,7 +311,7 @@ Expression:
 	|
 	Identifier { $1->isInstance = true; $$ = $1; }
 	|
-	THIS DOT Identifier { $3->isInstance = true; $$ = new CThisExpression( $3 );  }
+	THIS DOT Identifier { $3->isInstance = true; $$ = new CGetFieldByThisExpression( $3 );  }
 	|
 	NEW INT LBRACKET Expression RBRACKET { $$ = new CArrayExpression($4);  }
 	|

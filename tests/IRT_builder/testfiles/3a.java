@@ -11,7 +11,7 @@ class Fac extends Base {
 	int b;
 
     public int ComputeFac(int num){
-        return 5;
+        return this.b;
     }
 }
 

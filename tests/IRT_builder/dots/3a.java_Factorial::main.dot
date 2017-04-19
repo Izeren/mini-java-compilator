@@ -19,7 +19,7 @@ graph[ordering="out"];
 	10[label="malloc"]
 	11 -> 10
 	11[label="Name"]
-	12[label="0"]
+	12[label="2"]
 	13 -> 12
 	13[label="Const"]
 	14[label="4"]
@@ -49,7 +49,7 @@ graph[ordering="out"];
 	25[label="BinopExp"]
 	26 -> 25
 	26[label="Mem"]
-	27[label="fac::ComputeFac"]
+	27[label="Fac::ComputeFac"]
 	28 -> 27
 	28[label="Name"]
 	29[label="10"]

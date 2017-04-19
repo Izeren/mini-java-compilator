@@ -51,10 +51,13 @@ class BS{
 	int medium ;
 	int aux01 ;
 	int nt ;
+	int fakeSize;
+	
+	fakeSize = this.size;
 
 	aux01 = 0 ;
 	bs01 = false ;
-	right = number.length ;
+	//right = number.length ;
 	right = right - 1 ;
 	left = 0 ;
 	var_cont = true ;

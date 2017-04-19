@@ -438,13 +438,13 @@ void CTypeCheckerVisitor::Visit( CArrayExpression &exp )
     lastCalculatedType = enums::TPrimitiveType::INT_ARRAY;
 }
 
-void CTypeCheckerVisitor::Visit( CThisExpression &exp ) 
+void CTypeCheckerVisitor::Visit( CGetFieldByThisExpression &exp )
 {
-    std::cout << "typechecker: CThisExpression\n";
+    std::cout << "typechecker: CGetFieldByThisExpression\n";
 
-    if( exp.identifier ) {
+    if( exp.fieldIdentifier ) {
         auto currentClassFields = currentClass->fields;
-        auto fieldName = exp.identifier->name;
+        auto fieldName = exp.fieldIdentifier->name;
         if( currentClassFields->variables.find( fieldName ) == currentClassFields->variables.end() ) {
             auto errorMessage = CError::GetHasNoMemberErrorMessage( currentClass->name, fieldName );
             errors.push_back( CError( errorMessage, exp.position ) );

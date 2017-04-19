@@ -72,7 +72,8 @@ namespace IRT {
         const IAddress* GetReturnValueAddress() const;
         const IAddress* GetThisAddress() const;
         const IAddress* GetReturnAddress() const;
-        const IAddress* GetAddress( const std::string& varName ) const;
+        const IAddress* GetLocalVisibilityAddress(const std::string &varName) const;
+        const IAddress* GetClassFieldAddress(const std::string &varName) const;
 
         std::unique_ptr<const CExpression> ExternalCall( const std::string& functionName, std::unique_ptr<const CExpressionList> args ) const;
     private:
@@ -83,7 +84,8 @@ namespace IRT {
         std::string className;
         std::string methodName;
         CLabel name;
-        std::unordered_map<std::string, std::unique_ptr<const IAddress>> addresses;
+        std::unordered_map<std::string, std::unique_ptr<const IAddress>> localVisibilityAddresses;
+        std::unordered_map<std::string, std::unique_ptr<const IAddress>> classFieldAddresses;
 
         static const int wordSize;
         static const std::string thisAddressName;

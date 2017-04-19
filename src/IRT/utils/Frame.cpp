@@ -98,33 +98,36 @@ void CFrame::AddLocalAddress(const std::string &name) {
 }
 
 void CFrame::AddFieldAddress(const std::string &name) {
+    const CAddressOfField *fieldAddress = new CAddressOfField(GetThisAddress(), nextOffsetFromThis());
+    classFieldAddresses.emplace(name, std::unique_ptr<const IAddress>(fieldAddress));
+
     const CAddressOfField *address = new CAddressOfField(GetThisAddress(), nextOffsetFromThis());
     addAddress(name, address);
 }
 
-const IAddress *CFrame::GetAddress(const std::string &varName) const {
-    auto addressIt = addresses.find(varName);
+const IAddress *CFrame::GetLocalVisibilityAddress(const std::string &varName) const {
+    auto addressIt = localVisibilityAddresses.find(varName);
     const IAddress *res = nullptr;
-    if (addressIt != addresses.end()) {
+    if (addressIt != localVisibilityAddresses.end()) {
         res = addressIt->second.get();
     }
     return res;
 }
 
 const IAddress *CFrame::GetThisAddress() const {
-    return GetAddress(thisAddressName);
+    return GetLocalVisibilityAddress(thisAddressName);
 }
 
 const IAddress *CFrame::GetReturnAddress() const {
-    return GetAddress(returnAddressName);
+    return GetLocalVisibilityAddress(returnAddressName);
 }
 
 const IAddress *CFrame::GetFramePointerAddress() const {
-    return GetAddress(framePointerAddressName);
+    return GetLocalVisibilityAddress(framePointerAddressName);
 }
 
 const IAddress *CFrame::GetReturnValueAddress() const {
-    return GetAddress(returnValueAddressName);
+    return GetLocalVisibilityAddress(returnValueAddressName);
 }
 
 std::unique_ptr<const CExpression>
@@ -152,7 +155,16 @@ int CFrame::nextOffsetFromThis() {
 }
 
 void CFrame::addAddress(const std::string &name, const IAddress *address) {
-    auto result = addresses.emplace(name, std::unique_ptr<const IAddress>(address));
+    auto result = localVisibilityAddresses.emplace(name, std::unique_ptr<const IAddress>(address));
     // overwriting may happen in case there is a field and a local/argument with the same name
     // assert( result.second );
+}
+
+const IAddress *CFrame::GetClassFieldAddress(const std::string &varName) const {
+    auto addressIt = classFieldAddresses.find(varName);
+    const IAddress *res = nullptr;
+    if (addressIt != classFieldAddresses.end()) {
+        res = addressIt->second.get();
+    }
+    return res;
 }

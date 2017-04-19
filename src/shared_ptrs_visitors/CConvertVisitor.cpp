@@ -153,10 +153,10 @@ void CConvertVisitor::Visit(CNewIdentifier &exp)
 	this->code += "()";
 }
 
-void CConvertVisitor::Visit(CThisExpression &exp) {
+void CConvertVisitor::Visit(CGetFieldByThisExpression &exp) {
 	this->code += "this.";
-	if( exp.identifier ) {
-		exp.identifier->Accept( *this );
+	if( exp.fieldIdentifier ) {
+		exp.fieldIdentifier->Accept( *this );
 	}
 }
 

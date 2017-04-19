@@ -132,7 +132,7 @@ void CConstructSymbolTableVisitor::Visit( CNewIdentifier &exp )
 //	}
 }
 
-void CConstructSymbolTableVisitor::Visit( CThisExpression &exp )
+void CConstructSymbolTableVisitor::Visit( CGetFieldByThisExpression &exp )
 {}
 
 void CConstructSymbolTableVisitor::Visit( CByIndexExpression &exp )

@@ -29,7 +29,7 @@ public:
 	void Visit( CExpList &exp ) override;
 	void Visit( CNegativeExpression &exp ) override;
 	void Visit( CArrayExpression &exp ) override;
-	void Visit( CThisExpression &exp ) override;
+	void Visit( CGetFieldByThisExpression &exp ) override;
 	void Visit( CByIndexExpression &exp ) override;
 	void Visit( CNewIdentifier &exp ) override;
 
