@@ -12,3 +12,4 @@ src/lex.h
 *.gif
 .idea/*
 *.xml
+resource/temp.flex
