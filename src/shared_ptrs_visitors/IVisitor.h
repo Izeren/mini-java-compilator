@@ -13,7 +13,7 @@ class CGetFieldExp;
 class CCallMethodExp;
 class CExpList;
 class CNegativeExpression;
-class CArrayExpression;
+class CNewArrayExpression;
 class CGetFieldByThisExpression;
 class CByIndexExpression;
 class CNewIdentifier;
@@ -54,7 +54,7 @@ public:
 	virtual void Visit(CCallMethodExp &exp) = 0;
 	virtual void Visit(CExpList &exp) = 0;
 	virtual void Visit(CNegativeExpression &exp) = 0;
-	virtual void Visit(CArrayExpression &exp) = 0;
+	virtual void Visit(CNewArrayExpression &exp) = 0;
 	virtual void Visit(CNewIdentifier &exp) = 0;
 	virtual void Visit(CGetFieldByThisExpression &exp) = 0;
 	virtual void Visit(CByIndexExpression &exp) = 0;

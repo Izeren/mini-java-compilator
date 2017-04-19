@@ -227,15 +227,15 @@ void CNegativeExpression::Accept( IVisitor &visitor ) {
     visitor.Visit( *this );
 }
 
-//CArrayExpression:
+//CNewArrayExpression:
 //-------------------------------------------------------------------------------------------------
 
-CArrayExpression::CArrayExpression( IExpression *lengthExpression ) {
+CNewArrayExpression::CNewArrayExpression( IExpression *lengthExpression ) {
     this->position = lengthExpression->position;
     this->lengthExpression = std::unique_ptr<IExpression>( lengthExpression );
 }
 
-void CArrayExpression::Accept( IVisitor &visitor ) {
+void CNewArrayExpression::Accept( IVisitor &visitor ) {
     visitor.Visit( *this );
 }
 

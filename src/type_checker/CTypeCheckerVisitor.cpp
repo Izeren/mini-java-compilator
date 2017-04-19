@@ -419,9 +419,9 @@ void CTypeCheckerVisitor::Visit( CNegativeExpression &exp )
     }
 }
 
-void CTypeCheckerVisitor::Visit( CArrayExpression &exp ) 
+void CTypeCheckerVisitor::Visit( CNewArrayExpression &exp )
 {
-    std::cout << "typechecker: CArrayExpression\n";
+    std::cout << "typechecker: CNewArrayExpression\n";
 
     if ( exp.lengthExpression ) {
 		exp.lengthExpression->Accept( *this );

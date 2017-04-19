@@ -205,12 +205,12 @@ public:
 	std::unique_ptr<IExpression> expression;
 };
 
-//CArrayExpression:
+//CNewArrayExpression:
 //-------------------------------------------------------------------------------------------------
 
-class CArrayExpression : public IExpression {
+class CNewArrayExpression : public IExpression {
 public:
-	CArrayExpression(IExpression* lengthExpression);
+	CNewArrayExpression(IExpression* lengthExpression);
 
 	void Accept(IVisitor &visitor) override;
 

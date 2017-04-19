@@ -114,7 +114,7 @@ void CConstructSymbolTableVisitor::Visit( CNegativeExpression &exp )
 	}
 }
 
-void CConstructSymbolTableVisitor::Visit( CArrayExpression &exp )
+void CConstructSymbolTableVisitor::Visit( CNewArrayExpression &exp )
 {
 	if( exp.lengthExpression ) {
 		exp.lengthExpression->Accept( *this );

@@ -313,7 +313,7 @@ Expression:
 	|
 	THIS DOT Identifier { $3->isInstance = true; $$ = new CGetFieldByThisExpression( $3 );  }
 	|
-	NEW INT LBRACKET Expression RBRACKET { $$ = new CArrayExpression($4);  }
+	NEW INT LBRACKET Expression RBRACKET { $$ = new CNewArrayExpression($4);  }
 	|
 	NEW Identifier LPAREN  RPAREN { $$ = new CNewIdentifier( $2 );  }
 	|

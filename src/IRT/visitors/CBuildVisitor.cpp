@@ -192,8 +192,8 @@ void CBuildVisitor::Visit( CNegativeExpression &expression ) {
     ));
 }
 
-void CBuildVisitor::Visit( CArrayExpression &expression ) {
-    std::cout << "IRT builder: CArrayExpression\n";
+void CBuildVisitor::Visit( CNewArrayExpression &expression ) {
+    std::cout << "IRT builder: CNewArrayExpression\n";
     expression.lengthExpression->Accept( *this );
 
     std::unique_ptr<const IRT::CExpression> expressionLength = std::move( wrapper->ToExpression());

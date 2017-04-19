@@ -185,7 +185,7 @@ void CPrintVisitor::Visit(CNegativeExpression &exp)
 	++lastVisited;	
 }
 
-void CPrintVisitor::Visit(CArrayExpression &exp)
+void CPrintVisitor::Visit(CNewArrayExpression &exp)
 {
 	std::vector<INode*> children = { exp.lengthExpression.get() };
 	ChildrenAnswers answers = VisitChildren(children);

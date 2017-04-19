@@ -136,7 +136,7 @@ void CConvertVisitor::Visit(CNegativeExpression &exp) {
 	this->code += ")";
 }
 
-void CConvertVisitor::Visit(CArrayExpression &exp) {
+void CConvertVisitor::Visit(CNewArrayExpression &exp) {
 	this->code += " new int[";
 	if (exp.lengthExpression) {
 		exp.lengthExpression->Accept(*this);
