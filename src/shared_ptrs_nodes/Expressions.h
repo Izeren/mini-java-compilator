@@ -17,8 +17,7 @@ public:
 class CIdExp : public IExpression {
 public:
 	void Accept(IVisitor &visitor) override;
-	CIdExp(char *name, int *address = 0);
-	int *address;
+	CIdExp(char *name);
 
 	std::string name;
     bool isInstance = false;

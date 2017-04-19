@@ -6,9 +6,8 @@
 //CIdExp:
 //-------------------------------------------------------------------------------------------------
 
-CIdExp::CIdExp( char *name, int *address ) {
+CIdExp::CIdExp( char *name) {
     this->name = std::string( name );
-    this->address = address;
 }
 
 void CIdExp::Accept( IVisitor &visitor ) {
