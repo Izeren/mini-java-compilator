@@ -22,9 +22,9 @@ void CBuildVisitor::Visit( CIdExp &expression ) {
 
     auto varInfo = getVariableInfoFromLocalArgAndFields(symbolTable, currentClassName, currentMethod, expression.name);
     if (varInfo->type->isPrimitive) {
-        methodObjectClassName = "";
+        currentObjectClassName = "";
     } else {
-        methodObjectClassName = varInfo->type->className;
+        currentObjectClassName = varInfo->type->className;
     }
 }
 
@@ -39,7 +39,7 @@ void CBuildVisitor::Visit( CNumExp &expression ) {
             new IRT::CConstExpression( expression.number )
     ));
 
-    methodObjectClassName = "";
+    currentObjectClassName = "";
 }
 
 void CBuildVisitor::Visit( COpExp &expression ) {
@@ -138,7 +138,7 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
     std::cout << "IRT builder: CCallMethod\n";
 
     expression.objectExpression->Accept( *this );
-    std::string mineMethodObjectClassName = methodObjectClassName;
+    std::string mineMethodObjectClassName = currentObjectClassName;
     assert(mineMethodObjectClassName != "");
 
     IRT::CExpressionList *expressionListIrt = new IRT::CExpressionList();
@@ -160,9 +160,9 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
     auto methodInfo = classInfo->methods[expression.methodName->name];
     auto returnTypeInfo = methodInfo->returnType;
     if (returnTypeInfo->isPrimitive) {
-        methodObjectClassName = "";
+        currentObjectClassName = "";
     } else {
-        methodObjectClassName = returnTypeInfo->className;
+        currentObjectClassName = returnTypeInfo->className;
     }
 }
 
@@ -264,7 +264,7 @@ void CBuildVisitor::Visit( CNewIdentifier &expression ) {
             ))
     ));
 
-    methodObjectClassName = expression.identifier->name;
+    currentObjectClassName = expression.identifier->name;
 }
 
 void CBuildVisitor::Visit( CAssignStm &statement ) {
@@ -710,11 +710,22 @@ void CBuildVisitor::Visit(CThisExpression &exp) {
             std::move( currentFrame->GetThisAddress()->ToExpression() )
     ) );
 
-    methodObjectClassName = currentClassName;
+    currentObjectClassName = currentClassName;
 }
 
 void CBuildVisitor::Visit(CGetFieldByThisExpression &exp) {
     std::cout << "IRT builder: CGetFieldByThisExpression\n";
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             std::move(currentFrame->GetClassFieldAddress(exp.fieldIdentifier->name)->ToExpression())));
+
+    auto varInfo = getVariableInfoFromLocalArgAndFields(symbolTable,
+                                                        currentClassName,
+                                                        "",
+                                                        exp.fieldIdentifier->name);
+
+    if (varInfo->type->isPrimitive) {
+        currentObjectClassName = "";
+    } else {
+        currentObjectClassName = varInfo->type->className;
+    }
 }

@@ -96,7 +96,7 @@ private:
 	std::string currentMethod;
 
 	// obj.methodName(); obj -- expression
-	std::string methodObjectClassName;
+	std::string currentObjectClassName;
 
     FramesMap frames;
     IRT::CFrame *currentFrame;

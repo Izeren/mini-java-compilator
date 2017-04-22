@@ -23,16 +23,20 @@ getVariableInfoFromLocalArgAndFields(const SymbolTable *table, const std::string
                                      const std::string &currentMethod, const std::string &varName) {
 
     std::shared_ptr<const ClassInfo> clazz = table->classes.at(currentClassName);
-    std::shared_ptr<const MethodInfo> method = clazz->methods.at(currentMethod);
 
-    auto argumentIt = method->arguments->variables.find(varName);
-    if (argumentIt != method->arguments->variables.end()) {
-        return argumentIt->second;
-    }
+    if (currentMethod != "") {
 
-    auto localVariableIt = method->fields->variables.find(varName);
-    if (localVariableIt != method->fields->variables.end()) {
-        return localVariableIt->second;
+        std::shared_ptr<const MethodInfo> method = clazz->methods.at(currentMethod);
+
+        auto argumentIt = method->arguments->variables.find(varName);
+        if (argumentIt != method->arguments->variables.end()) {
+            return argumentIt->second;
+        }
+
+        auto localVariableIt = method->fields->variables.find(varName);
+        if (localVariableIt != method->fields->variables.end()) {
+            return localVariableIt->second;
+        }
     }
 
     while (clazz != NULL) {
