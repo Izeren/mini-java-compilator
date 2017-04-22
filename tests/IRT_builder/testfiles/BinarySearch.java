@@ -1,8 +1,6 @@
 class BinarySearch{
     public static void main(String[] a){
-	BS bs;
-	bs = new BS();
-	System.out.println(bs.Start(20));
+	System.out.println(new BS().Start(20));
     }
 }
 // This class contains an array of integers and
