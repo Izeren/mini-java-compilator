@@ -110,7 +110,7 @@ void IRT::PrintVisitor::Visit( const IRT::CLabelStatement &statement ) {
 
 void IRT::PrintVisitor::Visit( const IRT::CJumpStatement &statement ) {
     ++lastVisited;
-    description = ConstructLabel( statement.Target( ).ToString( ), lastVisited );
+    description = ConstructLabel( statement.getLabel( )->Label().ToString( ), lastVisited );
     AddArrow( lastVisited );
     AddLabel( "Jump" );
     ++lastVisited;

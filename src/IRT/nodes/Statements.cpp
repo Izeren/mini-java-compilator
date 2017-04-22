@@ -45,10 +45,10 @@ std::unique_ptr<const CStatement> CExpStatement::Copy( ) const {
 
 // ********************************************************************************
 
-CJumpStatement::CJumpStatement( CLabel _target ) : target( _target ) { }
+CJumpStatement::CJumpStatement( std::unique_ptr<const CLabelStatement> _label ) : label( std::move(_label) ) { }
 
-CLabel CJumpStatement::Target( ) const {
-    return target;
+const CLabelStatement* CJumpStatement::getLabel( ) const {
+    return label.get();
 }
 
 void CJumpStatement::Accept( IVisitor &visitor ) const {
@@ -56,7 +56,7 @@ void CJumpStatement::Accept( IVisitor &visitor ) const {
 }
 
 std::unique_ptr<const CStatement> CJumpStatement::Copy( ) const {
-    return std::move( std::unique_ptr<const CStatement>( new CJumpStatement( target )));
+    return std::move( std::unique_ptr<const CStatement>( new CJumpStatement( std::move(label->CastCopy()) )));
 }
 
 // ********************************************************************************

@@ -395,7 +395,11 @@ void CBuildVisitor::Visit( CIfStm &statement ) {
             suffix = std::move( std::unique_ptr<const IRT::CStatement>(
                     new IRT::CSeqStatement(
                             std::move( std::unique_ptr<const IRT::CStatement>(
-                                    new IRT::CJumpStatement( labelJoin )
+                                    new IRT::CJumpStatement( std::move(std::unique_ptr<const IRT::CLabelStatement>(
+                                            new IRT::CLabelStatement(
+                                                    labelJoin
+                                            )
+                                    )) )
                             )),
                             std::move( suffix )
                     )
@@ -440,7 +444,14 @@ void CBuildVisitor::Visit( CWhileStm &statement ) {
 
     std::unique_ptr<const IRT::CStatement> suffix(
             std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
-                    std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CJumpStatement( labelLoop ))),
+                    std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CJumpStatement(
+                            std::move(
+                                    std::unique_ptr<const IRT::CLabelStatement>(
+                                            new IRT::CLabelStatement(
+                                                    labelLoop
+                                            )
+                                    )
+                            )))),
                     std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CLabelStatement( labelDone )))
             )))
     );

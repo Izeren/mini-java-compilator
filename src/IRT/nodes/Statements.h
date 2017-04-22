@@ -69,9 +69,9 @@ namespace IRT {
     class CJumpStatement : public CStatement {
     public:
 
-        CJumpStatement( CLabel _target );
+        CJumpStatement( std::unique_ptr<const CLabelStatement> label );
 
-        CLabel Target( ) const;
+        const CLabelStatement* getLabel( ) const;
 
         virtual void Accept( IVisitor &visitor ) const override;
 
@@ -80,7 +80,7 @@ namespace IRT {
 //        std::unique_ptr<const CStatement> Canonicalize( ) const override;
 
     private:
-        CLabel target;
+        std::unique_ptr<const CLabelStatement> label;
     };
 
 // ********************************************************************************
