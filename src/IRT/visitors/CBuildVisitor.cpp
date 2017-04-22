@@ -133,17 +133,6 @@ void CBuildVisitor::Visit( CGetLengthExp &expression ) {
 
 }
 
-void CBuildVisitor::Visit( CGetFieldExp &exp ) {
-    std::cout << "IRT builder: CGetFieldExp\n";
-    const IRT::IAddress *address = currentFrame->GetLocalVisibilityAddress(exp.field->id->name);
-    if( address ) {
-        updateSubtreeWrapper( new IRT::CExpressionWrapper(
-                std::move( address->ToExpression())
-        ));
-    }
-
-}
-
 void CBuildVisitor::Visit( CCallMethodExp &expression ) {
 
     std::cout << "IRT builder: CCallMethod\n";

@@ -87,16 +87,6 @@ void CConvertVisitor::Visit(CGetLengthExp &exp) {
 	this->code += ".length";
 }
 
-void CConvertVisitor::Visit(CGetFieldExp &exp) {
-	if (exp.objectExpression) {
-		exp.objectExpression->Accept(*this);
-	}
-	this->code += ".";
-	if (exp.fieldIdentifier) {
-		exp.fieldIdentifier->Accept(*this);
-	}
-}
-
 void CConvertVisitor::Visit(CCallMethodExp &exp) {
 	if (exp.objectExpression) {
 		exp.objectExpression->Accept(*this);

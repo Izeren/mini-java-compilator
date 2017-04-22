@@ -299,40 +299,7 @@ void CTypeCheckerVisitor::Visit( CGetLengthExp &exp )
 	lastCalculatedType = enums::TPrimitiveType::INT;
 }
 
-//В грамматике нет такого варианта и у нас тут хрень какая-то
-void CTypeCheckerVisitor::Visit( CGetFieldExp &exp ) 
-{
-    std::cout << "typechecker: CGetFieldExp\n";
-
-    if( exp.classOwner && exp.field ) {
-		std::string ownerName = exp.classOwner->id->name;
-		std::string fieldName = exp.field->id->name;
-		auto ownerIterator = table->classes.find(ownerName);
-		if( ownerIterator == table->classes.end() ) {
-			auto errorMessage = CError::GetUndeclaredErrorMessage( ownerName );
-			errors.push_back( CError( errorMessage, exp.position ) );
-			lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
-			return;
-		}
-        auto ownerInfo = table->classes[ownerName];
-        auto variablesInfo = ownerInfo->fields;
-        auto fieldIterator = variablesInfo->variables.find(fieldName);
-        if( fieldIterator == variablesInfo->variables.end() ) {
-            auto errorMessage = CError::GetHasNoMemberErrorMessage( ownerName, fieldName );
-            errors.push_back( CError( errorMessage, exp.field->position ) );
-            lastCalculatedType = TypeInfo( enums::TPrimitiveType::ERROR_TYPE );
-            return;
-        }
-
-		auto fieldInfo = variablesInfo->variables[fieldName];
-		lastCalculatedType = *(fieldInfo->type);
-	} else {
-		errors.push_back( CError( CError::AST_ERROR, exp.field->position ) );
-        lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
-	}
-}
-
-void CTypeCheckerVisitor::Visit( CCallMethodExp &exp ) 
+void CTypeCheckerVisitor::Visit( CCallMethodExp &exp )
 {
     std::cout << "typechecker: CCallMethodExp\n";
 

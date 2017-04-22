@@ -9,7 +9,6 @@ class CLogOpExp;
 class CCompExp;
 class CUnarMinusExp;
 class CGetLengthExp;
-class CGetFieldExp;
 class CCallMethodExp;
 class CExpList;
 class CNegativeExpression;
@@ -49,7 +48,6 @@ public:
 	virtual void Visit(CCompExp &exp) = 0;
 	virtual void Visit(CUnarMinusExp &exp) = 0;
 	virtual void Visit(CGetLengthExp &exp) = 0;
-	virtual void Visit(CGetFieldExp &exp) = 0;
 	virtual void Visit(CCallMethodExp &exp) = 0;
 	virtual void Visit(CExpList &exp) = 0;
 	virtual void Visit(CNegativeExpression &exp) = 0;

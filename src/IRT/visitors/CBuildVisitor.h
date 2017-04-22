@@ -35,7 +35,6 @@ public:
 	void Visit( CCompExp &exp ) override;
 	void Visit( CUnarMinusExp &exp ) override;
 	void Visit( CGetLengthExp &exp ) override;
-	void Visit( CGetFieldExp &exp ) override;
 	void Visit( CCallMethodExp &exp ) override;
 	void Visit( CExpList &exp ) override;
 	void Visit( CNegativeExpression &exp ) override;

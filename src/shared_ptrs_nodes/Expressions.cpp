@@ -154,19 +154,6 @@ void CGetLengthExp::Accept( IVisitor &visitor ) {
     visitor.Visit( *this );
 }
 
-//CGetFieldExp:
-//-------------------------------------------------------------------------------------------------
-
-CGetFieldExp::CGetFieldExp( IExpression* _objectExpression, CIdExp* _identifier ) {
-    this->position = _objectExpression->position + _identifier->position;
-    objectExpression = std::unique_ptr<IExpression>(_objectExpression);
-    fieldIdentifier = std::unique_ptr<CIdExp>(_identifier);
-}
-
-void CGetFieldExp::Accept( IVisitor &visitor ) {
-    visitor.Visit( *this );
-}
-
 //CCallMethodExp:
 //-------------------------------------------------------------------------------------------------
 

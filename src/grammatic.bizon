@@ -299,8 +299,6 @@ Expression:
 	|
 	Expression DOT Identifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( $1, $3, (CExpList*) $5) ;  }
 	|
-	Expression DOT Identifier { $$ = new CGetFieldExp( $1, $3) ;  }
-	|
 	MINUS Expression { $$ = new CUnarMinusExp( $2 ); }
 	|
 	NUM { auto p = $$ = new CNumExp($1); SAVE_LOCATION }

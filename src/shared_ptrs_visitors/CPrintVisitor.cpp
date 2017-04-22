@@ -148,15 +148,6 @@ void CPrintVisitor::Visit(CGetLengthExp &exp)
 	++lastVisited;
 }
 
-void CPrintVisitor::Visit(CGetFieldExp &exp)
-{
-	std::vector<INode*> children = { exp.objectExpression.get(), exp.fieldIdentifier.get() };
-	ChildrenAnswers answers = VisitChildren(children);
-	AddChildrenAnswers(answers);
-	AddLabel("Field");
-	++lastVisited;	
-}
-
 void CPrintVisitor::Visit(CCallMethodExp &exp)
 {
 	std::vector<INode*> children = { exp.objectExpression.get(), exp.methodName.get(), exp.args.get() };

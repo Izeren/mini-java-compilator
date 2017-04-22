@@ -132,20 +132,6 @@ public:
 	std::unique_ptr<IExpression> rightOperand;
 };
 
-//CGetFieldExp:
-//-------------------------------------------------------------------------------------------------
-
-class CClass;
-class CField;
-
-class CGetFieldExp : public IExpression {
-public: 
-	CGetFieldExp(IExpression* _objectExpression, CIdExp* _identifier);
-	void Accept(IVisitor& visitor) override;
-	std::unique_ptr<IExpression> objectExpression;
-	std::unique_ptr<CIdExp> fieldIdentifier;
-};
-
 //CExpList:
 //-------------------------------------------------------------------------------------------------
 
