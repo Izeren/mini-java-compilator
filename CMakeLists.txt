@@ -3,6 +3,29 @@ project(mini_java_compilator)
 
 set(CMAKE_CXX_STANDARD 11)
 
+
+# Create target for the parser
+set(LEX_DESCRIPTION ${CMAKE_SOURCE_DIR}/src/temp_grammatic.flex)
+set(BISON_DESCRIPTION ${CMAKE_SOURCE_DIR}/src/grammatic.bizon)
+set(LEX_OUTPUT_H ${CMAKE_SOURCE_DIR}/src/lex.h)
+set(LEX_OUTPUT_CPP ${CMAKE_SOURCE_DIR}/src/lex.cpp)
+set(BISON_OUTPUT ${CMAKE_SOURCE_DIR}/src/bison.cpp)
+
+# Create custom command for flex/lex (note the outputs)
+ADD_CUSTOM_COMMAND(
+        COMMAND flex --header-file=${LEX_OUTPUT_H} -o ${LEX_OUTPUT_CPP} ${LEX_DESCRIPTION}
+        OUTPUT ${LEX_OUTPUT_CPP} ${LEX_OUTPUT_H} )
+
+# Create custom command for bison/yacc (note the DEPENDS)
+ADD_CUSTOM_COMMAND(
+        COMMAND bison -v -W -Wconflicts-rr -d -o ${BISON_OUTPUT} ${BISON_DESCRIPTION}
+        OUTPUT ${BISON_OUTPUT})
+
+
+#set_source_files_properties( src/bison.cpp GENERATED)
+#set_source_files_properties( src/lex.h GENERATED)
+#set_source_files_properties( src/lex.cpp GENERATED)
+
 set(SOURCE_FILES
         src/shared_ptrs_nodes/Classes.cpp
         src/shared_ptrs_nodes/Expressions.cpp
@@ -12,8 +35,6 @@ set(SOURCE_FILES
         src/symbol_table/CConstructSymbolTableVisitor.cpp
         src/symbol_table/SymbolInfo.cpp
         src/type_checker/CTypeCheckerVisitor.cpp
-        src/bison.cpp
-        src/lex.cpp
         src/IRT/utils/Frame.cpp
 #        src/main_typechecker.cpp
         src/IRT/utils/Label.cpp
@@ -33,4 +54,5 @@ set(SOURCE_FILES
         src/IRT/visitors/PrintVisitor.h
         src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp)
 
-add_executable(mini_java_compilator ${SOURCE_FILES})
+
+add_executable(mini_java_compilator ${SOURCE_FILES} ${LEX_OUTPUT_H} ${LEX_OUTPUT_CPP} ${BISON_OUTPUT} )
