@@ -1,6 +1,0 @@
-digraph G{
-graph[ordering="out"];
-	1[label="Main::main"]
-	2 -> 1
-	2[label="Label"]
-}
