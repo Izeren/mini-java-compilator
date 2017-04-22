@@ -712,3 +712,9 @@ void CBuildVisitor::Visit(CThisExpression &exp) {
 
     methodObjectClassName = currentClassName;
 }
+
+void CBuildVisitor::Visit(CGetFieldByThisExpression &exp) {
+    std::cout << "IRT builder: CGetFieldByThisExpression\n";
+    updateSubtreeWrapper( new IRT::CExpressionWrapper(
+            std::move(currentFrame->GetClassFieldAddress(exp.fieldIdentifier->name)->ToExpression())));
+}

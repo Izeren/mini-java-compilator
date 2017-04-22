@@ -49,6 +49,11 @@ std::pair<VariableInfo*, bool> CTypeCheckerVisitor::getVariableInfo(CIdExp& exp)
             }
         }
 
+        if (shouldSearchIdInFields) {
+            shouldSearchIdInFields = false;
+            return std::pair<VariableInfo*, bool>(variableInfoPtr, isLocalVariable);
+        }
+
         auto methodArgumentIterator = currentMethod->arguments->variables.find(exp.name);
         if (methodArgumentIterator != currentMethod->arguments->variables.end()) {
             variableInfoPtr = methodArgumentIterator->second.get();
@@ -909,4 +914,10 @@ bool CTypeCheckerVisitor::checkCyclicInheritance(std::shared_ptr<ClassInfo> star
 std::vector<CError> CTypeCheckerVisitor::GetErrors()
 {
     return errors;
+}
+
+void CTypeCheckerVisitor::Visit(CGetFieldByThisExpression &exp) {
+    shouldSearchIdInFields = true;
+
+    exp.fieldIdentifier->Accept( *this );
 }

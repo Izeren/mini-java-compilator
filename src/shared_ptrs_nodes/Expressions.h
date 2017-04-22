@@ -220,3 +220,13 @@ public:
 	std::unique_ptr<IExpression> identifier;
 	std::unique_ptr<IExpression> indexExpression;
 };
+
+//CGetFieldByThisExpression
+//-------------------------------------------------------------------------------------------------
+class CGetFieldByThisExpression : public IExpression {
+public:
+public:
+	CGetFieldByThisExpression(CIdExp* _identifier);
+	void Accept(IVisitor& visitor) override;
+	std::unique_ptr<CIdExp> fieldIdentifier;
+};

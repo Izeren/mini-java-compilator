@@ -451,3 +451,9 @@ std::vector<CError> CConstructSymbolTableVisitor::GetErrors()
 	return errors;
 }
 
+void CConstructSymbolTableVisitor::Visit(CGetFieldByThisExpression &exp) {
+	if (exp.fieldIdentifier) {
+		exp.fieldIdentifier->Accept(*this);
+	}
+}
+

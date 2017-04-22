@@ -250,3 +250,11 @@ CThisExpression::CThisExpression() {
 void CThisExpression::Accept(IVisitor &visitor) {
     visitor.Visit( *this );
 }
+
+CGetFieldByThisExpression::CGetFieldByThisExpression(CIdExp *_identifier) {
+    fieldIdentifier = std::unique_ptr<CIdExp>(_identifier);
+}
+
+void CGetFieldByThisExpression::Accept(IVisitor &visitor) {
+    visitor.Visit( *this );
+}

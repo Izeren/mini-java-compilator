@@ -31,7 +31,8 @@ public:
 	void Visit( CNewArrayExpression &exp ) override;
 	void Visit( CByIndexExpression &exp ) override;
 	void Visit( CNewIdentifier &exp ) override;
-	virtual void Visit(CThisExpression &exp) override;
+	void Visit(CThisExpression &exp) override;
+	void Visit(CGetFieldByThisExpression &exp) override;
 
 	void Visit( CAssignStm &stm ) override;
 	void Visit( CAssignSubscriptStm &stm ) override;
