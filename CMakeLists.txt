@@ -46,6 +46,7 @@ set(SOURCE_FILES
         src/IRT/utils/enums.h
         src/IRT/utils/SubtreeWrapper.cpp
         src/IRT/visitors/CBuildVisitor.cpp
+        src/IRT/visitors/CCallSimplifierVisitor.cpp
         src/IRT/visitors/CBuildVisitor.h
         src/IRT/utils/SubtreeWrapper.h
         src/IRT/visitors/EmptyVisitor.cpp
