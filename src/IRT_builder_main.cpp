@@ -22,6 +22,7 @@
 #include <fstream>
 #include <iostream>
 //#include "windows.h"
+#include "IRT/visitors/CCallSimplifierVisitor.h"
 
 #include "dirent.h"
 
@@ -71,6 +72,30 @@ void writeErrors(const std::string& description, const std::vector<CError>& erro
     }
 }
 
+void writeIRTTrees(const std::string& filename, const std::string& suffix, std::shared_ptr<const MethodToIRTMap> trees) {
+    for ( auto it = trees->begin(); it != trees->end(); ++it) {
+        IRT::PrintVisitor printVisitor;
+        it->second->Accept(printVisitor);
+        printVisitor.GetResult();
+
+        std::ofstream out("../tests/IRT_builder/dots/" + filename + "_" + it->first + suffix + ".dot", std::fstream::out);
+        out << printVisitor.GetResult();
+        out.close();
+    }
+}
+
+std::shared_ptr<MethodToIRTMap> canonizeIRTTrees(std::shared_ptr<const MethodToIRTMap> trees) {
+    std::shared_ptr<MethodToIRTMap> newTrees = std::shared_ptr<MethodToIRTMap>(std::move(std::unique_ptr<MethodToIRTMap>(new MethodToIRTMap())));
+    for (auto tree = trees->begin(); tree != trees->end(); ++tree) {
+        IRT::CCallSimplifierVisitor visitor;
+        tree->second->Accept(visitor);
+
+        (*newTrees)[tree->first] = std::move(visitor.getResultTree());
+    }
+
+    return newTrees;
+}
+
 void make_test( const std::string& filename, const std::string& testfile_name, const std::string& result_name ) {
     std::cout << "\n\n\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
     std::cout << "in make_test, testfile_name: " << testfile_name << " result_name: " << result_name << "\n";
@@ -95,16 +120,11 @@ void make_test( const std::string& filename, const std::string& testfile_name, c
     std::cout << "building IRTrees\n";
     CBuildVisitor iRTVisitor = CBuildVisitor( symbolTableRes.symbolTable.get( ));
     program->Accept( iRTVisitor );
-    std::shared_ptr<const MethodToIRTMap> trees = iRTVisitor.GetMethodFromIrtMap();
-    for ( auto it = trees->begin(); it != trees->end(); ++it) {
-        IRT::PrintVisitor printVisitor;
-        it->second->Accept(printVisitor);
-        printVisitor.GetResult();
+    std::shared_ptr<const MethodToIRTMap> dirtyTrees = iRTVisitor.GetMethodFromIrtMap();
+    writeIRTTrees(filename, "Dirty", dirtyTrees);
 
-        std::ofstream out("../tests/IRT_builder/dots/" + filename + "_" + it->first + ".dot", std::fstream::out);
-        out << printVisitor.GetResult();
-        out.close();
-    }
+    std::shared_ptr<const MethodToIRTMap> canonizedTrees = canonizeIRTTrees(dirtyTrees);
+    writeIRTTrees(filename, "Canonized", canonizedTrees);
 }
 
 int main( int argc, char **argv ) {
