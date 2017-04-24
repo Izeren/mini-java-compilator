@@ -180,7 +180,7 @@ int main( int argc, char **argv ) {
         while (( entry = readdir( dir )) != NULL ) {
             std::string filename = entry->d_name;
             std::string java_extension = ".java";
-            if ( filename == "LinkedList.java" && filename.rfind( java_extension ) == filename.length( ) - java_extension.length( )) {
+            if ( filename.rfind( java_extension ) == filename.length( ) - java_extension.length( )) {
                 make_test( filename, tests_dir + testfiles_dir + filename, tests_dir + results_dir + filename );
             }
         };
