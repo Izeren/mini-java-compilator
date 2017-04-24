@@ -299,9 +299,7 @@ Expression:
 	|
 	Expression DOT Identifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( $1, $3, (CExpList*) $5) ;  }
 	|
-	THIS DOT Identifier LPAREN ExpressionList RPAREN { $$ = new CCallMethodExp( new CThisExpression(), $3, (CExpList*) $5) ;  }
-	|
-	THIS DOT Identifier { $3->isInstance = true; $$ = new CGetFieldByThisExpression( $3 ); }
+	Expression DOT Identifier { $3->isInstance = true; $$ = new CGetFieldByThisExpression( $3 ); }
 	|
 	MINUS Expression { $$ = new CUnarMinusExp( $2 ); }
 	|
@@ -317,9 +315,11 @@ Expression:
 	|
 	NEW Identifier LPAREN  RPAREN { $$ = new CNewIdentifier( $2 );  }
 	|
-	NOT Expression { $$ = new CNegativeExpression($2);  }
-	|
 	LPAREN Expression RPAREN { $$ = $2; }
+	|
+	THIS { auto p = $$ = new CThisExpression(); SAVE_LOCATION }
+	|
+	NOT Expression { $$ = new CNegativeExpression($2);  }
 	;
 
 NonEmptyExpressionList:
