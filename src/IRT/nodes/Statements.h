@@ -168,7 +168,7 @@ namespace IRT {
 
         CStatementList( std::unique_ptr<const CStatement> &statement );
 
-        void Add( std::unique_ptr<const CStatement> &statement );
+        void Add( std::unique_ptr<const CStatement> statement );
 
         const std::vector<std::unique_ptr<const CStatement>> &Statements( ) const;
 

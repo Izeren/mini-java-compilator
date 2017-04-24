@@ -150,10 +150,10 @@ std::unique_ptr<const CLabelStatement> CLabelStatement::CastCopy( ) const {
 CStatementList::CStatementList( ) { }
 
 CStatementList::CStatementList( std::unique_ptr<const CStatement> &statement ) {
-    Add( statement );
+    Add( std::move(statement) );
 }
 
-void CStatementList::Add( std::unique_ptr<const CStatement> &statement ) {
+void CStatementList::Add( std::unique_ptr<const CStatement> statement ) {
     statements.push_back( std::move( statement ));
 }
 
@@ -169,7 +169,7 @@ std::unique_ptr<const CStatementList> CStatementList::Copy( ) const {
     CStatementList *newList = new CStatementList( );
     for ( int i = 0; i < statements.size( ); ++i ) {
         std::unique_ptr<const CStatement> copy = statements[ i ].get( )->Copy( );
-        newList->Add( copy );
+        newList->Add( std::move(copy) );
     }
     return std::move( std::unique_ptr<const CStatementList>( newList ));
 }

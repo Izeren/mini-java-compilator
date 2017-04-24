@@ -53,7 +53,7 @@ set(SOURCE_FILES
         src/IRT/visitors/EmptyVisitor.h
         src/IRT/visitors/PrintVisitor.cpp
         src/IRT/visitors/PrintVisitor.h
-        src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp)
+        src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp src/IRT/visitors/CLinearizeVisitor.h src/IRT/visitors/CLinearizeVisitor.cpp)
 
 
 add_executable(mini_java_compilator ${SOURCE_FILES} ${LEX_OUTPUT_H} ${LEX_OUTPUT_CPP} ${BISON_OUTPUT} )
