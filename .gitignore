@@ -1,4 +1,6 @@
 cmake-build-debug/*
+build
+cmake
 *.swp
 tests/type_checker/results/*
 *.o
