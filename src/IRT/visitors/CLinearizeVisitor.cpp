@@ -4,14 +4,14 @@
 #include "CLinearizeVisitor.h"
 
 IRT::CLinearizeVisitor::CLinearizeVisitor( ) {
-    statementList = std::unique_ptr<CStatementList>(new CStatementList());
+    statementList = std::unique_ptr<CStatementList>( new CStatementList( ));
 }
 
 IRT::CLinearizeVisitor::~CLinearizeVisitor( ) {
 
 }
 
-std::unique_ptr<const IRT::CStatementList> IRT::CLinearizeVisitor::ResultTree( ) {
+std::unique_ptr<const IRT::CStatement> IRT::CLinearizeVisitor::getResultTree( ) {
     return std::move( statementList );
 }
 

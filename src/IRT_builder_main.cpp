@@ -26,6 +26,7 @@
 
 #include "dirent.h"
 #include "IRT/visitors/CEseqFloatVisitor.h"
+#include "IRT/visitors/CLinearizeVisitor.h"
 
 extern int line_number, column_number;
 
@@ -95,8 +96,12 @@ std::shared_ptr<MethodToIRTMap> canonizeIRTTrees(std::shared_ptr<const MethodToI
 
         IRT::CEseqFloatVisitor eseqFloatVisitor;
         callSimplifiedTree->Accept(eseqFloatVisitor);
+        std::unique_ptr<const IRT::CStatement> eseqFloatVisitorResult = std::move(eseqFloatVisitor.getResultTree());
 
-        (*newTrees)[tree->first] = std::move(eseqFloatVisitor.getResultTree());
+        IRT::CLinearizeVisitor linearizeVisitor;
+        eseqFloatVisitorResult->Accept(linearizeVisitor);
+
+        (*newTrees)[tree->first] = std::move(linearizeVisitor.getResultTree());
     }
 
     return newTrees;

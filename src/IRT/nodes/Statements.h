@@ -162,7 +162,7 @@ namespace IRT {
 
 // ********************************************************************************
 
-    class CStatementList : public IStatement {
+    class CStatementList : public CStatement {
     public:
         CStatementList( );
 
@@ -174,8 +174,7 @@ namespace IRT {
 
         virtual void Accept( IVisitor &visitor ) const override;
 
-        std::unique_ptr<const CStatementList> Copy( ) const;
-
+        std::unique_ptr<const CStatement> Copy( ) const override;
 //        std::unique_ptr<const CStatementList> Canonicalize( ) const;
 
     private:

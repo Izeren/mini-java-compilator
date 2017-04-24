@@ -19,7 +19,7 @@ namespace IRT {
 
         ~CLinearizeVisitor( );
 
-        std::unique_ptr<const CStatementList> ResultTree( );
+        std::unique_ptr<const CStatement> getResultTree( );
 
         void Visit(const CEseqExpression &expression) override;
 

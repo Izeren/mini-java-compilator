@@ -165,11 +165,6 @@ void CStatementList::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
-std::unique_ptr<const CStatementList> CStatementList::Copy( ) const {
-    CStatementList *newList = new CStatementList( );
-    for ( int i = 0; i < statements.size( ); ++i ) {
-        std::unique_ptr<const CStatement> copy = statements[ i ].get( )->Copy( );
-        newList->Add( std::move(copy) );
-    }
-    return std::move( std::unique_ptr<const CStatementList>( newList ));
+std::unique_ptr<const CStatement> CStatementList::Copy( ) const {
+    return nullptr;
 }
