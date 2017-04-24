@@ -86,20 +86,37 @@ void writeIRTTrees(const std::string& filename, const std::string& suffix, std::
     }
 }
 
-std::shared_ptr<MethodToIRTMap> canonizeIRTTrees(std::shared_ptr<const MethodToIRTMap> trees) {
+std::shared_ptr<MethodToIRTMap> canonizeIRTTreesCreateESeq(std::shared_ptr<const MethodToIRTMap> trees) {
     std::shared_ptr<MethodToIRTMap> newTrees = std::shared_ptr<MethodToIRTMap>(std::move(std::unique_ptr<MethodToIRTMap>(new MethodToIRTMap())));
     for (auto tree = trees->begin(); tree != trees->end(); ++tree) {
         IRT::CCallSimplifierVisitor callSimplifierVisitor;
         tree->second->Accept(callSimplifierVisitor);
 
         std::unique_ptr<const IRT::CStatement> callSimplifiedTree = std::move(callSimplifierVisitor.getResultTree());
+        (*newTrees)[tree->first] = std::move(callSimplifiedTree);
+    }
+    return newTrees;
+}
 
+std::shared_ptr<MethodToIRTMap> canonizeIRTTreesDeleteEseq(std::shared_ptr<const MethodToIRTMap> trees) {
+    std::shared_ptr<MethodToIRTMap> newTrees = std::shared_ptr<MethodToIRTMap>(std::move(std::unique_ptr<MethodToIRTMap>(new MethodToIRTMap())));
+    for (auto tree = trees->begin(); tree != trees->end(); ++tree) {
         IRT::CEseqFloatVisitor eseqFloatVisitor;
-        callSimplifiedTree->Accept(eseqFloatVisitor);
-        std::unique_ptr<const IRT::CStatement> eseqFloatVisitorResult = std::move(eseqFloatVisitor.getResultTree());
+        tree->second->Accept(eseqFloatVisitor);
+
+        (*newTrees)[tree->first] = std::move(eseqFloatVisitor.getResultTree());
+    }
+
+    return newTrees;
+}
+
+
+std::shared_ptr<MethodToIRTMap> canonizeIRTTreesLinearize(std::shared_ptr<const MethodToIRTMap> trees) {
+    std::shared_ptr<MethodToIRTMap> newTrees = std::shared_ptr<MethodToIRTMap>(std::move(std::unique_ptr<MethodToIRTMap>(new MethodToIRTMap())));
+    for (auto tree = trees->begin(); tree != trees->end(); ++tree) {
 
         IRT::CLinearizeVisitor linearizeVisitor;
-        eseqFloatVisitorResult->Accept(linearizeVisitor);
+        tree->second->Accept(linearizeVisitor);
 
         (*newTrees)[tree->first] = std::move(linearizeVisitor.getResultTree());
     }
@@ -131,11 +148,17 @@ void make_test( const std::string& filename, const std::string& testfile_name, c
     std::cout << "building IRTrees\n";
     CBuildVisitor iRTVisitor = CBuildVisitor( symbolTableRes.symbolTable.get( ));
     program->Accept( iRTVisitor );
-    std::shared_ptr<const MethodToIRTMap> dirtyTrees = iRTVisitor.GetMethodFromIrtMap();
-    writeIRTTrees(filename, "Dirty", dirtyTrees);
+    std::shared_ptr<const MethodToIRTMap> irtTreesFromAST = iRTVisitor.GetMethodFromIrtMap();
+    writeIRTTrees(filename, "0_FROM_AST", irtTreesFromAST);
 
-    std::shared_ptr<const MethodToIRTMap> canonizedTrees = canonizeIRTTrees(dirtyTrees);
-    writeIRTTrees(filename, "Canonized", canonizedTrees);
+    std::shared_ptr<const MethodToIRTMap> canonizedTreesWithEseq = canonizeIRTTreesCreateESeq(irtTreesFromAST);
+    writeIRTTrees(filename, "1_CanonozedWithEseq", canonizedTreesWithEseq);
+
+    std::shared_ptr<const MethodToIRTMap> canonizedTreesWithoutEseq = canonizeIRTTreesDeleteEseq(canonizedTreesWithEseq);
+    writeIRTTrees(filename, "2_CanonozedWithoutEseq", canonizedTreesWithoutEseq);
+
+    std::shared_ptr<const MethodToIRTMap> canonizedTreesLinearized = canonizeIRTTreesLinearize(canonizedTreesWithoutEseq);
+    writeIRTTrees(filename, "3_CanonozedLinearized", canonizedTreesLinearized);
 }
 
 int main( int argc, char **argv ) {

@@ -98,10 +98,11 @@ void CFrame::AddLocalAddress(const std::string &name) {
 }
 
 void CFrame::AddFieldAddress(const std::string &name) {
-    const CAddressOfField *fieldAddress = new CAddressOfField(GetThisAddress(), nextOffsetFromThis());
+    int offset = nextOffsetFromThis();
+    const CAddressOfField *fieldAddress = new CAddressOfField(GetThisAddress(), offset);
     classFieldAddresses.emplace(name, std::unique_ptr<const IAddress>(fieldAddress));
 
-    const CAddressOfField *address = new CAddressOfField(GetThisAddress(), nextOffsetFromThis());
+    const CAddressOfField *address = new CAddressOfField(GetThisAddress(), offset);
     addAddress(name, address);
 }
 
