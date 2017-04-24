@@ -44,13 +44,14 @@ void IRT::CCallSimplifierVisitor::Visit(const CNameExpression &expression) {
 
 void IRT::CCallSimplifierVisitor::Visit(const CCallExpression &expression) {
     expression.getFunction()->Accept(*this);
+    std::unique_ptr<const CExpression> function = std::move(childExpression);
     expression.getArguments()->Accept(*this);
 
     CTemp temp;
 
     std::unique_ptr<const CExpression> callExp = std::unique_ptr<const CExpression>(
             new CCallExpression(
-                    std::move(childExpression),
+                    std::move(function),
                     std::move(childExpressionList)
             )
     );

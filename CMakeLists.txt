@@ -14,7 +14,7 @@ set(BISON_OUTPUT ${CMAKE_SOURCE_DIR}/src/bison.cpp)
 # Create custom command for flex/lex (note the outputs)
 ADD_CUSTOM_COMMAND(
         COMMAND flex --header-file=${LEX_OUTPUT_H} -o ${LEX_OUTPUT_CPP} ${LEX_DESCRIPTION}
-        OUTPUT ${LEX_OUTPUT_CPP} ${LEX_OUTPUT_H} )
+        OUTPUT ${LEX_OUTPUT_CPP} ${LEX_OUTPUT_H})
 
 # Create custom command for bison/yacc (note the DEPENDS)
 ADD_CUSTOM_COMMAND(
@@ -36,7 +36,7 @@ set(SOURCE_FILES
         src/symbol_table/SymbolInfo.cpp
         src/type_checker/CTypeCheckerVisitor.cpp
         src/IRT/utils/Frame.cpp
-#        src/main_typechecker.cpp
+        #        src/main_typechecker.cpp
         src/IRT/utils/Label.cpp
         src/IRT/utils/Temporary.cpp
         src/symbol_table/PositionInfo.cpp
@@ -53,7 +53,8 @@ set(SOURCE_FILES
         src/IRT/visitors/EmptyVisitor.h
         src/IRT/visitors/PrintVisitor.cpp
         src/IRT/visitors/PrintVisitor.h
-        src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp src/IRT/visitors/CLinearizeVisitor.h src/IRT/visitors/CLinearizeVisitor.cpp)
+        src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp src/IRT/visitors/CLinearizeVisitor.h src/IRT/visitors/CLinearizeVisitor.cpp
+        src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp src/IRT/visitors/CEseqFloatVisitor.cpp src/IRT/visitors/CEseqFloatVisitor.h)
 
 
-add_executable(mini_java_compilator ${SOURCE_FILES} ${LEX_OUTPUT_H} ${LEX_OUTPUT_CPP} ${BISON_OUTPUT} )
+add_executable(mini_java_compilator ${SOURCE_FILES} ${LEX_OUTPUT_H} ${LEX_OUTPUT_CPP} ${BISON_OUTPUT})
