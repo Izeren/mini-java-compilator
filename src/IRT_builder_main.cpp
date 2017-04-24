@@ -25,6 +25,7 @@
 #include "IRT/visitors/CCallSimplifierVisitor.h"
 
 #include "dirent.h"
+#include "IRT/visitors/CEseqFloatVisitor.h"
 
 extern int line_number, column_number;
 
@@ -87,10 +88,15 @@ void writeIRTTrees(const std::string& filename, const std::string& suffix, std::
 std::shared_ptr<MethodToIRTMap> canonizeIRTTrees(std::shared_ptr<const MethodToIRTMap> trees) {
     std::shared_ptr<MethodToIRTMap> newTrees = std::shared_ptr<MethodToIRTMap>(std::move(std::unique_ptr<MethodToIRTMap>(new MethodToIRTMap())));
     for (auto tree = trees->begin(); tree != trees->end(); ++tree) {
-        IRT::CCallSimplifierVisitor visitor;
-        tree->second->Accept(visitor);
+        IRT::CCallSimplifierVisitor callSimplifierVisitor;
+        tree->second->Accept(callSimplifierVisitor);
 
-        (*newTrees)[tree->first] = std::move(visitor.getResultTree());
+        std::unique_ptr<const IRT::CStatement> callSimplifiedTree = std::move(callSimplifierVisitor.getResultTree());
+
+        IRT::CEseqFloatVisitor eseqFloatVisitor;
+        callSimplifiedTree->Accept(eseqFloatVisitor);
+
+        (*newTrees)[tree->first] = std::move(eseqFloatVisitor.getResultTree());
     }
 
     return newTrees;
