@@ -316,7 +316,7 @@ std::unique_ptr<const IRT::CStatement> IRT::CEseqFloatVisitor::processSourceEseq
 
 void IRT::CEseqFloatVisitor::Visit(const IRT::CExpStatement &statement) {
     statement.Expression()->Accept(*this);
-    const CEseqExpression* eseq = CAST_TO_ESEQ(childStatement.get());
+    const CEseqExpression* eseq = CAST_TO_ESEQ(childExpression.get());
     if (eseq == nullptr) {
         childStatement = SMOVE_UNIQ(new CExpStatement(std::move(childExpression)));
     } else {
