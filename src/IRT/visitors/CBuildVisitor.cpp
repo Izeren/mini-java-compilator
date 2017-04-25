@@ -138,11 +138,13 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
     std::cout << "IRT builder: CCallMethod\n";
 
     expression.objectExpression->Accept( *this );
+    std::unique_ptr<const IRT::CExpression> objectExpression = std::move(wrapper->ToExpression());
     std::string mineMethodObjectClassName = currentObjectClassName;
     assert(mineMethodObjectClassName != "");
 
     IRT::CExpressionList *expressionListIrt = new IRT::CExpressionList();
     std::vector<std::unique_ptr<IExpression> > &arguments = expression.args->exps;
+    expressionListIrt->Add(std::move(objectExpression));
     for( auto it = arguments.begin(); it != arguments.end(); ++it ) {
         (*it)->Accept( *this );
         expressionListIrt->Add( std::move( wrapper->ToExpression()));
