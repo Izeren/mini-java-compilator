@@ -27,6 +27,7 @@
 #include "dirent.h"
 #include "IRT/visitors/CEseqFloatVisitor.h"
 #include "IRT/visitors/CLinearizeVisitor.h"
+#include "IRT/basic_blocks/jump_canonization.h"
 
 extern int line_number, column_number;
 
@@ -159,6 +160,9 @@ void make_test( const std::string& filename, const std::string& testfile_name, c
 
     std::shared_ptr<const MethodToIRTMap> canonizedTreesLinearized = canonizeIRTTreesLinearize(canonizedTreesWithoutEseq);
     writeIRTTrees(filename, "3_CanonozedLinearized", canonizedTreesLinearized);
+
+    std::shared_ptr<const MethodToIRTMap> canonizedTreesCjump = canonizeJumps(canonizedTreesLinearized);
+    writeIRTTrees(filename, "4_CanonozedCJump", canonizedTreesCjump);
 }
 
 int main( int argc, char **argv ) {
@@ -180,7 +184,7 @@ int main( int argc, char **argv ) {
         while (( entry = readdir( dir )) != NULL ) {
             std::string filename = entry->d_name;
             std::string java_extension = ".java";
-            if ( filename.rfind( java_extension ) == filename.length( ) - java_extension.length( )) {
+            if ( filename == "jumpCanTest.java" && filename.rfind( java_extension ) == filename.length( ) - java_extension.length( )) {
                 make_test( filename, tests_dir + testfiles_dir + filename, tests_dir + results_dir + filename );
             }
         };

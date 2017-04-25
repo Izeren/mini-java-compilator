@@ -1,8 +1,9 @@
-//
-// Created by ivan on 25.04.17.
-//
+#pragma once
 
-#ifndef MINI_JAVA_COMPILATOR_JUMP_CANONIZATION_H
-#define MINI_JAVA_COMPILATOR_JUMP_CANONIZATION_H
+#include "../visitors/CBuildVisitor.h"
 
-#endif //MINI_JAVA_COMPILATOR_JUMP_CANONIZATION_H
+namespace IRT {
+
+    std::shared_ptr<MethodToIRTMap> canonizeJumps(std::shared_ptr<const MethodToIRTMap> trees);
+
+}

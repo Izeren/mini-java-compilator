@@ -1,8 +1,10 @@
-//
-// Created by ivan on 26.04.17.
-//
+#pragma once
 
-#ifndef MINI_JAVA_COMPILATOR_BASIC_BLOCK_COLLECTOR_H
-#define MINI_JAVA_COMPILATOR_BASIC_BLOCK_COLLECTOR_H
+#include "../nodes/Statements.h"
 
-#endif //MINI_JAVA_COMPILATOR_BASIC_BLOCK_COLLECTOR_H
+namespace IRT {
+
+
+    const CStatement* collectBlocksToTree(const std::vector<std::unique_ptr<CStatementList>>& blocks);
+
+}

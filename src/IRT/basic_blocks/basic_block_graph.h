@@ -7,8 +7,17 @@
 
 namespace IRT {
 
-    // label -> block index
-    std::map<std::string, int> buildBasicBlocksGraph(
-            const std::vector<std::unique_ptr<const CStatementList>>& basicBlocks);
+    bool isCJumpBasicBlock(const CStatementList* basicBlock);
+
+    std::string getFalseLabel(const CStatementList* basicBlock);
+
+    bool isJumpBasicBlock(const CStatementList* basicBlock);
+
+    std::string getJmpLabel(const CStatementList *basicBlock);
+
+    std::string getBlockLabel(const CStatementList *basicBlock);
+
+    std::vector<std::unique_ptr<CStatementList>> reorderByTracies(
+            std::vector<std::unique_ptr<CStatementList>>& basicBlocks);
 
 }

@@ -175,6 +175,10 @@ namespace IRT {
         virtual void Accept( IVisitor &visitor ) const override;
 
         std::unique_ptr<const CStatement> Copy( ) const override;
+
+        CStatementList* CopyNotConst( ) const;
+
+        std::vector<std::unique_ptr<const CStatement>>& StatementsNotConst( );
 //        std::unique_ptr<const CStatementList> Canonicalize( ) const;
 
     private:

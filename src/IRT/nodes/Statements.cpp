@@ -161,10 +161,23 @@ const std::vector<std::unique_ptr<const CStatement>> &CStatementList::Statements
     return statements;
 }
 
+std::vector<std::unique_ptr<const CStatement>> &CStatementList::StatementsNotConst( ) {
+    return statements;
+}
+
 void CStatementList::Accept( IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
 
 std::unique_ptr<const CStatement> CStatementList::Copy( ) const {
     return nullptr;
+}
+
+CStatementList *CStatementList::CopyNotConst() const {
+    CStatementList* list = new CStatementList();
+    for (int i = 0; i < statements.size(); ++i) {
+        list->Add(std::move(statements[i]->Copy()));
+    }
+
+    return list;
 }
