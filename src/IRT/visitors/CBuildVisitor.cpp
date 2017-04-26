@@ -103,6 +103,14 @@ void CBuildVisitor::Visit( CCompExp &expression ) {
                 std::move( wrapperRight->ToExpression())
         ));
     }
+
+    if( expression.operation == enums::TCompareOperation::GREATER ) {
+        updateSubtreeWrapper( new IRT::CRelativeConditionalWrapper(
+                IRT::enums::TLogicOperator::GREATER,
+                std::move( wrapperLeft->ToExpression()),
+                std::move( wrapperRight->ToExpression())
+        ));
+    }
 }
 
 void CBuildVisitor::Visit( CUnarMinusExp &expression ) {
@@ -332,7 +340,12 @@ void CBuildVisitor::Visit( CAssignSubscriptStm &statement ) {
 void CBuildVisitor::Visit( CCompoundStm &statement ) {
     std::cout << "IRT builder: CCompound\n";
     if( statement.leftStatement == NULL ) {
-        updateSubtreeWrapper( NULL );
+        // fake statement
+        updateSubtreeWrapper( new IRT::CStatementWrapper( std::move(std::unique_ptr<const IRT::CStatement>(
+                new IRT::CExpStatement(
+                        std::move(std::unique_ptr<const IRT::CExpression>(new IRT::CConstExpression(0)))
+                )
+        )) ) );
     } else {
         statement.leftStatement->Accept( *this );
         auto leftStatement = std::move( wrapper );
@@ -373,64 +386,55 @@ void CBuildVisitor::Visit( CIfStm &statement ) {
     statement.negativeStatement->Accept( *this );
     std::unique_ptr<IRT::ISubtreeWrapper> wrapperTargetNegative = std::move( wrapper );
 
+    assert(wrapperTargetPositive != nullptr);
+    assert(wrapperTargetNegative != nullptr);
+
     IRT::CLabel labelTrue;
     IRT::CLabel labelFalse;
     IRT::CLabel labelJoin;
 
-    IRT::CLabel *resultLabelTrue = &labelJoin;
-    IRT::CLabel *resultLabelFalse = &labelJoin;
-
     std::unique_ptr<const IRT::CStatement> suffix( new IRT::CLabelStatement( labelJoin ));
-    if( wrapperTargetNegative ) {
-        resultLabelFalse = &labelFalse;
 
-        suffix = std::move( std::unique_ptr<const IRT::CStatement>(
-                new IRT::CSeqStatement(
-                        std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CLabelStatement( labelFalse ))),
-                        std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
-                                std::move( wrapperTargetNegative->ToStatement()),
-                                std::move( suffix )
-                        )))
-                )
-        ));
-        if( wrapperTargetPositive ) {
-            suffix = std::move( std::unique_ptr<const IRT::CStatement>(
-                    new IRT::CSeqStatement(
-                            std::move( std::unique_ptr<const IRT::CStatement>(
-                                    new IRT::CJumpStatement( std::move(std::unique_ptr<const IRT::CLabelStatement>(
-                                            new IRT::CLabelStatement(
-                                                    labelJoin
-                                            )
-                                    )) )
-                            )),
+    suffix = std::move( std::unique_ptr<const IRT::CStatement>(
+            new IRT::CSeqStatement(
+                    std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CLabelStatement( labelFalse ))),
+                    std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
+                            std::move( wrapperTargetNegative->ToStatement()),
                             std::move( suffix )
-                    )
-            ));
-        }
-    }
+                    )))
+            )
+    ));
 
-    if( wrapperTargetPositive ) {
-        resultLabelTrue = &labelTrue;
+    suffix = std::move( std::unique_ptr<const IRT::CStatement>(
+            new IRT::CSeqStatement(
+                    std::move( std::unique_ptr<const IRT::CStatement>(
+                            new IRT::CJumpStatement( std::move(std::unique_ptr<const IRT::CLabelStatement>(
+                                    new IRT::CLabelStatement(
+                                            labelJoin
+                                    )
+                            )) )
+                    )),
+                    std::move( suffix )
+            )
+    ));
 
-        suffix = std::move( std::unique_ptr<const IRT::CStatement>(
-                new IRT::CSeqStatement(
-                        std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CLabelStatement( labelTrue ))),
-                        std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
-                                std::move( wrapperTargetPositive->ToStatement()),
-                                std::move( suffix )
-                        )))
-                )
-        ));
-    }
+    suffix = std::move( std::unique_ptr<const IRT::CStatement>(
+            new IRT::CSeqStatement(
+                    std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CLabelStatement( labelTrue ))),
+                    std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
+                            std::move( wrapperTargetPositive->ToStatement()),
+                            std::move( suffix )
+                    )))
+            )
+    ));
 
     updateSubtreeWrapper( new IRT::CStatementWrapper(
             new IRT::CSeqStatement(
-                    std::move( wrapperCondition->ToConditional( *resultLabelTrue, *resultLabelFalse )),
+                    std::move( wrapperCondition->ToConditional( labelTrue, labelFalse )),
                     std::move( suffix )
             )
     ));
 }
-
 
 void CBuildVisitor::Visit( CWhileStm &statement ) {
 
