@@ -54,7 +54,7 @@ set(SOURCE_FILES
         src/IRT/visitors/PrintVisitor.cpp
         src/IRT/visitors/PrintVisitor.h
         src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp src/IRT/visitors/CLinearizeVisitor.h src/IRT/visitors/CLinearizeVisitor.cpp
-        src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp src/IRT/visitors/CEseqFloatVisitor.cpp src/IRT/visitors/CEseqFloatVisitor.h src/IRT/utils/TreePatterns.cpp src/IRT/utils/TreePatterns.h)
+        src/IRT_builder_main.cpp src/IRT/utils/symbol_table_utils.cpp src/IRT/visitors/CEseqFloatVisitor.cpp src/IRT/visitors/CEseqFloatVisitor.h src/IRT/utils/TreePatterns.cpp src/IRT/utils/TreePatterns.h src/IRT/utils/AssemblyCommand.cpp src/IRT/utils/AssemblyCommand.h)
 
 
 add_executable(mini_java_compilator ${SOURCE_FILES} ${LEX_OUTPUT_H} ${LEX_OUTPUT_CPP} ${BISON_OUTPUT})
