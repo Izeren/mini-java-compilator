@@ -16,7 +16,7 @@ namespace AssemblyCode {
     public:
         PatternMatcher( );
 
-        AssemblyCommands GenerateCode( IRT::CStatementList *cStatementList );
+        AssemblyCommands GenerateCode( const IRT::CStatementList *cStatementList );
 
         void GenerateCodeForNode( const IRT::INode *node, const IRT::CTemp &dest, AssemblyCommands &commands );
 

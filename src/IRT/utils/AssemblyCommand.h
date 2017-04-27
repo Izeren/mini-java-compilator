@@ -179,6 +179,68 @@ namespace AssemblyCode {
         std::vector<IRT::CTemp> arguments;
     };
 
+    class JumpCommand : public AssemblyCommand {
+    public:
+        JumpCommand( const std::string &label );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        std::string label;
+    };
+
+
+    class CJumpLessCommand : public AssemblyCommand {
+    public:
+        CJumpLessCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG leftOperand;
+        REG rightOperand;
+        std::string label;
+    };
+
+    class CJumpEqualCommand : public AssemblyCommand {
+    public:
+        CJumpEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG leftOperand;
+        REG rightOperand;
+        std::string label;
+    };
+
+    class CJumpNotEqualCommand : public AssemblyCommand {
+    public:
+        CJumpNotEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG leftOperand;
+        REG rightOperand;
+        std::string label;
+    };
 };
 
 #undef REG

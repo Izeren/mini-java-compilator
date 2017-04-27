@@ -2,6 +2,7 @@
 // Created by izeren on 4/25/17.
 //
 
+#include <cassert>
 #include "TreePatterns.h"
 #include "../nodes/Expressions.h"
 #include "../nodes/Statements.h"
@@ -18,6 +19,8 @@ using ConstNamePtr = const IRT::CNameExpression *;
 using ConstCallPtr = const IRT::CCallExpression *;
 using ConstExpStmPtr = const IRT::CExpStatement *;
 using ConstMovePtr = const IRT::CMoveStatement *;
+using ConstJumpPtr = const IRT::CJumpStatement *;
+using ConstCJumpPtr = const IRT::CJumpConditionalStatement *;
 
 
 std::shared_ptr<IRT::INode> IRT::TreePattern::GetPatternRepresentation( ) {
@@ -198,6 +201,57 @@ bool IRT::MoveRegRegPattern::TryToGenerateCode( const IRT::INode *tree, const IR
         children.push_back( std::make_pair( leftRegister, movePtr->Target( )));
         children.push_back( std::make_pair( rightRegister, movePtr->Source( )));
         commands.emplace_back( std::make_shared<AssemblyCode::MoveRegRegCommand>( leftRegister, rightRegister ));
+        return true;
+    }
+    return false;
+}
+
+bool IRT::JumpPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest, ChildrenTemps &children,
+                                          AssemblyCommands &commands ) {
+    ConstJumpPtr jumpPtr = dynamic_cast<ConstJumpPtr>(tree);
+    if ( jumpPtr ) {
+        commands.emplace_back(
+                std::make_shared<AssemblyCode::JumpCommand>( jumpPtr->getLabel( )->Label( ).ToString( )));
+        return true;
+    }
+    return false;
+}
+
+
+bool
+IRT::ConditionalJumpPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest, ChildrenTemps &children,
+                                                AssemblyCommands &commands ) {
+    ConstCJumpPtr cJumpPtr = dynamic_cast<ConstCJumpPtr>(tree);
+    if ( cJumpPtr ) {
+        CTemp leftOperand;
+        CTemp rightOperand;
+        children.push_back( std::make_pair( leftOperand, cJumpPtr->LeftOperand( )));
+        children.push_back( std::make_pair( rightOperand, cJumpPtr->RightOperand( )));
+        switch ( cJumpPtr->Operation( )) {
+            case IRT::enums::TLogicOperator::LESS : {
+                commands.emplace_back( std::make_shared<AssemblyCode::CJumpLessCommand>( leftOperand, rightOperand,
+                                                                                         cJumpPtr->TrueLabel( )->Label( ).ToString( )));
+                break;
+            }
+            case IRT::enums::TLogicOperator::GREATER : {
+                commands.emplace_back( std::make_shared<AssemblyCode::CJumpLessCommand>( rightOperand, leftOperand,
+                                                                                         cJumpPtr->TrueLabel( )->Label( ).ToString( )));
+                break;
+            }
+            case IRT::enums::TLogicOperator::EQUALS : {
+                commands.emplace_back( std::make_shared<AssemblyCode::CJumpEqualCommand>( leftOperand, rightOperand,
+                                                                                          cJumpPtr->TrueLabel( )->Label( ).ToString( )));
+                break;
+            }
+            case IRT::enums::TLogicOperator::NOT_EQUALS : {
+                commands.emplace_back( std::make_shared<AssemblyCode::CJumpNotEqualCommand>( leftOperand, rightOperand,
+                                                                                             cJumpPtr->TrueLabel( )->Label( ).ToString( )));
+                break;
+            }
+            default: {
+                assert( false );
+            }
+        }
         return true;
     }
     return false;

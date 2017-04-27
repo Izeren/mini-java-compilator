@@ -116,4 +116,16 @@ namespace IRT {
                                 AssemblyCommands &commands ) override;
     };
 
+    class JumpPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class ConditionalJumpPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
 };

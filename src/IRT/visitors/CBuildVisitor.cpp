@@ -12,16 +12,17 @@
 
 void CBuildVisitor::Visit( CIdExp &expression ) {
     std::cout << "IRT builder: CIdExp\n";
-    const IRT::IAddress *address = currentFrame->GetLocalVisibilityAddress(expression.name);
+    const IRT::IAddress *address = currentFrame->GetLocalVisibilityAddress( expression.name );
 
-    assert(address != NULL);
+    assert( address != NULL );
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
-            std::move( address->ToExpression())
+            std::move( address->ToExpression( ))
     ));
 
-    auto varInfo = getVariableInfoFromLocalArgAndFields(symbolTable, currentClassName, currentMethod, expression.name);
-    if (varInfo->type->isPrimitive) {
+    auto varInfo = getVariableInfoFromLocalArgAndFields( symbolTable, currentClassName, currentMethod,
+                                                         expression.name );
+    if ( varInfo->type->isPrimitive ) {
         currentObjectClassName = "";
     } else {
         currentObjectClassName = varInfo->type->className;
@@ -54,8 +55,8 @@ void CBuildVisitor::Visit( COpExp &expression ) {
 
     std::unique_ptr<const IRT::CExpression> binOpPtr = std::unique_ptr<const IRT::CExpression>(
             new IRT::CBinopExpression(
-                    std::move( wrapperLeft->ToExpression()),
-                    std::move( wrapperRight->ToExpression()),
+                    std::move( wrapperLeft->ToExpression( )),
+                    std::move( wrapperRight->ToExpression( )),
                     operatorType ));
     updateSubtreeWrapper( new IRT::CExpressionWrapper( std::move( binOpPtr )));
 }
@@ -75,12 +76,12 @@ void CBuildVisitor::Visit( CLogOpExp &expression ) {
     expression.rightOperand->Accept( *this );
     std::unique_ptr<IRT::ISubtreeWrapper> wrapperRight = std::move( wrapper );
 
-    if( expression.operation == enums::TLogicalOperation::AND ) {
+    if ( expression.operation == enums::TLogicalOperation::AND ) {
         updateSubtreeWrapper( new IRT::CAndConditionalWrapper(
                 std::move( wrapperLeft ),
                 std::move( wrapperRight )
         ));
-    } else if( expression.operation == enums::TLogicalOperation::OR ) {
+    } else if ( expression.operation == enums::TLogicalOperation::OR ) {
         updateSubtreeWrapper( new IRT::COrConditionalWrapper(
                 std::move( wrapperLeft ),
                 std::move( wrapperRight )
@@ -96,19 +97,19 @@ void CBuildVisitor::Visit( CCompExp &expression ) {
     expression.rightOperand->Accept( *this );
     std::unique_ptr<IRT::ISubtreeWrapper> wrapperRight = std::move( wrapper );
 
-    if( expression.operation == enums::TCompareOperation::LESS ) {
+    if ( expression.operation == enums::TCompareOperation::LESS ) {
         updateSubtreeWrapper( new IRT::CRelativeConditionalWrapper(
                 IRT::enums::TLogicOperator::LESS,
-                std::move( wrapperLeft->ToExpression()),
-                std::move( wrapperRight->ToExpression())
+                std::move( wrapperLeft->ToExpression( )),
+                std::move( wrapperRight->ToExpression( ))
         ));
     }
 
-    if( expression.operation == enums::TCompareOperation::GREATER ) {
+    if ( expression.operation == enums::TCompareOperation::GREATER ) {
         updateSubtreeWrapper( new IRT::CRelativeConditionalWrapper(
                 IRT::enums::TLogicOperator::GREATER,
-                std::move( wrapperLeft->ToExpression()),
-                std::move( wrapperRight->ToExpression())
+                std::move( wrapperLeft->ToExpression( )),
+                std::move( wrapperRight->ToExpression( ))
         ));
     }
 }
@@ -120,20 +121,20 @@ void CBuildVisitor::Visit( CUnarMinusExp &expression ) {
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             new IRT::CBinopExpression( std::unique_ptr<const IRT::CExpression>( new IRT::CConstExpression( 0 )),
-                                       std::move( wrapperRight->ToExpression()), IRT::enums::TOperationType::MINUS )
+                                       std::move( wrapperRight->ToExpression( )), IRT::enums::TOperationType::MINUS )
     ));
 }
 
 void CBuildVisitor::Visit( CGetLengthExp &expression ) {
     std::cout << "IRT builder: CGetLength\n";
     expression.arrayIdentifier->Accept( *this );
-    std::unique_ptr<const IRT::CExpression> containerExpression = std::move( wrapper->ToExpression());
+    std::unique_ptr<const IRT::CExpression> containerExpression = std::move( wrapper->ToExpression( ));
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             new IRT::CMemExpression(
                     std::move( std::unique_ptr<const IRT::CExpression>( new IRT::CBinopExpression(
                             std::move( containerExpression ),
-                            std::move( std::unique_ptr<const IRT::CExpression>(new IRT::CConstExpression( 0 ))),
+                            std::move( std::unique_ptr<const IRT::CExpression>( new IRT::CConstExpression( 0 ))),
                             IRT::enums::TOperationType::PLUS
                                                                         )
                     )))
@@ -146,16 +147,16 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
     std::cout << "IRT builder: CCallMethod\n";
 
     expression.objectExpression->Accept( *this );
-    std::unique_ptr<const IRT::CExpression> objectExpression = std::move(wrapper->ToExpression());
+    std::unique_ptr<const IRT::CExpression> objectExpression = std::move( wrapper->ToExpression( ));
     std::string mineMethodObjectClassName = currentObjectClassName;
-    assert(mineMethodObjectClassName != "");
+    assert( mineMethodObjectClassName != "" );
 
-    IRT::CExpressionList *expressionListIrt = new IRT::CExpressionList();
+    IRT::CExpressionList *expressionListIrt = new IRT::CExpressionList( );
     std::vector<std::unique_ptr<IExpression> > &arguments = expression.args->exps;
-    expressionListIrt->Add(std::move(objectExpression));
-    for( auto it = arguments.begin(); it != arguments.end(); ++it ) {
-        (*it)->Accept( *this );
-        expressionListIrt->Add( std::move( wrapper->ToExpression()));
+    expressionListIrt->Add( std::move( objectExpression ));
+    for ( auto it = arguments.begin( ); it != arguments.end( ); ++it ) {
+        ( *it )->Accept( *this );
+        expressionListIrt->Add( std::move( wrapper->ToExpression( )));
     }
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
@@ -166,10 +167,10 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
                     std::unique_ptr<const IRT::CExpressionList>( expressionListIrt ))
     ));
 
-    std::shared_ptr<ClassInfo> classInfo = symbolTable->classes.at(mineMethodObjectClassName);
-    auto methodInfo = classInfo->methods[expression.methodName->name];
+    std::shared_ptr<ClassInfo> classInfo = symbolTable->classes.at( mineMethodObjectClassName );
+    auto methodInfo = classInfo->methods[ expression.methodName->name ];
     auto returnTypeInfo = methodInfo->returnType;
-    if (returnTypeInfo->isPrimitive) {
+    if ( returnTypeInfo->isPrimitive ) {
         currentObjectClassName = "";
     } else {
         currentObjectClassName = returnTypeInfo->className;
@@ -195,7 +196,7 @@ void CBuildVisitor::Visit( CNewArrayExpression &expression ) {
     std::cout << "IRT builder: CNewArrayExpression\n";
     expression.lengthExpression->Accept( *this );
 
-    std::unique_ptr<const IRT::CExpression> expressionLength = std::move( wrapper->ToExpression());
+    std::unique_ptr<const IRT::CExpression> expressionLength = std::move( wrapper->ToExpression( ));
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             std::move( currentFrame->ExternalCall(
@@ -211,7 +212,7 @@ void CBuildVisitor::Visit( CNewArrayExpression &expression ) {
                                                     IRT::enums::TOperationType::PLUS
                                             )),
                                             std::unique_ptr<const IRT::CExpression>(
-                                                    new IRT::CConstExpression( currentFrame->GetWordSize())),
+                                                    new IRT::CConstExpression( currentFrame->GetWordSize( ))),
                                             IRT::enums::TOperationType::MULTYPLY
                                     ))
                             )
@@ -223,10 +224,10 @@ void CBuildVisitor::Visit( CNewArrayExpression &expression ) {
 void CBuildVisitor::Visit( CByIndexExpression &expression ) {
     std::cout << "IRT builder: CByIndexExpression\n";
     expression.identifier->Accept( *this );
-    std::unique_ptr<const IRT::CExpression> containerExpression = std::move( wrapper->ToExpression());
+    std::unique_ptr<const IRT::CExpression> containerExpression = std::move( wrapper->ToExpression( ));
 
     expression.indexExpression->Accept( *this );
-    std::unique_ptr<const IRT::CExpression> indexExpression = std::move( wrapper->ToExpression());
+    std::unique_ptr<const IRT::CExpression> indexExpression = std::move( wrapper->ToExpression( ));
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             new IRT::CMemExpression(
@@ -243,7 +244,7 @@ void CBuildVisitor::Visit( CByIndexExpression &expression ) {
                                                             IRT::enums::TOperationType::PLUS
                                                     ))),
                                             std::unique_ptr<const IRT::CExpression>(
-                                                    new IRT::CConstExpression( currentFrame->GetWordSize())),
+                                                    new IRT::CConstExpression( currentFrame->GetWordSize( ))),
                                             IRT::enums::TOperationType::MULTYPLY
                                     )
                             )),
@@ -255,7 +256,7 @@ void CBuildVisitor::Visit( CByIndexExpression &expression ) {
 
 void CBuildVisitor::Visit( CNewIdentifier &expression ) {
     std::cout << "IRT builder: CNewIdentifier\n";
-    int fieldCount = getFieldCountWithSuper(symbolTable, expression.identifier->name);
+    int fieldCount = getFieldCountWithSuper( symbolTable, expression.identifier->name );
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             std::move( currentFrame->ExternalCall(
@@ -266,7 +267,7 @@ void CBuildVisitor::Visit( CNewIdentifier &expression ) {
                                             std::move( std::unique_ptr<const IRT::CExpression>(
                                                     new IRT::CConstExpression( fieldCount ))),
                                             std::move( std::unique_ptr<const IRT::CExpression>(
-                                                    new IRT::CConstExpression( currentFrame->GetWordSize()))),
+                                                    new IRT::CConstExpression( currentFrame->GetWordSize( )))),
                                             IRT::enums::TOperationType::MULTYPLY
                                     )))
                             )
@@ -286,8 +287,8 @@ void CBuildVisitor::Visit( CAssignStm &statement ) {
 
     updateSubtreeWrapper( new IRT::CStatementWrapper(
             new IRT::CMoveStatement(
-                    std::move( wrapperLeftPart->ToExpression()),
-                    std::move( wrapperRightPart->ToExpression())
+                    std::move( wrapperLeftPart->ToExpression( )),
+                    std::move( wrapperRightPart->ToExpression( ))
             )
     ));
 }
@@ -295,10 +296,10 @@ void CBuildVisitor::Visit( CAssignStm &statement ) {
 void CBuildVisitor::Visit( CAssignSubscriptStm &statement ) {
     std::cout << "IRT builder: CAssignSubscriptStm\n";
     statement.idExpression->Accept( *this );
-    std::unique_ptr<const IRT::CExpression> leftPartExpression = std::move( wrapper->ToExpression());
+    std::unique_ptr<const IRT::CExpression> leftPartExpression = std::move( wrapper->ToExpression( ));
 
     statement.valueExpression->Accept( *this );
-    std::unique_ptr<const IRT::CExpression> rightPartExpression = std::move( wrapper->ToExpression());
+    std::unique_ptr<const IRT::CExpression> rightPartExpression = std::move( wrapper->ToExpression( ));
 
     std::unique_ptr<const IRT::CExpression> indexExpression = std::move( std::unique_ptr<const IRT::CExpression>(
             new IRT::CConstExpression( statement.offset->number )));
@@ -323,7 +324,7 @@ void CBuildVisitor::Visit( CAssignSubscriptStm &statement ) {
                                                                     ))),
                                                             std::move( std::unique_ptr<const IRT::CExpression>(
                                                                     new IRT::CConstExpression(
-                                                                            currentFrame->GetWordSize()))),
+                                                                            currentFrame->GetWordSize( )))),
                                                             IRT::enums::TOperationType::MULTYPLY
                                                     )
                                             )),
@@ -339,25 +340,25 @@ void CBuildVisitor::Visit( CAssignSubscriptStm &statement ) {
 
 void CBuildVisitor::Visit( CCompoundStm &statement ) {
     std::cout << "IRT builder: CCompound\n";
-    if( statement.leftStatement == NULL ) {
+    if ( statement.leftStatement == NULL ) {
         // fake statement
-        updateSubtreeWrapper( new IRT::CStatementWrapper( std::move(std::unique_ptr<const IRT::CStatement>(
+        updateSubtreeWrapper( new IRT::CStatementWrapper( std::move( std::unique_ptr<const IRT::CStatement>(
                 new IRT::CExpStatement(
-                        std::move(std::unique_ptr<const IRT::CExpression>(new IRT::CConstExpression(0)))
+                        std::move( std::unique_ptr<const IRT::CExpression>( new IRT::CConstExpression( 0 )))
                 )
-        )) ) );
+        ))));
     } else {
         statement.leftStatement->Accept( *this );
         auto leftStatement = std::move( wrapper );
         statement.rightStatement->Accept( *this );
 
-        if( wrapper ) {
-            std::unique_ptr<const IRT::CStatement> rightStatement = std::move( wrapper->ToStatement());
+        if ( wrapper ) {
+            std::unique_ptr<const IRT::CStatement> rightStatement = std::move( wrapper->ToStatement( ));
             std::unique_ptr<const IRT::CStatement> compound = std::move( std::unique_ptr<const IRT::CStatement>(
-                    new IRT::CSeqStatement( std::move( leftStatement->ToStatement()), std::move( rightStatement ))));
+                    new IRT::CSeqStatement( std::move( leftStatement->ToStatement( )), std::move( rightStatement ))));
             updateSubtreeWrapper( new IRT::CStatementWrapper( std::move( compound )));
         } else {
-            updateSubtreeWrapper( new IRT::CStatementWrapper( std::move( leftStatement->ToStatement())));
+            updateSubtreeWrapper( new IRT::CStatementWrapper( std::move( leftStatement->ToStatement( ))));
         }
     }
 }
@@ -371,7 +372,7 @@ void CBuildVisitor::Visit( CPrintStm &statement ) {
             std::move( currentFrame->ExternalCall(
                     "print",
                     std::move( std::unique_ptr<const IRT::CExpressionList>(
-                            new IRT::CExpressionList( std::move( wrapper->ToExpression()))
+                            new IRT::CExpressionList( std::move( wrapper->ToExpression( )))
                     ))
             ))
     ));
@@ -386,8 +387,8 @@ void CBuildVisitor::Visit( CIfStm &statement ) {
     statement.negativeStatement->Accept( *this );
     std::unique_ptr<IRT::ISubtreeWrapper> wrapperTargetNegative = std::move( wrapper );
 
-    assert(wrapperTargetPositive != nullptr);
-    assert(wrapperTargetNegative != nullptr);
+    assert( wrapperTargetPositive != nullptr );
+    assert( wrapperTargetNegative != nullptr );
 
     IRT::CLabel labelTrue;
     IRT::CLabel labelFalse;
@@ -399,7 +400,7 @@ void CBuildVisitor::Visit( CIfStm &statement ) {
             new IRT::CSeqStatement(
                     std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CLabelStatement( labelFalse ))),
                     std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
-                            std::move( wrapperTargetNegative->ToStatement()),
+                            std::move( wrapperTargetNegative->ToStatement( )),
                             std::move( suffix )
                     )))
             )
@@ -408,11 +409,11 @@ void CBuildVisitor::Visit( CIfStm &statement ) {
     suffix = std::move( std::unique_ptr<const IRT::CStatement>(
             new IRT::CSeqStatement(
                     std::move( std::unique_ptr<const IRT::CStatement>(
-                            new IRT::CJumpStatement( std::move(std::unique_ptr<const IRT::CLabelStatement>(
+                            new IRT::CJumpStatement( std::move( std::unique_ptr<const IRT::CLabelStatement>(
                                     new IRT::CLabelStatement(
                                             labelJoin
                                     )
-                            )) )
+                            )))
                     )),
                     std::move( suffix )
             )
@@ -422,7 +423,7 @@ void CBuildVisitor::Visit( CIfStm &statement ) {
             new IRT::CSeqStatement(
                     std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CLabelStatement( labelTrue ))),
                     std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
-                            std::move( wrapperTargetPositive->ToStatement()),
+                            std::move( wrapperTargetPositive->ToStatement( )),
                             std::move( suffix )
                     )))
             )
@@ -461,10 +462,10 @@ void CBuildVisitor::Visit( CWhileStm &statement ) {
                     std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CLabelStatement( labelDone )))
             )))
     );
-    if( wrapperBody ) {
+    if ( wrapperBody ) {
         suffix = std::move( std::unique_ptr<const IRT::CStatement>(
                 new IRT::CSeqStatement(
-                        std::move( wrapperBody->ToStatement()),
+                        std::move( wrapperBody->ToStatement( )),
                         std::move( suffix )
                 )
         ));
@@ -520,24 +521,26 @@ void CBuildVisitor::Visit( CMethod &statement ) {
     std::cout << "IRT builder: CMethodStm\n";
     currentMethod = statement.name->name;
     buildNewFrame( &statement );
-    std::string methodFullName = GetMethodFullName( currentFrame->GetClassName(), currentFrame->GetMethodName());
+    std::string methodFullName = GetMethodFullName( currentFrame->GetClassName( ), currentFrame->GetMethodName( ));
 
     statement.statements->Accept( *this );
     std::unique_ptr<IRT::ISubtreeWrapper> statementListWrapper = std::move( wrapper );
 
     statement.returnExp->Accept( *this );
-    std::unique_ptr<const IRT::CExpression> expressionReturn = std::move( wrapper->ToExpression());
+    std::unique_ptr<const IRT::CExpression> expressionReturn = std::move( wrapper->ToExpression( ));
 
-    if( statementListWrapper ) {
+    if ( statementListWrapper ) {
         updateSubtreeWrapper( new IRT::CStatementWrapper(
                 std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
                         std::move( std::unique_ptr<const IRT::CStatement>(
                                 new IRT::CLabelStatement( IRT::CLabel( methodFullName )))),
                         std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CSeqStatement(
-                                std::move( statementListWrapper->ToStatement()),
+                                std::move( statementListWrapper->ToStatement( )),
                                 std::move( std::unique_ptr<const IRT::CStatement>(
                                         new IRT::CMoveStatement(
-                                                std::move( currentFrame->GetReturnValueAddress()->ToExpression()),
+                                                std::move( std::unique_ptr<IRT::CExpression>( new IRT::CMemExpression(
+                                                        std::move(
+                                                                currentFrame->GetReturnValueAddress( )->ToExpression( ))))),
                                                 std::move( expressionReturn )
                                         )
                                 ))
@@ -550,14 +553,14 @@ void CBuildVisitor::Visit( CMethod &statement ) {
                         std::move( std::unique_ptr<const IRT::CStatement>(
                                 new IRT::CLabelStatement( IRT::CLabel( methodFullName )))),
                         std::move( std::unique_ptr<const IRT::CStatement>( new IRT::CMoveStatement(
-                                std::move( currentFrame->GetReturnValueAddress()->ToExpression()),
+                                std::move( currentFrame->GetReturnValueAddress( )->ToExpression( )),
                                 std::move( expressionReturn )
                         )))
                 )))
         ));
     }
 
-    treesOfMethods->emplace( methodFullName, std::move( wrapper->ToStatement()));
+    treesOfMethods->emplace( methodFullName, std::move( wrapper->ToStatement( )));
 }
 
 void CBuildVisitor::Visit( CMethodList &stm ) {
@@ -569,8 +572,8 @@ void CBuildVisitor::Visit( CClass &statement ) {
     std::cout << "IRT builder: CClass\n";
     currentClassName = statement.id->name;
     std::vector<std::unique_ptr<CMethod>> &methodDeclarations = statement.methods->methods;
-    for( auto it = methodDeclarations.begin(); it != methodDeclarations.end(); ++it ) {
-        (*it)->Accept( *this );
+    for ( auto it = methodDeclarations.begin( ); it != methodDeclarations.end( ); ++it ) {
+        ( *it )->Accept( *this );
     }
 }
 
@@ -589,17 +592,17 @@ void CBuildVisitor::Visit( CMainClass &statement ) {
     currentMethod = MAIN_NAME;
     currentClassName = statement.id->name;
     buildNewFrame( &statement );
-    std::string methodFullName = GetMethodFullName( currentFrame->GetClassName(), currentFrame->GetMethodName());
+    std::string methodFullName = GetMethodFullName( currentFrame->GetClassName( ), currentFrame->GetMethodName( ));
 
     statement.mainMethod->statements->Accept( *this );
     std::unique_ptr<IRT::ISubtreeWrapper> statementListWrapper = std::move( wrapper );
-    if( statementListWrapper ) {
+    if ( statementListWrapper ) {
         updateSubtreeWrapper( new IRT::CStatementWrapper(
                 new IRT::CSeqStatement(
                         std::move( std::unique_ptr<const IRT::CStatement>(
                                 new IRT::CLabelStatement( IRT::CLabel( methodFullName ))
                         )),
-                        std::move( statementListWrapper->ToStatement())
+                        std::move( statementListWrapper->ToStatement( ))
                 )
         ));
     } else {
@@ -609,25 +612,25 @@ void CBuildVisitor::Visit( CMainClass &statement ) {
         ));
     }
 
-    treesOfMethods->emplace( methodFullName, std::move( wrapper->ToStatement()));
+    treesOfMethods->emplace( methodFullName, std::move( wrapper->ToStatement( )));
 }
 
 void CBuildVisitor::Visit( CProgram &statement ) {
     std::cout << "IRT builder: CProgram\n";
     statement.mainClass->Accept( *this );
     std::vector<std::unique_ptr<CClass>> &classDeclarations = statement.classList->classes;
-    for( auto it = classDeclarations.begin(); it != classDeclarations.end(); ++it ) {
-        (*it)->Accept( *this );
+    for ( auto it = classDeclarations.begin( ); it != classDeclarations.end( ); ++it ) {
+        ( *it )->Accept( *this );
     }
 }
 
-std::shared_ptr<const MethodToIRTMap> CBuildVisitor::GetMethodFromIrtMap() {
+std::shared_ptr<const MethodToIRTMap> CBuildVisitor::GetMethodFromIrtMap( ) {
     return treesOfMethods;
 }
 
 IRT::enums::TOperationType CBuildVisitor::operatorAst2Irt( enums::TOperation type ) const {
     IRT::enums::TOperationType typeResult;
-    switch( type ) {
+    switch ( type ) {
         case enums::TOperation::PLUS:
             typeResult = IRT::enums::TOperationType::PLUS;
             break;
@@ -667,18 +670,18 @@ void CBuildVisitor::buildNewFrame( const std::string &className, const std::stri
                                    InputIteratorFields fieldsLeftIt, InputIteratorFields fieldsRightIt ) {
     std::unique_ptr<IRT::CFrame> newFrame = std::unique_ptr<IRT::CFrame>( new IRT::CFrame( className, methodName ));
 
-    currentFrame = newFrame.get();
+    currentFrame = newFrame.get( );
 
-    currentFrame->AddThisAddress();
-    for( auto it = fieldsLeftIt; it != fieldsRightIt; ++it ) {
+    currentFrame->AddThisAddress( );
+    for ( auto it = fieldsLeftIt; it != fieldsRightIt; ++it ) {
         currentFrame->AddFieldAddress( *it );
     }
     // arguments and locals overwrite class fields in the scope
-    for( auto it = argumentsLeftIt; it != argumentsRightIt; ++it ) {
+    for ( auto it = argumentsLeftIt; it != argumentsRightIt; ++it ) {
         currentFrame->AddArgumentAddress( *it );
     }
-    currentFrame->AddReturnAddress();
-    for( auto it = localsLeftIt; it != localsRightIt; ++it ) {
+    currentFrame->AddReturnAddress( );
+    for ( auto it = localsLeftIt; it != localsRightIt; ++it ) {
         currentFrame->AddLocalAddress( *it );
     }
 
@@ -692,24 +695,24 @@ void CBuildVisitor::buildNewFrame( const CMethod *declaration ) {
 
     const std::vector<std::unique_ptr<CArgument>> &arguments = declaration->arguments->arguments;
     std::vector<std::string> argumentsNames;
-    argumentsNames.reserve( arguments.size());
-    for( auto it = arguments.begin(); it != arguments.end(); ++it ) {
-        argumentsNames.push_back((*it)->id->name );
+    argumentsNames.reserve( arguments.size( ));
+    for ( auto it = arguments.begin( ); it != arguments.end( ); ++it ) {
+        argumentsNames.push_back(( *it )->id->name );
     }
     auto localNames = methodDefinition->fields->variableNames;
 
-    auto fieldsNames = std::list<std::string>();
+    auto fieldsNames = std::list<std::string>( );
     std::shared_ptr<const ClassInfo> baseClass = classDefinition;
-    while( baseClass ) {
+    while ( baseClass ) {
         auto fields = baseClass->fields->variableNames;
-        for( auto name : fields ) {
+        for ( auto name : fields ) {
             fieldsNames.push_back( name );
         }
         baseClass = baseClass->baseClass != "" ? symbolTable->classes.at( baseClass->baseClass ) : nullptr;
     }
 
-    buildNewFrame( currentClassName, declaration->name->name, argumentsNames.begin(), argumentsNames.end(),
-                   localNames.begin(), localNames.end(), fieldsNames.begin(), fieldsNames.end());
+    buildNewFrame( currentClassName, declaration->name->name, argumentsNames.begin( ), argumentsNames.end( ),
+                   localNames.begin( ), localNames.end( ), fieldsNames.begin( ), fieldsNames.end( ));
 }
 
 void CBuildVisitor::buildNewFrame( const CMainClass *mainClass ) {
@@ -718,29 +721,29 @@ void CBuildVisitor::buildNewFrame( const CMainClass *mainClass ) {
     std::shared_ptr<const MethodInfo> methodDefinition = classDefinition->methods.at( MAIN_NAME );
     auto localNames = methodDefinition->fields->variableNames;
 
-    buildNewFrame( mainClass->id->name, "main", emptySet.end(), emptySet.end(),
-                   localNames.begin(), localNames.end(), emptySet.end(), emptySet.end());
+    buildNewFrame( mainClass->id->name, "main", emptySet.end( ), emptySet.end( ),
+                   localNames.begin( ), localNames.end( ), emptySet.end( ), emptySet.end( ));
 }
 
-void CBuildVisitor::Visit(CThisExpression &exp) {
+void CBuildVisitor::Visit( CThisExpression &exp ) {
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
-            std::move( currentFrame->GetThisAddress()->ToExpression() )
-    ) );
+            std::move( currentFrame->GetThisAddress( )->ToExpression( ))
+    ));
 
     currentObjectClassName = currentClassName;
 }
 
-void CBuildVisitor::Visit(CGetFieldByThisExpression &exp) {
+void CBuildVisitor::Visit( CGetFieldByThisExpression &exp ) {
     std::cout << "IRT builder: CGetFieldByThisExpression\n";
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
-            std::move(currentFrame->GetClassFieldAddress(exp.fieldIdentifier->name)->ToExpression())));
+            std::move( currentFrame->GetClassFieldAddress( exp.fieldIdentifier->name )->ToExpression( ))));
 
-    auto varInfo = getVariableInfoFromLocalArgAndFields(symbolTable,
-                                                        currentClassName,
-                                                        "",
-                                                        exp.fieldIdentifier->name);
+    auto varInfo = getVariableInfoFromLocalArgAndFields( symbolTable,
+                                                         currentClassName,
+                                                         "",
+                                                         exp.fieldIdentifier->name );
 
-    if (varInfo->type->isPrimitive) {
+    if ( varInfo->type->isPrimitive ) {
         currentObjectClassName = "";
     } else {
         currentObjectClassName = varInfo->type->className;
