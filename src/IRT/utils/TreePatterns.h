@@ -12,9 +12,8 @@
 #include "../utils/Temporary.h"
 #include "AssemblyCommand.h"
 
-
 using ChildrenTemps = std::vector<std::pair<IRT::CTemp, const IRT::INode *>>;
-using AssemblyCommands = std::vector<AssemblyCode::AssemblyCommand>;
+using AssemblyCommands = std::vector<std::shared_ptr<AssemblyCode::AssemblyCommand>>;
 
 namespace IRT {
 

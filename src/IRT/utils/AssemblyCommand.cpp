@@ -152,7 +152,7 @@ std::string AssemblyCode::NameCommand::ToString( ) const {
 
 
 //----------------------------------------------------------------------------------------------------------------------
-AssemblyCode::CallCommand::CallCommand( const IRT::CTemp &address, const std::vector<const IRT::CTemp> &arguments )
+AssemblyCode::CallCommand::CallCommand( const IRT::CTemp &address, const std::vector<IRT::CTemp> &arguments )
         : address( address ), arguments( arguments ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::CallCommand::GetIn( ) const {

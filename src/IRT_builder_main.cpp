@@ -27,6 +27,8 @@
 #include "dirent.h"
 #include "IRT/visitors/CEseqFloatVisitor.h"
 #include "IRT/visitors/CLinearizeVisitor.h"
+#include "IRT/basic_blocks/jump_canonization.h"
+#include "IRT/visitors/ConstEvaluateVisitor.h"
 
 extern int line_number, column_number;
 
@@ -124,6 +126,20 @@ std::shared_ptr<MethodToIRTMap> canonizeIRTTreesLinearize(std::shared_ptr<const 
     return newTrees;
 }
 
+std::shared_ptr<MethodToIRTMap> evauluateConstBinops(std::shared_ptr<const MethodToIRTMap> trees) {
+    std::shared_ptr<MethodToIRTMap> newTrees = std::shared_ptr<MethodToIRTMap>(std::move(std::unique_ptr<MethodToIRTMap>(new MethodToIRTMap())));
+    for (auto tree = trees->begin(); tree != trees->end(); ++tree) {
+
+        IRT::ConstEvaluateVisitor visitor;
+        tree->second->Accept(visitor);
+
+        (*newTrees)[tree->first] = std::move(visitor.getResult());
+    }
+
+    return newTrees;
+}
+
+
 void make_test( const std::string& filename, const std::string& testfile_name, const std::string& result_name ) {
     std::cout << "\n\n\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
     std::cout << "in make_test, testfile_name: " << testfile_name << " result_name: " << result_name << "\n";
@@ -145,20 +161,32 @@ void make_test( const std::string& filename, const std::string& testfile_name, c
         return;
     }
 
+    // BUILD IRT
     std::cout << "building IRTrees\n";
     CBuildVisitor iRTVisitor = CBuildVisitor( symbolTableRes.symbolTable.get( ));
     program->Accept( iRTVisitor );
     std::shared_ptr<const MethodToIRTMap> irtTreesFromAST = iRTVisitor.GetMethodFromIrtMap();
     writeIRTTrees(filename, "0_FROM_AST", irtTreesFromAST);
 
+    // CREATE ESEQ
     std::shared_ptr<const MethodToIRTMap> canonizedTreesWithEseq = canonizeIRTTreesCreateESeq(irtTreesFromAST);
     writeIRTTrees(filename, "1_CanonozedWithEseq", canonizedTreesWithEseq);
 
+    // REMOVE ESEQ
     std::shared_ptr<const MethodToIRTMap> canonizedTreesWithoutEseq = canonizeIRTTreesDeleteEseq(canonizedTreesWithEseq);
     writeIRTTrees(filename, "2_CanonozedWithoutEseq", canonizedTreesWithoutEseq);
 
+    // LINIARIZE
     std::shared_ptr<const MethodToIRTMap> canonizedTreesLinearized = canonizeIRTTreesLinearize(canonizedTreesWithoutEseq);
     writeIRTTrees(filename, "3_CanonozedLinearized", canonizedTreesLinearized);
+
+    // BASIC BLOCKS
+    std::shared_ptr<const MethodToIRTMap> canonizedTreesCjump = canonizeJumps(canonizedTreesLinearized);
+    writeIRTTrees(filename, "4_CanonozedCJump", canonizedTreesCjump);
+
+    // CONST BINOP CALCS
+    std::shared_ptr<const MethodToIRTMap> constBinopEvaluatedTrees = evauluateConstBinops(canonizedTreesCjump);
+    writeIRTTrees(filename, "5_ConstBinopEvaluated", constBinopEvaluatedTrees);
 }
 
 int main( int argc, char **argv ) {

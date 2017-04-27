@@ -4,6 +4,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "../utils/Temporary.h"
 
@@ -165,7 +166,7 @@ namespace AssemblyCode {
 
     class CallCommand : public AssemblyCommand {
     public:
-        CallCommand( const IRT::CTemp &address, const std::vector<const IRT::CTemp> &arguments );
+        CallCommand( const IRT::CTemp &address, const std::vector<IRT::CTemp> &arguments );
 
         std::vector<IRT::CTemp> GetIn( ) const override;
 
@@ -175,7 +176,7 @@ namespace AssemblyCode {
 
     private:
         REG address;
-        std::vector<REG> arguments;
+        std::vector<IRT::CTemp> arguments;
     };
 
 };

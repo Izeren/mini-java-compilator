@@ -115,7 +115,7 @@ std::unique_ptr<const IRT::CExpression> IRT::CEseqFloatVisitor::processRightEseq
                 EMOVE_UNIQ(new CEseqExpression(
                         std::move(rightEseq->getStatement()->Copy()),
                         EMOVE_UNIQ(new CBinopExpression(
-                                EMOVE_UNIQ(new CTempExpression(temp)),
+                                EMOVE_UNIQ(new CMemExpression( EMOVE_UNIQ(new CTempExpression(temp)))),
                                 std::move(rightEseq->getExpression()->Copy()),
                                 binop->getOperation()
                         ))
@@ -177,7 +177,7 @@ void IRT::CEseqFloatVisitor::Visit(const IRT::CCallExpression &expression) {
     childExpression = EMOVE_UNIQ(new CEseqExpression(
             std::move(rightStatement),
             EMOVE_UNIQ(new CCallExpression(
-                    EMOVE_UNIQ(new CTempExpression(tempFunction)),
+                    EMOVE_UNIQ(new CMemExpression( EMOVE_UNIQ(new CTempExpression(tempFunction)))),
                     std::move(std::unique_ptr<const CExpressionList>(tempExpressionList))
             ))
     ));
@@ -205,7 +205,7 @@ void IRT::CEseqFloatVisitor::processCallArgument(
     }
 
     helpStatements.push_back(SMOVE_UNIQ(new CMoveStatement(
-            EMOVE_UNIQ(new CTempExpression(argTemp)),
+            EMOVE_UNIQ(new CMemExpression( EMOVE_UNIQ(new CTempExpression(argTemp)))),
             std::move(source)
     )));
 }
@@ -306,7 +306,7 @@ std::unique_ptr<const IRT::CStatement> IRT::CEseqFloatVisitor::processSourceEseq
                 SMOVE_UNIQ(new CSeqStatement(
                         std::move(sourceEseq->getStatement()->Copy()),
                         SMOVE_UNIQ(new CMoveStatement(
-                                EMOVE_UNIQ(new CTempExpression(temp)),
+                                EMOVE_UNIQ(new CMemExpression(EMOVE_UNIQ(new CTempExpression(temp)))),
                                 std::move(sourceEseq->getExpression()->Copy())
                         ))
                 ))
@@ -316,7 +316,7 @@ std::unique_ptr<const IRT::CStatement> IRT::CEseqFloatVisitor::processSourceEseq
 
 void IRT::CEseqFloatVisitor::Visit(const IRT::CExpStatement &statement) {
     statement.Expression()->Accept(*this);
-    const CEseqExpression* eseq = CAST_TO_ESEQ(childStatement.get());
+    const CEseqExpression* eseq = CAST_TO_ESEQ(childExpression.get());
     if (eseq == nullptr) {
         childStatement = SMOVE_UNIQ(new CExpStatement(std::move(childExpression)));
     } else {
@@ -412,7 +412,7 @@ std::unique_ptr<const IRT::CStatement> IRT::CEseqFloatVisitor::processRightEseqI
                         std::move(rightEseq->getStatement()->Copy()),
                         SMOVE_UNIQ(new CJumpConditionalStatement(
                                 cjump->Operation(),
-                                EMOVE_UNIQ(new CTempExpression(temp)),
+                                EMOVE_UNIQ(new CMemExpression(EMOVE_UNIQ(new CTempExpression(temp)))),
                                 std::move(rightEseq->getExpression()->Copy()),
                                 std::move(cjump->TrueLabel()->CastCopy()),
                                 std::move(cjump->FalseLabel()->CastCopy())
