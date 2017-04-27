@@ -108,17 +108,17 @@ std::unique_ptr<const IRT::CExpression> IRT::CEseqFloatVisitor::processRightEseq
     } else {
         CTemp temp;
         return EMOVE_UNIQ(new CEseqExpression(
-                SMOVE_UNIQ(new CMoveStatement(
+                SMOVE_UNIQ(new CSeqStatement(
+                    SMOVE_UNIQ(new CMoveStatement(
                         EMOVE_UNIQ(new CTempExpression(temp)),
                         std::move(left->Copy())
+                    )),
+                    std::move(rightEseq->getStatement()->Copy())
                 )),
-                EMOVE_UNIQ(new CEseqExpression(
-                        std::move(rightEseq->getStatement()->Copy()),
-                        EMOVE_UNIQ(new CBinopExpression(
-                                EMOVE_UNIQ(new CMemExpression( EMOVE_UNIQ(new CTempExpression(temp)))),
-                                std::move(rightEseq->getExpression()->Copy()),
-                                binop->getOperation()
-                        ))
+                EMOVE_UNIQ(new CBinopExpression(
+                        EMOVE_UNIQ(new CMemExpression( EMOVE_UNIQ(new CTempExpression(temp)))),
+                        std::move(rightEseq->getExpression()->Copy()),
+                        binop->getOperation()
                 ))
         ));
     }
@@ -287,6 +287,9 @@ void IRT::CEseqFloatVisitor::Visit(const IRT::CMoveStatement &statement) {
 
 std::unique_ptr<const IRT::CStatement> IRT::CEseqFloatVisitor::processSourceEseqInCMove(
         const IRT::CExpression *target, const IRT::CEseqExpression *sourceEseq) {
+
+    const CEseqExpression* eseq = dynamic_cast<const CEseqExpression*>(sourceEseq->getExpression());
+    assert(eseq == nullptr);
 
     if (isExpCommuteWithStm(target, sourceEseq->getStatement())) {
         return SMOVE_UNIQ(new CSeqStatement(
