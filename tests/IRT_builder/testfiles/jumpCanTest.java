@@ -1,6 +1,6 @@
 class Main {
     public static void main(String[] args) {
-        if (0 < (2 - 1)) {
+        if (0 < (2 - (4 % 3))) {
 
         } else {
             
