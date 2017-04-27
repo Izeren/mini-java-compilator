@@ -24,15 +24,7 @@ int calculate(int left, int right, IRT::enums::TOperationType type) {
 }
 
 void IRT::ConstEvaluateVisitor::Visit(const IRT::CEseqExpression &expression) {
-    expression.getStatement()->Accept(*this);
-    STM stm = M(childStatement);
-    expression.getExpression()->Accept(*this);
-    EXP exp = M(childExpression);
-
-    childExpression = EMOVE_UNIQ(new CEseqExpression(
-            M(stm),
-            M(exp)
-    ));
+    assert(false);
 }
 
 void IRT::ConstEvaluateVisitor::Visit(const IRT::CBinopExpression &expression) {
