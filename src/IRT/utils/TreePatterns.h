@@ -5,109 +5,115 @@
 
 #include <memory>
 #include <string>
+#include <vector>
+#include <functional>
 
 #include "../nodes/INode.h"
+#include "../utils/Temporary.h"
+#include "AssemblyCommand.h"
 
+using ChildrenTemps = std::vector<std::pair<IRT::CTemp, const IRT::INode *>>;
+using AssemblyCommands = std::vector<std::shared_ptr<AssemblyCode::AssemblyCommand>>;
 
 namespace IRT {
 
     class TreePattern {
     public:
-        TreePattern();
+        TreePattern( );
+
         virtual ~TreePattern( );
-        virtual std::shared_ptr<IRT::INode> GetPatternRepresentation();
-        virtual std::string GetStringRepresentation();
+
+        virtual std::shared_ptr<IRT::INode> GetPatternRepresentation( );
+
+        virtual std::string GetStringRepresentation( );
+
+        virtual bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                        AssemblyCommands &commands ) = 0;
 
     protected:
         std::shared_ptr<IRT::INode> treeRepresentation;
         std::string stringRepresentation;
     };
 
-    class RegPlusRegToRegPattern : public TreePattern {
+    class RegPlusRegPattern : public TreePattern {
 
     public:
-        RegPlusRegToRegPattern( );
+        RegPlusRegPattern( );
+
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
 
-    class RegMinusRegToRegPattern : public TreePattern {
+    class RegMinusRegPattern : public TreePattern {
     public:
-        RegMinusRegToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+
+        RegMinusRegPattern( );
     };
 
-    class RegMulRegToRegPattern : public TreePattern {
+    class RegMulRegPattern : public TreePattern {
     public:
-        RegMulRegToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+
+        RegMulRegPattern( );
     };
 
-    class RegModRegToRegPattern :public TreePattern {
+    class RegModRegPattern : public TreePattern {
     public:
-        RegModRegToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+
+        RegModRegPattern( );
     };
 
-    class RegPlusConstToRegPattern : public  TreePattern {
+    class ConstPattern : public TreePattern {
     public:
-        RegPlusConstToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
 
-    class ConstPlusRegToRegPattern : public  TreePattern {
+    class MemPattern : public TreePattern {
     public:
-        ConstPlusRegToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
 
-    class ConstToRegPattern : public TreePattern {
+    class RegPattern : public TreePattern {
     public:
-        ConstToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
 
-    class RegMinusConstToRegPattern : public TreePattern {
+    class LabelPattern : public TreePattern {
     public:
-        RegMinusConstToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
 
-    class MemFromRegPlusConstToRegPattern : public TreePattern {
+    class NamePattern : public TreePattern {
     public:
-        MemFromRegPlusConstToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
 
-    class MemFromConstPlusRegToRegPattern : public TreePattern {
+    class ExpPattern : public TreePattern {
     public:
-        MemFromConstPlusRegToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
 
-    class MemFromConstToRegPattern : public TreePattern {
+    class CallPattern : public TreePattern {
     public:
-        MemFromConstToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
 
-    class MemFromRegToRegPattern : public TreePattern {
+    class MoveRegRegPattern : public TreePattern {
     public:
-        MemFromRegToRegPattern( );
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
     };
-
-    class MoveFromMemFromRegPlusConstToRegPattern : public TreePattern {
-    public:
-        MoveFromMemFromRegPlusConstToRegPattern( );
-    };
-
-    class MoveFromMemFromConstPlusRegToRegPattern : public TreePattern {
-    public:
-        MoveFromMemFromConstPlusRegToRegPattern( );
-    };
-
-    class MoveFromMemFromConstToRegPattern : public TreePattern {
-    public:
-        MoveFromMemFromConstToRegPattern( );
-    };
-
-    class MoveFromMemFromRegToRegPattern : public TreePattern {
-    public:
-        MoveFromMemFromRegToRegPattern( );
-    };
-
-    class MoveFromMemFromRegToMemToRegPattern : public TreePattern {
-    public:
-        MoveFromMemFromRegToMemToRegPattern( );
-    };
-
 
 };

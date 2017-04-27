@@ -60,8 +60,9 @@ set(SOURCE_FILES
         src/IRT/basic_blocks/basic_block_graph.cpp
         src/IRT/basic_blocks/basic_block_optimizer.cpp
         src/IRT/basic_blocks/basic_block_collector.cpp
-        src/IRT/utils/TreePatterns.cpp src/IRT/utils/TreePatterns.h
-        src/IRT/visitors/ConstEvaluateVisitor.cpp)
+        src/IRT/visitors/ConstEvaluateVisitor.cpp
+        src/IRT/utils/TreePatterns.cpp
+        src/IRT/utils/AssemblyCommand.cpp)
 
 
 add_executable(mini_java_compilator ${SOURCE_FILES} ${LEX_OUTPUT_H} ${LEX_OUTPUT_CPP} ${BISON_OUTPUT})
