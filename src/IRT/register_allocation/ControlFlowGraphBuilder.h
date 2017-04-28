@@ -12,7 +12,9 @@ namespace AssemblyCode {
 
         int lineNumber;
 
-        std::vector<AssemblyCode::CodeLine*> possibleNextLines;
+        std::vector<AssemblyCode::CodeLine*> outEdges;
+
+        std::vector<AssemblyCode::CodeLine*> inEdges;
     };
 
     std::vector<AssemblyCode::CodeLine> buildControlFlowGraph(const AssemblyCommands& commands);
