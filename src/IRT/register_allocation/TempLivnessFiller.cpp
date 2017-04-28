@@ -21,7 +21,7 @@ int processCodeLine(AssemblyCode::CodeLine* codeLine) {
         }
     }
 
-    for (auto liveOutTemp : codeLine->liveInTemps) {
+    for (auto liveOutTemp : codeLine->liveOutTemps) {
         bool found = false;
         for (auto outTemp : codeLine->command->GetOut()) {
             if (outTemp.ToString() == liveOutTemp) {
