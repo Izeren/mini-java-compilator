@@ -241,6 +241,57 @@ namespace AssemblyCode {
         REG rightOperand;
         std::string label;
     };
+
+    class AddRegConstCommand : public AssemblyCommand {
+    public:
+        AddRegConstCommand( const IRT::CTemp &leftOperand, int constant );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG leftOperand;
+        int constant;
+
+    };
+
+    class MoveMemFromRegPlusConstToReg : public AssemblyCommand {
+    public:
+        MoveMemFromRegPlusConstToReg( const IRT::CTemp &target, const IRT::CTemp &source, int constant );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG target;
+        REG source;
+        int constant;
+
+    };
+
+    class MoveMemFromConstCommand : public AssemblyCommand {
+    public:
+        MoveMemFromConstCommand( const IRT::CTemp &target, int constant );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG target;
+        int constant;
+
+    };
+
+
 };
 
 #undef REG

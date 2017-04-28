@@ -128,4 +128,35 @@ namespace IRT {
                                 AssemblyCommands &commands ) override;
     };
 
+    class RegPlusConstPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class ConstPlusRegPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MemFromRegPlusConstPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MemFromConstPlusRegPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MemFromConstPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+
 };
