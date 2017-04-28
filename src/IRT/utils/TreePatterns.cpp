@@ -237,8 +237,7 @@ bool IRT::CallPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTe
         CTemp address;
         children.push_back( std::make_pair( address, callPtr->getFunction( )));
         for ( int index = 0; index < argumentsPtr.size( ); ++index ) {
-            CTemp child;
-            children.push_back( std::make_pair( child, argumentsPtr[ index ].get( )));
+            CTemp child = dynamic_cast<ConstTempPtr>(argumentsPtr[index].get())->getTemprorary();
             arguments.push_back( child );
         }
         commands.emplace_back( std::make_shared<AssemblyCode::CallCommand>( address, arguments ));
@@ -249,13 +248,22 @@ bool IRT::CallPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTe
 
 bool IRT::MoveRegRegPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest, ChildrenTemps &children,
                                                 AssemblyCommands &commands ) {
-    assert( false );  //pretended not to be ever used as a pattern rather than simple command
     ConstMovePtr movePtr = dynamic_cast<ConstMovePtr>(tree);
     if ( movePtr ) {
         CTemp leftRegister;
         CTemp rightRegister;
-        children.push_back( std::make_pair( leftRegister, movePtr->Target( )));
-        children.push_back( std::make_pair( rightRegister, movePtr->Source( )));
+        ConstTempPtr leftTemp = dynamic_cast<ConstTempPtr>(movePtr->Target());
+        ConstTempPtr rightTemp = dynamic_cast<ConstTempPtr>(movePtr->Source());
+        if (!leftTemp) {
+            children.push_back( std::make_pair( leftRegister, movePtr->Target()));
+        } else {
+            leftRegister = leftTemp->getTemprorary();
+        }
+        if (!rightTemp) {
+            children.push_back( std::make_pair( rightRegister, movePtr->Source()));
+        } else {
+            rightRegister = rightTemp->getTemprorary();
+        }
         commands.emplace_back( std::make_shared<AssemblyCode::MoveRegRegCommand>( leftRegister, rightRegister ));
         return true;
     }
@@ -281,8 +289,18 @@ IRT::ConditionalJumpPattern::TryToGenerateCode( const IRT::INode *tree, const IR
     if ( cJumpPtr ) {
         CTemp leftOperand;
         CTemp rightOperand;
-        children.push_back( std::make_pair( leftOperand, cJumpPtr->LeftOperand( )));
-        children.push_back( std::make_pair( rightOperand, cJumpPtr->RightOperand( )));
+        ConstTempPtr leftTemp = dynamic_cast<ConstTempPtr>(cJumpPtr->LeftOperand());
+        ConstTempPtr rightTemp = dynamic_cast<ConstTempPtr>(cJumpPtr->RightOperand());
+        if (!leftTemp) {
+            children.push_back( std::make_pair( leftOperand, cJumpPtr->LeftOperand( )));
+        } else {
+            leftOperand = leftTemp->getTemprorary();
+        }
+        if (!rightTemp) {
+            children.push_back( std::make_pair( rightOperand, cJumpPtr->RightOperand( )));
+        } else {
+            rightOperand = rightTemp->getTemprorary();
+        }
         switch ( cJumpPtr->Operation( )) {
             case IRT::enums::TLogicOperator::LESS : {
                 commands.emplace_back( std::make_shared<AssemblyCode::CJumpLessCommand>( leftOperand, rightOperand,
@@ -416,7 +434,7 @@ bool IRT::MemFromConstPlusRegPattern::TryToGenerateCode( const IRT::INode *tree,
 }
 
 bool
-IRT::MemFromConstPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest, ChildrenTemps &children,
+IRT::MoveMemFromConstPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest, ChildrenTemps &children,
                                              AssemblyCommands &commands ) {
     ConstMemPtr memPtr = dynamic_cast<ConstMemPtr>(tree);
     if ( memPtr ) {

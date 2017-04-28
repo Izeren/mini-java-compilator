@@ -152,7 +152,7 @@ namespace IRT {
                                 AssemblyCommands &commands ) override;
     };
 
-    class MemFromConstPattern : public TreePattern {
+    class MoveMemFromConstPattern : public TreePattern {
     public:
         bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
                                 AssemblyCommands &commands ) override;

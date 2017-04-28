@@ -11,6 +11,7 @@ void AssemblyCode::PatternMatcher::GenerateCodeForNode( const IRT::INode *node, 
     AssemblyCommands nodeCommands;
     ChildrenTemps children;
     bool result = false;
+    int i = 0;
     for ( auto pattern : patterns ) {
         children.clear( );
         nodeCommands.clear( );
@@ -18,6 +19,7 @@ void AssemblyCode::PatternMatcher::GenerateCodeForNode( const IRT::INode *node, 
         if ( result ) {
             break;
         }
+        ++i;
     }
     assert( result );
     for ( auto child : children ) {
@@ -39,6 +41,18 @@ AssemblyCommands AssemblyCode::PatternMatcher::GenerateCode( const IRT::CStateme
 }
 
 AssemblyCode::PatternMatcher::PatternMatcher( ) {
+    patterns.emplace_back( std::make_shared<IRT::MemFromRegPlusConstPattern>( ));
+    patterns.emplace_back( std::make_shared<IRT::MemFromConstPlusRegPattern>( ));
+    patterns.emplace_back( std::make_shared<IRT::MoveFromMemByRegToMemByReg>( ));
+    patterns.emplace_back( std::make_shared<IRT::MoveRegToMemByRegPlusConst>( ));
+    patterns.emplace_back( std::make_shared<IRT::MoveRegToMemByConstPlusReg>( ));
+    patterns.emplace_back( std::make_shared<IRT::MoveRegToMemByReg>( ));
+    patterns.emplace_back( std::make_shared<IRT::MoveRegToMemByConst>( ));
+    patterns.emplace_back( std::make_shared<IRT::MemFromConstPlusRegPattern>( ));
+    patterns.emplace_back( std::make_shared<IRT::MemFromRegPlusConstPattern>( ));
+    patterns.emplace_back( std::make_shared<IRT::MoveMemFromConstPattern>( ));
+    patterns.emplace_back( std::make_shared<IRT::RegPlusConstPattern>( ));
+    patterns.emplace_back( std::make_shared<IRT::ConstPlusRegPattern>( ));
     patterns.emplace_back( std::make_shared<IRT::CallPattern>( ));
     patterns.emplace_back( std::make_shared<IRT::ConditionalJumpPattern>( ));
     patterns.emplace_back( std::make_shared<IRT::MoveRegRegPattern>( ));

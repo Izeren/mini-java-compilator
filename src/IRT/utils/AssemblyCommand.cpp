@@ -364,5 +364,5 @@ std::vector<IRT::CTemp> AssemblyCode::MoveRegFromMemToMemByReg::GetOut( ) const 
 }
 
 std::string AssemblyCode::MoveRegFromMemToMemByReg::ToString( ) const {
-    return "mov " + target.ToString() + " [" + source.ToString() + "]\n";
+    return "mov [" + target.ToString() + "] [" + source.ToString() + "]\n";
 }
