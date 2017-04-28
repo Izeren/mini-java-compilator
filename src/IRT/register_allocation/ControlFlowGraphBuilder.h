@@ -20,6 +20,8 @@ namespace AssemblyCode {
         std::set<std::string> liveInTemps;
 
         std::set<std::string> liveOutTemps;
+
+        bool isMoveRegReg;
     };
 
     std::vector<AssemblyCode::CodeLine> buildControlFlowGraph(const AssemblyCommands& commands);
