@@ -44,7 +44,7 @@ int processCodeLine(AssemblyCode::CodeLine* codeLine) {
 bool doIteration(std::vector<AssemblyCode::CodeLine> &lines) {
     int changesCount = 0;
 
-    for (int i = 0; i < lines.size(); ++i) {
+    for (size_t i = (lines.size() - 1); i >= 0; --i) {
         changesCount += processCodeLine(&lines[i]);
     }
 
