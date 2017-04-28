@@ -134,6 +134,10 @@ std::string AssemblyCode::LabelCommand::ToString( ) const {
     return label + ":\n";
 }
 
+std::string AssemblyCode::LabelCommand::getLabel() const {
+    return label;
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 std::vector<IRT::CTemp> AssemblyCode::NameCommand::GetIn( ) const {
     return { };
@@ -177,7 +181,14 @@ std::string AssemblyCode::CallCommand::ToString( ) const {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-AssemblyCode::JumpCommand::JumpCommand( const std::string &label ) : label( label ) { }
+std::string AssemblyCode::AbstractJumpCommand::getLabel() const {
+    return label;
+}
+
+AssemblyCode::AbstractJumpCommand::AbstractJumpCommand(const std::string &label) : label(label) {}
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::JumpCommand::JumpCommand( const std::string &label ) : AbstractJumpCommand( label ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::JumpCommand::GetIn( ) const {
     return { };
@@ -207,13 +218,13 @@ std::string AssemblyCode::CJumpLessCommand::ToString( ) const {
 AssemblyCode::CJumpLessCommand::CJumpLessCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand,
                                                   const std::string &label ) : leftOperand( leftOperand ),
                                                                                rightOperand( rightOperand ),
-                                                                               label( label ) { }
+                                                                               AbstractJumpCommand( label ) { }
 
 //----------------------------------------------------------------------------------------------------------------------
 AssemblyCode::CJumpEqualCommand::CJumpEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand,
                                                     const std::string &label ) : leftOperand( leftOperand ),
                                                                                  rightOperand( rightOperand ),
-                                                                                 label( label ) { }
+                                                                                 AbstractJumpCommand( label ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::CJumpEqualCommand::GetIn( ) const {
     return { leftOperand, rightOperand };
@@ -232,7 +243,7 @@ std::string AssemblyCode::CJumpEqualCommand::ToString( ) const {
 AssemblyCode::CJumpNotEqualCommand::CJumpNotEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand,
                                                           const std::string &label ) : leftOperand( leftOperand ),
                                                                                        rightOperand( rightOperand ),
-                                                                                       label( label ) { }
+                                                                                       AbstractJumpCommand( label ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::CJumpNotEqualCommand::GetIn( ) const {
     return { leftOperand, rightOperand };

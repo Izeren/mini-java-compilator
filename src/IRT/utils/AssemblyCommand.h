@@ -142,6 +142,8 @@ namespace AssemblyCode {
 
         LabelCommand( const std::string &label );
 
+        std::string getLabel() const;
+
         std::string ToString( ) const override;
 
     private:
@@ -179,7 +181,17 @@ namespace AssemblyCode {
         std::vector<IRT::CTemp> arguments;
     };
 
-    class JumpCommand : public AssemblyCommand {
+    class AbstractJumpCommand : public AssemblyCommand {
+    public:
+
+        AbstractJumpCommand(const std::string &label);
+
+        std::string getLabel() const;
+    protected:
+        std::string label;
+    };
+
+    class JumpCommand : public AbstractJumpCommand {
     public:
         JumpCommand( const std::string &label );
 
@@ -189,12 +201,10 @@ namespace AssemblyCode {
 
         std::string ToString( ) const override;
 
-    private:
-        std::string label;
     };
 
 
-    class CJumpLessCommand : public AssemblyCommand {
+    class CJumpLessCommand : public AbstractJumpCommand {
     public:
         CJumpLessCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
 
@@ -207,10 +217,9 @@ namespace AssemblyCode {
     private:
         REG leftOperand;
         REG rightOperand;
-        std::string label;
     };
 
-    class CJumpEqualCommand : public AssemblyCommand {
+    class CJumpEqualCommand : public AbstractJumpCommand {
     public:
         CJumpEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
 
@@ -223,10 +232,9 @@ namespace AssemblyCode {
     private:
         REG leftOperand;
         REG rightOperand;
-        std::string label;
     };
 
-    class CJumpNotEqualCommand : public AssemblyCommand {
+    class CJumpNotEqualCommand : public AbstractJumpCommand {
     public:
         CJumpNotEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
 
@@ -239,7 +247,6 @@ namespace AssemblyCode {
     private:
         REG leftOperand;
         REG rightOperand;
-        std::string label;
     };
 };
 
