@@ -1,16 +1,20 @@
-//
-// Created by ivan on 28.04.17.
-//
+#pragma once
 
-#ifndef MINI_JAVA_COMPILATOR_CONTROLFLOWGRAPHBUILDER_H
-#define MINI_JAVA_COMPILATOR_CONTROLFLOWGRAPHBUILDER_H
+#include <memory>
+#include "../utils/AssemblyCommand.h"
+#include "../utils/TreePatterns.h"
+#include <vector>
 
+namespace AssemblyCode {
 
+    struct CodeLine {
+        std::shared_ptr<AssemblyCode::AssemblyCommand> command;
 
-class ControlFlowGraphBuilder {
+        int lineNumber;
 
-};
+        std::vector<AssemblyCode::CodeLine*> possibleNextLines;
+    };
 
+    std::vector<AssemblyCode::CodeLine> buildControlFlowGraph(const AssemblyCommands& commands);
 
-
-#endif //MINI_JAVA_COMPILATOR_CONTROLFLOWGRAPHBUILDER_H
+}
