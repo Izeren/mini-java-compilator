@@ -291,6 +291,69 @@ namespace AssemblyCode {
 
     };
 
+    class MoveRegToMemByRegPlusConst : public AssemblyCommand {
+    public:
+        MoveRegToMemByRegPlusConst( const IRT::CTemp &target, int constant, const IRT::CTemp &source );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG target;
+        int constant;
+        REG source;
+
+    };
+
+    class MoveRegToMemByConst : public AssemblyCommand {
+    public:
+        MoveRegToMemByConst( int constant, const IRT::CTemp &source );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        int constant;
+        REG source;
+    };
+
+
+    class MoveRegToMemByReg : public AssemblyCommand {
+    public:
+        MoveRegToMemByReg( const IRT::CTemp &target, const IRT::CTemp &source );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG target;
+        REG source;
+    };
+
+
+    class MoveRegFromMemToMemByReg : public AssemblyCommand {
+    public:
+        MoveRegFromMemToMemByReg( const IRT::CTemp &target, const IRT::CTemp &source );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG target;
+        REG source;
+    };
 
 };
 

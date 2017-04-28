@@ -423,7 +423,160 @@ IRT::MemFromConstPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::
         ConstConstPtr constPtr = dynamic_cast<ConstConstPtr>(memPtr->getAddress( ));
         if ( constPtr ) {
             commands.emplace_back(
-                    std::make_shared<AssemblyCode::MoveMemFromConstCommand>( dest, constPtr->getValue()));
+                    std::make_shared<AssemblyCode::MoveMemFromConstCommand>( dest, constPtr->getValue( )));
+            return true;
+        }
+    }
+    return false;
+}
+
+bool IRT::MoveRegToMemByRegPlusConst::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest,
+                                                         ChildrenTemps &children, AssemblyCommands &commands ) {
+    ConstMovePtr movePtr = dynamic_cast<ConstMovePtr>(tree);
+    if ( movePtr ) {
+        ConstMemPtr memPtr = dynamic_cast<ConstMemPtr>(movePtr->Target( ));
+        if ( memPtr ) {
+            ConstBinopPtr binopPtr = dynamic_cast<ConstBinopPtr>(memPtr->getAddress( ));
+            if ( binopPtr ) {
+                ConstConstPtr constPtr = dynamic_cast<ConstConstPtr>(binopPtr->getRightOperand( ));
+                if ( constPtr ) {
+                    ConstTempPtr targetRegPtr = dynamic_cast<ConstTempPtr>(binopPtr->getLeftOperand( ));
+                    ConstTempPtr sourceRegPtr = dynamic_cast<ConstTempPtr>(movePtr->Source( ));
+                    CTemp leftRegister;
+                    CTemp rightRegister;
+                    if ( !targetRegPtr ) {
+                        children.push_back( std::make_pair( leftRegister, binopPtr->getLeftOperand()));
+                    } else {
+                        leftRegister = targetRegPtr->getTemprorary( );
+                    }
+                    if ( !sourceRegPtr ) {
+                        children.push_back( std::make_pair( rightRegister, movePtr->Source()));
+                    } else {
+                        rightRegister = sourceRegPtr->getTemprorary( );
+                    }
+                    commands.emplace_back( std::make_shared<AssemblyCode::MoveRegToMemByRegPlusConst>( leftRegister,
+                                                                                                       constPtr->getValue( ),
+                                                                                                       rightRegister ));
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool IRT::MoveRegToMemByConstPlusReg::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest,
+                                                         ChildrenTemps &children, AssemblyCommands &commands ) {
+    ConstMovePtr movePtr = dynamic_cast<ConstMovePtr>(tree);
+    if ( movePtr ) {
+        ConstMemPtr memPtr = dynamic_cast<ConstMemPtr>(movePtr->Target( ));
+        if ( memPtr ) {
+            ConstBinopPtr binopPtr = dynamic_cast<ConstBinopPtr>(memPtr->getAddress( ));
+            if ( binopPtr ) {
+                ConstConstPtr constPtr = dynamic_cast<ConstConstPtr>(binopPtr->getLeftOperand( ));
+                if ( constPtr ) {
+                    ConstTempPtr targetRegPtr = dynamic_cast<ConstTempPtr>(binopPtr->getRightOperand( ));
+                    ConstTempPtr sourceRegPtr = dynamic_cast<ConstTempPtr>(movePtr->Source( ));
+                    CTemp leftRegister;
+                    CTemp rightRegister;
+                    if ( !targetRegPtr ) {
+                        children.push_back( std::make_pair( leftRegister, binopPtr->getRightOperand()));
+                    } else {
+                        leftRegister = targetRegPtr->getTemprorary( );
+                    }
+                    if ( !sourceRegPtr ) {
+                        children.push_back( std::make_pair( rightRegister, movePtr->Source()));
+                    } else {
+                        rightRegister = sourceRegPtr->getTemprorary( );
+                    }
+                    commands.emplace_back( std::make_shared<AssemblyCode::MoveRegToMemByRegPlusConst>( leftRegister,
+                                                                                                       constPtr->getValue( ),
+                                                                                                       rightRegister ));
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool
+IRT::MoveRegToMemByConst::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest, ChildrenTemps &children,
+                                             AssemblyCommands &commands ) {
+    ConstMovePtr movePtr = dynamic_cast<ConstMovePtr>(tree);
+    if ( movePtr ) {
+        ConstMemPtr memPtr = dynamic_cast<ConstMemPtr>(movePtr->Target( ));
+        if ( memPtr ) {
+            ConstConstPtr constPtr = dynamic_cast<ConstConstPtr>(memPtr->getAddress( ));
+            if ( constPtr ) {
+                ConstTempPtr sourceRegPtr = dynamic_cast<ConstTempPtr>(movePtr->Source( ));
+                CTemp rightRegister;
+                if ( !sourceRegPtr ) {
+                    children.push_back( std::make_pair( rightRegister, movePtr->Source()));
+                } else {
+                    rightRegister = sourceRegPtr->getTemprorary( );
+                }
+                commands.emplace_back( std::make_shared<AssemblyCode::MoveRegToMemByConst>(
+                        constPtr->getValue( ),
+                        rightRegister ));
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool IRT::MoveRegToMemByReg::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest, ChildrenTemps &children,
+                                                AssemblyCommands &commands ) {
+    ConstMovePtr movePtr = dynamic_cast<ConstMovePtr>(tree);
+    if ( movePtr ) {
+        ConstMemPtr memPtr = dynamic_cast<ConstMemPtr>(movePtr->Target( ));
+        if ( memPtr ) {
+            ConstTempPtr targetRegPtr = dynamic_cast<ConstTempPtr>(memPtr->getAddress( ));
+            ConstTempPtr sourceRegPtr = dynamic_cast<ConstTempPtr>(movePtr->Source( ));
+            CTemp leftRegister;
+            CTemp rightRegister;
+            if ( !targetRegPtr ) {
+                children.push_back( std::make_pair( leftRegister, memPtr->getAddress()));
+            } else {
+                leftRegister = targetRegPtr->getTemprorary( );
+            }
+            if ( !sourceRegPtr ) {
+                children.push_back( std::make_pair( rightRegister, movePtr->Source()));
+            } else {
+                rightRegister = sourceRegPtr->getTemprorary( );
+            }
+            commands.emplace_back( std::make_shared<AssemblyCode::MoveRegToMemByReg>( leftRegister,
+                                                                                      rightRegister ));
+            return true;
+        }
+    }
+    return false;
+}
+
+bool IRT::MoveFromMemByRegToMemByReg::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest,
+                                                         ChildrenTemps &children, AssemblyCommands &commands ) {
+    ConstMovePtr movePtr = dynamic_cast<ConstMovePtr>(tree);
+    if ( movePtr ) {
+        ConstMemPtr leftMemPtr = dynamic_cast<ConstMemPtr>(movePtr->Target( ));
+        ConstMemPtr rightMemPtr = dynamic_cast<ConstMemPtr>(movePtr->Source( ));
+        if ( leftMemPtr && rightMemPtr ) {
+            ConstTempPtr targetRegPtr = dynamic_cast<ConstTempPtr>(leftMemPtr->getAddress( ));
+            ConstTempPtr sourceRegPtr = dynamic_cast<ConstTempPtr>(rightMemPtr->getAddress());
+            CTemp leftRegister;
+            CTemp rightRegister;
+            if ( !targetRegPtr ) {
+                children.push_back( std::make_pair( leftRegister, leftMemPtr->getAddress()));
+            } else {
+                leftRegister = targetRegPtr->getTemprorary( );
+            }
+            if ( !sourceRegPtr ) {
+                children.push_back( std::make_pair( rightRegister, rightMemPtr->getAddress()));
+            } else {
+                rightRegister = sourceRegPtr->getTemprorary( );
+            }
+            commands.emplace_back( std::make_shared<AssemblyCode::MoveRegFromMemToMemByReg>( leftRegister,
+                                                                                      rightRegister ));
             return true;
         }
     }
