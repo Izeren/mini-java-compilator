@@ -4,6 +4,7 @@
 #include "../utils/AssemblyCommand.h"
 #include "../utils/TreePatterns.h"
 #include <vector>
+#include <set>
 
 namespace AssemblyCode {
 
@@ -12,9 +13,13 @@ namespace AssemblyCode {
 
         int lineNumber;
 
-        std::vector<AssemblyCode::CodeLine*> outEdges;
+        std::vector<AssemblyCode::CodeLine*> nextLines;
 
-        std::vector<AssemblyCode::CodeLine*> inEdges;
+        std::vector<AssemblyCode::CodeLine*> prevLines;
+
+        std::set<std::string> liveInTemps;
+
+        std::set<std::string> liveOutTemps;
     };
 
     std::vector<AssemblyCode::CodeLine> buildControlFlowGraph(const AssemblyCommands& commands);

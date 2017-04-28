@@ -152,13 +152,17 @@ void WriteAssemblyToFile( const AssemblyCommands &commands, std::ostream &out ) 
     }
 }
 
-void processIRTtoASS(std::shared_ptr<const MethodToIRTMap> methodToIRTMap, std::ostream &out) {
+std::vector<AssemblyCommands> processIRTtoASS(std::shared_ptr<const MethodToIRTMap> methodToIRTMap, std::ostream &out) {
+    std::vector<AssemblyCommands> commandsBatch;
     AssemblyCode::PatternMatcher patternMatcher;
     for ( auto it = methodToIRTMap->begin(); it != methodToIRTMap->end(); ++it) {
         out << ";-----------------------------------" << it->first << "--------------------------------------\n";
         AssemblyCommands commands = patternMatcher.GenerateCode( static_cast<const IRT::CStatementList *>(it->second.get()));
         WriteAssemblyToFile(commands, out);
+        commandsBatch.push_back(commands);
     }
+
+    return commandsBatch;
 }
 
 void make_test( const std::string &filename, const std::string &testfile_name, const std::string &result_name ) {

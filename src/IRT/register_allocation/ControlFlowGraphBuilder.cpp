@@ -33,20 +33,20 @@ std::vector<AssemblyCode::CodeLine> AssemblyCode::buildControlFlowGraph(const As
         if (abstractJumpCommand != nullptr) {
             CodeLine* labelJumpLine = &lines[labelToIndexMap[abstractJumpCommand->getLabel()]];
 
-            lines[i].outEdges.push_back(labelJumpLine);
-            labelJumpLine->inEdges.push_back(&lines[i]);
+            lines[i].nextLines.push_back(labelJumpLine);
+            labelJumpLine->prevLines.push_back(&lines[i]);
 
             const JumpCommand* jumpCommand = dynamic_cast<const JumpCommand*>(abstractJumpCommand);
             if (jumpCommand == nullptr && (i + 1) != commands.size()) {
                 // conditional jump
                 CodeLine* nextLine = &lines[i + 1];
-                lines[i].outEdges.push_back(nextLine);
-                nextLine->inEdges.push_back(&lines[i]);
+                lines[i].nextLines.push_back(nextLine);
+                nextLine->prevLines.push_back(&lines[i]);
             }
         } else {
             if ((i + 1) != commands.size()) {
-                lines[i].outEdges.push_back(&lines[i + 1]);
-                lines[i + 1].inEdges.push_back(&lines[i]);
+                lines[i].nextLines.push_back(&lines[i + 1]);
+                lines[i + 1].prevLines.push_back(&lines[i]);
             }
         }
     }
