@@ -152,8 +152,7 @@ void WriteAssemblyToFile( const AssemblyCommands &commands, std::ostream &out ) 
     }
 }
 
-void
-WriteTreesToFile( std::shared_ptr<const MethodToIRTMap> methodToIRTMap, std::ostream &out ) {
+void processIRTtoASS(std::shared_ptr<const MethodToIRTMap> methodToIRTMap, std::ostream &out) {
     AssemblyCode::PatternMatcher patternMatcher;
     for ( auto it = methodToIRTMap->begin(); it != methodToIRTMap->end(); ++it) {
         out << ";-----------------------------------" << it->first << "--------------------------------------\n";
@@ -214,8 +213,8 @@ void make_test( const std::string &filename, const std::string &testfile_name, c
     writeIRTTrees( filename, "5_ConstBinopEvaluated", constBinopEvaluatedTrees );
 
     // ASSEMBLY GENERATION
-    std::ofstream out( "../tests/IRT_builder/asms/" + filename + ".asm", std::fstream::out );
-    WriteTreesToFile(constBinopEvaluatedTrees, out);
+    std::ofstream out( "../tests/IRT_builder/asms/" + filename + "-0_infinite-registers.asm", std::fstream::out );
+    processIRTtoASS(constBinopEvaluatedTrees, out);
     out.close();
 }
 
