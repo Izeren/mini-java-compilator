@@ -208,9 +208,15 @@ bool IRT::ExpPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTem
                                          AssemblyCommands &commands ) {
     ConstExpStmPtr expStmPtr = dynamic_cast<ConstExpStmPtr>(tree);
     if ( expStmPtr ) {
-        CTemp source;
-        children.push_back( std::make_pair( source, expStmPtr->Expression( )));
-        commands.emplace_back( std::make_shared<AssemblyCode::MoveRegRegCommand>( dest, source ));
+        ConstTempPtr registerPtr = dynamic_cast<ConstTempPtr>(expStmPtr->Expression( ));
+        if ( registerPtr ) {
+            commands.emplace_back(
+                    std::make_shared<AssemblyCode::MoveRegRegCommand>( dest, registerPtr->getTemprorary( )));
+        } else {
+            CTemp source;
+            children.push_back( std::make_pair( source, expStmPtr->Expression( )));
+            commands.emplace_back( std::make_shared<AssemblyCode::MoveRegRegCommand>( dest, source ));
+        }
         return true;
     }
     return false;
@@ -237,6 +243,7 @@ bool IRT::CallPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTe
 
 bool IRT::MoveRegRegPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTemp &dest, ChildrenTemps &children,
                                                 AssemblyCommands &commands ) {
+    assert( false );  //pretended not to be ever used as a pattern rather than simple command
     ConstMovePtr movePtr = dynamic_cast<ConstMovePtr>(tree);
     if ( movePtr ) {
         CTemp leftRegister;
