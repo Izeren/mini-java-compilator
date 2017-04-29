@@ -128,4 +128,64 @@ namespace IRT {
                                 AssemblyCommands &commands ) override;
     };
 
+    class RegPlusConstPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class ConstPlusRegPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MemFromRegPlusConstPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MemFromConstPlusRegPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MoveMemFromConstPattern : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MoveRegToMemByRegPlusConst : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MoveRegToMemByConstPlusReg: public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MoveRegToMemByConst : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MoveRegToMemByReg: public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
+    class MoveFromMemByRegToMemByReg : public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
 };

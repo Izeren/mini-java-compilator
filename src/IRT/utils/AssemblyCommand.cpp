@@ -256,3 +256,124 @@ std::vector<IRT::CTemp> AssemblyCode::CJumpNotEqualCommand::GetOut( ) const {
 std::string AssemblyCode::CJumpNotEqualCommand::ToString( ) const {
     return "cmp " + leftOperand.ToString( ) + " " + rightOperand.ToString( ) + "\njne " + label + "\n";
 }
+
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::AddRegConstCommand::AddRegConstCommand( const IRT::CTemp &leftOperand, int constant ) : leftOperand(
+        leftOperand ), constant( constant ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::AddRegConstCommand::GetIn( ) const {
+    return { };
+}
+
+std::vector<IRT::CTemp> AssemblyCode::AddRegConstCommand::GetOut( ) const {
+    return { leftOperand };
+}
+
+std::string AssemblyCode::AddRegConstCommand::ToString( ) const {
+    return "add " + leftOperand.ToString( ) + " " + std::to_string( constant ) + "\n";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::MoveMemFromRegPlusConstToReg::MoveMemFromRegPlusConstToReg( const IRT::CTemp &target,
+                                                                          const IRT::CTemp &source, int constant )
+        : target( target ), source( source ), constant( constant ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::MoveMemFromRegPlusConstToReg::GetIn( ) const {
+    return { source };
+}
+
+std::vector<IRT::CTemp> AssemblyCode::MoveMemFromRegPlusConstToReg::GetOut( ) const {
+    return { target };
+}
+
+std::string AssemblyCode::MoveMemFromRegPlusConstToReg::ToString( ) const {
+    return "mov " + target.ToString( ) + " [" + source.ToString( ) + " + " + std::to_string( constant ) + "]\n";
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::MoveMemFromConstCommand::MoveMemFromConstCommand( const IRT::CTemp &target, int constant ) : target(
+        target ), constant( constant ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::MoveMemFromConstCommand::GetIn( ) const {
+    return {};
+}
+
+std::vector<IRT::CTemp> AssemblyCode::MoveMemFromConstCommand::GetOut( ) const {
+    return {target};
+}
+
+std::string AssemblyCode::MoveMemFromConstCommand::ToString( ) const {
+    return "mov " + target.ToString( ) + " [" + std::to_string( constant ) + "]\n";
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::MoveRegToMemByRegPlusConst::MoveRegToMemByRegPlusConst( const IRT::CTemp &target, int constant,
+                                                                      const IRT::CTemp &source ) : target( target ),
+                                                                                                   constant( constant ),
+                                                                                                   source( source ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::MoveRegToMemByRegPlusConst::GetIn( ) const {
+    return {source};
+}
+
+std::vector<IRT::CTemp> AssemblyCode::MoveRegToMemByRegPlusConst::GetOut( ) const {
+    return {target};
+}
+
+std::string AssemblyCode::MoveRegToMemByRegPlusConst::ToString( ) const {
+    return "mov [" + target.ToString( ) + " + " + std::to_string( constant ) + "] " + source.ToString() + "\n";
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::MoveRegToMemByConst::MoveRegToMemByConst( int constant, const IRT::CTemp &source ) : constant( constant ),
+                                                                                                   source( source ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::MoveRegToMemByConst::GetIn( ) const {
+    return {source};
+}
+
+std::vector<IRT::CTemp> AssemblyCode::MoveRegToMemByConst::GetOut( ) const {
+    return {};
+}
+
+std::string AssemblyCode::MoveRegToMemByConst::ToString( ) const {
+    return "mov [" + std::to_string( constant ) + "] " + source.ToString() + "\n";
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::MoveRegToMemByReg::MoveRegToMemByReg( const IRT::CTemp &target, const IRT::CTemp &source ) : target(
+        target ), source( source ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::MoveRegToMemByReg::GetIn( ) const {
+    return {source};
+}
+
+std::vector<IRT::CTemp> AssemblyCode::MoveRegToMemByReg::GetOut( ) const {
+    return {target};
+}
+
+std::string AssemblyCode::MoveRegToMemByReg::ToString( ) const {
+    return "mov [" + target.ToString() + "] " + source.ToString() + "\n";
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::MoveRegFromMemToMemByReg::MoveRegFromMemToMemByReg( const IRT::CTemp &target, const IRT::CTemp &source )
+        : target( target ), source( source ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::MoveRegFromMemToMemByReg::GetIn( ) const {
+    return {source};
+}
+
+std::vector<IRT::CTemp> AssemblyCode::MoveRegFromMemToMemByReg::GetOut( ) const {
+    return {target};
+}
+
+std::string AssemblyCode::MoveRegFromMemToMemByReg::ToString( ) const {
+    return "mov [" + target.ToString() + "] [" + source.ToString() + "]\n";
+}
