@@ -96,6 +96,10 @@ namespace AssemblyCode {
 
         std::string ToString( ) const override;
 
+        std::string getTarget() const;
+
+        std::string getSource() const;
+
     private:
         REG source;
         REG target;

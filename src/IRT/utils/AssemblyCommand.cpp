@@ -20,6 +20,14 @@ std::string AssemblyCode::MoveRegRegCommand::ToString( ) const {
     return "mov " + target.ToString( ) + " " + source.ToString( ) + "\n";
 }
 
+std::string AssemblyCode::MoveRegRegCommand::getTarget() const {
+    return target.ToString();
+}
+
+std::string AssemblyCode::MoveRegRegCommand::getSource() const {
+    return source.ToString();
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 
 std::vector<IRT::CTemp> AssemblyCode::AddRegRegCommand::GetIn( ) const {

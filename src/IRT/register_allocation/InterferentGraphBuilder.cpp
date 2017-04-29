@@ -14,7 +14,17 @@ void addNotOrientedEdge(std::string a, std::string b, std::map<std::string, std:
 }
 
 void addEdgesFromMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, std::set<std::string>>& graph) {
+    AssemblyCode::MoveRegRegCommand* moveRegRegCommand =
+            dynamic_cast<AssemblyCode::MoveRegRegCommand*>(line.command.get());
 
+    std::string target = moveRegRegCommand->getTarget();
+    std::string source = moveRegRegCommand->getSource();
+
+    for (auto outTemp : line.liveOutTemps) {
+        if (outTemp != source) {
+            addNotOrientedEdge(target, outTemp, graph);
+        }
+    }
 }
 
 void addEdgesFromNotMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, std::set<std::string>>& graph) {
