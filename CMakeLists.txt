@@ -65,7 +65,7 @@ set(SOURCE_FILES
         src/IRT/utils/AssemblyCommand.cpp
         src/IRT/utils/PatternMatcher.cpp
         src/IRT/utils/PatternMatcher.h
-        src/IRT/register_allocation/ControlFlowGraphBuilder.cpp src/IRT/register_allocation/TempLivnessFiller.cpp src/IRT/register_allocation/TempLivnessFiller.h src/IRT/register_allocation/InterferentGraphBuilder.cpp src/IRT/register_allocation/InterferentGraphBuilder.h)
+        src/IRT/register_allocation/ControlFlowGraphBuilder.cpp src/IRT/register_allocation/TempLivnessFiller.cpp src/IRT/register_allocation/TempLivnessFiller.h src/IRT/register_allocation/InterferentGraphBuilder.cpp src/IRT/register_allocation/InterferentGraphBuilder.h src/IRT/register_allocation/RegisterAllocation.cpp src/IRT/register_allocation/RegisterAllocation.h)
 
 
 add_executable(mini_java_compilator ${SOURCE_FILES} ${LEX_OUTPUT_H} ${LEX_OUTPUT_CPP} ${BISON_OUTPUT})
