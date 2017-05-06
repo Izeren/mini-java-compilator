@@ -1,6 +1,6 @@
 #include "InterferentGraphBuilder.h"
 
-void addOrientedEdge(std::string from, std::string to, std::map<std::string, std::set<std::string>>& graph) {
+void AssemblyCode::addOrientedEdge(std::string from, std::string to, std::map<std::string, std::set<std::string>>& graph) {
     if (graph.find(from) == graph.end()) {
         graph[from] = std::set<std::string>();
     }
@@ -8,7 +8,7 @@ void addOrientedEdge(std::string from, std::string to, std::map<std::string, std
     graph[from].insert(to);
 }
 
-void addNotOrientedEdge(std::string a, std::string b, std::map<std::string, std::set<std::string>>& graph) {
+void AssemblyCode::addNotOrientedEdge(std::string a, std::string b, std::map<std::string, std::set<std::string>>& graph) {
     addOrientedEdge(a, b, graph);
     addOrientedEdge(b, a, graph);
 }
@@ -22,7 +22,7 @@ void addEdgesFromMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, st
 
     for (auto outTemp : line.liveOutTemps) {
         if (outTemp != source) {
-            addNotOrientedEdge(target, outTemp, graph);
+            AssemblyCode::addNotOrientedEdge(target, outTemp, graph);
         }
     }
 }
@@ -30,7 +30,7 @@ void addEdgesFromMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, st
 void addEdgesFromNotMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, std::set<std::string>>& graph) {
     for (auto defTemp : line.command->GetOut()) {
         for (auto outTemp : line.liveOutTemps) {
-            addNotOrientedEdge(defTemp.ToString(), outTemp, graph);
+            AssemblyCode::addNotOrientedEdge(defTemp.ToString(), outTemp, graph);
         }
     }
 }

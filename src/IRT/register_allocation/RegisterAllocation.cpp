@@ -74,6 +74,75 @@ void spill(std::map<std::string, std::set<std::string>>& graph,
     }
 }
 
+int IN_MEMORY_COLOR = -1;
+
+void addTempToRecoveredGraph(const std::string& temp,
+        std::map<std::string, std::set<std::string>>& originalGraph,
+        std::map<std::string, std::set<std::string>>& recoveredGraph) {
+
+    assert(recoveredGraph.find(temp) == recoveredGraph.end());
+
+    recoveredGraph[temp] = std::set<std::string>();
+    for (std::string neighbour : originalGraph[temp]) {
+        if (recoveredGraph.find(neighbour) != recoveredGraph.end()) {
+            AssemblyCode::addNotOrientedEdge(temp, neighbour, recoveredGraph);
+        }
+    }
+}
+
+int getColorForTemp(const std::string& temp,
+                    std::map<std::string, std::set<std::string>>& recoveredGraph,
+                    std::map<std::string, int>& tempToColorMap) {
+
+    std::set<int> colorSet;
+    for (std::string neighbour : recoveredGraph[temp]) {
+        assert(tempToColorMap.find(neighbour) != tempToColorMap.end());
+        colorSet.insert(tempToColorMap[neighbour]);
+    }
+
+    int color = 0;
+    while (colorSet.find(color) != colorSet.end()) {
+        ++color;
+    }
+
+    return color;
+}
+
+void processStackEntry(
+        const StackEntry& stackEntry,
+        std::map<std::string, std::set<std::string>>& originalGraph,
+        std::map<std::string, std::set<std::string>>& recoveredGraph,
+        int registerNumber,
+        std::map<std::string, int>& tempToColorMap
+) {
+    addTempToRecoveredGraph(stackEntry.temp, originalGraph, recoveredGraph);
+    int color = getColorForTemp(stackEntry.temp, recoveredGraph, tempToColorMap);
+    if (color >= registerNumber) {
+        assert(stackEntry.isSpilled);
+        tempToColorMap[stackEntry.temp] = IN_MEMORY_COLOR;
+    } else {
+        tempToColorMap[stackEntry.temp] = color;
+    }
+}
+
+bool rewriteProgram(AssemblyCommands& commands, std::map<std::string, int>& tempToColorMap) {
+
+}
+
+bool select(AssemblyCommands& commands, int registerNumber,
+        std::map<std::string, std::set<std::string>>& originalGraph,
+        std::stack<StackEntry>& tempStack) {
+
+    std::map<std::string, std::set<std::string>> recoveredGraph;
+    std::map<std::string, int> tempToColorMap;
+    while (!tempStack.empty()) {
+        processStackEntry(tempStack.top(), originalGraph, recoveredGraph, registerNumber, tempToColorMap);
+        tempStack.pop();
+    }
+
+    return rewriteProgram(commands, tempToColorMap);
+}
+
 bool tryAllocateRegisters(AssemblyCommands& commands, int registerNumber) {
     // build graph
     std::map<std::string, std::set<std::string>> originalGraph = buildGraph(commands);
