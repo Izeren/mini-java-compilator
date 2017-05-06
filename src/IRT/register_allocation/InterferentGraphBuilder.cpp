@@ -43,7 +43,7 @@ void processLine(AssemblyCode::CodeLine& line, std::map<std::string, std::set<st
     }
 }
 
-std::map<std::string, std::set<std::string>> buildInterferentGraph(std::vector<AssemblyCode::CodeLine>& lines) {
+std::map<std::string, std::set<std::string>> AssemblyCode::buildInterferentGraph(std::vector<AssemblyCode::CodeLine>& lines) {
     std::map<std::string, std::set<std::string>> graph;
 
     for (auto line : lines) {
