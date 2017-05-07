@@ -366,6 +366,22 @@ namespace AssemblyCode {
         REG source;
     };
 
+    class SubRegConstCommand : public AssemblyCommand {
+    public:
+        SubRegConstCommand( const IRT::CTemp &leftOperand, int rightConst );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+    private:
+        REG leftOperand;
+        int rightConst;
+
+    };
+
 };
 
 #undef REG

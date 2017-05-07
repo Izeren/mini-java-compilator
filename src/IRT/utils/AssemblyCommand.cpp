@@ -385,3 +385,19 @@ std::vector<IRT::CTemp> AssemblyCode::MoveRegFromMemToMemByReg::GetOut( ) const 
 std::string AssemblyCode::MoveRegFromMemToMemByReg::ToString( ) const {
     return "mov [" + target.ToString() + "] [" + source.ToString() + "]\n";
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+AssemblyCode::SubRegConstCommand::SubRegConstCommand( const IRT::CTemp &leftOperand, int rightConst ) : leftOperand(
+        leftOperand ), rightConst( rightConst ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::SubRegConstCommand::GetIn( ) const {
+    return { leftOperand };
+}
+
+std::vector<IRT::CTemp> AssemblyCode::SubRegConstCommand::GetOut( ) const {
+    return { leftOperand };
+}
+
+std::string AssemblyCode::SubRegConstCommand::ToString( ) const {
+    return "sub " + leftOperand.ToString() + " " + std::to_string(rightConst);
+}
