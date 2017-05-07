@@ -68,12 +68,15 @@ void simplify(std::map<std::string, std::set<std::string>>& graph,
 }
 
 void spill(std::map<std::string, std::set<std::string>>& graph,
-           std::stack<StackEntry>& tempStack, AssemblyCode::RegisterInfo& registerInfo) {
+           std::stack<StackEntry>& tempStack, AssemblyCode::RegisterInfo& registerInfo, std::set<std::string>& originalTemps) {
 
     while (!isGraphEmpty(graph) && !checkSimplifiableVertex(graph, registerInfo.registers.size())) {
-        auto vertex = graph.begin();
-        tempStack.push(StackEntry(vertex->first, true));
-        deleteVertexFromGraph(vertex->first, graph);
+        for (auto vertex : graph) {
+            if (originalTemps.find(vertex.first) != originalTemps.end()) {
+                tempStack.push( StackEntry( vertex.first, true ));
+                deleteVertexFromGraph( vertex.first, graph );
+            }
+        }
     }
 }
 
@@ -224,7 +227,8 @@ bool select(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo
     return rewriteProgram(commands, tempToColorMap, registerInfo);
 }
 
-bool tryAllocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo) {
+bool tryAllocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo,
+                          std::set<std::string>& originalTemps) {
     // build graph
     std::map<std::string, std::set<std::string>> originalGraph = buildGraph(commands);
 
@@ -233,16 +237,28 @@ bool tryAllocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo
     std::stack<StackEntry> tempStack;
     while (!isGraphEmpty(tempGraph)) {
         simplify(tempGraph, tempStack, registerInfo);
-        spill(tempGraph, tempStack, registerInfo);
+        spill(tempGraph, tempStack, registerInfo, originalTemps);
     }
 
     // select
     return select(commands, registerInfo, originalGraph, tempStack);
 }
 
+std::set<std::string> getOriginalTemps(AssemblyCommands& commands) {
+    std::set<std::string> temps;
+    for (auto command : commands) {
+        for (auto temp : command->GetOut()) {
+            temps.insert(temp.ToString());
+        }
+    }
+
+    return temps;
+}
+
 AssemblyCommands allocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo) {
     AssemblyCommands commandsWithRegisters = commands;
-    while (!tryAllocateRegisters(commandsWithRegisters, registerInfo)) {
+    std::set<std::string> originalTemps = getOriginalTemps(commands);
+    while (!tryAllocateRegisters(commandsWithRegisters, registerInfo, originalTemps)) {
         // 👻 💀 ☠️ 👽 👾 👻 💀 ☠️ 👽 👾 👻 💀 ☠️ 👽 👾 👻 💀 ☠️ 👽 👾 👻 💀 ☠️ 👽 👾
     }
 
