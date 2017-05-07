@@ -4,13 +4,19 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include <memory>
 
 #include "../utils/Temporary.h"
 
-#define REG const IRT::CTemp
+
+#define REG IRT::CTemp
+
+#define AssemblyCommands std::vector<std::shared_ptr<AssemblyCode::AssemblyCommand>>
 
 namespace AssemblyCode {
+    class RegisterInfo;
+
     class AssemblyCommand {
     public:
         virtual std::vector<IRT::CTemp> GetIn( ) const = 0;
@@ -18,6 +24,14 @@ namespace AssemblyCode {
         virtual std::vector<IRT::CTemp> GetOut( ) const = 0;
 
         virtual std::string ToString( ) const = 0;
+
+        virtual void colorToRegisterChange(std::map<std::string, int>& tempToColorMap,
+                                           AssemblyCode::RegisterInfo& registerInfo) = 0;
+
+        virtual void processMemoryTemps(std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                        AssemblyCommands& newAssemblyCommands,
+                                        std::map<std::string, int>& spilledToOffset,
+                                        IRT::CTemp& beginSP) = 0;
     };
 
 
@@ -25,11 +39,19 @@ namespace AssemblyCode {
     public:
         std::vector<IRT::CTemp> GetIn( ) const override;
 
-        AddRegRegCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand );
+        AddRegRegCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand );
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands,
+                                 std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp& beginSP) override;
 
     private:
         REG leftOperand;
@@ -42,11 +64,18 @@ namespace AssemblyCode {
     public:
         std::vector<IRT::CTemp> GetIn( ) const override;
 
-        SubRegRegCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand );
+        SubRegRegCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand );
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG leftOperand;
@@ -58,11 +87,18 @@ namespace AssemblyCode {
     public:
         std::vector<IRT::CTemp> GetIn( ) const override;
 
-        MulRegRegCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand );
+        MulRegRegCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand );
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG leftOperand;
@@ -74,11 +110,18 @@ namespace AssemblyCode {
     public:
         std::vector<IRT::CTemp> GetIn( ) const override;
 
-        DivRegRegCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand );
+        DivRegRegCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand );
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG leftOperand;
@@ -88,7 +131,7 @@ namespace AssemblyCode {
 
     class MoveRegRegCommand : public AssemblyCommand {
     public:
-        MoveRegRegCommand( REG &_target, REG &_source );
+        MoveRegRegCommand( REG _target, REG _source );
 
         std::vector<IRT::CTemp> GetIn( ) const override;
 
@@ -99,6 +142,13 @@ namespace AssemblyCode {
         std::string getTarget() const;
 
         std::string getSource() const;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG source;
@@ -116,6 +166,13 @@ namespace AssemblyCode {
 
         MoveRegConstCommand( const IRT::CTemp &target, int source );
 
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
+
     private:
         REG target;
         int source;
@@ -131,6 +188,13 @@ namespace AssemblyCode {
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG target;
@@ -150,6 +214,13 @@ namespace AssemblyCode {
 
         std::string ToString( ) const override;
 
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
+
     private:
         std::string label;
     };
@@ -163,6 +234,13 @@ namespace AssemblyCode {
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG target;
@@ -179,6 +257,13 @@ namespace AssemblyCode {
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG address;
@@ -205,18 +290,32 @@ namespace AssemblyCode {
 
         std::string ToString( ) const override;
 
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
+
     };
 
 
     class CJumpLessCommand : public AbstractJumpCommand {
     public:
-        CJumpLessCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
+        CJumpLessCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand, const std::string &label );
 
         std::vector<IRT::CTemp> GetIn( ) const override;
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG leftOperand;
@@ -225,13 +324,20 @@ namespace AssemblyCode {
 
     class CJumpEqualCommand : public AbstractJumpCommand {
     public:
-        CJumpEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
+        CJumpEqualCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand, const std::string &label );
 
         std::vector<IRT::CTemp> GetIn( ) const override;
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG leftOperand;
@@ -240,13 +346,20 @@ namespace AssemblyCode {
 
     class CJumpNotEqualCommand : public AbstractJumpCommand {
     public:
-        CJumpNotEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand, const std::string &label );
+        CJumpNotEqualCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand, const std::string &label );
 
         std::vector<IRT::CTemp> GetIn( ) const override;
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG leftOperand;
@@ -255,13 +368,20 @@ namespace AssemblyCode {
 
     class AddRegConstCommand : public AssemblyCommand {
     public:
-        AddRegConstCommand( const IRT::CTemp &leftOperand, int constant );
+        AddRegConstCommand( const IRT::CTemp leftOperand, int constant );
 
         std::vector<IRT::CTemp> GetIn( ) const override;
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG leftOperand;
@@ -278,6 +398,13 @@ namespace AssemblyCode {
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG target;
@@ -296,6 +423,13 @@ namespace AssemblyCode {
 
         std::string ToString( ) const override;
 
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
+
     private:
         REG target;
         int constant;
@@ -311,6 +445,13 @@ namespace AssemblyCode {
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG target;
@@ -329,6 +470,13 @@ namespace AssemblyCode {
 
         std::string ToString( ) const override;
 
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
+
     private:
         int constant;
         REG source;
@@ -344,6 +492,13 @@ namespace AssemblyCode {
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG target;
@@ -361,6 +516,13 @@ namespace AssemblyCode {
 
         std::string ToString( ) const override;
 
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
+
     private:
         REG target;
         REG source;
@@ -368,13 +530,20 @@ namespace AssemblyCode {
 
     class SubRegConstCommand : public AssemblyCommand {
     public:
-        SubRegConstCommand( const IRT::CTemp &leftOperand, int rightConst );
+        SubRegConstCommand( const IRT::CTemp leftOperand, int rightConst );
 
         std::vector<IRT::CTemp> GetIn( ) const override;
 
         std::vector<IRT::CTemp> GetOut( ) const override;
 
         std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
 
     private:
         REG leftOperand;
@@ -385,3 +554,4 @@ namespace AssemblyCode {
 };
 
 #undef REG
+#undef AssemblyCommands

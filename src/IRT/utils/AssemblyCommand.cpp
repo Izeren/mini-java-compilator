@@ -2,7 +2,116 @@
 // Created by izeren on 4/27/17.
 //
 
+#include <cassert>
 #include "AssemblyCommand.h"
+#include "../register_allocation/RegisterAllocation.h"
+
+std::shared_ptr<AssemblyCode::AssemblyCommand> createLoad(IRT::CTemp& target, int offset, IRT::CTemp& beginSP) {
+    return std::make_shared<AssemblyCode::MoveMemFromRegPlusConstToReg>(target, beginSP, -offset);
+}
+
+std::shared_ptr<AssemblyCode::AssemblyCommand> createStore(IRT::CTemp& source, int offset, IRT::CTemp& beginSP) {
+    return std::make_shared<AssemblyCode::MoveRegToMemByRegPlusConst>(beginSP, -offset, source);
+}
+
+void leftRightProcessMemoryTemps(AssemblyCommands &newAssemblyCommands,
+                                 std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp& beginSP,
+                                 std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 IRT::CTemp& leftOperand,
+                                 IRT::CTemp& rightOperand,
+                                 bool shouldLoadLeft = true,
+                                 bool shouldStoreLeft = true) {
+
+    assert(shouldLoadLeft || shouldStoreLeft);
+
+    std::string leftName = leftOperand.ToString();
+    std::string rightName = rightOperand.ToString();
+
+    auto leftFind = spilledToOffset.find(leftOperand.ToString());
+    auto rightFind = spilledToOffset.find(rightOperand.ToString());
+
+    if (rightFind != spilledToOffset.end()) {
+        IRT::CTemp rightTemp;
+        newAssemblyCommands.push_back(createLoad(rightTemp, rightFind->second, beginSP));
+
+        rightName = rightTemp.ToString();
+    }
+
+    if (leftFind != spilledToOffset.end()) {
+        IRT::CTemp leftTemp;
+        if (shouldLoadLeft) {
+            newAssemblyCommands.push_back( createLoad( leftTemp, leftFind->second, beginSP ));
+        }
+        leftName = leftTemp.ToString( );
+
+        newAssemblyCommands.push_back(thisShared);
+
+        if (shouldStoreLeft) {
+            newAssemblyCommands.push_back( createStore( leftTemp, leftFind->second, beginSP ));
+        }
+    } else {
+        newAssemblyCommands.push_back(thisShared);
+    }
+
+    leftOperand.setName(leftName);
+    rightOperand.setName(rightName);
+}
+
+void onlyRightProcessMemoryTemps(AssemblyCommands &newAssemblyCommands,
+                                 std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp& beginSP,
+                                 std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 IRT::CTemp& rightOperand) {
+
+    std::string rightName = rightOperand.ToString();
+
+    auto rightFind = spilledToOffset.find(rightOperand.ToString());
+
+    if (rightFind != spilledToOffset.end()) {
+        IRT::CTemp rightTemp;
+        newAssemblyCommands.push_back(createLoad(rightTemp, rightFind->second, beginSP));
+
+        rightName = rightTemp.ToString();
+    }
+
+    newAssemblyCommands.push_back(thisShared);
+
+    rightOperand.setName(rightName);
+}
+
+void onlyLeftProcessMemoryTemps(AssemblyCommands &newAssemblyCommands,
+                                 std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp& beginSP,
+                                 std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 IRT::CTemp& leftOperand,
+                                 bool shouldLoadLeft = true,
+                                 bool shouldStoreLeft = true) {
+
+    std::string leftName = leftOperand.ToString();
+
+    auto leftFind = spilledToOffset.find(leftOperand.ToString());
+
+    if (leftFind != spilledToOffset.end()) {
+        IRT::CTemp leftTemp;
+        if (shouldLoadLeft) {
+            newAssemblyCommands.push_back( createLoad( leftTemp, leftFind->second, beginSP ));
+        }
+        leftName = leftTemp.ToString();
+
+        newAssemblyCommands.push_back(thisShared);
+
+        if (shouldStoreLeft) {
+            newAssemblyCommands.push_back( createStore( leftTemp, leftFind->second, beginSP ));
+        }
+    } else {
+        newAssemblyCommands.push_back(thisShared);
+    }
+
+    leftOperand.setName(leftName);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 
 std::vector<IRT::CTemp> AssemblyCode::MoveRegRegCommand::GetIn( ) const {
     return { source };
@@ -13,7 +122,7 @@ std::vector<IRT::CTemp> AssemblyCode::MoveRegRegCommand::GetOut( ) const {
 }
 
 AssemblyCode::MoveRegRegCommand::MoveRegRegCommand(
-        const IRT::CTemp &_target, const IRT::CTemp &_source
+        IRT::CTemp _target, IRT::CTemp _source
 ) : source( _source ), target( _target ) { }
 
 std::string AssemblyCode::MoveRegRegCommand::ToString( ) const {
@@ -26,6 +135,21 @@ std::string AssemblyCode::MoveRegRegCommand::getTarget() const {
 
 std::string AssemblyCode::MoveRegRegCommand::getSource() const {
     return source.ToString();
+}
+
+void AssemblyCode::MoveRegRegCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                             AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(source, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::MoveRegRegCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                          AssemblyCommands &newAssemblyCommands,
+                                                          std::map<std::string, int> &spilledToOffset,
+                                                          IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, target, source, false);
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -42,8 +166,22 @@ std::string AssemblyCode::AddRegRegCommand::ToString( ) const {
     return "add " + leftOperand.ToString( ) + " " + rightOperand.ToString( ) + "\n";
 }
 
-AssemblyCode::AddRegRegCommand::AddRegRegCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand )
+AssemblyCode::AddRegRegCommand::AddRegRegCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand )
         : leftOperand( leftOperand ), rightOperand( rightOperand ) { }
+
+void AssemblyCode::AddRegRegCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                            AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(rightOperand, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::AddRegRegCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                         AssemblyCommands &newAssemblyCommands,
+                                                         std::map<std::string, int> &spilledToOffset,
+                                                         IRT::CTemp& beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, leftOperand, rightOperand);
+}
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -51,7 +189,7 @@ std::vector<IRT::CTemp> AssemblyCode::SubRegRegCommand::GetIn( ) const {
     return { leftOperand, rightOperand };
 }
 
-AssemblyCode::SubRegRegCommand::SubRegRegCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand )
+AssemblyCode::SubRegRegCommand::SubRegRegCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand )
         : leftOperand( leftOperand ), rightOperand( rightOperand ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::SubRegRegCommand::GetOut( ) const {
@@ -62,8 +200,23 @@ std::string AssemblyCode::SubRegRegCommand::ToString( ) const {
     return "sub " + leftOperand.ToString( ) + " " + rightOperand.ToString( ) + "\n";
 }
 
+void AssemblyCode::SubRegRegCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                            AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(rightOperand, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::SubRegRegCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                         AssemblyCommands &newAssemblyCommands,
+                                                         std::map<std::string, int> &spilledToOffset,
+                                                         IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, leftOperand, rightOperand);
+
+}
+
 //----------------------------------------------------------------------------------------------------------------------
-AssemblyCode::MulRegRegCommand::MulRegRegCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand )
+AssemblyCode::MulRegRegCommand::MulRegRegCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand )
         : leftOperand( leftOperand ), rightOperand( rightOperand ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::MulRegRegCommand::GetIn( ) const {
@@ -76,6 +229,23 @@ std::vector<IRT::CTemp> AssemblyCode::MulRegRegCommand::GetOut( ) const {
 
 std::string AssemblyCode::MulRegRegCommand::ToString( ) const {
     return "imul " + leftOperand.ToString( ) + " " + rightOperand.ToString( ) + "\n";
+}
+
+void AssemblyCode::MulRegRegCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                            AssemblyCode::RegisterInfo &registerInfo ) {
+
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(rightOperand, tempToColorMap, registerInfo);
+
+}
+
+void AssemblyCode::MulRegRegCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                         AssemblyCommands &newAssemblyCommands,
+                                                         std::map<std::string, int> &spilledToOffset,
+                                                         IRT::CTemp &beginSP ) {
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, leftOperand, rightOperand);
+
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -91,8 +261,24 @@ std::string AssemblyCode::DivRegRegCommand::ToString( ) const {
     return "idiv " + leftOperand.ToString( ) + " " + rightOperand.ToString( ) + "\n";
 }
 
-AssemblyCode::DivRegRegCommand::DivRegRegCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand )
+AssemblyCode::DivRegRegCommand::DivRegRegCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand )
         : leftOperand( leftOperand ), rightOperand( rightOperand ) { }
+
+void AssemblyCode::DivRegRegCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                            AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(rightOperand, tempToColorMap, registerInfo);
+
+}
+
+void AssemblyCode::DivRegRegCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                         AssemblyCommands &newAssemblyCommands,
+                                                         std::map<std::string, int> &spilledToOffset,
+                                                         IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, leftOperand, rightOperand);
+
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 std::vector<IRT::CTemp> AssemblyCode::MoveRegConstCommand::GetIn( ) const {
@@ -110,6 +296,21 @@ std::string AssemblyCode::MoveRegConstCommand::ToString( ) const {
 AssemblyCode::MoveRegConstCommand::MoveRegConstCommand( const IRT::CTemp &target, int source ) : target( target ),
                                                                                                  source( source ) { }
 
+void AssemblyCode::MoveRegConstCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                               AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+
+}
+
+void AssemblyCode::MoveRegConstCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                            AssemblyCommands &newAssemblyCommands,
+                                                            std::map<std::string, int> &spilledToOffset,
+                                                            IRT::CTemp &beginSP ) {
+
+    onlyLeftProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, target, false);
+
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
 AssemblyCode::MoveRegMemCommand::MoveRegMemCommand( const IRT::CTemp &target, const IRT::CTemp &source ) : target(
@@ -125,6 +326,22 @@ std::vector<IRT::CTemp> AssemblyCode::MoveRegMemCommand::GetOut( ) const {
 
 std::string AssemblyCode::MoveRegMemCommand::ToString( ) const {
     return "mov " + target.ToString( ) + " [" + source.ToString( ) + "]\n";
+}
+
+void AssemblyCode::MoveRegMemCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                             AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(source, tempToColorMap, registerInfo);
+
+}
+
+void AssemblyCode::MoveRegMemCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                          AssemblyCommands &newAssemblyCommands,
+                                                          std::map<std::string, int> &spilledToOffset,
+                                                          IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, target, source, false);
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -146,6 +363,20 @@ std::string AssemblyCode::LabelCommand::getLabel() const {
     return label;
 }
 
+void AssemblyCode::LabelCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                        AssemblyCode::RegisterInfo &registerInfo ) {
+
+}
+
+void AssemblyCode::LabelCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                     AssemblyCommands &newAssemblyCommands,
+                                                     std::map<std::string, int> &spilledToOffset,
+                                                     IRT::CTemp &beginSP ) {
+
+    newAssemblyCommands.push_back(thisShared);
+
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 std::vector<IRT::CTemp> AssemblyCode::NameCommand::GetIn( ) const {
     return { };
@@ -162,6 +393,19 @@ std::string AssemblyCode::NameCommand::ToString( ) const {
     return "mov " + target.ToString( ) + " \"" + name + "\"\n";
 }
 
+void AssemblyCode::NameCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                       AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::NameCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                    AssemblyCommands &newAssemblyCommands,
+                                                    std::map<std::string, int> &spilledToOffset, IRT::CTemp &beginSP ) {
+
+    onlyLeftProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, target);
+
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
 AssemblyCode::CallCommand::CallCommand( const IRT::CTemp &address, const std::vector<IRT::CTemp> &arguments )
@@ -170,9 +414,9 @@ AssemblyCode::CallCommand::CallCommand( const IRT::CTemp &address, const std::ve
 std::vector<IRT::CTemp> AssemblyCode::CallCommand::GetIn( ) const {
     std::vector<IRT::CTemp> in;
     in.push_back( address );
-    for ( auto argument : arguments ) {
-        in.push_back( argument );
-    }
+//    for ( auto argument : arguments ) {
+//        in.push_back( argument );
+//    }
     return in;
 }
 
@@ -188,12 +432,30 @@ std::string AssemblyCode::CallCommand::ToString( ) const {
     return command + "\n";
 }
 
+void AssemblyCode::CallCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                       AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(address, tempToColorMap, registerInfo);
+    for ( auto argTemp : arguments) {
+        AssemblyCode::colorToRegisterChange( argTemp, tempToColorMap, registerInfo );
+    }
+}
+
+void AssemblyCode::CallCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                    AssemblyCommands &newAssemblyCommands,
+                                                    std::map<std::string, int> &spilledToOffset, IRT::CTemp &beginSP ) {
+
+    onlyRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, address);
+
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 std::string AssemblyCode::AbstractJumpCommand::getLabel() const {
     return label;
 }
 
-AssemblyCode::AbstractJumpCommand::AbstractJumpCommand(const std::string &label) : label(label) {}
+AssemblyCode::AbstractJumpCommand::AbstractJumpCommand(const std::string& label) : label(label) {
+
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 AssemblyCode::JumpCommand::JumpCommand( const std::string &label ) : AbstractJumpCommand( label ) { }
@@ -210,6 +472,19 @@ std::string AssemblyCode::JumpCommand::ToString( ) const {
     return "jmp " + label + "\n";
 }
 
+void AssemblyCode::JumpCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                       AssemblyCode::RegisterInfo &registerInfo ) {
+
+}
+
+void AssemblyCode::JumpCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                    AssemblyCommands &newAssemblyCommands,
+                                                    std::map<std::string, int> &spilledToOffset, IRT::CTemp &beginSP ) {
+
+    newAssemblyCommands.push_back(thisShared);
+
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 std::vector<IRT::CTemp> AssemblyCode::CJumpLessCommand::GetIn( ) const {
     return { leftOperand, rightOperand };
@@ -223,13 +498,29 @@ std::string AssemblyCode::CJumpLessCommand::ToString( ) const {
     return "cmp " + leftOperand.ToString( ) + " " + rightOperand.ToString( ) + "\njl " + label + "\n";
 }
 
-AssemblyCode::CJumpLessCommand::CJumpLessCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand,
-                                                  const std::string &label ) : leftOperand( leftOperand ),
-                                                                               rightOperand( rightOperand ),
-                                                                               AbstractJumpCommand( label ) { }
+AssemblyCode::CJumpLessCommand::CJumpLessCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand,
+                                                  const std::string &label ) : AbstractJumpCommand( label ),
+                                                                               leftOperand( leftOperand ),
+                                                                               rightOperand( rightOperand ) { }
+
+void AssemblyCode::CJumpLessCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                            AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(rightOperand, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::CJumpLessCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                         AssemblyCommands &newAssemblyCommands,
+                                                         std::map<std::string, int> &spilledToOffset,
+                                                         IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, leftOperand, rightOperand, /* load left */ true, /* store left */ false);
+
+}
 
 //----------------------------------------------------------------------------------------------------------------------
-AssemblyCode::CJumpEqualCommand::CJumpEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand,
+AssemblyCode::CJumpEqualCommand::CJumpEqualCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand,
                                                     const std::string &label ) : leftOperand( leftOperand ),
                                                                                  rightOperand( rightOperand ),
                                                                                  AbstractJumpCommand( label ) { }
@@ -247,8 +538,24 @@ std::string AssemblyCode::CJumpEqualCommand::ToString( ) const {
 
 }
 
+void AssemblyCode::CJumpEqualCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                             AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(rightOperand, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::CJumpEqualCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                          AssemblyCommands &newAssemblyCommands,
+                                                          std::map<std::string, int> &spilledToOffset,
+                                                          IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, leftOperand, rightOperand, /* load left */ true, /* store left */ false);
+
+}
+
 //----------------------------------------------------------------------------------------------------------------------
-AssemblyCode::CJumpNotEqualCommand::CJumpNotEqualCommand( const IRT::CTemp &leftOperand, const IRT::CTemp &rightOperand,
+AssemblyCode::CJumpNotEqualCommand::CJumpNotEqualCommand( const IRT::CTemp leftOperand, const IRT::CTemp rightOperand,
                                                           const std::string &label ) : leftOperand( leftOperand ),
                                                                                        rightOperand( rightOperand ),
                                                                                        AbstractJumpCommand( label ) { }
@@ -265,9 +572,26 @@ std::string AssemblyCode::CJumpNotEqualCommand::ToString( ) const {
     return "cmp " + leftOperand.ToString( ) + " " + rightOperand.ToString( ) + "\njne " + label + "\n";
 }
 
+void AssemblyCode::CJumpNotEqualCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                                AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(rightOperand, tempToColorMap, registerInfo);
+
+}
+
+void AssemblyCode::CJumpNotEqualCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                             AssemblyCommands &newAssemblyCommands,
+                                                             std::map<std::string, int> &spilledToOffset,
+                                                             IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, leftOperand, rightOperand, /* load left */ true, /* store left */ false);
+
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
-AssemblyCode::AddRegConstCommand::AddRegConstCommand( const IRT::CTemp &leftOperand, int constant ) : leftOperand(
+AssemblyCode::AddRegConstCommand::AddRegConstCommand( const IRT::CTemp leftOperand, int constant ) : leftOperand(
         leftOperand ), constant( constant ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::AddRegConstCommand::GetIn( ) const {
@@ -280,6 +604,21 @@ std::vector<IRT::CTemp> AssemblyCode::AddRegConstCommand::GetOut( ) const {
 
 std::string AssemblyCode::AddRegConstCommand::ToString( ) const {
     return "add " + leftOperand.ToString( ) + " " + std::to_string( constant ) + "\n";
+}
+
+void AssemblyCode::AddRegConstCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                              AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::AddRegConstCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                           AssemblyCommands &newAssemblyCommands,
+                                                           std::map<std::string, int> &spilledToOffset,
+                                                           IRT::CTemp &beginSP ) {
+
+    onlyLeftProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, leftOperand, /* load left */ true, /* store left */ true);
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -296,7 +635,25 @@ std::vector<IRT::CTemp> AssemblyCode::MoveMemFromRegPlusConstToReg::GetOut( ) co
 }
 
 std::string AssemblyCode::MoveMemFromRegPlusConstToReg::ToString( ) const {
-    return "mov " + target.ToString( ) + " [" + source.ToString( ) + " + " + std::to_string( constant ) + "]\n";
+    if (constant > 0) {
+        return "mov " + target.ToString( ) + " [" + source.ToString( ) + " + " + std::to_string( constant ) + "]\n";
+    } else {
+        return "mov " + target.ToString( ) + " [" + source.ToString( ) + " - " + std::to_string( abs(constant) ) + "]\n";
+    }
+}
+
+void AssemblyCode::MoveMemFromRegPlusConstToReg::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                                        AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(source, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::MoveMemFromRegPlusConstToReg::processMemoryTemps(
+        std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared, AssemblyCommands &newAssemblyCommands,
+        std::map<std::string, int> &spilledToOffset, IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, target, source, /* load left */ false, /* store left */ true);
 }
 
 
@@ -316,6 +673,22 @@ std::string AssemblyCode::MoveMemFromConstCommand::ToString( ) const {
     return "mov " + target.ToString( ) + " [" + std::to_string( constant ) + "]\n";
 }
 
+void AssemblyCode::MoveMemFromConstCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                                   AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+}
+
+void
+AssemblyCode::MoveMemFromConstCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                           AssemblyCommands &newAssemblyCommands,
+                                                           std::map<std::string, int> &spilledToOffset,
+                                                           IRT::CTemp &beginSP ) {
+
+    onlyLeftProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, target, /* load left */ false, /* store left */ true);
+
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
 AssemblyCode::MoveRegToMemByRegPlusConst::MoveRegToMemByRegPlusConst( const IRT::CTemp &target, int constant,
@@ -332,7 +705,28 @@ std::vector<IRT::CTemp> AssemblyCode::MoveRegToMemByRegPlusConst::GetOut( ) cons
 }
 
 std::string AssemblyCode::MoveRegToMemByRegPlusConst::ToString( ) const {
-    return "mov [" + target.ToString( ) + " + " + std::to_string( constant ) + "] " + source.ToString() + "\n";
+    if (constant > 0) {
+        return "mov [" + target.ToString( ) + " + " + std::to_string( constant ) + "] " + source.ToString( ) + "\n";
+    } else {
+        return "mov [" + target.ToString( ) + " - " + std::to_string( abs(constant) ) + "] " + source.ToString( ) + "\n";
+    }
+}
+
+void AssemblyCode::MoveRegToMemByRegPlusConst::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                                      AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(source, tempToColorMap, registerInfo);
+}
+
+void
+AssemblyCode::MoveRegToMemByRegPlusConst::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                              AssemblyCommands &newAssemblyCommands,
+                                                              std::map<std::string, int> &spilledToOffset,
+                                                              IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, target, source, /* load left */ false, /* store left */ true);
+
 }
 
 
@@ -352,6 +746,21 @@ std::string AssemblyCode::MoveRegToMemByConst::ToString( ) const {
     return "mov [" + std::to_string( constant ) + "] " + source.ToString() + "\n";
 }
 
+void AssemblyCode::MoveRegToMemByConst::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                               AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(source, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::MoveRegToMemByConst::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                            AssemblyCommands &newAssemblyCommands,
+                                                            std::map<std::string, int> &spilledToOffset,
+                                                            IRT::CTemp &beginSP ) {
+
+    onlyRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, source);
+
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
 AssemblyCode::MoveRegToMemByReg::MoveRegToMemByReg( const IRT::CTemp &target, const IRT::CTemp &source ) : target(
@@ -367,6 +776,22 @@ std::vector<IRT::CTemp> AssemblyCode::MoveRegToMemByReg::GetOut( ) const {
 
 std::string AssemblyCode::MoveRegToMemByReg::ToString( ) const {
     return "mov [" + target.ToString() + "] " + source.ToString() + "\n";
+}
+
+void AssemblyCode::MoveRegToMemByReg::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                             AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(source, tempToColorMap, registerInfo);
+
+}
+
+void AssemblyCode::MoveRegToMemByReg::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                          AssemblyCommands &newAssemblyCommands,
+                                                          std::map<std::string, int> &spilledToOffset,
+                                                          IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, target, source, /* load left */ false, /* store left */ true);
 }
 
 
@@ -386,8 +811,26 @@ std::string AssemblyCode::MoveRegFromMemToMemByReg::ToString( ) const {
     return "mov [" + target.ToString() + "] [" + source.ToString() + "]\n";
 }
 
+void AssemblyCode::MoveRegFromMemToMemByReg::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                                    AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(source, tempToColorMap, registerInfo);
+
+}
+
+void
+AssemblyCode::MoveRegFromMemToMemByReg::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                            AssemblyCommands &newAssemblyCommands,
+                                                            std::map<std::string, int> &spilledToOffset,
+                                                            IRT::CTemp &beginSP ) {
+
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, target, source, /* load left */ false, /* store left */ true);
+
+}
+
 //----------------------------------------------------------------------------------------------------------------------
-AssemblyCode::SubRegConstCommand::SubRegConstCommand( const IRT::CTemp &leftOperand, int rightConst ) : leftOperand(
+AssemblyCode::SubRegConstCommand::SubRegConstCommand( const IRT::CTemp leftOperand, int rightConst ) : leftOperand(
         leftOperand ), rightConst( rightConst ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::SubRegConstCommand::GetIn( ) const {
@@ -400,4 +843,20 @@ std::vector<IRT::CTemp> AssemblyCode::SubRegConstCommand::GetOut( ) const {
 
 std::string AssemblyCode::SubRegConstCommand::ToString( ) const {
     return "sub " + leftOperand.ToString() + " " + std::to_string(rightConst);
+}
+
+void AssemblyCode::SubRegConstCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                              AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(leftOperand, tempToColorMap, registerInfo);
+
+}
+
+void AssemblyCode::SubRegConstCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                           AssemblyCommands &newAssemblyCommands,
+                                                           std::map<std::string, int> &spilledToOffset,
+                                                           IRT::CTemp &beginSP ) {
+
+    onlyLeftProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP,
+                                thisShared, leftOperand, /* load left */ true, /* store left */ true);
+
 }

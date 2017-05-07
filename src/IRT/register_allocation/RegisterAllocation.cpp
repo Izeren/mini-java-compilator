@@ -6,6 +6,9 @@
 #include "ControlFlowGraphBuilder.h"
 #include "TempLivnessFiller.h"
 #include "InterferentGraphBuilder.h"
+#include "../utils/Frame.h"
+#include "../utils/TreePatterns.h"
+
 
 std::map<std::string, std::set<std::string>> buildGraph(AssemblyCommands& commands) {
     std::vector<AssemblyCode::CodeLine> controlGraph = buildControlFlowGraph(commands);
@@ -46,14 +49,14 @@ struct StackEntry {
 };
 
 void simplify(std::map<std::string, std::set<std::string>>& graph,
-              std::stack<StackEntry>& tempStack, int registerNumber) {
+              std::stack<StackEntry>& tempStack, AssemblyCode::RegisterInfo& registerInfo) {
 
     bool wasSuccessfully;
     do {
         wasSuccessfully = false;
 
         for (auto vertex : graph) {
-            if (vertex.second.size() < registerNumber) {
+            if (vertex.second.size() < registerInfo.registers.size()) {
                 tempStack.push(StackEntry(vertex.first));
                 deleteVertexFromGraph(vertex.first, graph);
                 wasSuccessfully = true;
@@ -65,9 +68,9 @@ void simplify(std::map<std::string, std::set<std::string>>& graph,
 }
 
 void spill(std::map<std::string, std::set<std::string>>& graph,
-           std::stack<StackEntry>& tempStack, int registerNumber) {
+           std::stack<StackEntry>& tempStack, AssemblyCode::RegisterInfo& registerInfo) {
 
-    while (!isGraphEmpty(graph) && !checkSimplifiableVertex(graph, registerNumber)) {
+    while (!isGraphEmpty(graph) && !checkSimplifiableVertex(graph, registerInfo.registers.size())) {
         auto vertex = graph.begin();
         tempStack.push(StackEntry(vertex->first, true));
         deleteVertexFromGraph(vertex->first, graph);
@@ -125,25 +128,103 @@ void processStackEntry(
     }
 }
 
-bool rewriteProgram(AssemblyCommands& commands, std::map<std::string, int>& tempToColorMap) {
+int totalAllocated = 0;
 
+int countSpilled(std::map<std::string, int>& tempToColorMap) {
+    int count = 0;
+    for (auto entry : tempToColorMap) {
+        if (entry.second == IN_MEMORY_COLOR) {
+            ++count;
+        }
+    }
+
+    return count;
 }
 
-bool select(AssemblyCommands& commands, int registerNumber,
+void addFirstLineAllocation(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo) {
+    commands.insert(commands.begin(),
+                    std::make_shared<AssemblyCode::MoveRegRegCommand>(registerInfo.spBeginReg,
+                                                    registerInfo.espReg));
+
+    commands.insert(commands.begin(),
+                    std::make_shared<AssemblyCode::SubRegConstCommand>(IRT::CTemp(registerInfo.espReg),
+                    totalAllocated * IRT::CFrame::wordSize));
+}
+
+void colorToRegistersChange(AssemblyCommands& commands,
+                            std::map<std::string, int>& tempToColorMap,
+                            AssemblyCode::RegisterInfo& registerInfo) {
+    for (auto entry : commands) {
+        entry->colorToRegisterChange(tempToColorMap, registerInfo);
+    }
+}
+
+std::map<std::string, int> buildSpillToOffsetMap(std::map<std::string, int>& tempToColorMap) {
+    std::vector<std::string> spilledNodes;
+    for (auto entry : tempToColorMap) {
+        if (entry.second == IN_MEMORY_COLOR) {
+            spilledNodes.push_back(entry.first);
+        }
+    }
+
+    assert(spilledNodes.size() != 0);
+
+    std::map<std::string, int> map;
+    for (int i = 0; i < spilledNodes.size(); ++i) {
+        map[spilledNodes[i]] = (totalAllocated + i) * IRT::CFrame::wordSize;
+    }
+
+    return map;
+};
+
+void processSpilledTemps(AssemblyCommands& commands,
+        std::map<std::string, int>& tempToColorMap,
+        AssemblyCode::RegisterInfo& registerInfo) {
+
+    AssemblyCommands newAssemblyCommands;
+    std::map<std::string, int> spilledToOffset = buildSpillToOffsetMap(tempToColorMap);
+    for (auto command : commands) {
+        command->processMemoryTemps(command, newAssemblyCommands, spilledToOffset, registerInfo.spBeginReg);
+    }
+
+    commands.clear();
+    commands.insert(commands.end(), newAssemblyCommands.begin(), newAssemblyCommands.end());
+}
+
+bool rewriteProgram(AssemblyCommands& commands,
+                    std::map<std::string, int>& tempToColorMap,
+                    AssemblyCode::RegisterInfo& registerInfo) {
+
+    int newSpilledCount = countSpilled(tempToColorMap);
+    if (newSpilledCount == 0) {
+        addFirstLineAllocation(commands, registerInfo);
+        colorToRegistersChange(commands, tempToColorMap, registerInfo);
+        return true;
+    } else {
+        processSpilledTemps(commands, tempToColorMap, registerInfo);
+        return false;
+    }
+}
+
+bool select(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo,
         std::map<std::string, std::set<std::string>>& originalGraph,
         std::stack<StackEntry>& tempStack) {
 
     std::map<std::string, std::set<std::string>> recoveredGraph;
     std::map<std::string, int> tempToColorMap;
     while (!tempStack.empty()) {
-        processStackEntry(tempStack.top(), originalGraph, recoveredGraph, registerNumber, tempToColorMap);
+        processStackEntry(tempStack.top(),
+                          originalGraph,
+                          recoveredGraph,
+                          registerInfo.registers.size(),
+                          tempToColorMap);
         tempStack.pop();
     }
 
-    return rewriteProgram(commands, tempToColorMap);
+    return rewriteProgram(commands, tempToColorMap, registerInfo);
 }
 
-bool tryAllocateRegisters(AssemblyCommands& commands, int registerNumber) {
+bool tryAllocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo) {
     // build graph
     std::map<std::string, std::set<std::string>> originalGraph = buildGraph(commands);
 
@@ -151,19 +232,27 @@ bool tryAllocateRegisters(AssemblyCommands& commands, int registerNumber) {
     std::map<std::string, std::set<std::string>> tempGraph = originalGraph;
     std::stack<StackEntry> tempStack;
     while (!isGraphEmpty(tempGraph)) {
-        simplify(tempGraph, tempStack, registerNumber);
-        spill(tempGraph, tempStack, registerNumber);
+        simplify(tempGraph, tempStack, registerInfo);
+        spill(tempGraph, tempStack, registerInfo);
     }
 
     // select
-
+    return select(commands, registerInfo, originalGraph, tempStack);
 }
 
-AssemblyCommands allocateRegisters(AssemblyCommands& commands, int registerNumber) {
+AssemblyCommands allocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo) {
     AssemblyCommands commandsWithRegisters = commands;
-    while (!tryAllocateRegisters(commandsWithRegisters, registerNumber)) {
+    while (!tryAllocateRegisters(commandsWithRegisters, registerInfo)) {
         // 👻 💀 ☠️ 👽 👾 👻 💀 ☠️ 👽 👾 👻 💀 ☠️ 👽 👾 👻 💀 ☠️ 👽 👾 👻 💀 ☠️ 👽 👾
     }
 
     return commandsWithRegisters;
+}
+
+void AssemblyCode::colorToRegisterChange( IRT::CTemp& temp,
+                            std::map<std::string, int> &tempToColorMap, AssemblyCode::RegisterInfo &registerInfo ) {
+    auto mapEntry = tempToColorMap.find(temp.ToString());
+    if (mapEntry != tempToColorMap.end()) {
+        temp.setName(registerInfo.registers[mapEntry->second]);
+    }
 }
