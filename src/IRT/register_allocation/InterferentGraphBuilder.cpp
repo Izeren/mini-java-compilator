@@ -45,10 +45,12 @@ void addEdgesFromMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, st
 void addEdgesFromNotMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, std::set<std::string>>& graph) {
     for (auto defTemp : line.command->GetOut()) {
         for (auto outTemp : line.liveOutTemps) {
-            std::string def = defTemp.ToString( );
-            std::string out = outTemp;
-            if (!isInIgnoreList(def) && !isInIgnoreList(out)) {
-                AssemblyCode::addNotOrientedEdge( def, out, graph );
+            if (defTemp.ToString() != outTemp) {
+                std::string def = defTemp.ToString( );
+                std::string out = outTemp;
+                if ( !isInIgnoreList( def ) && !isInIgnoreList( out )) {
+                    AssemblyCode::addNotOrientedEdge( def, out, graph );
+                }
             }
         }
     }

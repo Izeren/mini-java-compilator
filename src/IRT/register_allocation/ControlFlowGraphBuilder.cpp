@@ -24,12 +24,13 @@ std::vector<AssemblyCode::CodeLine> AssemblyCode::buildControlFlowGraph(const As
         CodeLine codeLine;
         codeLine.lineNumber = i;
         codeLine.command = commands[i];
-        lines.push_back(codeLine);
 
         AssemblyCode::MoveRegRegCommand* moveRegRegCommand =
                 dynamic_cast<AssemblyCode::MoveRegRegCommand*>(commands[i].get());
 
         codeLine.isMoveRegReg = moveRegRegCommand != nullptr;
+
+        lines.push_back(codeLine);
     }
 
     // build graph
@@ -55,4 +56,6 @@ std::vector<AssemblyCode::CodeLine> AssemblyCode::buildControlFlowGraph(const As
             }
         }
     }
+
+    return lines;
 }
