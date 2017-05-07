@@ -30,6 +30,7 @@
 #include "IRT/basic_blocks/jump_canonization.h"
 #include "IRT/visitors/ConstEvaluateVisitor.h"
 #include "IRT/utils/PatternMatcher.h"
+#include "IRT/register_allocation/RegisterAllocation.h"
 
 extern int line_number, column_number;
 
@@ -165,6 +166,26 @@ std::vector<AssemblyCommands> processIRTtoASS(std::shared_ptr<const MethodToIRTM
     return commandsBatch;
 }
 
+std::vector<AssemblyCommands> processIRTtoASSWithRegAlloc(std::shared_ptr<const MethodToIRTMap> methodToIRTMap, std::ostream &out) {
+    std::vector<AssemblyCommands> commandsBatch;
+    AssemblyCode::PatternMatcher patternMatcher;
+    for ( auto it = methodToIRTMap->begin(); it != methodToIRTMap->end(); ++it) {
+        out << ";-----------------------------------" << it->first << "--------------------------------------\n";
+        AssemblyCommands commands = patternMatcher.GenerateCode( static_cast<const IRT::CStatementList *>(it->second.get()));
+
+        AssemblyCode::RegisterInfo registerInfo;
+        registerInfo.spBeginReg = IRT::CTemp("eax");
+        registerInfo.espReg = IRT::CTemp("esp");
+        registerInfo.registers = { "edx", "ecx", "ebx", "ec", "ed" };
+        AssemblyCommands commandsWithAlloc = AssemblyCode::allocateRegisters(commands, registerInfo);
+
+        WriteAssemblyToFile(commandsWithAlloc, out);
+        commandsBatch.push_back(commandsWithAlloc);
+    }
+
+    return commandsBatch;
+}
+
 void make_test( const std::string &filename, const std::string &testfile_name, const std::string &result_name ) {
     std::cout
             << "\n\n\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
@@ -220,6 +241,11 @@ void make_test( const std::string &filename, const std::string &testfile_name, c
     std::ofstream out( "../tests/IRT_builder/asms/" + filename + "-0_infinite-registers.asm", std::fstream::out );
     processIRTtoASS(constBinopEvaluatedTrees, out);
     out.close();
+
+    // ASSEMBLY GENERATION WITH ALLOC
+    std::ofstream outWithAlloc( "../tests/IRT_builder/asms/" + filename + "-1_with_alloc.asm", std::fstream::out );
+    processIRTtoASSWithRegAlloc(constBinopEvaluatedTrees, outWithAlloc);
+    outWithAlloc.close();
 }
 
 int main( int argc, char **argv ) {

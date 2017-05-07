@@ -1,8 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include <string>
-#include "ControlFlowGraphBuilder.h"
+#include "../utils/Temporary.h"
+#include "../utils/AssemblyCommand.h"
+
+using AssemblyCommands = std::vector<std::shared_ptr<AssemblyCode::AssemblyCommand>>;
 
 namespace AssemblyCode {
 

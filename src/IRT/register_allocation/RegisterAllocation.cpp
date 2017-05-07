@@ -255,7 +255,7 @@ std::set<std::string> getOriginalTemps(AssemblyCommands& commands) {
     return temps;
 }
 
-AssemblyCommands allocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo) {
+AssemblyCommands AssemblyCode::allocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo) {
     AssemblyCommands commandsWithRegisters = commands;
     std::set<std::string> originalTemps = getOriginalTemps(commands);
     while (!tryAllocateRegisters(commandsWithRegisters, registerInfo, originalTemps)) {
