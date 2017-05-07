@@ -11,3 +11,7 @@ CTemp::CTemp( std::string _name ) : name( _name ) { }
 std::string CTemp::ToString( ) const {
     return name;
 }
+
+void CTemp::setName( const std::string &string ) {
+    name = string;
+}
