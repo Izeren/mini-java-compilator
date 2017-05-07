@@ -1,4 +1,17 @@
 #include "InterferentGraphBuilder.h"
+#include "../utils/Frame.h"
+
+bool isInIgnoreList(std::string& temp) {
+    if (temp == IRT::CFrame::returnValueAddressName) {
+        return true;
+    }
+
+    if (temp == IRT::CFrame::framePointerAddressName) {
+        return true;
+    }
+
+    return false;
+}
 
 void AssemblyCode::addOrientedEdge(std::string from, std::string to, std::map<std::string, std::set<std::string>>& graph) {
     if (graph.find(from) == graph.end()) {
@@ -22,7 +35,9 @@ void addEdgesFromMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, st
 
     for (auto outTemp : line.liveOutTemps) {
         if (outTemp != source) {
-            AssemblyCode::addNotOrientedEdge(target, outTemp, graph);
+            if (!isInIgnoreList(outTemp) && !isInIgnoreList(target)) {
+                AssemblyCode::addNotOrientedEdge( target, outTemp, graph );
+            }
         }
     }
 }
@@ -30,7 +45,11 @@ void addEdgesFromMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, st
 void addEdgesFromNotMoveLine(AssemblyCode::CodeLine& line, std::map<std::string, std::set<std::string>>& graph) {
     for (auto defTemp : line.command->GetOut()) {
         for (auto outTemp : line.liveOutTemps) {
-            AssemblyCode::addNotOrientedEdge(defTemp.ToString(), outTemp, graph);
+            std::string def = defTemp.ToString( );
+            std::string out = outTemp;
+            if (!isInIgnoreList(def) && !isInIgnoreList(out)) {
+                AssemblyCode::addNotOrientedEdge( def, out, graph );
+            }
         }
     }
 }

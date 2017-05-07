@@ -76,6 +76,12 @@ namespace IRT {
         const IAddress* GetClassFieldAddress(const std::string &varName) const;
 
         std::unique_ptr<const CExpression> ExternalCall( const std::string& functionName, std::unique_ptr<const CExpressionList> args ) const;
+
+        static const int wordSize;
+        static const std::string thisAddressName;
+        static const std::string returnAddressName;
+        static const std::string returnValueAddressName;
+        static const std::string framePointerAddressName;
     private:
         int nextOffsetFromFramePointer();
         int nextOffsetFromThis();
@@ -87,11 +93,6 @@ namespace IRT {
         std::unordered_map<std::string, std::unique_ptr<const IAddress>> localVisibilityAddresses;
         std::unordered_map<std::string, std::unique_ptr<const IAddress>> classFieldAddresses;
 
-        static const int wordSize;
-        static const std::string thisAddressName;
-        static const std::string returnAddressName;
-        static const std::string returnValueAddressName;
-        static const std::string framePointerAddressName;
 
         int maxOffsetFramePointer;
         int maxOffsetThis;
