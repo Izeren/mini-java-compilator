@@ -234,13 +234,11 @@ bool IRT::CallPattern::TryToGenerateCode( const IRT::INode *tree, const IRT::CTe
     if ( callPtr ) {
         const std::vector<std::unique_ptr<const CExpression>> &argumentsPtr = callPtr->getArguments( )->getExpressions( );
         std::vector<CTemp> arguments;
-        CTemp address;
-        children.push_back( std::make_pair( address, callPtr->getFunction( )));
         for ( int index = 0; index < argumentsPtr.size( ); ++index ) {
             CTemp child = dynamic_cast<ConstTempPtr>(argumentsPtr[index].get())->getTemprorary();
             arguments.push_back( child );
         }
-        commands.emplace_back( std::make_shared<AssemblyCode::CallCommand>( address, arguments ));
+        commands.emplace_back( std::make_shared<AssemblyCode::CallCommand>( callPtr->getFunction()->getLabel(), arguments ));
         return true;
     }
     return false;

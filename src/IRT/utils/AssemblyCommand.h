@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "../utils/Temporary.h"
+#include "Label.h"
 
 
 #define REG IRT::CTemp
@@ -250,7 +251,7 @@ namespace AssemblyCode {
 
     class CallCommand : public AssemblyCommand {
     public:
-        CallCommand( const IRT::CTemp &address, const std::vector<IRT::CTemp> &arguments );
+        CallCommand( const IRT::CLabel &address, const std::vector<IRT::CTemp> &arguments );
 
         std::vector<IRT::CTemp> GetIn( ) const override;
 
@@ -266,7 +267,7 @@ namespace AssemblyCode {
                                  IRT::CTemp &beginSP ) override;
 
     private:
-        REG address;
+        IRT::CLabel address;
         std::vector<IRT::CTemp> arguments;
     };
 

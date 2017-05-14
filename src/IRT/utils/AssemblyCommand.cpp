@@ -412,16 +412,15 @@ void AssemblyCode::NameCommand::processMemoryTemps( std::shared_ptr<AssemblyCode
 
 
 //----------------------------------------------------------------------------------------------------------------------
-AssemblyCode::CallCommand::CallCommand( const IRT::CTemp &address, const std::vector<IRT::CTemp> &arguments )
+AssemblyCode::CallCommand::CallCommand( const IRT::CLabel &address, const std::vector<IRT::CTemp> &arguments )
         : address( address ), arguments( arguments ) { }
 
 std::vector<IRT::CTemp> AssemblyCode::CallCommand::GetIn( ) const {
-    std::vector<IRT::CTemp> in;
-    in.push_back( address );
+//    std::vector<IRT::CTemp> in;
 //    for ( auto argument : arguments ) {
 //        in.push_back( argument );
 //    }
-    return in;
+    return { };
 }
 
 std::vector<IRT::CTemp> AssemblyCode::CallCommand::GetOut( ) const {
@@ -438,7 +437,6 @@ std::string AssemblyCode::CallCommand::ToString( ) const {
 
 void AssemblyCode::CallCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
                                                        AssemblyCode::RegisterInfo &registerInfo ) {
-    AssemblyCode::colorToRegisterChange(address, tempToColorMap, registerInfo);
     for ( auto argTemp : arguments) {
         AssemblyCode::colorToRegisterChange( argTemp, tempToColorMap, registerInfo );
     }
@@ -447,8 +445,6 @@ void AssemblyCode::CallCommand::colorToRegisterChange( std::map<std::string, int
 void AssemblyCode::CallCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
                                                     AssemblyCommands &newAssemblyCommands,
                                                     std::map<std::string, int> &spilledToOffset, IRT::CTemp &beginSP ) {
-
-    onlyRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, address);
 
 }
 

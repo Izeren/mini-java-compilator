@@ -10,10 +10,11 @@
 #include "../utils/TreePatterns.h"
 
 
-std::map<std::string, std::set<std::string>> buildGraph(AssemblyCommands& commands) {
+std::map<std::string, std::set<std::string>> buildGraph(AssemblyCommands& commands,
+                                                        std::vector<std::string>& ignoreList) {
     std::vector<AssemblyCode::CodeLine> controlGraph = buildControlFlowGraph(commands);
     fillCodeLineTempLivness(controlGraph);
-    return buildInterferentGraph(controlGraph);
+    return buildInterferentGraph(controlGraph, ignoreList);
 };
 
 bool isGraphEmpty(std::map<std::string, std::set<std::string>> &graph) {
@@ -118,12 +119,12 @@ void processStackEntry(
         const StackEntry& stackEntry,
         std::map<std::string, std::set<std::string>>& originalGraph,
         std::map<std::string, std::set<std::string>>& recoveredGraph,
-        int registerNumber,
+        AssemblyCode::RegisterInfo& registerInfo,
         std::map<std::string, int>& tempToColorMap
 ) {
     addTempToRecoveredGraph(stackEntry.temp, originalGraph, recoveredGraph);
     int color = getColorForTemp(stackEntry.temp, recoveredGraph, tempToColorMap);
-    if (color >= registerNumber) {
+    if (color >= registerInfo.registers.size()) {
         assert(stackEntry.isSpilled);
         tempToColorMap[stackEntry.temp] = IN_MEMORY_COLOR;
     } else {
@@ -146,12 +147,12 @@ int countSpilled(std::map<std::string, int>& tempToColorMap) {
 
 void addFirstLineAllocation(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo) {
     commands.insert(commands.begin(),
-                    std::make_shared<AssemblyCode::MoveRegRegCommand>(registerInfo.spBeginReg,
-                                                    registerInfo.espReg));
-
-    commands.insert(commands.begin(),
                     std::make_shared<AssemblyCode::SubRegConstCommand>(IRT::CTemp(registerInfo.espReg),
                     totalAllocated * IRT::CFrame::wordSize));
+
+    commands.insert(commands.begin(),
+                    std::make_shared<AssemblyCode::MoveRegRegCommand>(registerInfo.spBeginReg,
+                                                    registerInfo.espReg));
 }
 
 void colorToRegistersChange(AssemblyCommands& commands,
@@ -176,6 +177,8 @@ std::map<std::string, int> buildSpillToOffsetMap(std::map<std::string, int>& tem
     for (int i = 0; i < spilledNodes.size(); ++i) {
         map[spilledNodes[i]] = (totalAllocated + i) * IRT::CFrame::wordSize;
     }
+
+    totalAllocated += spilledNodes.size();
 
     return map;
 };
@@ -219,7 +222,7 @@ bool select(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo
         processStackEntry(tempStack.top(),
                           originalGraph,
                           recoveredGraph,
-                          registerInfo.registers.size(),
+                          registerInfo,
                           tempToColorMap);
         tempStack.pop();
     }
@@ -229,8 +232,13 @@ bool select(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo
 
 bool tryAllocateRegisters(AssemblyCommands& commands, AssemblyCode::RegisterInfo& registerInfo,
                           std::set<std::string>& originalTemps) {
+
+    std::string spBeginString = registerInfo.spBeginReg.ToString();
+    std::vector<std::string> ignoreList;
+    ignoreList.push_back(spBeginString);
+
     // build graph
-    std::map<std::string, std::set<std::string>> originalGraph = buildGraph(commands);
+    std::map<std::string, std::set<std::string>> originalGraph = buildGraph(commands, ignoreList);
 
     // simplify and spill
     std::map<std::string, std::set<std::string>> tempGraph = originalGraph;

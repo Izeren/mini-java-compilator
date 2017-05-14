@@ -9,6 +9,7 @@ namespace AssemblyCode {
 
     void addNotOrientedEdge(std::string a, std::string b, std::map<std::string, std::set<std::string>>& graph);
 
-    std::map<std::string, std::set<std::string>> buildInterferentGraph(std::vector<AssemblyCode::CodeLine>& lines);
+    std::map<std::string, std::set<std::string>> buildInterferentGraph(std::vector<AssemblyCode::CodeLine>& lines,
+                                                                       std::vector<std::string>& ignoreList);
 
 }
