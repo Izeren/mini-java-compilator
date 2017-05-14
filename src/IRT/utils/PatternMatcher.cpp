@@ -41,6 +41,7 @@ AssemblyCommands AssemblyCode::PatternMatcher::GenerateCode( const IRT::CStateme
 }
 
 AssemblyCode::PatternMatcher::PatternMatcher( ) {
+    patterns.emplace_back( std::make_shared<IRT::MoveFromMemByRegToReg>( ));
     patterns.emplace_back( std::make_shared<IRT::MemFromRegPlusConstPattern>( ));
     patterns.emplace_back( std::make_shared<IRT::MemFromConstPlusRegPattern>( ));
     patterns.emplace_back( std::make_shared<IRT::MoveFromMemByRegToMemByReg>( ));

@@ -860,3 +860,34 @@ void AssemblyCode::SubRegConstCommand::processMemoryTemps( std::shared_ptr<Assem
                                 thisShared, leftOperand, /* load left */ true, /* store left */ true);
 
 }
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+std::vector<IRT::CTemp> AssemblyCode::MoveToRegFromMemByReg::GetIn( ) const {
+    return {source};
+}
+
+std::vector<IRT::CTemp> AssemblyCode::MoveToRegFromMemByReg::GetOut( ) const {
+    return {target};
+}
+
+std::string AssemblyCode::MoveToRegFromMemByReg::ToString( ) const {
+    return "mov " + target.ToString( ) + " [" + source.ToString( ) + "]\n";
+}
+
+void AssemblyCode::MoveToRegFromMemByReg::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                                 AssemblyCode::RegisterInfo &registerInfo ) {
+    AssemblyCode::colorToRegisterChange(source, tempToColorMap, registerInfo);
+    AssemblyCode::colorToRegisterChange(target, tempToColorMap, registerInfo);
+}
+
+void AssemblyCode::MoveToRegFromMemByReg::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                              AssemblyCommands &newAssemblyCommands,
+                                                              std::map<std::string, int> &spilledToOffset,
+                                                              IRT::CTemp &beginSP ) {
+    leftRightProcessMemoryTemps(newAssemblyCommands, spilledToOffset, beginSP, thisShared, target, source, false);
+}
+
+AssemblyCode::MoveToRegFromMemByReg::MoveToRegFromMemByReg( const IRT::CTemp &leftOperand, const IRT::CTemp &address )
+        : target( leftOperand ), source( address ) { }

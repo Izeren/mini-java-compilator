@@ -176,7 +176,7 @@ std::vector<AssemblyCommands> processIRTtoASSWithRegAlloc(std::shared_ptr<const 
         AssemblyCode::RegisterInfo registerInfo;
         registerInfo.spBeginReg = IRT::CTemp("eax");
         registerInfo.espReg = IRT::CTemp("esp");
-        registerInfo.registers = { "edx", "ecx", "ebx", "ec", "ed" };
+        registerInfo.registers = { "edx", "ecx", "ebx"};
         AssemblyCommands commandsWithAlloc = AssemblyCode::allocateRegisters(commands, registerInfo);
 
         WriteAssemblyToFile(commandsWithAlloc, out);

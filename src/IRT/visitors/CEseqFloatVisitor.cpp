@@ -197,7 +197,7 @@ void IRT::CEseqFloatVisitor::processCallArgument(
     }
 
     helpStatements.push_back(SMOVE_UNIQ(new CMoveStatement(
-            EMOVE_UNIQ(new CMemExpression( EMOVE_UNIQ(new CTempExpression(argTemp)))),
+            EMOVE_UNIQ(EMOVE_UNIQ(new CTempExpression(argTemp))),
             std::move(source)
     )));
 }
@@ -292,20 +292,39 @@ std::unique_ptr<const IRT::CStatement> IRT::CEseqFloatVisitor::processSourceEseq
                 ))
         ));
     } else {
-        CTemp temp;
-        return SMOVE_UNIQ(new CSeqStatement(
-                SMOVE_UNIQ(new CMoveStatement(
-                        EMOVE_UNIQ(new CTempExpression(temp)),
-                        std::move(target->Copy())
-                )),
-                SMOVE_UNIQ(new CSeqStatement(
-                        std::move(sourceEseq->getStatement()->Copy()),
-                        SMOVE_UNIQ(new CMoveStatement(
-                                EMOVE_UNIQ(new CMemExpression(EMOVE_UNIQ(new CTempExpression(temp)))),
-                                std::move(sourceEseq->getExpression()->Copy())
-                        ))
-                ))
-        ));
+
+        const CMemExpression* memTarget = dynamic_cast<const CMemExpression*>(target);
+        const CTempExpression* tempTarget = dynamic_cast<const CTempExpression*>(target);
+
+        assert(memTarget != nullptr || tempTarget != nullptr);
+
+        if (memTarget != nullptr) {
+            CTemp temp;
+
+            return SMOVE_UNIQ(new CSeqStatement(
+                    SMOVE_UNIQ(new CMoveStatement(
+                            EMOVE_UNIQ(new CTempExpression(temp)),
+                            std::move(memTarget->getAddress()->Copy())
+                    )),
+                    SMOVE_UNIQ(new CSeqStatement(
+                            std::move(sourceEseq->getStatement()->Copy()),
+                            SMOVE_UNIQ(new CMoveStatement(
+                                    EMOVE_UNIQ(new CMemExpression(EMOVE_UNIQ(new CTempExpression(temp)))),
+                                    std::move(sourceEseq->getExpression()->Copy())
+                            ))
+                    ))
+            ));
+        }
+
+        if (tempTarget != nullptr) {
+            return SMOVE_UNIQ(new CSeqStatement(
+                            std::move(sourceEseq->getStatement()->Copy()),
+                            SMOVE_UNIQ(new CMoveStatement(
+                                    EMOVE_UNIQ(tempTarget->Copy()),
+                                    std::move(sourceEseq->getExpression()->Copy())
+                            ))
+            ));
+        }
     }
 }
 

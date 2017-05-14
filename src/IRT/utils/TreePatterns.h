@@ -188,4 +188,10 @@ namespace IRT {
                                 AssemblyCommands &commands ) override;
     };
 
+    class MoveFromMemByRegToReg: public TreePattern {
+    public:
+        bool TryToGenerateCode( const INode *tree, const CTemp &dest, ChildrenTemps &children,
+                                AssemblyCommands &commands ) override;
+    };
+
 };

@@ -552,6 +552,30 @@ namespace AssemblyCode {
 
     };
 
+
+    class MoveToRegFromMemByReg : public AssemblyCommand {
+    public:
+        MoveToRegFromMemByReg( const IRT::CTemp &leftOperand, const IRT::CTemp &address );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
+
+    private:
+        REG target;
+        REG source;
+
+    };
+
 };
 
 #undef REG

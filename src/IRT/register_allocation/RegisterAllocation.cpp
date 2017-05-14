@@ -72,12 +72,16 @@ void spill(std::map<std::string, std::set<std::string>>& graph,
            std::stack<StackEntry>& tempStack, AssemblyCode::RegisterInfo& registerInfo, std::set<std::string>& originalTemps) {
 
     while (!isGraphEmpty(graph) && !checkSimplifiableVertex(graph, registerInfo.registers.size())) {
+        int t = 0;
         for (auto vertex : graph) {
             if (originalTemps.find(vertex.first) != originalTemps.end()) {
+                ++t;
                 tempStack.push( StackEntry( vertex.first, true ));
                 deleteVertexFromGraph( vertex.first, graph );
             }
         }
+
+        assert(t != 0);
     }
 }
 
