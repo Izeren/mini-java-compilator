@@ -152,8 +152,8 @@ void CConstructSymbolTableVisitor::Visit( CAssignSubscriptStm &stm )
 	if( stm.idExpression ) {
 		stm.idExpression->Accept( *this );
 	}
-	if( stm.offset ) {
-		stm.offset->Accept( *this );
+	if( stm.indexExpression ) {
+		stm.indexExpression->Accept( *this );
 	}
 	if( stm.valueExpression ) {
 		stm.valueExpression->Accept( *this );

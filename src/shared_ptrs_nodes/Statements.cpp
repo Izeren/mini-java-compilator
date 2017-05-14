@@ -29,12 +29,12 @@ CAssignSubscriptStm::CAssignSubscriptStm() :CAssignSubscriptStm(NULL, NULL, NULL
 
 CAssignSubscriptStm::CAssignSubscriptStm(
 	CIdExp* idExpression,
-	CNumExp* offset,
+	IExpression* offset,
 	IExpression* valueExpression
 ) {
 	this->position = idExpression->position + valueExpression->position;
 	this->idExpression = std::unique_ptr<CIdExp>(idExpression);
-	this->offset = std::unique_ptr<CNumExp>(offset);
+	this->indexExpression = std::unique_ptr<IExpression>(offset);
 	this->valueExpression = std::unique_ptr<IExpression>(valueExpression);
 }
 

@@ -176,8 +176,8 @@ void CConvertVisitor::Visit(CAssignSubscriptStm &stm) {
 		stm.idExpression->Accept(*this);
 	}
 	this->code += "[";
-	if (stm.offset) {
-		stm.offset->Accept(*this);
+	if (stm.indexExpression) {
+		stm.indexExpression->Accept(*this);
 	}
 	this->code += "] = ";
 	if (stm.valueExpression) {

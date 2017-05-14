@@ -506,7 +506,7 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
 {
     std::cout << "typechecker: CAssignSubscriptStm\n";
 
-    if( stm.idExpression && stm.offset && stm.valueExpression ) {
+    if( stm.idExpression && stm.indexExpression && stm.valueExpression ) {
         auto variableName = stm.idExpression->name;
         bool isVisible = checkVariableVisibility( variableName, currentClass, currentMethod );
         if( !isVisible ) {
@@ -514,13 +514,13 @@ void CTypeCheckerVisitor::Visit( CAssignSubscriptStm &stm )
             lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
             return;
         }
-        stm.offset->Accept( *this );
+        stm.indexExpression->Accept( *this );
         if( lastCalculatedType == enums::TPrimitiveType::ERROR_TYPE ) {
             return;
         }
         if( lastCalculatedType != enums::TPrimitiveType::INT ) {
             auto errorMessage = CError::GetTypeErrorMessage( enums::TPrimitiveType::INT, lastCalculatedType );
-            errors.push_back( CError( errorMessage, stm.offset->position) );
+            errors.push_back( CError( errorMessage, stm.indexExpression->position) );
             lastCalculatedType = enums::TPrimitiveType::ERROR_TYPE;
             return;
         }

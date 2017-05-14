@@ -24,12 +24,12 @@ public:
 
 class CAssignSubscriptStm : public IStatement {
 public:
-	CAssignSubscriptStm(CIdExp* idExpression, CNumExp* offset, IExpression* valueExpression);
+	CAssignSubscriptStm(CIdExp* idExpression, IExpression* _index, IExpression* valueExpression);
 	CAssignSubscriptStm();
 	void Accept(IVisitor &visitor) override;
 
 	std::unique_ptr<CIdExp> idExpression;
-	std::unique_ptr<CNumExp> offset;
+	std::unique_ptr<IExpression> indexExpression;
 	std::unique_ptr<IExpression> valueExpression;
 };
 

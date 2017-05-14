@@ -273,7 +273,7 @@ Statement:
 	|
 	Identifier ASSIGN Expression SEMI { $1->isInstance = true; $$ = new CAssignStm( $1, $3 );  }
 	|
-	Identifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI { $1->isInstance = true; $$ = new CAssignSubscriptStm( $1, (CNumExp *)$3, $6 );  }
+	Identifier LBRACKET Expression RBRACKET ASSIGN Expression SEMI { $1->isInstance = true; $$ = new CAssignSubscriptStm( $1, $3, $6 );  }
 	;
 
 Expression:

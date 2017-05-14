@@ -214,7 +214,7 @@ void CPrintVisitor::Visit(CAssignStm &stm) {
 }
 
 void CPrintVisitor::Visit(CAssignSubscriptStm &stm) {
-	std::vector<INode*> children = { stm.idExpression.get(), stm.offset.get(), stm.valueExpression.get() };
+	std::vector<INode*> children = { stm.idExpression.get(), stm.indexExpression.get(), stm.valueExpression.get() };
 	AddChildrenAnswers(VisitChildren(children));
 	AddLabel("AssignSubscriptStm");
 	++lastVisited;

@@ -298,11 +298,12 @@ void CBuildVisitor::Visit( CAssignSubscriptStm &statement ) {
     statement.idExpression->Accept( *this );
     std::unique_ptr<const IRT::CExpression> leftPartExpression = std::move( wrapper->ToExpression( ));
 
+    statement.indexExpression->Accept(*this);
+    std::unique_ptr<const IRT::CExpression> indexExpression = std::move( wrapper->ToExpression() );
+
     statement.valueExpression->Accept( *this );
     std::unique_ptr<const IRT::CExpression> rightPartExpression = std::move( wrapper->ToExpression( ));
 
-    std::unique_ptr<const IRT::CExpression> indexExpression = std::move( std::unique_ptr<const IRT::CExpression>(
-            new IRT::CConstExpression( statement.offset->number )));
 
     updateSubtreeWrapper( new IRT::CStatementWrapper(
             new IRT::CMoveStatement(
