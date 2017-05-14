@@ -576,6 +576,28 @@ namespace AssemblyCode {
 
     };
 
+    class CommentCommand : public AssemblyCommand {
+    public:
+
+        CommentCommand( const std::string &comment );
+
+        std::vector<IRT::CTemp> GetIn( ) const override;
+
+        std::vector<IRT::CTemp> GetOut( ) const override;
+
+        std::string ToString( ) const override;
+
+        void colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                    AssemblyCode::RegisterInfo &registerInfo ) override;
+
+        void processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                 AssemblyCommands &newAssemblyCommands, std::map<std::string, int> &spilledToOffset,
+                                 IRT::CTemp &beginSP ) override;
+
+    private:
+        std::string comment;
+    };
+
 };
 
 #undef REG

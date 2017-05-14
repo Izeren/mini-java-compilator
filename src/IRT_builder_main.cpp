@@ -169,19 +169,21 @@ std::vector<AssemblyCommands> processIRTtoASS(std::shared_ptr<const MethodToIRTM
 std::vector<AssemblyCommands> processIRTtoASSWithRegAlloc(std::shared_ptr<const MethodToIRTMap> methodToIRTMap, std::ostream &out) {
     std::vector<AssemblyCommands> commandsBatch;
     AssemblyCode::PatternMatcher patternMatcher;
+    AssemblyCommands commands;
     for ( auto it = methodToIRTMap->begin(); it != methodToIRTMap->end(); ++it) {
-        out << ";-----------------------------------" << it->first << "--------------------------------------\n";
-        AssemblyCommands commands = patternMatcher.GenerateCode( static_cast<const IRT::CStatementList *>(it->second.get()));
-
-        AssemblyCode::RegisterInfo registerInfo;
-        registerInfo.spBeginReg = IRT::CTemp("eax");
-        registerInfo.espReg = IRT::CTemp("esp");
-        registerInfo.registers = { "edx", "ecx", "ebx"};
-        AssemblyCommands commandsWithAlloc = AssemblyCode::allocateRegisters(commands, registerInfo);
-
-        WriteAssemblyToFile(commandsWithAlloc, out);
-        commandsBatch.push_back(commandsWithAlloc);
+        commands.push_back(std::make_shared<AssemblyCode::CommentCommand>("-----------------------------------" + it->first + "--------------------------------------"));
+        AssemblyCommands funCommands = patternMatcher.GenerateCode( static_cast<const IRT::CStatementList *>(it->second.get()));
+        commands.insert(commands.end(), funCommands.begin(), funCommands.end());
     }
+
+    AssemblyCode::RegisterInfo registerInfo;
+    registerInfo.spBeginReg = IRT::CTemp("eax");
+    registerInfo.espReg = IRT::CTemp("esp");
+    registerInfo.registers = { "edx", "ecx", "ebx"};
+    AssemblyCommands commandsWithAlloc = AssemblyCode::allocateRegisters(commands, registerInfo);
+
+    WriteAssemblyToFile(commandsWithAlloc, out);
+    commandsBatch.push_back(commandsWithAlloc);
 
     return commandsBatch;
 }
@@ -238,9 +240,9 @@ void make_test( const std::string &filename, const std::string &testfile_name, c
     writeIRTTrees( filename, "5_ConstBinopEvaluated", constBinopEvaluatedTrees );
 
     // ASSEMBLY GENERATION
-    std::ofstream out( "../tests/IRT_builder/asms/" + filename + "-0_infinite-registers.asm", std::fstream::out );
-    processIRTtoASS(constBinopEvaluatedTrees, out);
-    out.close();
+//    std::ofstream out( "../tests/IRT_builder/asms/" + filename + "-0_infinite-registers.asm", std::fstream::out );
+//    processIRTtoASS(constBinopEvaluatedTrees, out);
+//    out.close();
 
     // ASSEMBLY GENERATION WITH ALLOC
     std::ofstream outWithAlloc( "../tests/IRT_builder/asms/" + filename + "-1_with_alloc.asm", std::fstream::out );

@@ -891,3 +891,33 @@ void AssemblyCode::MoveToRegFromMemByReg::processMemoryTemps( std::shared_ptr<As
 
 AssemblyCode::MoveToRegFromMemByReg::MoveToRegFromMemByReg( const IRT::CTemp &leftOperand, const IRT::CTemp &address )
         : target( leftOperand ), source( address ) { }
+
+//----------------------------------------------------------------------------------------------------------------------
+
+AssemblyCode::CommentCommand::CommentCommand( const std::string &comment ) : comment( comment ) { }
+
+std::vector<IRT::CTemp> AssemblyCode::CommentCommand::GetIn( ) const {
+    return { };
+}
+
+std::vector<IRT::CTemp> AssemblyCode::CommentCommand::GetOut( ) const {
+    return { };
+}
+
+std::string AssemblyCode::CommentCommand::ToString( ) const {
+    return ";" + comment + "\n";
+}
+
+void AssemblyCode::CommentCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,
+                                                          AssemblyCode::RegisterInfo &registerInfo ) {
+
+}
+
+void AssemblyCode::CommentCommand::processMemoryTemps( std::shared_ptr<AssemblyCode::AssemblyCommand> thisShared,
+                                                       AssemblyCommands &newAssemblyCommands,
+                                                       std::map<std::string, int> &spilledToOffset,
+                                                       IRT::CTemp &beginSP ) {
+
+}
+
+

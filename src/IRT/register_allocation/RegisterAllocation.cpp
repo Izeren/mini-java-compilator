@@ -279,6 +279,7 @@ AssemblyCommands AssemblyCode::allocateRegisters(AssemblyCommands& commands, Ass
 
 void AssemblyCode::colorToRegisterChange( IRT::CTemp& temp,
                             std::map<std::string, int> &tempToColorMap, AssemblyCode::RegisterInfo &registerInfo ) {
+    totalAllocated = 0;
     auto mapEntry = tempToColorMap.find(temp.ToString());
     if (mapEntry != tempToColorMap.end()) {
         temp.setName(registerInfo.registers[mapEntry->second]);
