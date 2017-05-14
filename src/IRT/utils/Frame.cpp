@@ -135,7 +135,7 @@ std::unique_ptr<const CExpression>
 CFrame::ExternalCall(const std::string &functionName, std::unique_ptr<const CExpressionList> args) const {
     return std::move(std::unique_ptr<const CExpression>(
             new CCallExpression(
-                    std::move(std::unique_ptr<const CExpression>(
+                    std::move(std::unique_ptr<const CNameExpression>(
                             new CNameExpression(CLabel(functionName))
                     )),
                     std::move(args)

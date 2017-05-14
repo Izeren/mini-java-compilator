@@ -64,6 +64,7 @@ set(SOURCE_FILES
         src/IRT/utils/TreePatterns.cpp
         src/IRT/utils/AssemblyCommand.cpp
         src/IRT/utils/PatternMatcher.cpp
+        src/IRT/register_allocation/IgnoreList.cpp
         src/IRT/register_allocation/ControlFlowGraphBuilder.cpp
         src/IRT/register_allocation/TempLivnessFiller.cpp
         src/IRT/register_allocation/InterferentGraphBuilder.cpp

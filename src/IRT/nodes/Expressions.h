@@ -135,6 +135,8 @@ namespace IRT {
 
         std::unique_ptr<const CExpression> Copy( ) const override;
 
+        std::unique_ptr<const CNameExpression> CopyCast( ) const;
+
 //        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
@@ -144,10 +146,10 @@ namespace IRT {
 //------------------------------------------------------------------------------------------
     class CCallExpression : public CExpression {
     public:
-        CCallExpression( std::unique_ptr<const CExpression> _function,
+        CCallExpression( std::unique_ptr<const CNameExpression> _function,
                          std::unique_ptr<const CExpressionList> arguments );
 
-        const CExpression *getFunction( ) const;
+        const CNameExpression *getFunction( ) const;
 
         const CExpressionList *getArguments( ) const;
 
@@ -160,7 +162,7 @@ namespace IRT {
 //        std::unique_ptr<const CExpression> Canonicalize( ) const override;
 
     private:
-        std::unique_ptr<const CExpression> function;
+        std::unique_ptr<const CNameExpression> function;
         std::unique_ptr<const CExpressionList> arguments;
     };
 

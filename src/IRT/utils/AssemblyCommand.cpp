@@ -126,7 +126,11 @@ AssemblyCode::MoveRegRegCommand::MoveRegRegCommand(
 ) : source( _source ), target( _target ) { }
 
 std::string AssemblyCode::MoveRegRegCommand::ToString( ) const {
-    return "mov " + target.ToString( ) + " " + source.ToString( ) + "\n";
+    if (target.ToString() != source.ToString()) {
+        return "mov " + target.ToString( ) + " " + source.ToString( ) + "\n";
+    } else {
+        return "";
+    }
 }
 
 std::string AssemblyCode::MoveRegRegCommand::getTarget() const {
@@ -842,7 +846,7 @@ std::vector<IRT::CTemp> AssemblyCode::SubRegConstCommand::GetOut( ) const {
 }
 
 std::string AssemblyCode::SubRegConstCommand::ToString( ) const {
-    return "sub " + leftOperand.ToString() + " " + std::to_string(rightConst);
+    return "sub " + leftOperand.ToString() + " " + std::to_string(rightConst) + "\n";
 }
 
 void AssemblyCode::SubRegConstCommand::colorToRegisterChange( std::map<std::string, int> &tempToColorMap,

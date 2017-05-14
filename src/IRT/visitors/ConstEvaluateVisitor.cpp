@@ -63,13 +63,10 @@ void IRT::ConstEvaluateVisitor::Visit(const IRT::CNameExpression &expression) {
 }
 
 void IRT::ConstEvaluateVisitor::Visit(const IRT::CCallExpression &expression) {
-    expression.getFunction()->Accept(*this);
-    EXP function = M(childExpression);
-
     expression.getArguments()->Accept(*this);
 
     childExpression = EMOVE_UNIQ(new CCallExpression(
-            M(function),
+            M(expression.getFunction()->CopyCast()),
             M(childExpressionList)
     ));
 }

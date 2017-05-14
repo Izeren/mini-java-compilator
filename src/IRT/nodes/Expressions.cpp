@@ -115,6 +115,10 @@ std::unique_ptr<const IRT::CExpression> IRT::CNameExpression::Copy( ) const {
     return std::move( std::unique_ptr<const IRT::CExpression>( new CNameExpression( label )));
 }
 
+std::unique_ptr<const IRT::CNameExpression> IRT::CNameExpression::CopyCast( ) const {
+    return std::move( std::unique_ptr<const IRT::CNameExpression>( new CNameExpression( label )));
+}
+
 void IRT::CCallExpression::Accept( IRT::IVisitor &visitor ) const {
     visitor.Visit( *this );
 }
@@ -123,7 +127,7 @@ IRT::CCallExpression::~CCallExpression( ) {
 
 }
 
-const IRT::CExpression *IRT::CCallExpression::getFunction( ) const {
+const IRT::CNameExpression *IRT::CCallExpression::getFunction( ) const {
     return function.get( );
 }
 
@@ -131,13 +135,13 @@ const IRT::CExpressionList *IRT::CCallExpression::getArguments( ) const {
     return arguments.get( );
 }
 
-IRT::CCallExpression::CCallExpression( std::unique_ptr<const IRT::CExpression> _function,
+IRT::CCallExpression::CCallExpression( std::unique_ptr<const IRT::CNameExpression> _function,
                                        std::unique_ptr<const IRT::CExpressionList> arguments ) : function(
         std::move( _function )), arguments( std::move( arguments )) { }
 
 std::unique_ptr<const IRT::CExpression> IRT::CCallExpression::Copy( ) const {
     return std::move(
-            std::unique_ptr<const IRT::CExpression>( new CCallExpression( function->Copy( ), arguments->Copy( ))));
+            std::unique_ptr<const IRT::CExpression>( new CCallExpression( function->CopyCast( ), arguments->Copy( ))));
 }
 
 void IRT::CMemExpression::Accept( IRT::IVisitor &visitor ) const {

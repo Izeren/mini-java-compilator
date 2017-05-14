@@ -1,7 +1,5 @@
 #include "TempLivnessFiller.h"
 
-
-
 int processCodeLine(AssemblyCode::CodeLine* codeLine) {
     int changesCount = 0;
 

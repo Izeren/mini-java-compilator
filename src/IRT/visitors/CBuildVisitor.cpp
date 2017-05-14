@@ -161,7 +161,7 @@ void CBuildVisitor::Visit( CCallMethodExp &expression ) {
 
     updateSubtreeWrapper( new IRT::CExpressionWrapper(
             new IRT::CCallExpression(
-                    std::unique_ptr<const IRT::CExpression>( new IRT::CNameExpression(
+                    std::unique_ptr<const IRT::CNameExpression>( new IRT::CNameExpression(
                             IRT::CLabel( GetMethodFullName( mineMethodObjectClassName, expression.methodName->name ))
                     )),
                     std::unique_ptr<const IRT::CExpressionList>( expressionListIrt ))
@@ -660,7 +660,7 @@ void CBuildVisitor::updateSubtreeWrapper( std::unique_ptr<IRT::ISubtreeWrapper> 
 }
 
 std::string CBuildVisitor::GetMethodFullName( const std::string &className, const std::string &methodName ) {
-    return className + "::" + methodName;
+    return className + "$$" + methodName;
 }
 
 template<class InputIteratorArguments, class InputIteratorLocals, class InputIteratorFields>

@@ -137,27 +137,19 @@ void IRT::CEseqFloatVisitor::Visit(const IRT::CNameExpression &expression) {
 }
 
 void IRT::CEseqFloatVisitor::Visit(const IRT::CCallExpression &expression) {
-    expression.getFunction()->Accept(*this);
-    std::unique_ptr<const CExpression> function = std::move(childExpression);
-
     expression.getArguments()->Accept(*this);
     std::unique_ptr<const CExpressionList> args = std::move(childExpressionList);
 
     if (args->getExpressions().size() == 0) {
         childExpression = EMOVE_UNIQ(new CCallExpression(
-                std::move(function),
+                std::move(expression.getFunction()->CopyCast()),
                 std::move(args)
         ));
 
         return;
     }
 
-    CTemp tempFunction;
     std::vector<std::unique_ptr<const CStatement>> helpStatements;
-    helpStatements.emplace_back(new CMoveStatement(
-            EMOVE_UNIQ(new CTempExpression(tempFunction)),
-            std::move(function)
-    ));
 
     CExpressionList* tempExpressionList = new CExpressionList();
 
@@ -177,7 +169,7 @@ void IRT::CEseqFloatVisitor::Visit(const IRT::CCallExpression &expression) {
     childExpression = EMOVE_UNIQ(new CEseqExpression(
             std::move(rightStatement),
             EMOVE_UNIQ(new CCallExpression(
-                    EMOVE_UNIQ(new CMemExpression( EMOVE_UNIQ(new CTempExpression(tempFunction)))),
+                    std::move(expression.getFunction()->CopyCast()),
                     std::move(std::unique_ptr<const CExpressionList>(tempExpressionList))
             ))
     ));
